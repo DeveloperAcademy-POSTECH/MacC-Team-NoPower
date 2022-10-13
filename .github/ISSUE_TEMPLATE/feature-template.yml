@@ -1,0 +1,34 @@
+name: Feature Template 생성
+description: 새로운 Feature를 추가합니다.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        새로운 Feature를 추가합니다.
+        
+        ---
+  - type: textarea
+    id: feat-description
+    attributes:
+      label: 작업할 내용
+      description: 작업할 내용을 상세히 적어주세요
+    validations:
+      required: true
+  - type: input
+    id: relatedIssueNumber
+    attributes:
+      label: 관련 이슈넘버
+      description: "해당 Feature와 관련된 이슈들을 적어주세요"
+      placeholder: "#3, #4..."
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 스크린샷 혹은 gif
+      description: "작업할 내용의 스크린샷, UX라면 gif를 추가해주세요"
+      placeholder: "<img src='https://블라블라' width='300'>"
+  - type: textarea
+    id: todo
+    attributes:
+      label: TODO
+      description: 해당 작업을 완료하기 위한 TODO 리스트를 작성해 주세요.
+      placeholder: "- [ ] todo1"

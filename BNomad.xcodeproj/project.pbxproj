@@ -17,6 +17,7 @@
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675628F7E398004614B0 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675528F7E398004614B0 /* Position.swift */; };
+		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675528F7E398004614B0 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				E25A675128F7E1CE004614B0 /* User.swift */,
 				E25A675328F7E2C6004614B0 /* Place.swift */,
 				E25A675528F7E398004614B0 /* Position.swift */,
+				E25A675728F7E515004614B0 /* DummyData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
+				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,

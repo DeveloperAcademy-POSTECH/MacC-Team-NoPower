@@ -15,6 +15,14 @@
 		DF96185B28F8052200E21D30 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF96185A28F8052200E21D30 /* FirebaseAuth */; };
 		DF96185F28F8053500E21D30 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DF96185E28F8053500E21D30 /* FirebaseFirestore */; };
 		DF96186128F8053E00E21D30 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96186028F8053E00E21D30 /* FirebaseStorage */; };
+		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
+		DF9618A828FCEF8800E21D30 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */; };
+		DF9618AA28FCEF9700E21D30 /* ProfileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */; };
+		DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */; };
+		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
+		DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */; };
+		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
+		DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */; };
 		E25A674A28F7DF1C004614B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */; };
 		E25A674D28F7DF88004614B0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E25A674C28F7DF88004614B0 /* FirebaseAnalytics */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
@@ -31,6 +39,14 @@
 		DF288B5728F7D710002838A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF288B5A28F7D710002838A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF288B5C28F7D710002838A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF9618A528FCEF6A00E21D30 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
+		DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileListViewController.swift; sourceTree = "<group>"; };
+		DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersInPlace.swift; sourceTree = "<group>"; };
 		E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
@@ -73,6 +89,8 @@
 		DF288B4D28F7D70F002838A4 /* BNomad */ = {
 			isa = PBXGroup;
 			children = (
+				DF96189D28FCEEF200E21D30 /* API */,
+				DF96189C28FCEEE900E21D30 /* View */,
 				E25A674F28F7E1B9004614B0 /* Model */,
 				E25A674E28F7E1AB004614B0 /* Application */,
 			);
@@ -84,6 +102,75 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DF96189C28FCEEE900E21D30 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DF96189F28FCEF0100E21D30 /* MapView */,
+				DF9618A328FCEF1700E21D30 /* PlaceView */,
+				DF9618A428FCEF1B00E21D30 /* ProfileListView */,
+				DF9618A128FCEF0D00E21D30 /* LoginView */,
+				DF9618A228FCEF1200E21D30 /* SignUpView */,
+				DF9618A028FCEF0500E21D30 /* ProfileView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DF96189D28FCEEF200E21D30 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		DF96189F28FCEF0100E21D30 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618A528FCEF6A00E21D30 /* MapViewController.swift */,
+			);
+			path = MapView;
+			sourceTree = "<group>";
+		};
+		DF9618A028FCEF0500E21D30 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
+			);
+			path = ProfileView;
+			sourceTree = "<group>";
+		};
+		DF9618A128FCEF0D00E21D30 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		DF9618A228FCEF1200E21D30 /* SignUpView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */,
+			);
+			path = SignUpView;
+			sourceTree = "<group>";
+		};
+		DF9618A328FCEF1700E21D30 /* PlaceView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */,
+			);
+			path = PlaceView;
+			sourceTree = "<group>";
+		};
+		DF9618A428FCEF1B00E21D30 /* ProfileListView */ = {
+			isa = PBXGroup;
+			children = (
+				DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */,
+			);
+			path = ProfileListView;
 			sourceTree = "<group>";
 		};
 		E25A674E28F7E1AB004614B0 /* Application */ = {
@@ -106,6 +193,7 @@
 				E25A675128F7E1CE004614B0 /* User.swift */,
 				E25A675328F7E2C6004614B0 /* Place.swift */,
 				E25A675528F7E398004614B0 /* Position.swift */,
+				DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */,
 				E25A675728F7E515004614B0 /* DummyData.swift */,
 			);
 			path = Model;
@@ -193,11 +281,19 @@
 			files = (
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
+				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
+				DF9618A828FCEF8800E21D30 /* PlaceViewController.swift in Sources */,
+				DF9618AA28FCEF9700E21D30 /* ProfileListViewController.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
+				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
+				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
+				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
+				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
+				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,6 @@
 import Foundation
 
 struct Place {
-    var users: [User]
     let placeUid: String
     let name: String
     let latitude: Double

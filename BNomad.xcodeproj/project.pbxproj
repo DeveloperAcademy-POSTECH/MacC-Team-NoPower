@@ -23,6 +23,7 @@
 		DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */; };
 		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
 		DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */; };
+		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
 		E25A674A28F7DF1C004614B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */; };
 		E25A674D28F7DF88004614B0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E25A674C28F7DF88004614B0 /* FirebaseAnalytics */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
@@ -47,6 +48,7 @@
 		DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersInPlace.swift; sourceTree = "<group>"; };
+		DFE747B828FD75980048E70A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		DF288B4D28F7D70F002838A4 /* BNomad */ = {
 			isa = PBXGroup;
 			children = (
+				DFE747B628FD75690048E70A /* Utils */,
 				DF96189D28FCEEF200E21D30 /* API */,
 				DF96189C28FCEEE900E21D30 /* View */,
 				E25A674F28F7E1B9004614B0 /* Model */,
@@ -171,6 +174,22 @@
 				DF9618A928FCEF9700E21D30 /* PlaceCheckInView.swift */,
 			);
 			path = PlaceCheckInView;
+			sourceTree = "<group>";
+		};
+		DFE747B628FD75690048E70A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DFE747B728FD75750048E70A /* Extensions */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		DFE747B728FD75750048E70A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DFE747B828FD75980048E70A /* UIView+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		E25A674E28F7E1AB004614B0 /* Application */ = {
@@ -281,6 +300,7 @@
 			files = (
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
+				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
 				DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */,

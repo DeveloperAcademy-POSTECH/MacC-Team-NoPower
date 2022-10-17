@@ -30,6 +30,8 @@
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675628F7E398004614B0 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675528F7E398004614B0 /* Position.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
+		E2E6B22A28FDA7E1005C0D77 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = E2E6B22928FDA7E1005C0D77 /* FirebaseDatabase */; };
+		E2E6B22C28FDA7E1005C0D77 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E2E6B22B28FDA7E1005C0D77 /* FirebaseDatabaseSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2E6B22C28FDA7E1005C0D77 /* FirebaseDatabaseSwift in Frameworks */,
+				E2E6B22A28FDA7E1005C0D77 /* FirebaseDatabase in Frameworks */,
 				DF96185F28F8053500E21D30 /* FirebaseFirestore in Frameworks */,
 				E25A674D28F7DF88004614B0 /* FirebaseAnalytics in Frameworks */,
 				DF96186128F8053E00E21D30 /* FirebaseStorage in Frameworks */,
@@ -239,6 +243,8 @@
 				DF96185A28F8052200E21D30 /* FirebaseAuth */,
 				DF96185E28F8053500E21D30 /* FirebaseFirestore */,
 				DF96186028F8053E00E21D30 /* FirebaseStorage */,
+				E2E6B22928FDA7E1005C0D77 /* FirebaseDatabase */,
+				E2E6B22B28FDA7E1005C0D77 /* FirebaseDatabaseSwift */,
 			);
 			productName = BNomad;
 			productReference = DF288B4B28F7D70F002838A4 /* BNomad.app */;
@@ -551,6 +557,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E25A674B28F7DF88004614B0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		E2E6B22928FDA7E1005C0D77 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E25A674B28F7DF88004614B0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		E2E6B22B28FDA7E1005C0D77 /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E25A674B28F7DF88004614B0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

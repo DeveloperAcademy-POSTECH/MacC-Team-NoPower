@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileListViewController: UIViewController {
+class PlaceCheckInView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

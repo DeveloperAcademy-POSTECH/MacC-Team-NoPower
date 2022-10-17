@@ -16,8 +16,8 @@
 		DF96185F28F8053500E21D30 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DF96185E28F8053500E21D30 /* FirebaseFirestore */; };
 		DF96186128F8053E00E21D30 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96186028F8053E00E21D30 /* FirebaseStorage */; };
 		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
-		DF9618A828FCEF8800E21D30 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */; };
-		DF9618AA28FCEF9700E21D30 /* ProfileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */; };
+		DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */; };
+		DF9618AA28FCEF9700E21D30 /* PlaceCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A928FCEF9700E21D30 /* PlaceCheckInView.swift */; };
 		DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */; };
 		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
 		DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */; };
@@ -40,8 +40,8 @@
 		DF288B5A28F7D710002838A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF288B5C28F7D710002838A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF9618A528FCEF6A00E21D30 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
-		DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileListViewController.swift; sourceTree = "<group>"; };
+		DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoViewController.swift; sourceTree = "<group>"; };
+		DF9618A928FCEF9700E21D30 /* PlaceCheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCheckInView.swift; sourceTree = "<group>"; };
 		DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -108,8 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				DF96189F28FCEF0100E21D30 /* MapView */,
-				DF9618A328FCEF1700E21D30 /* PlaceView */,
-				DF9618A428FCEF1B00E21D30 /* ProfileListView */,
+				DF9618A328FCEF1700E21D30 /* PlaceInfoView */,
+				DF9618A428FCEF1B00E21D30 /* PlaceCheckInView */,
 				DF9618A128FCEF0D00E21D30 /* LoginView */,
 				DF9618A228FCEF1200E21D30 /* SignUpView */,
 				DF9618A028FCEF0500E21D30 /* ProfileView */,
@@ -157,20 +157,20 @@
 			path = SignUpView;
 			sourceTree = "<group>";
 		};
-		DF9618A328FCEF1700E21D30 /* PlaceView */ = {
+		DF9618A328FCEF1700E21D30 /* PlaceInfoView */ = {
 			isa = PBXGroup;
 			children = (
-				DF9618A728FCEF8800E21D30 /* PlaceViewController.swift */,
+				DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */,
 			);
-			path = PlaceView;
+			path = PlaceInfoView;
 			sourceTree = "<group>";
 		};
-		DF9618A428FCEF1B00E21D30 /* ProfileListView */ = {
+		DF9618A428FCEF1B00E21D30 /* PlaceCheckInView */ = {
 			isa = PBXGroup;
 			children = (
-				DF9618A928FCEF9700E21D30 /* ProfileListViewController.swift */,
+				DF9618A928FCEF9700E21D30 /* PlaceCheckInView.swift */,
 			);
-			path = ProfileListView;
+			path = PlaceCheckInView;
 			sourceTree = "<group>";
 		};
 		E25A674E28F7E1AB004614B0 /* Application */ = {
@@ -283,8 +283,8 @@
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
-				DF9618A828FCEF8800E21D30 /* PlaceViewController.swift in Sources */,
-				DF9618AA28FCEF9700E21D30 /* ProfileListViewController.swift in Sources */,
+				DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */,
+				DF9618AA28FCEF9700E21D30 /* PlaceCheckInView.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,

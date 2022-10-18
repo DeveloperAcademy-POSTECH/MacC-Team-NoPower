@@ -130,6 +130,38 @@ class SignUpViewController: UIViewController {
         
         view.addSubview(dotsStackView)
         dotsStackView.anchor(bottom: requestLabel.bottomAnchor, right: nicknameField.rightAnchor, paddingBottom: 0, paddingRight: 0)
+
+        occupationField.isHidden = true
+        occupationLineView.isHidden = true
+        statusField.isHidden = true
+        statusLineView.isHidden = true
+        
+        inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
+    }
+    
+    @objc func didTapInputConfirmButton() {
+
+        if occupationField.isHidden == true {
+            if nicknameField.text?.isEmpty == true {
+                print("닉네임을 입력하세요.")
+            } else {
+                occupationField.isHidden = false
+                occupationLineView.isHidden = false
+                dot1View.backgroundColor = CustomColor.nomadGray2
+                dot2View.backgroundColor = CustomColor.nomadBlue
+            }
+        } else if occupationField.isHidden == false && statusField.isHidden == true {
+            if occupationField.text?.isEmpty == true {
+                print("직업을 입력하세요.")
+            } else {
+                statusField.isHidden = false
+                statusLineView.isHidden = false
+                dot2View.backgroundColor = CustomColor.nomadGray2
+                dot3View.backgroundColor = CustomColor.nomadBlue
+            }
+        } else {
+            print("이용자 정보 입력완료")
+        }
     }
     
     func configUI() {
@@ -160,12 +192,14 @@ class SignUpViewController: UIViewController {
         nicknameLineView.anchor(top: nicknameField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldLineSpacing, paddingLeft: 0, width: textFieldWidth, height: lineHeight)
         
         view.addSubview(occupationField)
+        occupationField.inputAccessoryView = keyboardAccView
         occupationField.anchor(top: nicknameField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldTopSpacing, paddingLeft: 0, width: textFieldWidth)
         
         view.addSubview(occupationLineView)
         occupationLineView.anchor(top: occupationField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldLineSpacing, paddingLeft: 0, width: textFieldWidth, height: lineHeight)
         
         view.addSubview(statusField)
+        statusField.inputAccessoryView = keyboardAccView
         statusField.anchor(top: occupationField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldTopSpacing, paddingLeft: 0, width: textFieldWidth)
         
         view.addSubview(statusLineView)

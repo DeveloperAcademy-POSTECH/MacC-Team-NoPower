@@ -144,22 +144,13 @@ class MapViewController: UIViewController {
     func configueMapUI() {
         map.delegate = self
         view.addSubview(map)
-        map.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        map.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        map.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        map.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
 
         map.addSubview(mapButtons)
-        mapButtons.topAnchor.constraint(equalTo: map.topAnchor, constant: 50) .isActive = true
-        mapButtons.rightAnchor.constraint(equalTo: map.rightAnchor, constant: -20).isActive = true
-        mapButtons.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        mapButtons.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        mapButtons.anchor(top: map.topAnchor, right: map.rightAnchor, paddingTop: 50, paddingRight: 20, width: 40, height: 140)
         
         map.addSubview(compass)
-        compass.topAnchor.constraint(equalTo: map.topAnchor, constant: 50) .isActive = true
-        compass.leftAnchor.constraint(equalTo: map.leftAnchor, constant: 20).isActive = true
-        compass.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        compass.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
         
         map.addOverlay(circleOverlay)
 
@@ -167,6 +158,7 @@ class MapViewController: UIViewController {
     
 }
 
+// MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
     

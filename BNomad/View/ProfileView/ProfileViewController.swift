@@ -14,7 +14,6 @@ class ProfileViewController: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-//        iv.frame = CGRect(x: 0, y: 0, width: 78, height: 78)
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.image = resizeImage(image: UIImage(named: "ProfileDefault")!, targetSize: CGSize(width: 78.0, height: 78.0))
@@ -27,8 +26,10 @@ class ProfileViewController: UIViewController {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor(hex: "F5F5F5")
-        collectionView.register(ProfileViewCell1.self, forCellWithReuseIdentifier: "CollectionViewCell1")
-        collectionView.register(ProfileViewCell2.self, forCellWithReuseIdentifier: "CollectionViewCell2")
+        collectionView.register(SelfUserInfoCell.self, forCellWithReuseIdentifier: SelfUserInfoCell.identifier)
+        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(ProfileGraphCell.self, forCellWithReuseIdentifier: ProfileGraphCell.identifier)
+
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -99,7 +100,7 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -112,15 +113,22 @@ extension ProfileViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell1" , for: indexPath) as? ProfileViewCell1 else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelfUserInfoCell.identifier , for: indexPath) as? SelfUserInfoCell else {
             return UICollectionViewCell()
         }
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 20
         return cell
+        }else if indexPath.section == 1 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+                return UICollectionViewCell()
+            }
+            cell.backgroundColor = .white
+            cell.layer.cornerRadius = 20
+            return cell
         }else {
             print(indexPath)
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell2" , for: indexPath) as? ProfileViewCell2 else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCell.identifier , for: indexPath) as? ProfileGraphCell else {
                 return UICollectionViewCell()
             }
             cell.backgroundColor = .white
@@ -139,8 +147,10 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 358, height: 166)
         } else if indexPath.section == 1 {
             return CGSize(width: 358, height: 119)
+        } else {
+            return CGSize(width: 358, height: 190)
         }
-        return CGSize(width: 358, height: 166)
+        
     }
     
     

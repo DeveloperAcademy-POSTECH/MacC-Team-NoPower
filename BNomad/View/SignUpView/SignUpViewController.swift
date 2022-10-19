@@ -12,12 +12,13 @@ class SignUpViewController: UIViewController {
     // MARK: - Properties
 
     let requestItem = ["닉네임", "직업", "상태"]
+    var index = 0
     
-    private let requestLabel: UILabel = {
+    lazy var requestLabel: UILabel = {
         let label = UILabel()
-        label.text = "노마드가 되기 위해\n닉네임을 알려주세요!"
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         label.numberOfLines = 2
+        
         return label
     }()
     
@@ -69,12 +70,14 @@ class SignUpViewController: UIViewController {
         textfield.font = .preferredFont(forTextStyle: .title3)
         textfield.borderStyle = .none
         textfield.clearButtonMode = .whileEditing
+        
         return textfield
     }()
     
-    private let nicknameLineView: UIView = {
+    private var nicknameLineView: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray1
+        
         return view
     }()
     
@@ -84,12 +87,14 @@ class SignUpViewController: UIViewController {
         textfield.font = .preferredFont(forTextStyle: .title3)
         textfield.borderStyle = .none
         textfield.clearButtonMode = .whileEditing
+        
         return textfield
     }()
     
-    private let occupationLineView: UIView = {
+    private var occupationLineView: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray1
+        
         return view
     }()
     
@@ -99,12 +104,14 @@ class SignUpViewController: UIViewController {
         textfield.font = .preferredFont(forTextStyle: .title3)
         textfield.borderStyle = .none
         textfield.clearButtonMode = .whileEditing
+        
         return textfield
     }()
     
-    private let statusLineView: UIView = {
+    private var statusLineView: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray1
+        
         return view
     }()
     
@@ -129,8 +136,17 @@ class SignUpViewController: UIViewController {
         configUI()
         
         view.addSubview(dotsStackView)
-        dotsStackView.anchor(bottom: requestLabel.bottomAnchor, right: nicknameField.rightAnchor, paddingBottom: 0, paddingRight: 0)
+        dotsStackView.anchor(
+            bottom: requestLabel.bottomAnchor,
+            right: nicknameField.rightAnchor,
+            paddingBottom: 0,
+            paddingRight: 0
+        )
 
+        nicknameField.delegate = self
+        occupationField.delegate = self
+        statusField.delegate = self
+        
         occupationField.isHidden = true
         occupationLineView.isHidden = true
         statusField.isHidden = true
@@ -139,30 +155,7 @@ class SignUpViewController: UIViewController {
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
     }
     
-    @objc func didTapInputConfirmButton() {
-
-        if occupationField.isHidden == true {
-            if nicknameField.text?.isEmpty == true {
-                print("닉네임을 입력하세요.")
-            } else {
-                occupationField.isHidden = false
-                occupationLineView.isHidden = false
-                dot1View.backgroundColor = CustomColor.nomadGray2
-                dot2View.backgroundColor = CustomColor.nomadBlue
-            }
-        } else if occupationField.isHidden == false && statusField.isHidden == true {
-            if occupationField.text?.isEmpty == true {
-                print("직업을 입력하세요.")
-            } else {
-                statusField.isHidden = false
-                statusLineView.isHidden = false
-                dot2View.backgroundColor = CustomColor.nomadGray2
-                dot3View.backgroundColor = CustomColor.nomadBlue
-            }
-        } else {
-            print("이용자 정보 입력완료")
-        }
-    }
+    // MARK: - Methods
     
     func configUI() {
         let viewWidth = view.bounds.width
@@ -175,8 +168,9 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(requestLabel)
+        updateRequestLabel(index: 0)
         requestLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 87, paddingLeft: contentInset)
-        requestLabel.asColor(targetString: "닉네임", color: CustomColor.nomadBlue ?? .label)
+        requestLabel.asColor(targetString: requestItem[0], color: CustomColor.nomadBlue ?? .label)
 
         view.addSubview(nicknameField)
         nicknameField.inputAccessoryView = keyboardAccView
@@ -189,21 +183,53 @@ class SignUpViewController: UIViewController {
         )
         
         view.addSubview(nicknameLineView)
-        nicknameLineView.anchor(top: nicknameField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldLineSpacing, paddingLeft: 0, width: textFieldWidth, height: lineHeight)
+        nicknameLineView.anchor(
+            top: nicknameField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldLineSpacing,
+            paddingLeft: 0, width: textFieldWidth,
+            height: lineHeight
+        )
         
         view.addSubview(occupationField)
         occupationField.inputAccessoryView = keyboardAccView
-        occupationField.anchor(top: nicknameField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldTopSpacing, paddingLeft: 0, width: textFieldWidth)
+        occupationField.anchor(
+            top: nicknameField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldTopSpacing,
+            paddingLeft: 0,
+            width: textFieldWidth
+        )
         
         view.addSubview(occupationLineView)
-        occupationLineView.anchor(top: occupationField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldLineSpacing, paddingLeft: 0, width: textFieldWidth, height: lineHeight)
+        occupationLineView.anchor(
+            top: occupationField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldLineSpacing,
+            paddingLeft: 0,
+            width: textFieldWidth,
+            height: lineHeight
+        )
         
         view.addSubview(statusField)
         statusField.inputAccessoryView = keyboardAccView
-        statusField.anchor(top: occupationField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldTopSpacing, paddingLeft: 0, width: textFieldWidth)
+        statusField.anchor(
+            top: occupationField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldTopSpacing,
+            paddingLeft: 0,
+            width: textFieldWidth
+        )
         
         view.addSubview(statusLineView)
-        statusLineView.anchor(top: statusField.bottomAnchor, left: requestLabel.leftAnchor, paddingTop: textFieldLineSpacing, paddingLeft: 0, width: textFieldWidth, height: lineHeight)
+        statusLineView.anchor(
+            top: statusField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldLineSpacing,
+            paddingLeft: 0,
+            width: textFieldWidth,
+            height: lineHeight
+        )
         
         keyboardAccView.addSubview(inputConfirmButton)
         
@@ -218,5 +244,68 @@ class SignUpViewController: UIViewController {
             width: inputConfirmButtonSuperview.bounds.width,
             height: inputConfirmButtonSuperview.bounds.height
         )
+    }
+    
+    func updateRequestLabel(index: Int) {
+        requestLabel.text = "노마드가 되기 위해\n\(requestItem[index])을 알려주세요!"
+    }
+    
+    // MARK: - Actions
+    
+    @objc func didTapInputConfirmButton() {
+
+        if occupationField.isHidden == true {
+            if nicknameField.text?.isEmpty == true {
+                print("닉네임을 입력하세요.")
+            } else {
+                occupationField.isHidden = false
+                occupationLineView.isHidden = false
+                dot1View.backgroundColor = CustomColor.nomadGray2
+                dot2View.backgroundColor = CustomColor.nomadBlue
+                
+                index = 1
+                updateRequestLabel(index: index)
+                requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
+            }
+            
+        } else if occupationField.isHidden == false && statusField.isHidden == true {
+            if occupationField.text?.isEmpty == true {
+                print("직업을 입력하세요.")
+            } else {
+                statusField.isHidden = false
+                statusLineView.isHidden = false
+                dot2View.backgroundColor = CustomColor.nomadGray2
+                dot3View.backgroundColor = CustomColor.nomadBlue
+                
+                index = 2
+                updateRequestLabel(index: index)
+                requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
+            }
+            
+        } else {
+            print("이용자 정보 입력완료")
+        }
+    }
+}
+
+extension SignUpViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == nicknameField {
+            nicknameLineView.backgroundColor = CustomColor.nomadBlue
+        } else if textField == occupationField {
+            occupationLineView.backgroundColor = CustomColor.nomadBlue
+        } else {
+            statusLineView.backgroundColor = CustomColor.nomadBlue
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == nicknameField {
+            nicknameLineView.backgroundColor = CustomColor.nomadGray1
+        } else if textField == occupationField {
+            occupationLineView.backgroundColor = CustomColor.nomadGray1
+        } else {
+            statusLineView.backgroundColor = CustomColor.nomadGray1
+        }
     }
 }

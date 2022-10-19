@@ -10,6 +10,9 @@
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
+		8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */; };
+		8C21CC4328FF8394009043AF /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4228FF8394009043AF /* ClusterAnnotationView.swift */; };
+		8C21CC4528FF89BA009043AF /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4428FF89BA009043AF /* MapData.swift */; };
 		DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B4E28F7D70F002838A4 /* AppDelegate.swift */; };
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5228F7D70F002838A4 /* ViewController.swift */; };
@@ -41,6 +44,9 @@
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
+		8C21CC4228FF8394009043AF /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
+		8C21CC4428FF89BA009043AF /* MapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapData.swift; sourceTree = "<group>"; };
 		DF288B4B28F7D70F002838A4 /* BNomad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BNomad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF288B4E28F7D70F002838A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF288B5028F7D70F002838A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,6 +148,9 @@
 			isa = PBXGroup;
 			children = (
 				DF9618A528FCEF6A00E21D30 /* MapViewController.swift */,
+				8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */,
+				8C21CC4228FF8394009043AF /* ClusterAnnotationView.swift */,
+				8C21CC4428FF89BA009043AF /* MapData.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -325,12 +334,15 @@
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
+				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
+				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
+				8C21CC4328FF8394009043AF /* ClusterAnnotationView.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

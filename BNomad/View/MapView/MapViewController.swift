@@ -14,12 +14,13 @@ class MapViewController: UIViewController {
 
     private let locationManager = CLLocationManager()
     
-    let userLocation = MKUserLocation()
-    let span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1) // span을 바꾸어 적용하려고 해도 잘 안됩니다. setRegion에 변화를 줄 수 있는 방법을 계속 찾아볼 예정입니다.
-    lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: userLocation.coordinate, span: span)
+    private let userLocationCL = CLLocationCoordinate2D(latitude: 35, longitude: 129)
+    private let userLocationMK = MKUserLocation()
+    private let span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1) // span을 바꾸어 적용하려고 해도 잘 안됩니다. setRegion에 변화를 줄 수 있는 방법을 계속 찾아볼 예정입니다.
+    private lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: userLocationCL, span: span)
     
     // 맵 띄우기
-    lazy var map: MKMapView = {
+    private lazy var map: MKMapView = {
         let map = MKMapView()
         map.setRegion(startRegion, animated: false)
         map.pointOfInterestFilter = .some(MKPointOfInterestFilter(including: [.airport, .beach, .campground, .publicTransport]))
@@ -32,7 +33,7 @@ class MapViewController: UIViewController {
     }()
     
     // 맵 회전 시에만 일시적으로 등장하는 나침반
-    lazy var compass: MKCompassButton = {
+    private lazy var compass: MKCompassButton = {
         let compass = MKCompassButton(mapView: map)
         compass.compassVisibility = .adaptive
         compass.translatesAutoresizingMaskIntoConstraints = false
@@ -118,7 +119,7 @@ class MapViewController: UIViewController {
         
         locationAuthorization()
         configueMapUI()
-        
+        registerAnnotationViewClasses()
         
     }
     
@@ -153,7 +154,13 @@ class MapViewController: UIViewController {
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
         
         map.addOverlay(circleOverlay)
-
+        map.addAnnotations(placeAnnotations)
+    }
+    
+    func registerAnnotationViewClasses() {
+        map.register(CoworkingAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        map.register(LibraryAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        map.register(CafePlaceAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     }
     
 }
@@ -167,4 +174,16 @@ extension MapViewController: MKMapViewDelegate {
         MKCircleRenderer(circle: circleOverlay)
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? PlaceToMKAnnotation else { return nil }
+        
+        switch annotation.type {
+        case .coworking:
+            return CoworkingAnnotationView(annotation: annotation, reuseIdentifier: CoworkingAnnotationView.ReuseID)
+        case .cafe:
+            return CafePlaceAnnotationView(annotation: annotation, reuseIdentifier: CafePlaceAnnotationView.ReuseID)
+        case .library:
+            return LibraryAnnotationView(annotation: annotation, reuseIdentifier: LibraryAnnotationView.ReuseID)
+        }
+    }
 }

@@ -8,22 +8,38 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
+    // MARK: - Properties
+    
+    private let logoView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "tempLogo")
+        
+        return view
+    }()
+    
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        configLogo()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // MARK: - Methods
+    
+    func configLogo() {
+        let viewWidth = view.bounds.width
+        let viewHeight = view.bounds.height
+        let imageWidth = viewWidth * 196/390
+        let imageHeight = viewHeight * 33/844
+        
+        view.addSubview(logoView)
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        logoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        logoView.widthAnchor.constraint(equalToConstant: imageWidth).isActive = true
+        logoView.heightAnchor.constraint(equalToConstant: imageHeight).isActive = true
     }
-    */
-
 }

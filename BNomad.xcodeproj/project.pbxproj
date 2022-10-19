@@ -44,6 +44,7 @@
 		0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUserInfoCell.swift; sourceTree = "<group>"; };
 		041351A028FF7E72005D19CC /* VisitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitingInfoCell.swift; sourceTree = "<group>"; };
 		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
+		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -107,6 +108,7 @@
 		DF288B4D28F7D70F002838A4 /* BNomad */ = {
 			isa = PBXGroup;
 			children = (
+				7E5CF5D228FFB73400641E74 /* BNomad.entitlements */,
 				DFE747B628FD75690048E70A /* Utils */,
 				DF96189D28FCEEF200E21D30 /* API */,
 				DF96189C28FCEEE900E21D30 /* View */,
@@ -480,6 +482,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -507,6 +510,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

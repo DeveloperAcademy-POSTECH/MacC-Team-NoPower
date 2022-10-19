@@ -11,8 +11,8 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Properties
 
-    let requestItem = ["닉네임", "직업", "상태"]
-    var index = 0
+    private let requestItem = ["닉네임", "직업", "상태"]
+    private var index = 0
     
     lazy var requestLabel: UILabel = {
         let label = UILabel()
@@ -241,7 +241,6 @@ class SignUpViewController: UIViewController {
         inputConfirmButton.anchor(
             left: inputConfirmButtonSuperview.leftAnchor,
             right: inputConfirmButtonSuperview.rightAnchor,
-            width: inputConfirmButtonSuperview.bounds.width,
             height: inputConfirmButtonSuperview.bounds.height
         )
     }
@@ -287,6 +286,8 @@ class SignUpViewController: UIViewController {
         }
     }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension SignUpViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {

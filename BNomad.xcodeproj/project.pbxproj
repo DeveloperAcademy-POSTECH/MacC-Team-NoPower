@@ -30,6 +30,7 @@
 		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
 		DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */; };
 		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
+		DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747C929000FC80048E70A /* ProfileEditViewController.swift */; };
 		E25A674A28F7DF1C004614B0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */; };
 		E25A674D28F7DF88004614B0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E25A674C28F7DF88004614B0 /* FirebaseAnalytics */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
@@ -63,6 +64,7 @@
 		DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		DF9618B328FCF7D300E21D30 /* UsersInPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersInPlace.swift; sourceTree = "<group>"; };
 		DFE747B828FD75980048E70A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		DFE747C929000FC80048E70A /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
 		E25A674928F7DF1C004614B0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		DF9618A028FCEF0500E21D30 /* ProfileView */ = {
 			isa = PBXGroup;
 			children = (
+				DFE747C829000FAF0048E70A /* ProfileEditView */,
 				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
 				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
@@ -212,6 +215,14 @@
 				7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		DFE747C829000FAF0048E70A /* ProfileEditView */ = {
+			isa = PBXGroup;
+			children = (
+				DFE747C929000FC80048E70A /* ProfileEditViewController.swift */,
+			);
+			path = ProfileEditView;
 			sourceTree = "<group>";
 		};
 		E25A674E28F7E1AB004614B0 /* Application */ = {
@@ -342,6 +353,7 @@
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
+				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 			);

@@ -168,7 +168,7 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(requestLabel)
-        updateRequestLabel(index: 0)
+        updateRequestLabel(index: index)
         requestLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 87, paddingLeft: contentInset)
         requestLabel.asColor(targetString: requestItem[0], color: CustomColor.nomadBlue ?? .label)
 

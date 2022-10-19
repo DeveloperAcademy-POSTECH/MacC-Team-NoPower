@@ -1,14 +1,15 @@
 //
-//  BottomSheetContainerViewController.swift
-//  BottomSheet
+//  ModalViewController.swift
+//  BNomad
 //
-//  Created by Zafar on 8/13/20.
+//  Created by 박진웅 on 2022/10/19.
+//
 //  Copyright © 2020 Zafar. All rights reserved.
 //
 
 import UIKit
 
-open class BottomSheetContainerViewController<Content: UIViewController, BottomSheet: UIViewController> : UIViewController, UIGestureRecognizerDelegate {
+open class ModalViewController<Content: UIViewController, BottomSheet: UIViewController> : UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Initialization
     public init(contentViewController: Content,
@@ -28,7 +29,78 @@ open class BottomSheetContainerViewController<Content: UIViewController, BottomS
         fatalError("init(coder:) is not supported")
     }
     
-    // MARK: - Bottom Sheet Actions
+    let contentViewController: Content
+    let bottomSheetViewController: BottomSheet
+    
+    public struct BottomSheetConfiguration {
+        let height: CGFloat
+        let initialOffset: CGFloat
+    }
+    
+    private let configuration: BottomSheetConfiguration
+    
+    public enum BottomSheetState {
+        case initial
+        case full
+    }
+    
+    var state: BottomSheetState = .initial
+    
+    lazy var panGesture: UIPanGestureRecognizer = {
+        let pan = UIPanGestureRecognizer()
+        pan.delegate = self
+        pan.addTarget(self, action: #selector(handlePan))
+        return pan
+    }()
+
+    private var topConstraint = NSLayoutConstraint()
+    
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    private func setupUI() {
+        self.addChild(contentViewController)
+        self.addChild(bottomSheetViewController)
+        
+        self.view.addSubview(contentViewController.view)
+        self.view.addSubview(bottomSheetViewController.view)
+        bottomSheetViewController.view.addGestureRecognizer(panGesture)
+        
+        contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        bottomSheetViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            contentViewController.view.leftAnchor
+                .constraint(equalTo: self.view.leftAnchor),
+            contentViewController.view.rightAnchor
+                .constraint(equalTo: self.view.rightAnchor),
+            contentViewController.view.topAnchor
+                .constraint(equalTo: self.view.topAnchor),
+            contentViewController.view.bottomAnchor
+                .constraint(equalTo: self.view.bottomAnchor)
+        ])
+        
+        contentViewController.didMove(toParent: self)
+        
+        topConstraint = bottomSheetViewController.view.topAnchor
+            .constraint(equalTo: self.view.bottomAnchor,
+                        constant: -configuration.initialOffset)
+        
+        NSLayoutConstraint.activate([
+            bottomSheetViewController.view.heightAnchor
+                .constraint(equalToConstant: configuration.height),
+            bottomSheetViewController.view.leftAnchor
+                .constraint(equalTo: self.view.leftAnchor),
+            bottomSheetViewController.view.rightAnchor
+                .constraint(equalTo: self.view.rightAnchor),
+            topConstraint
+        ])
+        
+        bottomSheetViewController.didMove(toParent: self)
+    }
+
     public func showBottomSheet(animated: Bool = true) {
         self.topConstraint.constant = -configuration.height
         
@@ -64,7 +136,6 @@ open class BottomSheetContainerViewController<Content: UIViewController, BottomS
         }
     }
     
-    // MARK: - Pan Action
     @objc func handlePan(_ sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: bottomSheetViewController.view)
         let velocity = sender.velocity(in: bottomSheetViewController.view)
@@ -121,83 +192,5 @@ open class BottomSheetContainerViewController<Content: UIViewController, BottomS
             }
         default: break
         }
-    }
-    
-    // MARK: - Configuration
-    public struct BottomSheetConfiguration {
-        let height: CGFloat
-        let initialOffset: CGFloat
-    }
-    
-    private let configuration: BottomSheetConfiguration
-    
-    // MARK: - State
-    public enum BottomSheetState {
-        case initial
-        case full
-    }
-    
-    var state: BottomSheetState = .initial
-    
-    // MARK: - Children
-    let contentViewController: Content
-    let bottomSheetViewController: BottomSheet
-    
-    // MARK: - Top Constraint
-    private var topConstraint = NSLayoutConstraint()
-    
-    // MARK: - Pan Gesture
-    lazy var panGesture: UIPanGestureRecognizer = {
-        let pan = UIPanGestureRecognizer()
-        pan.delegate = self
-        pan.addTarget(self, action: #selector(handlePan))
-        return pan
-    }()
-    
-    // MARK: - UI Setup
-    private func setupUI() {
-        self.addChild(contentViewController)
-        self.addChild(bottomSheetViewController)
-        
-        self.view.addSubview(contentViewController.view)
-        self.view.addSubview(bottomSheetViewController.view)
-        bottomSheetViewController.view.addGestureRecognizer(panGesture)
-        
-        contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        bottomSheetViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            contentViewController.view.leftAnchor
-                .constraint(equalTo: self.view.leftAnchor),
-            contentViewController.view.rightAnchor
-                .constraint(equalTo: self.view.rightAnchor),
-            contentViewController.view.topAnchor
-                .constraint(equalTo: self.view.topAnchor),
-            contentViewController.view.bottomAnchor
-                .constraint(equalTo: self.view.bottomAnchor)
-        ])
-        
-        contentViewController.didMove(toParent: self)
-        
-        topConstraint = bottomSheetViewController.view.topAnchor
-            .constraint(equalTo: self.view.bottomAnchor,
-                        constant: -configuration.initialOffset)
-        
-        NSLayoutConstraint.activate([
-            bottomSheetViewController.view.heightAnchor
-                .constraint(equalToConstant: configuration.height),
-            bottomSheetViewController.view.leftAnchor
-                .constraint(equalTo: self.view.leftAnchor),
-            bottomSheetViewController.view.rightAnchor
-                .constraint(equalTo: self.view.rightAnchor),
-            topConstraint
-        ])
-        
-        bottomSheetViewController.didMove(toParent: self)
-    }
-    
-    // MARK: - UIGestureRecognizer Delegate
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }

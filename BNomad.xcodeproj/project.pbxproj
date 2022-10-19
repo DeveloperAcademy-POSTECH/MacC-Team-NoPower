@@ -37,11 +37,10 @@
 		F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB428FFA74000185A1F /* FirebaseStorage */; };
 		F6183CB728FFA83800185A1F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB628FFA83800185A1F /* FirebaseFirestore */; };
 		F6183CB928FFA83F00185A1F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB828FFA83F00185A1F /* FirebaseAnalytics */; };
-		F6183CC128FFABEC00185A1F /* WelcomeContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBC28FFABEC00185A1F /* WelcomeContainerViewController.swift */; };
-		F6183CC228FFABEC00185A1F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBD28FFABEC00185A1F /* Extensions.swift */; };
+		F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBC28FFABEC00185A1F /* FinalViewController.swift */; };
 		F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */; };
-		F6183CC428FFABEC00185A1F /* MyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBF28FFABEC00185A1F /* MyCustomViewController.swift */; };
-		F6183CC628FFAC2600185A1F /* BottomSheetContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC528FFAC2600185A1F /* BottomSheetContainerViewController.swift */; };
+		F6183CC828FFC3B900185A1F /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC728FFC3B900185A1F /* ModalViewController.swift */; };
+		F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */; };
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -72,11 +71,10 @@
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675528F7E398004614B0 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
-		F6183CBC28FFABEC00185A1F /* WelcomeContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeContainerViewController.swift; sourceTree = "<group>"; };
-		F6183CBD28FFABEC00185A1F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F6183CBC28FFABEC00185A1F /* FinalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalViewController.swift; sourceTree = "<group>"; };
 		F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
-		F6183CBF28FFABEC00185A1F /* MyCustomViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCustomViewController.swift; sourceTree = "<group>"; };
-		F6183CC528FFAC2600185A1F /* BottomSheetContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomSheetContainerViewController.swift; sourceTree = "<group>"; };
+		F6183CC728FFC3B900185A1F /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
+		F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalViewController.swift; sourceTree = "<group>"; };
 		F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -254,11 +252,10 @@
 		F6183CBA28FFABAB00185A1F /* PlaceViewBeforeCheckIn */ = {
 			isa = PBXGroup;
 			children = (
-				F6183CC528FFAC2600185A1F /* BottomSheetContainerViewController.swift */,
+				F6183CC728FFC3B900185A1F /* ModalViewController.swift */,
 				F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */,
-				F6183CBD28FFABEC00185A1F /* Extensions.swift */,
-				F6183CBF28FFABEC00185A1F /* MyCustomViewController.swift */,
-				F6183CBC28FFABEC00185A1F /* WelcomeContainerViewController.swift */,
+				F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */,
+				F6183CBC28FFABEC00185A1F /* FinalViewController.swift */,
 			);
 			path = PlaceViewBeforeCheckIn;
 			sourceTree = "<group>";
@@ -351,11 +348,11 @@
 				F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */,
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
-				F6183CC128FFABEC00185A1F /* WelcomeContainerViewController.swift in Sources */,
+				F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
-				F6183CC428FFABEC00185A1F /* MyCustomViewController.swift in Sources */,
 				DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */,
+				F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */,
 				DF9618AA28FCEF9700E21D30 /* PlaceCheckInView.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */,
@@ -365,10 +362,9 @@
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
-				F6183CC628FFAC2600185A1F /* BottomSheetContainerViewController.swift in Sources */,
+				F6183CC828FFC3B900185A1F /* ModalViewController.swift in Sources */,
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
-				F6183CC228FFABEC00185A1F /* Extensions.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,

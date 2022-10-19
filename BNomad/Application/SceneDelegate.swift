@@ -16,9 +16,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = WelcomeContainerViewController(
+        window?.rootViewController = FinalViewController(
             contentViewController: MapViewController(),
-            bottomSheetViewController: MyCustomViewController(),
+            bottomSheetViewController: CustomModalViewController(),
             bottomSheetConfiguration: .init(
                 height: UIScreen.main.bounds.height * 0.6,
                 initialOffset: 60 + window!.safeAreaInsets.bottom

@@ -57,7 +57,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     // TODO: 변경해야함
     func render() {
-        // 프로필 이미지 : 패딩 임시
+        // 프로필 이미지
         self.addSubview(userProfileImg)
         userProfileImg.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 17, paddingLeft: 24)
         

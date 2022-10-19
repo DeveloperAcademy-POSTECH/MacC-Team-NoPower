@@ -54,19 +54,13 @@ class SelfUserInfoCell: UICollectionViewCell {
     func render() {
 
         contentView.addSubview(nameLabel)
-        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
         
         contentView.addSubview(jobLabel)
-        jobLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60).isActive = true
-        jobLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        jobLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 60, paddingLeft: 20, paddingRight: 20)
         
         contentView.addSubview(statusLabel)
-        statusLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 110).isActive = true
-        statusLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        statusLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        statusLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 110, paddingLeft: 20, paddingRight: 20)
         
     }
 

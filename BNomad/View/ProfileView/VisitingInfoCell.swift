@@ -70,27 +70,21 @@ class VisitingInfoCell: UICollectionViewCell {
     func render() {
 
         contentView.addSubview(nameLabel)
-        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
         
         let stack = [UIStackView(arrangedSubviews: [checkinLabel, checkinTimeLabel]), UIStackView(arrangedSubviews: [stayedLabel, stayedTimeLabel])]
         stack.forEach {
             $0.axis = .vertical
             $0.spacing = 1
             $0.distribution = .fillEqually
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         contentView.addSubview(stack[0])
-        stack[0].translatesAutoresizingMaskIntoConstraints = false
-        stack[0].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60).isActive = true
-        stack[0].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 60, paddingLeft: 20)
         
         contentView.addSubview(stack[1])
-        stack[1].translatesAutoresizingMaskIntoConstraints = false
-        stack[1].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60).isActive = true
-        stack[1].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 200).isActive = true
-
+        stack[1].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 60, paddingLeft: 200)
 
     }
     

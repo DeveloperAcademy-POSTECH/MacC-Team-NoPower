@@ -7,44 +7,52 @@
 
 import UIKit
 
-class PlaceInfoViewController: UIViewController, UISheetPresentationControllerDelegate {
+class PlaceInfoViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    lazy var pinButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("장소핀", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(didTapPinButton), for: .touchUpInside)
+        
+        return button
+    }()
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
             super.viewDidLoad()
             
-            let btn = UIButton(type: .system)
-            view.addSubview(btn)
-            btn.frame = .init(x: 100, y: 100, width: 100, height: 100)
-            btn.setTitle("장소핀", for: .normal)
-            btn.addTarget(self, action: #selector(presentModalBtnTap), for: .touchUpInside)
+        view.addSubview(pinButton)
+        pinButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pinButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pinButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
         }
-        
-        @objc private func presentModalBtnTap() {
-            
-            let vc = UIViewController()
-            vc.view.backgroundColor = .white
-            vc.view.layer.cornerRadius = 12
-            vc.modalPresentationStyle = .pageSheet
-            
-            if let sheet = vc.sheetPresentationController {
-                
-                //지원할 크기 지정
-                sheet.detents = [.medium(), .large()]
-                //크기 변하는거 감지
-                sheet.delegate = self
-               
-                //시트 상단에 그래버 표시 (기본 값은 false)
-                sheet.prefersGrabberVisible = true
-                
-                //처음 크기 지정 (기본 값은 가장 작은 크기)
-                //sheet.selectedDetentIdentifier = .large
-                
-                //뒤 배경 흐리게 제거 (기본 값은 모든 크기에서 배경 흐리게 됨)
-                //sheet.largestUndimmedDetentIdentifier = .medium
-                
-            }
-            
-            present(vc, animated: true, completion: nil)
-        }
-        
+    
+    // MARK: - Helpers
+    
+    @objc func didTapPinButton() {
+        showMyViewController()
     }
+    
+            func showMyViewController() {
+//                let navigationController = UINavigationController(rootViewController: PlaceInfoViewModalViewController())
+                present(PlaceInfoModalViewController(), animated: true, completion: nil)
+    }
+             }
+     
+
+    // MARK: - PlaceInfoViewController
+
+extension PlaceInfoViewController: UISheetPresentationControllerDelegate {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+
+    }
+}
+
+

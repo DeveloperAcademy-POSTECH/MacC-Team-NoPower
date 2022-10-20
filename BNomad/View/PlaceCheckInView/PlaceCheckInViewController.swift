@@ -11,7 +11,6 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
-    // 해당 공간에 체크인한 사람
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     // MARK: - LifeCycle
@@ -19,25 +18,21 @@ class PlaceCheckInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // checkedProfileListView
         placeCheckInView()
-//        view.backgroundColor = .systemBackground
-//        view.backgroundColor = CustomColor.nomadGray2
         collectionView.backgroundColor = CustomColor.nomadGray2
     }
 
 
     // MARK: - Helps
     
-    // 컬렉션 뷰 레이아웃
     func placeCheckInView() {
 
         view.addSubview(collectionView)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
-        self.collectionView.register(userProfileViewCell.self, forCellWithReuseIdentifier: userProfileViewCell.identifier)
-        self.collectionView.register(placeInforViewCell.self, forCellWithReuseIdentifier: placeInforViewCell.identifier)
+        self.collectionView.register(UserProfileViewCell.self, forCellWithReuseIdentifier: UserProfileViewCell.identifier)
+        self.collectionView.register(PlaceInforViewCell.self, forCellWithReuseIdentifier: PlaceInforViewCell.identifier)
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +61,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        guard let userProfileViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: userProfileViewCell.identifier, for: indexPath) as? userProfileViewCell else {
+        guard let userProfileViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileViewCell.identifier, for: indexPath) as? UserProfileViewCell else {
             return UICollectionViewCell()
         }
         
@@ -74,7 +69,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        guard let placeInforViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: placeInforViewCell.identifier, for: indexPath) as? placeInforViewCell else {
+        guard let placeInforViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInforViewCell.identifier, for: indexPath) as? PlaceInforViewCell else {
             return UICollectionViewCell()
         }
         
@@ -130,22 +125,12 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     
     // 마진
-    // TODO: 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
             return UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         }
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
-    
-    
-    
-//
-//    // header
-//    private func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CheckedProfileListHeader", for: indexPath)
-//        return header
-//    }
 }
 
 

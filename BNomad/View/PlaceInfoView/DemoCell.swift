@@ -10,6 +10,8 @@ import UIKit
 class DemoCell: UICollectionViewCell {
     static let cellIdentifier = "DemoCell"
     
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .red

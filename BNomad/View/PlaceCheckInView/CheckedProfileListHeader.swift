@@ -36,7 +36,7 @@ class CheckedProfileListHeader: UICollectionViewCell {
 
     lazy var menuView: UIView = {
         let menuView = UIView()
-        menuView.frame = CGRect(x:0, y:0, width: 64, height: 27)
+        menuView.frame = CGRect(x:0, y:0, width: 64, height: 35)
         menuView.layer.borderWidth = 1
         menuView.layer.cornerRadius = 12
         menuView.layer.borderColor = CustomColor.nomadGray2?.cgColor
@@ -64,7 +64,7 @@ class CheckedProfileListHeader: UICollectionViewCell {
         addSubview(menuView)
         label.anchor(left: contentView.leftAnchor, paddingLeft: 17)
         label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        menuView.anchor(left: contentView.leftAnchor, paddingLeft: 309, width: 64, height: 27)
+        menuView.anchor(left: contentView.leftAnchor, paddingLeft: 309, width: 64, height: 35)
         menuView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
 }

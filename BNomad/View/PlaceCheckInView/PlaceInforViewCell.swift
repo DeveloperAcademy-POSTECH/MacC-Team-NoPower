@@ -9,9 +9,9 @@ import UIKit
 
 class PlaceInforViewCell: UICollectionViewCell {
     
-    // MARK: - Properties
-    
     static let identifier = "placeInforViewCell"
+    
+    // MARK: - Properties
     
     private let placeNameLable: UILabel = {
         let label = UILabel()
@@ -46,11 +46,48 @@ class PlaceInforViewCell: UICollectionViewCell {
         return label
     }()
     
+    private let visitorTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "누적 노마더"
+        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
+        label.tintColor = CustomColor.nomadGray1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let visitorsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "142명"
+        label.font = .preferredFont(forTextStyle: .title2, weight: .semibold)
+        label.tintColor = CustomColor.nomadGray1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let workHoursTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "누적 근무시간"
+        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
+        label.tintColor = CustomColor.nomadBlack
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let workHoursLabel: UILabel = {
+        let label = UILabel()
+        label.text = "2173시간"
+        label.font = .preferredFont(forTextStyle: .title2, weight: .semibold)
+        label.tintColor = CustomColor.nomadGray1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        render()
+        renderInfo()
+        renderAnalysis()
         self.backgroundColor = .white
     }
     
@@ -58,18 +95,33 @@ class PlaceInforViewCell: UICollectionViewCell {
         fatalError("init(corder:) has not been implemented")
     }
     
-    func render() {
+    func renderInfo() {
         // 공간 이름
         self.addSubview(placeNameLable)
-        placeNameLable.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 10, paddingLeft: 17)
+        placeNameLable.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 15, paddingLeft: 17)
         // 픽토그램
         self.addSubview(locationIcon)
-        locationIcon.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 37, paddingLeft: 18)
+        locationIcon.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 18)
         // 소재지
         self.addSubview(locationLabel)
-        locationLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 36, paddingLeft: 28)
+        locationLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 39, paddingLeft: 28)
         // 공지사항
         self.addSubview(placeNoteLabel)
         placeNoteLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 60, paddingLeft: 18)
     }
+    
+    func renderAnalysis() {
+        // 누적 노마더 통계
+        self.addSubview(visitorTitleLabel)
+        self.addSubview(visitorsLabel)
+        visitorTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 115, paddingLeft: 75)
+        visitorsLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 135, paddingLeft: 72)
+        
+        // 누적 근무시간 통계
+        self.addSubview(workHoursTitleLabel)
+        self.addSubview(workHoursLabel)
+        workHoursTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 115, paddingLeft: 230)
+        workHoursLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 135, paddingLeft: 220)
+    }
 }
+

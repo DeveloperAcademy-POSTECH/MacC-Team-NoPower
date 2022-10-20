@@ -91,9 +91,9 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 0 {
-            return CGSize(width: 390, height: 160)
+            return CGSize(width: 390, height: 150)
         } else if indexPath.section == 1 {
-            return CGSize(width: 390, height: 10)
+            return CGSize(width: 390, height: 8)
         } else if indexPath.section == 2 {
             return CGSize(width: 390, height: 220)
         } else if indexPath.section == 3 {

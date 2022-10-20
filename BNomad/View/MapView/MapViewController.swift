@@ -107,7 +107,8 @@ class MapViewController: UIViewController {
     
     // 추후 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
     lazy var circleOverlay: MKCircle = {
-        let circle = MKCircle(center: currentLocation!.coordinate, radius: 500)
+        guard let location = currentLocation else { return MKCircle(center: CLLocationCoordinate2D(), radius: 0) }
+        let circle = MKCircle(center: location.coordinate, radius: 500)
         return circle
     }()
 
@@ -118,7 +119,7 @@ class MapViewController: UIViewController {
         
         locationAuthorization()
         configueMapUI()
-        registerAnnotationViewClasses()
+//        registerAnnotationViewClasses()
         
     }
     
@@ -157,11 +158,11 @@ class MapViewController: UIViewController {
         map.addAnnotations(placeAnnotations)
     }
     
-    func registerAnnotationViewClasses() {
-        map.register(CoworkingAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        map.register(LibraryAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        map.register(CafePlaceAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-    }
+//    func registerAnnotationViewClasses() {
+//        map.register(CoworkingAnnotationView.self, forAnnotationViewWithReuseIdentifier: "dda")
+//        map.register(LibraryAnnotationView.self, forAnnotationViewWithReuseIdentifier: "dd")
+//        map.register(CafePlaceAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cafeAnnotaion")
+//    }
     
 }
 
@@ -180,7 +181,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? PlaceToMKAnnotation else { return nil }
-        
+
         switch annotation.type {
         case .coworking:
             return CoworkingAnnotationView(annotation: annotation, reuseIdentifier: CoworkingAnnotationView.ReuseID)

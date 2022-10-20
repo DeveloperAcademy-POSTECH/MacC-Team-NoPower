@@ -20,10 +20,18 @@ class ProfileEditViewController: UIViewController {
         return button
     }()
     
+    let plusImage: UIImageView = {
+        let plusImage = UIImageView()
+        plusImage.image = UIImage(systemName: "plus.circle.fill")
+        plusImage.tintColor = CustomColor.nomadBlue
+        return plusImage
+    }()
+    
     private let nickNameLabel: UILabel = {
         let label = UILabel()
         label.text = "이름⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+        label.asColor(targetString: "⋆", color: .systemRed)
         return label
     }()
     
@@ -52,6 +60,7 @@ class ProfileEditViewController: UIViewController {
         let label = UILabel()
         label.text = "직책⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+        label.asColor(targetString: "⋆", color: .systemRed)
         return label
     }()
     
@@ -79,6 +88,7 @@ class ProfileEditViewController: UIViewController {
         let label = UILabel()
         label.text = "자기소개⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+        label.asColor(targetString: "⋆", color: .systemRed)
         return label
     }()
     
@@ -87,6 +97,18 @@ class ProfileEditViewController: UIViewController {
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.text = "10/50"
         return label
+    }()
+    
+    private lazy var descriprionTextView: UITextView = {
+        let textView = UITextView()
+        textView.isEditable = true
+        textView.text = "안녕하세요. 반갑습니다."
+        textView.layer.cornerRadius = 5
+        textView.layer.masksToBounds = true
+        textView.layer.borderColor = CustomColor.nomadGray2?.cgColor
+        textView.layer.borderWidth = 1
+        textView.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        return textView
     }()
     
     private let descriptionTextField: UITextField = {
@@ -141,8 +163,8 @@ class ProfileEditViewController: UIViewController {
         horizontalStack.layoutMargins = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 4)
         horizontalStack.distribution = .fill
         horizontalStack.spacing = 200
-        let verticalStack = UIStackView(arrangedSubviews: [horizontalStack, descriptionTextField])
-        descriptionTextField.anchor(height: 120)
+        let verticalStack = UIStackView(arrangedSubviews: [horizontalStack, descriprionTextView])
+        descriprionTextView.anchor(height: 120)
         verticalStack.axis = .vertical
         verticalStack.distribution = .fillProportionally
         verticalStack.spacing = 2
@@ -189,6 +211,8 @@ class ProfileEditViewController: UIViewController {
         view.addSubview(profileImageButton)
         profileImageButton.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 136, paddingLeft: 29, width: 78, height: 78)
         
+        view.addSubview(plusImage)
+        plusImage.anchor(top: profileImageButton.topAnchor, left: profileImageButton.leftAnchor, paddingTop: 58, paddingLeft: 58, width: 20, height: 20)
     }
     
     func configureStackView() {

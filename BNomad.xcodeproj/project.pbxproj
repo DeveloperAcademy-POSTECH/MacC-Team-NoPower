@@ -9,9 +9,14 @@
 /* Begin PBXBuildFile section */
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* DemoCell.swift */; };
+		0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */; };
+		041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A028FF7E72005D19CC /* VisitingInfoCell.swift */; };
+		041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A228FF7E98005D19CC /* ProfileGraphCell.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
+		8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */; };
+		8C21CC4528FF89BA009043AF /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4428FF89BA009043AF /* MapData.swift */; };
 		DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B4E28F7D70F002838A4 /* AppDelegate.swift */; };
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5228F7D70F002838A4 /* ViewController.swift */; };
@@ -42,9 +47,15 @@
 /* Begin PBXFileReference section */
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* DemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCell.swift; sourceTree = "<group>"; };
+		0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUserInfoCell.swift; sourceTree = "<group>"; };
+		041351A028FF7E72005D19CC /* VisitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitingInfoCell.swift; sourceTree = "<group>"; };
+		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
+		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
+		8C21CC4428FF89BA009043AF /* MapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapData.swift; sourceTree = "<group>"; };
 		DF288B4B28F7D70F002838A4 /* BNomad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BNomad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF288B4E28F7D70F002838A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF288B5028F7D70F002838A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +116,7 @@
 		DF288B4D28F7D70F002838A4 /* BNomad */ = {
 			isa = PBXGroup;
 			children = (
+				7E5CF5D228FFB73400641E74 /* BNomad.entitlements */,
 				DFE747B628FD75690048E70A /* Utils */,
 				DF96189D28FCEEF200E21D30 /* API */,
 				DF96189C28FCEEE900E21D30 /* View */,
@@ -146,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				DF9618A528FCEF6A00E21D30 /* MapViewController.swift */,
+				8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */,
+				8C21CC4428FF89BA009043AF /* MapData.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -153,6 +167,9 @@
 		DF9618A028FCEF0500E21D30 /* ProfileView */ = {
 			isa = PBXGroup;
 			children = (
+				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
+				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
+				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 			);
 			path = ProfileView;
@@ -323,15 +340,20 @@
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
 				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
+				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E25A675628F7E398004614B0 /* Position.swift in Sources */,
 				DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */,
 				DF9618AA28FCEF9700E21D30 /* PlaceCheckInView.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
+				041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
+				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
+				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
+				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
@@ -476,10 +498,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 44Q9HUN6LA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -502,10 +527,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 44Q9HUN6LA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

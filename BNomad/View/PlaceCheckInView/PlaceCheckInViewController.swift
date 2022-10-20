@@ -11,162 +11,39 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
-    // 유저 정보 -> 헤더로 변경 예정
-    let userProfileImg: UIImageView = {
-        let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(named: "profileDefault")
-        userProfileImg.translatesAutoresizingMaskIntoConstraints = false
-        return userProfileImg
-    }()
-    
-    let usernameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "김노마 (나)"
-        label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let occupationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "iOS Developer"
-        label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
-        label.textColor = CustomColor.nomadGray1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let noteLabel: UILabel = {
-        let label = UILabel()
-        label.text = "커피챗 환영합니다:P"
-        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let placeCheckInViewProfileLine: UIImageView = {
-        let divider = UIImageView()
-        divider.image = UIImage(named: "placeCheckInViewProfileLine")
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        return divider
-    }()
-    
-    let rectangleDivider: UIImageView = {
-        let divider = UIImageView()
-        divider.image = UIImage(named: "rectangleDivider")
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        return divider
-    }()
-    
-    
-    // 아래로 공간정보
-    let placeNameLable: UILabel = {
-        let label = UILabel()
-        label.text = "노마딕 제주"
-        label.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
-        label.textColor = CustomColor.nomadBlue
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    let locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "제주시"
-        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
-        label.textColor = CustomColor.nomadGray1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let locationIcon: UIImageView = {
-        let icon = UIImageView()
-        icon.image = UIImage(named: "locationIcon")
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        return icon
-    }()
-    
-    let placeNoteLabel: UILabel = {
-        let label = UILabel()
-        label.text = "인포데스크는 오전 10시 - 오후 4시 사이에만 운영됩니다. (점심시간포함)"
-        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    
     // 해당 공간에 체크인한 사람
-//    private let checkedProfileListView: UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        // 기본 보기형식 : 리스트로 보기
-//        layout.scrollDirection = .vertical
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//
-//
-//
-//        return collectionView
-//    }()
     private let checkedProfileListView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileInfoView()
-        view.addSubview(rectangleDivider)
-        rectangleDivider.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 211, paddingLeft: 0)
-        placeInfoView()
-        
         // checkedProfileListView
+        placeCheckInView()
+        view.backgroundColor = .systemBackground
+        view.backgroundColor = CustomColor.nomadGray2
+    }
+
+
+    // MARK: - Helps
+    
+    // 컬렉션 뷰 레이아웃
+    func placeCheckInView() {
+
+        view.addSubview(checkedProfileListView)
         self.checkedProfileListView.dataSource = self
         self.checkedProfileListView.delegate = self
         self.checkedProfileListView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
-        view.addSubview(checkedProfileListView)
+        self.checkedProfileListView.register(userProfileViewCell.self, forCellWithReuseIdentifier: userProfileViewCell.identifier)
+        self.checkedProfileListView.register(placeInforViewCell.self, forCellWithReuseIdentifier: placeInforViewCell.identifier)
+        self.checkedProfileListView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
+        
         checkedProfileListView.translatesAutoresizingMaskIntoConstraints = false
-        checkedProfileListView.topAnchor.constraint(equalTo: view.topAnchor, constant: 468).isActive = true
-        checkedProfileListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 17).isActive = true
+        checkedProfileListView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        checkedProfileListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         checkedProfileListView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        checkedProfileListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -17).isActive = true
-        
-        view.backgroundColor = .systemBackground
-    }
-    
-    
-    // MARK: - Helps
-    func profileInfoView() {
-        // 프로필 이미지
-        view.addSubview(userProfileImg)
-        userProfileImg.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 113, paddingLeft: 26)
-        // 사용자 이름
-        view.addSubview(usernameLabel)
-        usernameLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 121, paddingLeft: 125)
-        // 직업
-        view.addSubview(occupationLabel)
-        occupationLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 130, paddingLeft: 260)
-        
-        // 구분선
-        view.addSubview(placeCheckInViewProfileLine)
-        placeCheckInViewProfileLine.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 152, paddingLeft: 125)
-        
-        // 상태 메세지
-        view.addSubview(noteLabel)
-        noteLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 158, paddingLeft: 125)
-    }
-    
-    func placeInfoView() {
-        // 공간 이름
-        view.addSubview(placeNameLable)
-        placeNameLable.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 235, paddingLeft: 17)
-        // 픽토그램
-        view.addSubview(locationIcon)
-        locationIcon.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 262, paddingLeft: 18)
-        // 소재지
-        view.addSubview(locationLabel)
-        locationLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 261, paddingLeft: 28)
-        // 공지사항
-        view.addSubview(placeNoteLabel)
-        placeNoteLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 285, paddingLeft: 18)
+        checkedProfileListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
     }
 }
 
@@ -176,31 +53,82 @@ class PlaceCheckInViewController: UIViewController {
 extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+        if section == 3 {
+            return 10
+        }
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // check
-        print(indexPath)
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else {
+
+        guard let checkedProfileCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else {
             return UICollectionViewCell()
         }
-        cell.backgroundColor = .white
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = CustomColor.nomadGray2?.cgColor
-        cell.layer.cornerRadius = 12
-        return cell
+        
+        guard let userProfileViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: userProfileViewCell.identifier, for: indexPath) as? userProfileViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        guard let CheckedProfileListHeader = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else {
+            return UICollectionViewCell()
+        }
+        
+        guard let placeInforViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: placeInforViewCell.identifier, for: indexPath) as? placeInforViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        if indexPath[0] == 0 {
+            userProfileViewCell.backgroundColor = .white
+            return userProfileViewCell
+        }
+        else if indexPath[0] == 3 {
+            checkedProfileCell.backgroundColor = .white
+            checkedProfileCell.layer.borderWidth = 1
+            checkedProfileCell.layer.borderColor = CustomColor.nomadGray2?.cgColor
+            checkedProfileCell.layer.cornerRadius = 12
+            return checkedProfileCell
+        } else if indexPath[0] == 2 {
+            CheckedProfileListHeader.backgroundColor = .white
+            return CheckedProfileListHeader
+        }
+        checkedProfileCell.backgroundColor = .white
+        return placeInforViewCell
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 4
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        // 섹션의 헤더 너비와 높이 설정
+//            let width = collectionView.frame.width
+//            let height: CGFloat = 80
+//            return CGSize(width: width, height: height)
+//    }
 }
 
 
 extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
+    
     // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 356, height: 85)
+        if indexPath[0] == 3 {
+            return CGSize(width: 356, height: 85)
+        } else if indexPath[0] == 0 {
+            return CGSize(width: 380, height: 160)
+        } else if indexPath[0] == 2 {
+            return CGSize(width: 380, height: 40)
+        }
+        return CGSize(width: 380, height: 220)
     }
+//
+//    // header
+//    private func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CheckedProfileListHeader", for: indexPath)
+//        return header
+//    }
 }
+
+
+
+

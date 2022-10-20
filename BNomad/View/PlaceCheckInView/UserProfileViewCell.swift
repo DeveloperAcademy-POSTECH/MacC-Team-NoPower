@@ -90,6 +90,5 @@ class UserProfileViewCell: UICollectionViewCell {
         // 상태 메세지
         self.addSubview(noteLabel)
         noteLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 108, paddingLeft: 125)
-        
     }
 }

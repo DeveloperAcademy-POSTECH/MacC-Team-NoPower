@@ -88,7 +88,6 @@ class PlaceInforViewCell: UICollectionViewCell {
         super.init(frame: frame)
         renderInfo()
         renderAnalysis()
-        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

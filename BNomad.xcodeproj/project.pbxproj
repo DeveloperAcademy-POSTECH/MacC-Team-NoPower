@@ -16,6 +16,8 @@
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
+		8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */; };
+		8C21CC4528FF89BA009043AF /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4428FF89BA009043AF /* MapData.swift */; };
 		DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B4E28F7D70F002838A4 /* AppDelegate.swift */; };
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5228F7D70F002838A4 /* ViewController.swift */; };
@@ -50,9 +52,12 @@
 		041351A428FF8EBE005D19CC /* LiteralContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralContents.swift; sourceTree = "<group>"; };
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		041351A828FFF4FB005D19CC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAnnotation.swift; sourceTree = "<group>"; };
+		8C21CC4428FF89BA009043AF /* MapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapData.swift; sourceTree = "<group>"; };
 		DF288B4B28F7D70F002838A4 /* BNomad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BNomad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF288B4E28F7D70F002838A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF288B5028F7D70F002838A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +118,7 @@
 		DF288B4D28F7D70F002838A4 /* BNomad */ = {
 			isa = PBXGroup;
 			children = (
+				7E5CF5D228FFB73400641E74 /* BNomad.entitlements */,
 				DFE747B628FD75690048E70A /* Utils */,
 				DF96189D28FCEEF200E21D30 /* API */,
 				DF96189C28FCEEE900E21D30 /* View */,
@@ -154,6 +160,8 @@
 			isa = PBXGroup;
 			children = (
 				DF9618A528FCEF6A00E21D30 /* MapViewController.swift */,
+				8C21CC4028FF8018009043AF /* PlaceAnnotation.swift */,
+				8C21CC4428FF89BA009043AF /* MapData.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -347,8 +355,10 @@
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
+				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
+				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
@@ -492,10 +502,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 44Q9HUN6LA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -518,10 +531,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 44Q9HUN6LA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

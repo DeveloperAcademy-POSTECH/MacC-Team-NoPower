@@ -12,7 +12,7 @@ class ProfileGraphCell: UICollectionViewCell {
     
     //MARK: -Properties
     static let identifier = "ProfileGraphCell"
-    static var addedWeek:Int = 0
+    static var addedWeek: Int = 0
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -37,7 +37,7 @@ class ProfileGraphCell: UICollectionViewCell {
     }()
     
     static var dayLabel: [UILabel] = {
-        var label:[UILabel] = []
+        var label: [UILabel] = []
         
         for index in 0..<7 {
             let day = UILabel()
@@ -46,7 +46,7 @@ class ProfileGraphCell: UICollectionViewCell {
             
             let formatter = DateFormatter()
             formatter.dateFormat = "d"
-            if Contents.dateLabelMaker()[index][2] == formatter.string(from:Date()) {
+            if Contents.dateLabelMaker()[index][2] == formatter.string(from: Date()) {
                 day.textColor = CustomColor.nomadGreen
             }
             

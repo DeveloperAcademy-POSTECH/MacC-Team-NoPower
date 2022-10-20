@@ -9,13 +9,13 @@ import UIKit
 
 
 class CalendarViewController: UIViewController {
-
+    
     //MARK: -Properties
-
-    static var monthAddedMemory:Int = 0
+    
+    static var monthAddedMemory: Int = 0
     let calendarDateFormatter = CalendarDateFormatter()
-
-    private let CalendarCollectionView:  UICollectionView = {
+    
+    private let CalendarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -23,19 +23,19 @@ class CalendarViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
         collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
-
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
-    private let VisitInfInfoView:  UICollectionView = {
+    private let VisitInfInfoView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = UIColor(hex: "F5F5F5")
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
-
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -43,7 +43,7 @@ class CalendarViewController: UIViewController {
     private let VisitInfoHeader: UILabel = {
         let formatter = DateFormatter()
         formatter.dateFormat = "M월 d일"
-        let day = formatter.string(from:Date())
+        let day = formatter.string(from: Date())
         
         
         let label = UILabel()
@@ -85,7 +85,6 @@ class CalendarViewController: UIViewController {
     private let dayOfWeekStackView: UIStackView = {
         let dayOfTheWeek = ["일", "월", "화", "수", "목", "금", "토"]
         var stack = UIStackView()
-//        stack.spacing = 36
         stack.distribution = .fillEqually
         dayOfTheWeek.forEach {
             let label = UILabel()
@@ -100,40 +99,38 @@ class CalendarViewController: UIViewController {
         }
         return stack
     }()
-
-
+    
+    
     //MARK: -Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         CalendarCollectionView.dataSource = self
         CalendarCollectionView.delegate = self
         
         VisitInfInfoView.dataSource = self
         VisitInfInfoView.delegate = self
         
-//        self.updateCalendarData()
-
         configureUI()
         render()
         // Do any additional setup after loading the view.
     }
-
+    
     //MARK: -Actions
-
+    
     //MARK: -Helpers
-
+    
     func configureUI() {
         view.backgroundColor = UIColor(hex: "F5F5F5")
     }
-
+    
     func render() {
-
+        
         view.addSubview(CalendarCollectionView)
         CalendarCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                     paddingTop: 105, paddingLeft: 14, paddingRight: 14,
-                                     height: 388)
+                                      paddingTop: 105, paddingLeft: 14, paddingRight: 14,
+                                      height: 388)
         
         view.addSubview(calendarCollectionYearHeader)
         calendarCollectionYearHeader.anchor(top: CalendarCollectionView.topAnchor)
@@ -142,10 +139,10 @@ class CalendarViewController: UIViewController {
         view.addSubview(calendarCollectionMonthHeader)
         calendarCollectionMonthHeader.anchor(top: calendarCollectionYearHeader.bottomAnchor)
         calendarCollectionMonthHeader.centerX(inView: view)
-
+        
         view.addSubview(VisitInfInfoView)
         VisitInfInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                     paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
+                                paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
         
         view.addSubview(VisitInfoHeader)
         VisitInfoHeader.anchor(top: CalendarCollectionView.bottomAnchor, paddingTop: 21)
@@ -156,13 +153,13 @@ class CalendarViewController: UIViewController {
         dayOfWeekStackView.centerX(inView: view)
         
     }
-
+    
 }
 
 //MARK: -Extentions
 
 extension CalendarViewController: UICollectionViewDataSource {
-
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -173,15 +170,15 @@ extension CalendarViewController: UICollectionViewDataSource {
             return 2 //TODO: 반응형 수정 필요
         }
     }
-
+    
 }
 
 extension CalendarViewController: UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == CalendarCollectionView {
             
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCell.identifier , for: indexPath) as? CalendarCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCell.identifier , for: indexPath) as? CalendarCell else {
                 return UICollectionViewCell()
             }
             
@@ -193,7 +190,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             
         } else {
             
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
             cell.backgroundColor = .white
@@ -202,18 +199,18 @@ extension CalendarViewController: UICollectionViewDelegate {
             
         }
     }
-
+    
 }
 
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if collectionView == CalendarCollectionView {
             return CGSize(width: 358/8, height: 358/7)
         } else {
             return CGSize(width: 358, height: 119)
         }
-
+        
     }
     
     //cell 횡간 간격
@@ -223,20 +220,20 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
     //cell 종간 간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            return CGFloat(0)
+        return CGFloat(0)
     }
-
-
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-           
+        
         if collectionView == CalendarCollectionView {
             return UIEdgeInsets(top: 70, left: 358/14, bottom: 0, right: 358/14)
         } else {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
-    
+        
     }
-
+    
 }
 
 
@@ -249,7 +246,7 @@ class CalendarDateFormatter {
     init() {
         updateCurrentMonthDays()
     }
-
+    
     func getStartingDayOfWeek() -> Int {
         let dayCorrector = self.calendar.component(.day, from: self.nowCalendarDate) % 7
         var startingDay = self.calendar.component(.weekday, from: self.nowCalendarDate) - dayCorrector
@@ -258,25 +255,25 @@ class CalendarDateFormatter {
         }
         return startingDay
     }
-        
-        func getEndDateOfMonth() -> Int {
-            return self.calendar.range(of: .day, in: .month, for: self.nowCalendarDate)?.count ?? 0
-        }
+    
+    func getEndDateOfMonth() -> Int {
+        return self.calendar.range(of: .day, in: .month, for: self.nowCalendarDate)?.count ?? 0
+    }
     
     func updateCurrentMonthDays() {
-            self.days.removeAll()
-            
-            let startDayOfWeek = self.getStartingDayOfWeek()
-            let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth()
-            
-            for day in 0..<totalDaysOfMonth {
-                if day < startDayOfWeek {
-                    self.days.append("")
-                } else {
-                    self.days.append("\(day - startDayOfWeek + 1)")
-                }
+        self.days.removeAll()
+        
+        let startDayOfWeek = self.getStartingDayOfWeek()
+        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth()
+        
+        for day in 0..<totalDaysOfMonth {
+            if day < startDayOfWeek {
+                self.days.append("")
+            } else {
+                self.days.append("\(day - startDayOfWeek + 1)")
             }
         }
+    }
     
 }
 

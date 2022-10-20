@@ -91,10 +91,5 @@ class UserProfileViewCell: UICollectionViewCell {
         self.addSubview(noteLabel)
         noteLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 108, paddingLeft: 125)
         
-        // 구분선
-        // TODO: collectionView 안에서 해결하기
-//        self.addSubview(rectangleDivider)
-//        rectangleDivider.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 152, paddingLeft: 0)
-        
     }
 }

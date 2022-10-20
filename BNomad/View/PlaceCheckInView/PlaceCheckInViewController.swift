@@ -104,7 +104,3 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: 390, height: 0)
     }
 }
-
-
-
-

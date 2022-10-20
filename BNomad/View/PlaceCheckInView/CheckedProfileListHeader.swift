@@ -11,7 +11,6 @@ class CheckedProfileListHeader: UICollectionViewCell {
     
     static let identifier = "CheckedProfileListHeader"
     
-    
     private let label: UILabel = {
         let label = UILabel()
         label.text = "함께 일하고 있는 23명의 노마더"
@@ -41,8 +40,6 @@ class CheckedProfileListHeader: UICollectionViewCell {
         menuView.layer.cornerRadius = 12
         menuView.layer.borderColor = CustomColor.nomadGray2?.cgColor
         menuView.backgroundColor = .white
-        
-        
         menuView.addSubview(listIcon)
         menuView.addSubview(gridIcon)
         listIcon.anchor(top: menuView.topAnchor ,left: menuView.leftAnchor, bottom: menuView.bottomAnchor, paddingTop: 4, paddingLeft: 8, paddingBottom: 8)

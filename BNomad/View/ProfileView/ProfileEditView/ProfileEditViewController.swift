@@ -15,12 +15,14 @@ class ProfileEditViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(named: "ProfileDefault"), for: .normal)
         button.addTarget(self, action: #selector(profileImageChange), for: .touchUpInside)
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 78 / 2
         return button
     }()
     
     private let nickNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "이름"
+        label.text = "이름⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         return label
     }()
@@ -32,7 +34,7 @@ class ProfileEditViewController: UIViewController {
         return label
     }()
     
-    private let nickNameTextField: UITextField = {
+    lazy var nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 5
         textField.layer.masksToBounds = true
@@ -42,12 +44,13 @@ class ProfileEditViewController: UIViewController {
         textField.layer.borderColor = CustomColor.nomadGray2?.cgColor
         textField.layer.borderWidth = 1
         textField.text = "윌로우 류"
+        textField.delegate = self
         return textField
     }()
     
     private let occupationLabel: UILabel = {
         let label = UILabel()
-        label.text = "직책"
+        label.text = "직책⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         return label
     }()
@@ -74,7 +77,7 @@ class ProfileEditViewController: UIViewController {
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "자기소개"
+        label.text = "자기소개⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         return label
     }()
@@ -152,6 +155,7 @@ class ProfileEditViewController: UIViewController {
         button.tintColor = .white
         button.backgroundColor = CustomColor.nomadBlue
         button.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
+        button.layer.cornerRadius = 15
         return button
     }()
         
@@ -162,12 +166,17 @@ class ProfileEditViewController: UIViewController {
         view.backgroundColor = .systemBackground
         configureProfileImage()
         configureStackView()
+        configureSaveButton()
     }
     
     // MARK: - Actions
     
     @objc func profileImageChange() {
         // TODO: - UIImagePicker 가져와야함
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true)
     }
     
     @objc func saveProfile() {
@@ -193,5 +202,44 @@ class ProfileEditViewController: UIViewController {
         view.addSubview(stack)
         stack.anchor(top: profileImageButton.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 29, paddingRight: 29)
     }
+    
+    func configureSaveButton() {
+        view.addSubview(saveButton)
+        saveButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 29, paddingBottom: 50, paddingRight: 29, height: 58)
+    }
 
+}
+
+// MARK: - UITextFieldDelegate
+
+extension ProfileEditViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == nickNameTextField {
+            guard let textField = textField.text else { return true }
+            if let char = string.cString(using: String.Encoding.utf8) {
+                let isBackSpace = strcmp(char, "\\b")
+                if isBackSpace == -92 {
+                    nickNameCounter.text = "\(textField.count - 1) / 20"
+                    return true
+                }
+            }
+            if textField.count > 20 {
+                return false
+            }
+            print(textField.count)
+            nickNameCounter.text = "\(textField.count) / 20"
+        }
+        return true
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension ProfileEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageButton.setImage(image, for: .normal)
+        }
+        dismiss(animated: true)
+    }
 }

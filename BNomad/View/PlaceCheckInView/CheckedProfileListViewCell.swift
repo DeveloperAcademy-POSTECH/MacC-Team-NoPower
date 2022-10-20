@@ -139,6 +139,8 @@ class userProfileViewCell: UICollectionViewCell {
         fatalError("init(corder:) has not been implemented")
     }
     
+    // MARK: - Helpers
+    
     func render() {
         // 프로필 이미지
         self.addSubview(userProfileImg)
@@ -160,8 +162,8 @@ class userProfileViewCell: UICollectionViewCell {
         
         // 구분선
         // TODO: collectionView 안에서 해결하기
-        self.addSubview(rectangleDivider)
-        rectangleDivider.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 152, paddingLeft: 0)
+//        self.addSubview(rectangleDivider)
+//        rectangleDivider.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 152, paddingLeft: 0)
         
     }
 }
@@ -213,6 +215,7 @@ class placeInforViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        contentView.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

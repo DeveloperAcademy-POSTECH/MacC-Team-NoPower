@@ -12,7 +12,7 @@ class PlaceCheckInViewController: UIViewController {
     // MARK: - Properties
     
     // 해당 공간에 체크인한 사람
-    private let checkedProfileListView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     // MARK: - LifeCycle
     
@@ -21,8 +21,9 @@ class PlaceCheckInViewController: UIViewController {
         
         // checkedProfileListView
         placeCheckInView()
-        view.backgroundColor = .systemBackground
-        view.backgroundColor = CustomColor.nomadGray2
+//        view.backgroundColor = .systemBackground
+//        view.backgroundColor = CustomColor.nomadGray2
+        collectionView.backgroundColor = CustomColor.nomadGray2
     }
 
 
@@ -31,19 +32,19 @@ class PlaceCheckInViewController: UIViewController {
     // 컬렉션 뷰 레이아웃
     func placeCheckInView() {
 
-        view.addSubview(checkedProfileListView)
-        self.checkedProfileListView.dataSource = self
-        self.checkedProfileListView.delegate = self
-        self.checkedProfileListView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
-        self.checkedProfileListView.register(userProfileViewCell.self, forCellWithReuseIdentifier: userProfileViewCell.identifier)
-        self.checkedProfileListView.register(placeInforViewCell.self, forCellWithReuseIdentifier: placeInforViewCell.identifier)
-        self.checkedProfileListView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
+        view.addSubview(collectionView)
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
+        self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
+        self.collectionView.register(userProfileViewCell.self, forCellWithReuseIdentifier: userProfileViewCell.identifier)
+        self.collectionView.register(placeInforViewCell.self, forCellWithReuseIdentifier: placeInforViewCell.identifier)
+        self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
-        checkedProfileListView.translatesAutoresizingMaskIntoConstraints = false
-        checkedProfileListView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        checkedProfileListView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        checkedProfileListView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        checkedProfileListView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
     }
 }
 
@@ -77,21 +78,22 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        if indexPath[0] == 0 {
+        if indexPath.section == 0 {
             userProfileViewCell.backgroundColor = .white
             return userProfileViewCell
         }
-        else if indexPath[0] == 3 {
+        else if indexPath.section == 3 {
+            
             checkedProfileCell.backgroundColor = .white
             checkedProfileCell.layer.borderWidth = 1
             checkedProfileCell.layer.borderColor = CustomColor.nomadGray2?.cgColor
             checkedProfileCell.layer.cornerRadius = 12
             return checkedProfileCell
-        } else if indexPath[0] == 2 {
+        } else if indexPath.section == 2 {
             CheckedProfileListHeader.backgroundColor = .white
             return CheckedProfileListHeader
         }
-        checkedProfileCell.backgroundColor = .white
+//        checkedProfileCell.backgroundColor = .white
         return placeInforViewCell
     }
     
@@ -112,15 +114,32 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath[0] == 3 {
+        if indexPath.section == 3 {
             return CGSize(width: 356, height: 85)
-        } else if indexPath[0] == 0 {
-            return CGSize(width: 380, height: 160)
-        } else if indexPath[0] == 2 {
-            return CGSize(width: 380, height: 40)
+        } else if indexPath.section == 0 {
+            return CGSize(width: 390, height: 160)
+        } else if indexPath.section == 2 {
+            return CGSize(width: 390, height: 40)
         }
-        return CGSize(width: 380, height: 220)
+        return CGSize(width: 390, height: 220)
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 10
+//    }
+    
+    
+    // 마진
+    // TODO: 
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section == 0 {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        }
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    
+    
 //
 //    // header
 //    private func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) -> UICollectionReusableView {

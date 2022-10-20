@@ -1,18 +1,18 @@
 //
-//  DemoCell.swift
+//  DemoCell3.swift
 //  BNomad
 //
-//  Created by 유재훈 on 2022/10/19.
+//  Created by 유재훈 on 2022/10/20.
 //
 
 import UIKit
 
-class DemoCell: UICollectionViewCell {
-    static let cellIdentifier = "DemoCell"
+class DemoCell3: UICollectionViewCell {
+    static let cellIdentifier = "DemoCell3"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .red
+        backgroundColor = .yellow
     }
     
     required init?(coder: NSCoder) {

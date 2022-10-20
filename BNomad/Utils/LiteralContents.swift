@@ -39,4 +39,14 @@ struct Contents {
         }
         return labelList
     }
+    
+    static func getTodayDate() -> [Int] {
+        let calendar = Calendar.current
+        let nowCalendarDate = Date()
+        let year = calendar.component(.year, from: nowCalendarDate)
+        let month = calendar.component(.month, from: nowCalendarDate)
+        let day = calendar.component(.day, from: nowCalendarDate)
+        
+        return [year, month, day]
+    }
 }

@@ -49,5 +49,15 @@ class CalendarCell: UICollectionViewCell {
     func setWeekendColor(){
         self.dayLabel.textColor = CustomColor.nomadSkyblue
     }
+    
+    func setSelectedCell() {
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 20
+        self.layer.borderColor = UIColor.black.cgColor
+    }
+    
+    func setNormalCell() {
+        self.layer.borderWidth = 0
+    }
 
 }

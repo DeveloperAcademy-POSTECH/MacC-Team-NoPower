@@ -12,7 +12,8 @@ class CalendarViewController: UIViewController {
     
     //MARK: -Properties
     
-    static var monthAddedMemory: Int = 0
+    var monthAddedMemory: Int = 0
+    private var selectedCell: Int? = 100
     let calendarDateFormatter = CalendarDateFormatter()
     
     private let CalendarCollectionView: UICollectionView = {
@@ -41,9 +42,7 @@ class CalendarViewController: UIViewController {
     }()
     
     private let VisitInfoHeader: UILabel = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일"
-        let day = formatter.string(from: Date())
+        let day = String(Contents.getTodayDate()[1])+"월 "+String(Contents.getTodayDate()[2])+"일"
         
         
         let label = UILabel()
@@ -100,6 +99,24 @@ class CalendarViewController: UIViewController {
         return stack
     }()
     
+    private let plusMonthButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(">", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let minusMonthButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("<", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     
     //MARK: -Lifecycle
     
@@ -112,12 +129,33 @@ class CalendarViewController: UIViewController {
         VisitInfInfoView.dataSource = self
         VisitInfInfoView.delegate = self
         
+        plusMonthButton.addTarget(self, action: #selector(plusMonthTapButton), for: .touchUpInside)
+        minusMonthButton.addTarget(self, action: #selector(minusMonthTapButton), for: .touchUpInside)
+        
         configureUI()
         render()
         // Do any additional setup after loading the view.
     }
     
     //MARK: -Actions
+    
+    @objc func plusMonthTapButton() {
+        monthAddedMemory += 1
+        calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
+        
+        calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
+        CalendarCollectionView.reloadData()
+        
+    }
+    
+    @objc func minusMonthTapButton() {
+        monthAddedMemory -= 1
+        calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
+
+        calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
+        CalendarCollectionView.reloadData()
+        
+    }
     
     //MARK: -Helpers
     
@@ -132,12 +170,12 @@ class CalendarViewController: UIViewController {
                                       paddingTop: 105, paddingLeft: 14, paddingRight: 14,
                                       height: 388)
         
-        view.addSubview(calendarCollectionYearHeader)
-        calendarCollectionYearHeader.anchor(top: CalendarCollectionView.topAnchor)
-        calendarCollectionYearHeader.centerX(inView: view)
+//        view.addSubview(calendarCollectionYearHeader)
+//        calendarCollectionYearHeader.anchor(top: CalendarCollectionView.topAnchor)
+//        calendarCollectionYearHeader.centerX(inView: view)
         
         view.addSubview(calendarCollectionMonthHeader)
-        calendarCollectionMonthHeader.anchor(top: calendarCollectionYearHeader.bottomAnchor)
+        calendarCollectionMonthHeader.anchor(top: CalendarCollectionView.topAnchor, paddingTop: 10)
         calendarCollectionMonthHeader.centerX(inView: view)
         
         view.addSubview(VisitInfInfoView)
@@ -152,6 +190,11 @@ class CalendarViewController: UIViewController {
         dayOfWeekStackView.anchor(top: calendarCollectionMonthHeader.bottomAnchor, paddingTop: 15, width: 358-358/7)
         dayOfWeekStackView.centerX(inView: view)
         
+        view.addSubview(minusMonthButton)
+        minusMonthButton.anchor(top: CalendarCollectionView.topAnchor, left: dayOfWeekStackView.leftAnchor, paddingTop: 15)
+        view.addSubview(plusMonthButton)
+        plusMonthButton.anchor(top: CalendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15)
+        
     }
     
 }
@@ -165,6 +208,8 @@ extension CalendarViewController: UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == CalendarCollectionView {
+            
+//            return self.calendarDateFormatter.monthDays[Contents.getTodayDate()[1]+monthAddedMemory-1].count
             return self.calendarDateFormatter.days.count
         } else {
             return 2 //TODO: 반응형 수정 필요
@@ -175,6 +220,7 @@ extension CalendarViewController: UICollectionViewDataSource {
 
 extension CalendarViewController: UICollectionViewDelegate {
     
+    //draw cells
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == CalendarCollectionView {
             
@@ -182,9 +228,17 @@ extension CalendarViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
+//            cell.configureLabel(text: self.calendarDateFormatter.monthDays[Contents.getTodayDate()[1]+monthAddedMemory-1][indexPath.item])
             cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
+            
             if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
                 cell.setWeekendColor()
+            }
+            
+            if indexPath.item == selectedCell {
+                cell.setSelectedCell()
+            } else {
+                cell.setNormalCell()
             }
             return cell
             
@@ -199,6 +253,17 @@ extension CalendarViewController: UICollectionViewDelegate {
             
         }
     }
+    
+    //cell click action
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek() {
+//            selectedCell = indexPath.item
+//            CalendarCollectionView.reloadData()
+//
+//
+//            VisitInfoHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월 "+String(indexPath.item - calendarDateFormatter.getStartingDayOfWeek()+1)+"일"
+//        }
+//    }
     
 }
 
@@ -227,7 +292,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
         if collectionView == CalendarCollectionView {
-            return UIEdgeInsets(top: 70, left: 358/14, bottom: 0, right: 358/14)
+            return UIEdgeInsets(top: 75, left: 358/14, bottom: 0, right: 358/14)
         } else {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
@@ -237,35 +302,42 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
 }
 
 
+
+
 class CalendarDateFormatter {
     private let calendar = Calendar.current
     private let dateFormatter = DateFormatter()
     private var nowCalendarDate = Date()
     private(set) var days = [String]()
     
+
     init() {
-        updateCurrentMonthDays()
+        updateCurrentMonthDays(addedMonth: 0)
     }
-    
-    func getStartingDayOfWeek() -> Int {
-        let dayCorrector = self.calendar.component(.day, from: self.nowCalendarDate) % 7
-        var startingDay = self.calendar.component(.weekday, from: self.nowCalendarDate) - dayCorrector
+
+    func getStartingDayOfWeek(addedMonth: Int) -> Int {
+        let month = self.calendar.date(byAdding: .month, value: addedMonth, to: self.nowCalendarDate)
+        
+        let dayCorrector = self.calendar.component(.day, from: month!) % 7
+        var startingDay = self.calendar.component(.weekday, from: month!) - dayCorrector
         if startingDay < 0 {
             startingDay += 7
         }
         return startingDay
     }
-    
-    func getEndDateOfMonth() -> Int {
-        return self.calendar.range(of: .day, in: .month, for: self.nowCalendarDate)?.count ?? 0
+
+    func getEndDateOfMonth(addedMonth: Int) -> Int {
+        let month = self.calendar.date(byAdding: .month, value: addedMonth, to: self.nowCalendarDate)
+        
+        return self.calendar.range(of: .day, in: .month, for: month!)?.count ?? 0
     }
-    
-    func updateCurrentMonthDays() {
+
+    func updateCurrentMonthDays(addedMonth: Int) {
         self.days.removeAll()
-        
-        let startDayOfWeek = self.getStartingDayOfWeek()
-        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth()
-        
+
+        let startDayOfWeek = self.getStartingDayOfWeek(addedMonth: addedMonth)
+        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth(addedMonth: addedMonth)
+
         for day in 0..<totalDaysOfMonth {
             if day < startDayOfWeek {
                 self.days.append("")
@@ -274,6 +346,110 @@ class CalendarDateFormatter {
             }
         }
     }
-    
+
 }
 
+////MARK: -calender struct&class
+//
+//struct CalendarDateFormatter {
+//
+//    private let dateFormatter = DateFormatter()
+//    private var calendarComponent: Calendar?
+//
+//    init() {
+//        self.configureDateFormatter()
+//    }
+//
+//    mutating func setCalendarComponent(calendar: Calendar) {
+//        self.calendarComponent = calendar
+//    }
+//
+//    func getYearMonthText(calendarDate: Date) -> String {
+//        let yearMonthText = self.dateFormatter.string(from: calendarDate)
+//
+//        return yearMonthText
+//    }
+//
+//    func updateCurrentMonthDays(calendarDate: Date) -> [String] {
+//        var days = [String]()
+//
+//        let startDayOfWeek = self.getStartingDayOfWeek(date: calendarDate)
+//        let totalDaysOfMonth = startDayOfWeek + self.getEndDateOfMonth(date: calendarDate)
+//
+//        for day in 0..<totalDaysOfMonth {
+//            if day < startDayOfWeek {
+//                days.append("")
+//            } else {
+//                days.append("\(day - startDayOfWeek + 1)")
+//            }
+//        }
+//
+//        return days
+//    }
+//}
+//
+//private extension CalendarDateFormatter {
+//
+//    func getStartingDayOfWeek(date: Date) -> Int {
+//
+//
+//        guard let calendar = calendarComponent else { return 0 }
+//        return calendar.component(.weekday, from: date) - calendar.component(.day, from: date) % 7
+//    }
+//
+//    func getEndDateOfMonth(date: Date) -> Int {
+//        guard let calendar = calendarComponent else { return 0 }
+//        return calendar.range(of: .day, in: .month, for: date)?.count ?? 0
+//    }
+//
+//    func configureDateFormatter() {
+//        self.dateFormatter.dateFormat = "yyyy년 MM월"
+//    }
+//}
+//
+//final class CalendarManager {
+//
+//    private let calendar = Calendar.current
+//    private var nowCalendarDate = Date()
+//    private var calendarFormatter = CalendarDateFormatter()
+//    private(set) var yearMonths = [Date]()
+//    private(set) var monthDays = [[String]]()
+//
+//    init() {
+//        self.setCalendar()
+//    }
+//
+//    func getMonthsToString(section: Int) -> String {
+//        guard yearMonths.count > section else { return "" }
+//
+//        let monthString = self.calendarFormatter.getYearMonthText(calendarDate: yearMonths[section])
+//        return monthString
+//    }
+//
+//}
+//
+//private extension CalendarManager {
+//
+//    func setCalendar() {
+//        let components = self.calendar.dateComponents([.year, .month], from: Date())
+//        self.nowCalendarDate = self.calendar.date(from: components) ?? Date()
+//        self.calendarFormatter.setCalendarComponent(calendar: self.calendar)
+//        self.setYearMonth()
+//        self.setMonthDays()
+//    }
+//
+//    func setYearMonth() {
+//        self.yearMonths.append(self.nowCalendarDate)
+//        for plusNum in 1...11 {
+//            let month = self.calendar.date(byAdding: .month, value: plusNum, to: nowCalendarDate)
+//            self.yearMonths.append(month ?? Date())
+//        }
+//    }
+//
+//    func setMonthDays() {
+//        self.yearMonths.forEach {
+//            let days = self.calendarFormatter.updateCurrentMonthDays(calendarDate: $0)
+//            self.monthDays.append(days)
+//        }
+//    }
+//}

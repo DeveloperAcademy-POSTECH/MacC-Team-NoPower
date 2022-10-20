@@ -31,7 +31,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     private let occupationLabel: UILabel = {
         let label = UILabel()
         label.text = "iOS Developer"
-        label.font = .preferredFont(forTextStyle: .title3, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -40,7 +40,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     private let noteLabel: UILabel = {
         let label = UILabel()
         label.text = "커피챗 환영합니다:P"
-        label.font = .preferredFont(forTextStyle: .title3, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

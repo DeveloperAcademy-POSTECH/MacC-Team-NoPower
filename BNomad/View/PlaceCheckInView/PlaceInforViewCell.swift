@@ -51,7 +51,7 @@ class PlaceInforViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
-        contentView.backgroundColor = .white
+        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

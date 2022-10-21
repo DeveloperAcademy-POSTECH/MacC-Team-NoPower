@@ -12,6 +12,7 @@ class ProfileGraphCell: UICollectionViewCell {
     
     //MARK: -Properties
     static let identifier = "ProfileGraphCell"
+    static var addedWeek: Int = 0
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -35,6 +36,27 @@ class ProfileGraphCell: UICollectionViewCell {
         return label
     }()
     
+    static var dayLabel: [UILabel] = {
+        var label: [UILabel] = []
+        
+        for index in 0..<7 {
+            let day = UILabel()
+            day.text = Contents.dateLabelMaker()[index][3]
+            day.textColor = .black
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "d"
+            if Contents.dateLabelMaker()[index][2] == formatter.string(from: Date()) {
+                day.textColor = CustomColor.nomadGreen
+            }
+            
+            day.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
+            day.translatesAutoresizingMaskIntoConstraints = false
+            label.append(day)
+        }
+        return label
+    }()
+    
     //MARK: - init
         
         override init(frame: CGRect) {
@@ -47,25 +69,38 @@ class ProfileGraphCell: UICollectionViewCell {
         }
     
     func render() {
-
-//        contentView.addSubview(nameLabel)
-//        nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
-//        nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
-//        nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         
-        let stack = [UIStackView(arrangedSubviews: timeLabel), UIStackView(arrangedSubviews: timeLabel)]
+        let timeStack = UIStackView(arrangedSubviews: timeLabel)
+        timeStack.axis = .vertical
+        timeStack.spacing = 31
+        timeStack.distribution = .fillEqually
+        timeStack.translatesAutoresizingMaskIntoConstraints = false
         
-        stack[0].axis = .vertical
-        stack[0].spacing = 31
-        stack[0].distribution = .fillEqually
+        let dayStack = UIStackView(arrangedSubviews: ProfileGraphCell.dayLabel)
+        dayStack.axis = .horizontal
+        dayStack.spacing = 19
+        dayStack.distribution = .fillEqually
+        dayStack.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(stack[0])
-        stack[0].translatesAutoresizingMaskIntoConstraints = false
-        stack[0].topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
-        stack[0].leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
+        contentView.addSubview(timeStack)
+        timeStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 10, paddingLeft: 10)
+        
+        contentView.addSubview(dayStack)
+        dayStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 166, paddingLeft: 45)
 
 
     }
     
-
+    static func editWeek(edit: Int) { //TODO: 로직 단순화 필요
+        addedWeek = addedWeek + edit
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        for index in Contents.dateLabelMaker().indices {
+            if Contents.dateLabelMaker()[index][2] == formatter.string(from:Date()) && addedWeek == 0 {
+                dayLabel[index].textColor = CustomColor.nomadGreen
+            } else {
+                dayLabel[index].textColor = .black
+            }
+        }
+    }
 }

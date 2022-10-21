@@ -143,6 +143,8 @@ class CalendarViewController: UIViewController {
         monthAddedMemory += 1
         calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
         
+        selectedCell = nil
+        
         calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
         CalendarCollectionView.reloadData()
         
@@ -151,6 +153,8 @@ class CalendarViewController: UIViewController {
     @objc func minusMonthTapButton() {
         monthAddedMemory -= 1
         calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
+        
+        selectedCell = nil
 
         calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
         CalendarCollectionView.reloadData()
@@ -250,16 +254,16 @@ extension CalendarViewController: UICollectionViewDelegate {
         }
     }
     
-    //cell click action
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek() {
-//            selectedCell = indexPath.item
-//            CalendarCollectionView.reloadData()
-//
-//
-//            VisitInfoHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월 "+String(indexPath.item - calendarDateFormatter.getStartingDayOfWeek()+1)+"일"
-//        }
-//    }
+//    cell click action
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
+            selectedCell = indexPath.item
+            CalendarCollectionView.reloadData()
+
+
+            VisitInfoHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월 "+String(indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)+"일"
+        }
+    }
     
 }
 

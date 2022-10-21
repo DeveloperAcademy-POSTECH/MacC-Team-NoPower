@@ -8,22 +8,51 @@
 import UIKit
 
 class PlaceInfoViewController: UIViewController {
+    
+    // MARK: - Properties
+    
+    lazy var pinButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("장소핀", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.addTarget(self, action: #selector(didTapPinButton), for: .touchUpInside)
+        
+        return button
+    }()
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
+            super.viewDidLoad()
+            
+        view.addSubview(pinButton)
+        pinButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            pinButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pinButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
 
-        // Do any additional setup after loading the view.
+        }
+    
+    // MARK: - Helpers
+    
+    @objc func didTapPinButton() {
+        showMyViewController()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+            func showMyViewController() {
+//                let navigationController = UINavigationController(rootViewController: PlaceInfoViewModalViewController())
+                present(PlaceInfoModalViewController(), animated: true, completion: nil)
     }
-    */
+             }
+     
 
+    // MARK: - PlaceInfoViewController
+
+extension PlaceInfoViewController: UISheetPresentationControllerDelegate {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+
+    }
 }
+
+

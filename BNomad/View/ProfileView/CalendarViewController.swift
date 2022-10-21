@@ -208,8 +208,6 @@ extension CalendarViewController: UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == CalendarCollectionView {
-            
-//            return self.calendarDateFormatter.monthDays[Contents.getTodayDate()[1]+monthAddedMemory-1].count
             return self.calendarDateFormatter.days.count
         } else {
             return 2 //TODO: 반응형 수정 필요
@@ -227,8 +225,6 @@ extension CalendarViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCell.identifier , for: indexPath) as? CalendarCell else {
                 return UICollectionViewCell()
             }
-            
-//            cell.configureLabel(text: self.calendarDateFormatter.monthDays[Contents.getTodayDate()[1]+monthAddedMemory-1][indexPath.item])
             cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
             if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
@@ -317,9 +313,10 @@ class CalendarDateFormatter {
 
     func getStartingDayOfWeek(addedMonth: Int) -> Int {
         let month = self.calendar.date(byAdding: .month, value: addedMonth, to: self.nowCalendarDate)
-        
-        let dayCorrector = self.calendar.component(.day, from: month!) % 7
-        var startingDay = self.calendar.component(.weekday, from: month!) - dayCorrector
+
+        guard let month = month else { return 0 }
+        let dayCorrector = self.calendar.component(.day, from: month) % 7
+        var startingDay = self.calendar.component(.weekday, from: month) - dayCorrector
         if startingDay < 0 {
             startingDay += 7
         }
@@ -328,8 +325,9 @@ class CalendarDateFormatter {
 
     func getEndDateOfMonth(addedMonth: Int) -> Int {
         let month = self.calendar.date(byAdding: .month, value: addedMonth, to: self.nowCalendarDate)
-        
-        return self.calendar.range(of: .day, in: .month, for: month!)?.count ?? 0
+        guard let month = month else { return 0 }
+
+        return self.calendar.range(of: .day, in: .month, for: month)?.count ?? 0
     }
 
     func updateCurrentMonthDays(addedMonth: Int) {

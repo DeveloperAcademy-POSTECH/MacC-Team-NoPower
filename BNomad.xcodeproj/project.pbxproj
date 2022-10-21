@@ -10,6 +10,10 @@
 		0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */; };
 		041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A028FF7E72005D19CC /* VisitingInfoCell.swift */; };
 		041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A228FF7E98005D19CC /* ProfileGraphCell.swift */; };
+		6373D11629010F5300BD8500 /* DemoCell3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373D11529010F5300BD8500 /* DemoCell3.swift */; };
+		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
+		6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* DemoCell.swift */; };
+		638333102900FF3E005AB0C3 /* DemoCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330F2900FF3E005AB0C3 /* DemoCell2.swift */; };
 		041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A428FF8EBE005D19CC /* LiteralContents.swift */; };
 		041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A628FFF459005D19CC /* CalendarViewController.swift */; };
 		041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A828FFF4FB005D19CC /* CalendarCell.swift */; };
@@ -56,6 +60,10 @@
 		0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUserInfoCell.swift; sourceTree = "<group>"; };
 		041351A028FF7E72005D19CC /* VisitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitingInfoCell.swift; sourceTree = "<group>"; };
 		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
+		6373D11529010F5300BD8500 /* DemoCell3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell3.swift; sourceTree = "<group>"; };
+		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
+		6383330D2900CDBA005AB0C3 /* DemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCell.swift; sourceTree = "<group>"; };
+		6383330F2900FF3E005AB0C3 /* DemoCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell2.swift; sourceTree = "<group>"; };
 		041351A428FF8EBE005D19CC /* LiteralContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralContents.swift; sourceTree = "<group>"; };
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		041351A828FFF4FB005D19CC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -214,6 +222,10 @@
 			isa = PBXGroup;
 			children = (
 				DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */,
+				6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */,
+				6383330D2900CDBA005AB0C3 /* DemoCell.swift */,
+				6383330F2900FF3E005AB0C3 /* DemoCell2.swift */,
+				6373D11529010F5300BD8500 /* DemoCell3.swift */,
 			);
 			path = PlaceInfoView;
 			sourceTree = "<group>";
@@ -373,6 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				638333102900FF3E005AB0C3 /* DemoCell2.swift in Sources */,
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
 				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
@@ -391,6 +404,7 @@
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
+				6373D11629010F5300BD8500 /* DemoCell3.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
@@ -400,10 +414,12 @@
 				F6183CC828FFC3B900185A1F /* ModalViewController.swift in Sources */,
 				DF9618B428FCF7D300E21D30 /* UsersInPlace.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
+				6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
+				6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

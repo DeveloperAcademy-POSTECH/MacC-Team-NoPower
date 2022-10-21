@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlaceInforViewCell: UICollectionViewCell {
+class PlaceInfoViewCell: UICollectionViewCell {
     
     static let identifier = "placeInforViewCell"
     
@@ -114,13 +114,13 @@ class PlaceInforViewCell: UICollectionViewCell {
         self.addSubview(visitorTitleLabel)
         self.addSubview(visitorsLabel)
         visitorTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 115, paddingLeft: 75)
-        visitorsLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 135, paddingLeft: 72)
+        visitorsLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 135, paddingLeft: 71)
         
         // 누적 근무시간 통계
         self.addSubview(workHoursTitleLabel)
         self.addSubview(workHoursLabel)
-        workHoursTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 115, paddingLeft: 230)
-        workHoursLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 135, paddingLeft: 220)
+        workHoursTitleLabel.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 115, paddingRight: 75)
+        workHoursLabel.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 135, paddingRight: 62)
     }
 }
 

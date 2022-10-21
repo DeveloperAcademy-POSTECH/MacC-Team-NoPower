@@ -32,14 +32,10 @@ class PlaceCheckInViewController: UIViewController {
         self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
         self.collectionView.register(ColorViewCell.self, forCellWithReuseIdentifier: ColorViewCell.identifier)
         self.collectionView.register(UserProfileViewCell.self, forCellWithReuseIdentifier: UserProfileViewCell.identifier)
-        self.collectionView.register(PlaceInforViewCell.self, forCellWithReuseIdentifier: PlaceInforViewCell.identifier)
+        self.collectionView.register(PlaceInfoViewCell.self, forCellWithReuseIdentifier: PlaceInfoViewCell.identifier)
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
     }
 }
 
@@ -55,8 +51,6 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let placeInforViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInforViewCell.identifier, for: indexPath) as? PlaceInforViewCell else { return UICollectionViewCell() }
-        
         if indexPath.section == 0 {
             guard let userProfileViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileViewCell.identifier, for: indexPath) as? UserProfileViewCell else { return UICollectionViewCell() }
             return userProfileViewCell
@@ -65,26 +59,31 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             guard let colorViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorViewCell.identifier, for: indexPath) as? ColorViewCell else { return UICollectionViewCell() }
             return colorViewCell
         }
+        else if indexPath.section == 2 {
+            guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
+            return placeInfoViewCell
+        }
         else if indexPath.section == 3 {
             guard let CheckedProfileListHeader = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
             return CheckedProfileListHeader
         }
         else if indexPath.section == 4 {
             guard let checkedProfileCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
-            
             checkedProfileCell.backgroundColor = .white
             checkedProfileCell.layer.borderWidth = 1
             checkedProfileCell.layer.borderColor = CustomColor.nomadGray2?.cgColor
             checkedProfileCell.layer.cornerRadius = 12
             return checkedProfileCell
         }
-        return placeInforViewCell
+        return UICollectionViewCell()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 5
     }
 }
+
+// MARK: - extension
 
 extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
@@ -100,7 +99,8 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 390, height: 40)
         } else if indexPath.section == 4 {
             return CGSize(width: 356, height: 85)
+        } else {
+            return CGSize(width: 390, height: 0)
         }
-        return CGSize(width: 390, height: 0)
     }
 }

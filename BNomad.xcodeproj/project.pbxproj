@@ -12,7 +12,7 @@
 		041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A228FF7E98005D19CC /* ProfileGraphCell.swift */; };
 		6373D11629010F5300BD8500 /* DemoCell3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373D11529010F5300BD8500 /* DemoCell3.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
-		6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* DemoCell.swift */; };
+		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		638333102900FF3E005AB0C3 /* DemoCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330F2900FF3E005AB0C3 /* DemoCell2.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
@@ -52,7 +52,7 @@
 		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
 		6373D11529010F5300BD8500 /* DemoCell3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell3.swift; sourceTree = "<group>"; };
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
-		6383330D2900CDBA005AB0C3 /* DemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCell.swift; sourceTree = "<group>"; };
+		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		6383330F2900FF3E005AB0C3 /* DemoCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell2.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 			children = (
 				DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */,
 				6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */,
-				6383330D2900CDBA005AB0C3 /* DemoCell.swift */,
+				6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */,
 				6383330F2900FF3E005AB0C3 /* DemoCell2.swift */,
 				6373D11529010F5300BD8500 /* DemoCell3.swift */,
 			);
@@ -369,7 +369,7 @@
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
-				6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */,
+				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

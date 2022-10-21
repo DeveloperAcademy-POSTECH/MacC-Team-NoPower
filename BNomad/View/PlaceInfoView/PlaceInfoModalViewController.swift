@@ -25,7 +25,7 @@ class PlaceInfoModalViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(DemoCell.self, forCellWithReuseIdentifier: DemoCell.cellIdentifier)
+        collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
         collectionView.register(DemoCell2.self, forCellWithReuseIdentifier: DemoCell2.cellIdentifier)
         collectionView.register(DemoCell3.self, forCellWithReuseIdentifier: DemoCell3.cellIdentifier)
         view.addSubview(collectionView)
@@ -75,7 +75,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     //enum 공부
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DemoCell.cellIdentifier, for: indexPath) as? DemoCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DemoCell2.cellIdentifier, for: indexPath) as? DemoCell2 else { return UICollectionViewCell() }

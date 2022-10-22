@@ -27,10 +27,7 @@ class PlaceInfoViewController: UIViewController {
             
         view.addSubview(pinButton)
         pinButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pinButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pinButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        pinButton.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 45, paddingLeft: 18)
 
         }
     

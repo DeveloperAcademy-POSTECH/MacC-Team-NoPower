@@ -11,7 +11,7 @@ class ColorViewCell: UICollectionViewCell {
     
     static let identifier = "ColorViewCell"
     
-    // MARK: - init
+    // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)

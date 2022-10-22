@@ -10,7 +10,7 @@
 import UIKit
 
 final class FinalViewController: ModalViewController
-<MapViewController, CustomModalViewController> {
+<UINavigationController, CustomModalViewController> {
     
     override func viewDidLoad() {
         

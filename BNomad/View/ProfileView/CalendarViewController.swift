@@ -10,7 +10,7 @@ import UIKit
 
 class CalendarViewController: UIViewController {
     
-    //MARK: -Properties
+    // MARK: - Properties
     
     var monthAddedMemory: Int = 0
     private var selectedCell: Int? = 100
@@ -118,7 +118,7 @@ class CalendarViewController: UIViewController {
     }()
     
     
-    //MARK: -Lifecycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,7 +137,7 @@ class CalendarViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    //MARK: -Actions
+    // MARK: - Actions
     
     @objc func plusMonthTapButton() {
         monthAddedMemory += 1
@@ -161,7 +161,7 @@ class CalendarViewController: UIViewController {
         
     }
     
-    //MARK: -Helpers
+    // MARK: - Helpers
     
     func configureUI() {
         view.backgroundColor = UIColor(hex: "F5F5F5")
@@ -203,7 +203,7 @@ class CalendarViewController: UIViewController {
     
 }
 
-//MARK: -Extentions
+// MARK: - UICollectionViewDataSource
 
 extension CalendarViewController: UICollectionViewDataSource {
     
@@ -219,6 +219,8 @@ extension CalendarViewController: UICollectionViewDataSource {
     }
     
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension CalendarViewController: UICollectionViewDelegate {
     
@@ -267,6 +269,7 @@ extension CalendarViewController: UICollectionViewDelegate {
     
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
@@ -300,9 +303,6 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
-
-
-
 
 class CalendarDateFormatter {
     private let calendar = Calendar.current

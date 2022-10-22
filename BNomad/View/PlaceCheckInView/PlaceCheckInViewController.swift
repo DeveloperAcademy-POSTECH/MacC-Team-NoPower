@@ -13,16 +13,34 @@ class PlaceCheckInViewController: UIViewController {
     
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
+    lazy var cancelButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.layer.cornerRadius = 30 / 2
+        button.tintColor = .white
+        button.backgroundColor = .lightGray
+        button.layer.opacity = 0.5
+        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         placeCheckInView()
+        configureCancelButton()
         collectionView.backgroundColor = .white
     }
+    
+    // MARK: - Actions
+    
+    @objc func dismissPage() {
+        self.dismiss(animated: true)
+    }
 
-    // MARK: - Helps
+    // MARK: - Helpers
     
     func placeCheckInView() {
 
@@ -37,9 +55,15 @@ class PlaceCheckInViewController: UIViewController {
         
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
     }
+    
+    func configureCancelButton() {
+        view.addSubview(cancelButton)
+        cancelButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 50, paddingRight: 20, width: 30, height: 30)
+    }
+    
 }
 
-// MARK: - Extentions
+// MARK: - UICollectionViewDataSource
 
 extension PlaceCheckInViewController: UICollectionViewDataSource {
     
@@ -83,7 +107,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - extension
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     

@@ -9,7 +9,7 @@ import UIKit
 
 class SelfUserInfoCell: UICollectionViewCell {
     
-    //MARK: -Properties
+    // MARK: - Properties
     
     static let identifier = "SelfUserInfoCell"
         
@@ -40,16 +40,16 @@ class SelfUserInfoCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - init
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            render()
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(corder:) has not been implemented")
-        }
+    // MARK: - LifeCycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        render()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(corder:) has not been implemented")
+    }
     
     func render() {
 

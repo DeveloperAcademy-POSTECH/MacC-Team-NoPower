@@ -9,7 +9,8 @@ import UIKit
 
 class VisitingInfoCell: UICollectionViewCell {
     
-    //MARK: -Properties
+    // MARK: - Properties
+    
     static let identifier = "VisitingInfoCell"
     
     private let nameLabel: UILabel = {
@@ -56,19 +57,21 @@ class VisitingInfoCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - init
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            render()
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(corder:) has not been implemented")
-        }
+    // MARK: - LifeCycle
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        render()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(corder:) has not been implemented")
+    }
+    
+    // MARK: - Helpers
     
     func render() {
-
+        
         contentView.addSubview(nameLabel)
         nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
         
@@ -85,8 +88,7 @@ class VisitingInfoCell: UICollectionViewCell {
         
         contentView.addSubview(stack[1])
         stack[1].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 60, paddingLeft: 200)
-
+        
     }
     
-
 }

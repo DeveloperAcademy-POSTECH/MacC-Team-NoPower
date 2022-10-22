@@ -6,22 +6,27 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    static let bottomSheet = CustomModalViewController()
+    static var bottomSheetHeight = CGFloat(60 + 50)
+    static var bottomSheetShown: Bool = true
 
     var window: UIWindow?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
+        
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         window?.rootViewController = FinalViewController(
-            contentViewController: MapViewController(),
-            bottomSheetViewController: CustomModalViewController(),
+            contentViewController: UINavigationController(rootViewController: MapViewController()),
+            bottomSheetViewController: SceneDelegate.bottomSheet,
             bottomSheetConfiguration: .init(
                 height: UIScreen.main.bounds.height * 0.6,
-                initialOffset: 60 + window!.safeAreaInsets.bottom
+                initialOffset: window!.safeAreaInsets.bottom
             )
         )
         window?.makeKeyAndVisible()

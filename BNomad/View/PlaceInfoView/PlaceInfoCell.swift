@@ -38,9 +38,28 @@ class PlaceInfoCell: UICollectionViewCell {
         return configDetailedCheckinButton
     }()
     
-    private var placeNameLabel = UILabel()
-    private var distanceLabel = UILabel()
-    private var dateLabel = UILabel()
+    private var placeNameLabel: UILabel = {
+        let placeNameLabel = UILabel()
+        placeNameLabel.text = "노마딕 제주"
+        placeNameLabel.textColor = CustomColor.nomadBlack
+        placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
+        return placeNameLabel
+    }()
+    
+    private var distanceLabel: UILabel = {
+        let distanceLabel = UILabel()
+        distanceLabel.text = "1.5 km"
+        distanceLabel.textColor = CustomColor.nomadGray1
+        distanceLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
+        return distanceLabel
+    }()
+    private var dateLabel: UILabel = {
+        let dateLabel = UILabel()
+        dateLabel.text = "2022년 10월 23일"
+        dateLabel.textColor = CustomColor.nomadBlack
+        dateLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
+        return dateLabel
+    }()
 
     var configCallButton: UIButton.Configuration = {
         var configCallButton = UIButton.Configuration.filled()
@@ -86,19 +105,11 @@ class PlaceInfoCell: UICollectionViewCell {
      }()
     
     lazy var detailedCheckinViewButton = UIButton(configuration: self.configDetailedCheckinButton, primaryAction: nil)
-    lazy var callButton = UIButton(configuration: self.configCallButton, primaryAction: nil)
+    lazy var callButton = UIButton(configuration: self.configCallButton, primaryAction: UIAction(handler: { action in
+        print("전화로 이어주게나,,")
+    }))
     lazy var mapButton = UIButton(configuration: self.configmapButton, primaryAction: nil)
     
-    let checkInButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("체크인하기", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body, weight: .semibold)
-        button.backgroundColor = CustomColor.nomadBlue
-        button.layer.cornerRadius = 8
-        
-        return button
-    }()
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -106,6 +117,10 @@ class PlaceInfoCell: UICollectionViewCell {
         backgroundColor = .white
         
         configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Helpers
@@ -121,52 +136,23 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(dotImg2)
         self.addSubview(operatingStatusLabel)
         self.addSubview(operatingTimeLabel)
-        self.addSubview(checkInButton)
         
         setAttributes()
     }
     
     private func setAttributes() {
-        placeNameLabel.text = "노마딕 제주"
-        placeNameLabel.textColor = CustomColor.nomadBlack
-        placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
+        
         placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 45, paddingLeft: 18)
-
-        distanceLabel.text = "1.5 km"
-        distanceLabel.textColor = CustomColor.nomadGray1
-        distanceLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         distanceLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 56, paddingLeft: 167)
-        
-        dateLabel.text = "2022년 10월 23일"
-        dateLabel.textColor = CustomColor.nomadBlack
-        dateLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         dateLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 97, paddingLeft: 18)
-        
         detailedCheckinViewButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 121, paddingLeft: 17)
-        
-
         callButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 20)
-        
         mapButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 74)
-        
         dotImg.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 64)
-        
         dotImg2.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 119)
-        
         operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 138)
-        
         operatingTimeLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 197)
-        
-        checkInButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        checkInButton.widthAnchor.constraint(equalToConstant: 356).isActive = true
-        checkInButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        checkInButton.bottomAnchor.constraint(equalTo: self.layoutMarginsGuide.bottomAnchor, constant: -10).isActive = true
-        checkInButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
 
-        }
-    
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
+
 }

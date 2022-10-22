@@ -34,7 +34,6 @@
 		DF288B5828F7D710002838A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5728F7D710002838A4 /* Assets.xcassets */; };
 		DF288B5B28F7D710002838A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */; };
 		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
-		DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */; };
 		DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */; };
 		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
 		DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */; };
@@ -91,7 +90,6 @@
 		DF288B5A28F7D710002838A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF288B5C28F7D710002838A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF9618A528FCEF6A00E21D30 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoViewController.swift; sourceTree = "<group>"; };
 		DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 		DF9618A328FCEF1700E21D30 /* PlaceInfoView */ = {
 			isa = PBXGroup;
 			children = (
-				DF9618A728FCEF8800E21D30 /* PlaceInfoViewController.swift */,
 				6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */,
 				6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */,
 				6383330F2900FF3E005AB0C3 /* DemoCell2.swift */,
@@ -411,7 +408,6 @@
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
 				F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
-				DF9618A828FCEF8800E21D30 /* PlaceInfoViewController.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				15B621FF2901D22100E31125 /* ColorViewCell.swift in Sources */,
 				F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */,
@@ -444,7 +440,7 @@
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
-				6383330E2900CDBA005AB0C3 /* DemoCell.swift in Sources */,
+				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,7 +581,7 @@
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 44Q9HUN6LA;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
@@ -614,7 +610,7 @@
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 44Q9HUN6LA;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";

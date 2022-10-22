@@ -99,7 +99,7 @@ class CollectionViewCell: UICollectionViewCell {
 
     func setUpCell() {
         contentView.addSubview(cell)
-        cell.anchor(width: 356, height: 86)
+        cell.anchor(top: self.topAnchor, width: 356, height: 86)
         cell.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
 }

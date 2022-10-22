@@ -10,7 +10,7 @@ import UIKit
 
 class ProfileGraphCell: UICollectionViewCell {
     
-    //MARK: -Properties
+    // MARK: - Properties
     static let identifier = "ProfileGraphCell"
     static var addedWeek: Int = 0
     
@@ -57,7 +57,7 @@ class ProfileGraphCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - init
+    // MARK: - LifeCycle
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -67,6 +67,8 @@ class ProfileGraphCell: UICollectionViewCell {
         required init?(coder: NSCoder) {
             fatalError("init(corder:) has not been implemented")
         }
+    
+    // MARK: - Helpers
     
     func render() {
         
@@ -87,7 +89,6 @@ class ProfileGraphCell: UICollectionViewCell {
         
         contentView.addSubview(dayStack)
         dayStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 166, paddingLeft: 45)
-
 
     }
     

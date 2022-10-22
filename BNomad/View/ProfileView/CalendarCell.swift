@@ -9,25 +9,23 @@ import UIKit
 
 class CalendarCell: UICollectionViewCell {
     
-    //MARK: -Properties
+    // MARK: - Properties
     
     static let identifier = "CalendarCell"
     private lazy var dayLabel = UILabel()
-
-
     
-    //MARK: - init
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            render()
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(corder:) has not been implemented")
-        }
+    // MARK: - LifeCycle
     
-    //MARK: -Actions
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        render()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(corder:) has not been implemented")
+    }
+    
+    // MARK: - Actions
     
     func render() {
         
@@ -59,5 +57,5 @@ class CalendarCell: UICollectionViewCell {
     func setNormalCell() {
         self.layer.borderWidth = 0
     }
-
+    
 }

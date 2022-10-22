@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-    //MARK: -Properties
+    // MARK: - Properties
     
     static var weekAddedMemory: Int = 0
     
@@ -64,7 +64,18 @@ class ProfileViewController: UIViewController {
         return collectionView
     }()
     
-    //MARK: -Lifecycle
+    // MARK: - Lifecycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(moveToProfileEditing))
+        
+        DispatchQueue.main.async {
+            SceneDelegate.bottomSheetHeight = 0
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +91,11 @@ class ProfileViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    //MARK: -Actions
+    // MARK: - Actions
+    
+    @objc func moveToProfileEditing() {
+        navigationController?.pushViewController(ProfileEditViewController(), animated: true)
+    }
 
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
         let size = image.size
@@ -106,7 +121,6 @@ class ProfileViewController: UIViewController {
     }
     
     static func profileGraphCellHeaderMaker(label: UILabel, weekAdded: Int) {
-        
         
         weekAddedMemory += weekAdded
         let weekCalculator = weekAddedMemory * 7
@@ -137,7 +151,7 @@ class ProfileViewController: UIViewController {
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
     }
     
-    //MARK: -Helpers
+    // MARK: - Helpers
     
     func configureUI() {
         view.backgroundColor = UIColor(hex: "F5F5F5")
@@ -169,7 +183,7 @@ class ProfileViewController: UIViewController {
     
 }
 
-//MARK: -Extentions
+//MARK: - UICollectionViewDataSource
 
 extension ProfileViewController: UICollectionViewDataSource {
     
@@ -182,6 +196,7 @@ extension ProfileViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - UICollectionViewDelegate
 extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -214,6 +229,8 @@ extension ProfileViewController: UICollectionViewDelegate {
 
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
@@ -226,7 +243,6 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         }
         
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
            return UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)

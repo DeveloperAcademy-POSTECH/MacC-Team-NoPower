@@ -15,10 +15,10 @@ struct Place {
     var contact: String?
     var address: String?
     var type: PlaceType?
-    var totalCheckIn: [CheckIn]?
-    var todayCheckIn: [CheckIn]?
+    var totalCheckInHistory: [CheckIn]?
+    var todayCheckInHistory: [CheckIn]?
     
     // 현재 checkIn 데이터들
-    var currentCheckIn: [CheckIn]? { todayCheckIn?.filter { $0.checkOutTime == nil } }
+    var currentCheckIn: [CheckIn]? { todayCheckInHistory?.filter { $0.checkOutTime == nil } }
     
 }

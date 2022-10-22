@@ -12,9 +12,9 @@ struct User {
     var nickname: String
     var occupation: String?
     var introduction: String?
-    var checkInDatas: [CheckIn]?
+    var checkInHistory: [CheckIn]?
 
-    var currentCheckIn: CheckIn? { checkInDatas?.first { $0.date == Date().toString() && $0.checkOutTime == nil} }
+    var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toString() && $0.checkOutTime == nil} }
     var currentPlaceUid: String? { currentCheckIn?.placeUid }
     var isChecked: Bool { currentPlaceUid != nil ? true : false }
     

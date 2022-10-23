@@ -130,6 +130,7 @@ class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.navigationBar.isHidden = true
+        navigationItem.backButtonTitle = ""
     }
 
     override func viewDidLoad() {
@@ -228,16 +229,13 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let view = view as? MKClusterAnnotation  {
-            // TODO: Cluster일때 click event가 활성화 되는 것이 문제,,
-            
-        } else {
+        if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: (annotation.coordinate.latitude ?? 0) - 0.004 ?? 0, longitude: annotation.coordinate.longitude ?? 0), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             present(PlaceInfoModalViewController(), animated: true)
+        } else {
             print("THIS is CLUSTER")
         }
-        
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {

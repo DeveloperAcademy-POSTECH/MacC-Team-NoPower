@@ -70,6 +70,7 @@ class ProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalender))
+        navigationItem.backButtonTitle = ""
         
     }
     

@@ -25,7 +25,7 @@ class CustomModalViewController: UIViewController {
         number.backgroundColor = .clear
         number.textColor = .black
         number.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
-        number.text = "업무 공간 9개"
+        number.text = "업무 공간 3개"
         number.textAlignment = .center
         number.translatesAutoresizingMaskIntoConstraints = false
         return number
@@ -85,7 +85,7 @@ class CustomModalViewController: UIViewController {
 
 extension CustomModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return 3
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

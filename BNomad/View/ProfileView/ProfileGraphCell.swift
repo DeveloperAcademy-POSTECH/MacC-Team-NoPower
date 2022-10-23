@@ -11,6 +11,7 @@ import UIKit
 class ProfileGraphCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
     static let identifier = "ProfileGraphCell"
     static var addedWeek: Int = 0
     

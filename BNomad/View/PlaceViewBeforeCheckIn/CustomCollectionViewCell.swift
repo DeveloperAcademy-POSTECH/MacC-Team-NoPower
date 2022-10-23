@@ -7,29 +7,30 @@
 
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+class CustomCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "CustomCollectionViewCell"
 
     // MARK: - Properties
-    lazy var cell: UIButton = {
-        let rectangle = UIButton()
-        rectangle.frame = CGRect(x: 0, y: 0, width: 356, height: 86)
-        rectangle.layer.cornerRadius = 12
-        rectangle.translatesAutoresizingMaskIntoConstraints = false
-        rectangle.backgroundColor = .white
-        rectangle.addSubview(name)
-        rectangle.addSubview(numberOfCheckIn)
-        rectangle.addSubview(distance)
-        rectangle.addSubview(averageTime)
-        rectangle.addSubview(arrow)
-        name.anchor(top: rectangle.topAnchor, left: rectangle.leftAnchor, paddingTop: 23, paddingLeft: 9)
-        numberOfCheckIn.anchor(top: rectangle.topAnchor, right: rectangle.rightAnchor, paddingTop: 26, paddingRight: 50)
-        distance.anchor(left: rectangle.leftAnchor, bottom: rectangle.bottomAnchor, paddingLeft: 11, paddingBottom: 8)
-        averageTime.anchor(bottom: rectangle.bottomAnchor, right: rectangle.rightAnchor, paddingBottom: 8, paddingRight: 48)
-        arrow.centerYAnchor.constraint(equalTo: rectangle.centerYAnchor).isActive = true
-        arrow.rightAnchor.constraint(equalTo: rectangle.rightAnchor, constant: -12.45).isActive = true
-        return rectangle
+    
+    lazy var cell: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 12
+        view.backgroundColor = .white
+        view.layer.borderWidth = 1
+        view.addSubview(name)
+        view.addSubview(numberOfCheckIn)
+        view.addSubview(distance)
+        view.addSubview(averageTime)
+        view.addSubview(arrow)
+        name.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 23, paddingLeft: 9)
+        numberOfCheckIn.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 26, paddingRight: 50)
+        distance.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 11, paddingBottom: 8)
+        averageTime.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 8, paddingRight: 48)
+        arrow.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        arrow.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12.45).isActive = true
+        return view
     }()
     
     var name: UILabel = {
@@ -80,7 +81,6 @@ class CollectionViewCell: UICollectionViewCell {
     }()
     
     let arrow: UIImageView = {
-//        let config = UIImage.SymbolConfiguration(pointSize: 16.95)
         let image = UIImage(systemName: "chevron.right")?.withTintColor(CustomColor.nomadBlue ?? .blue, renderingMode: .alwaysOriginal)
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,6 +88,7 @@ class CollectionViewCell: UICollectionViewCell {
     }()
     
     // MARK: - LifeCycle
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -97,6 +98,8 @@ class CollectionViewCell: UICollectionViewCell {
         setUpCell()
     }
 
+    // MARK: - Helpers
+    
     func setUpCell() {
         contentView.addSubview(cell)
         cell.anchor(top: self.topAnchor, width: 356, height: 86)

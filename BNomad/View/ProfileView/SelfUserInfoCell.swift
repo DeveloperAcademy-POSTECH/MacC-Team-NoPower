@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol MovePage {
+    func moveToEditingPage()
+}
+
 class SelfUserInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
     static let identifier = "SelfUserInfoCell"
+    
+    var delegate: MovePage?
         
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -19,6 +25,16 @@ class SelfUserInfoCell: UICollectionViewCell {
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    lazy var editingButton: UIButton = {
+        var button = UIButton(type: .system)
+        button.setTitle("프로필 수정", for: .normal)
+        button.tintColor = CustomColor.nomadGray1
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(moveToEditing), for: .touchUpInside)
+        return button
     }()
     
     private let jobLabel: UILabel = {
@@ -51,10 +67,21 @@ class SelfUserInfoCell: UICollectionViewCell {
         fatalError("init(corder:) has not been implemented")
     }
     
+    // MARK: - Actions
+    
+    @objc func moveToEditing() {
+        delegate?.moveToEditingPage()
+    }
+    
+    // MARK: - Helpers
+    
     func render() {
 
         contentView.addSubview(nameLabel)
         nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
+        
+        contentView.addSubview(editingButton)
+        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 18, paddingRight: 12, width: 55, height: 13)
         
         contentView.addSubview(jobLabel)
         jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 60, paddingLeft: 20, paddingRight: 20)

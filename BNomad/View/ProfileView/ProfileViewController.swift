@@ -69,11 +69,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(moveToProfileEditing))
-        
-        DispatchQueue.main.async {
-            SceneDelegate.bottomSheetHeight = 0
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalender))
         
     }
     
@@ -88,13 +84,12 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
-        // Do any additional setup after loading the view.
     }
     
     // MARK: - Actions
     
-    @objc func moveToProfileEditing() {
-        navigationController?.pushViewController(ProfileEditViewController(), animated: true)
+    @objc func moveToCalender() {
+        navigationController?.pushViewController(CalendarViewController(), animated: true)
     }
 
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
@@ -104,7 +99,7 @@ class ProfileViewController: UIViewController {
         let heightRatio = targetSize.height / size.height
         
         var newSize: CGSize
-        if(widthRatio > heightRatio) {
+        if (widthRatio > heightRatio) {
             newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
         } else {
             newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
@@ -183,7 +178,7 @@ class ProfileViewController: UIViewController {
     
 }
 
-//MARK: - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 
 extension ProfileViewController: UICollectionViewDataSource {
     
@@ -197,6 +192,7 @@ extension ProfileViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
+
 extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -207,15 +203,16 @@ extension ProfileViewController: UICollectionViewDelegate {
         }
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 20
+        cell.delegate = self
         return cell
-        }else if indexPath.section == 1 {
+        } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             return cell
-        }else {
+        } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCell.identifier , for: indexPath) as? ProfileGraphCell else {
                 return UICollectionViewCell()
             }
@@ -247,5 +244,12 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
            return UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         }
-    
+}
+
+// MARK: - MovePage
+
+extension ProfileViewController: MovePage {
+    func moveToEditingPage() {
+        navigationController?.pushViewController(ProfileEditViewController(), animated: true)
+    }
 }

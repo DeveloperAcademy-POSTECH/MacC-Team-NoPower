@@ -151,10 +151,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func moveToProfile() {
-        DispatchQueue.main.async {
-            SceneDelegate.bottomSheetShown = false
-        }
-        
         self.dismiss(animated: false)
         navigationController?.pushViewController(ProfileViewController(), animated: true)
         map.selectedAnnotations = []

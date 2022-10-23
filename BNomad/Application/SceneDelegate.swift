@@ -10,8 +10,6 @@ import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     static let bottomSheet = CustomModalViewController()
-    static var bottomSheetHeight = CGFloat(60 + 50)
-    static var bottomSheetShown: Bool = true
 
     var window: UIWindow?
 

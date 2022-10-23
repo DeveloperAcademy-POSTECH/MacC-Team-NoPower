@@ -60,7 +60,6 @@ class PlaceInfoModalViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("Disapper")
         guard let selectedAnnotation = selectedAnnotation else { return }
         delegate?.clearAnnotation(view: selectedAnnotation)
     }

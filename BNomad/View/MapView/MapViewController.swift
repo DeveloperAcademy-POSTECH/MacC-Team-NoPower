@@ -247,6 +247,9 @@ extension MapViewController: MKMapViewDelegate {
 
 extension MapViewController: ClearSelectedAnnotation {
     func clearAnnotation(view: MKAnnotation) {
+        if view.isEqual(map.selectedAnnotations.first) {
+            return
+        }
         let tempAnnotations = map.selectedAnnotations
         map.selectedAnnotations = []
         for annotation in tempAnnotations {

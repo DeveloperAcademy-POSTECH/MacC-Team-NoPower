@@ -15,7 +15,7 @@ protocol ClearSelectedAnnotation {
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
-    var tempView: MKAnnotation?
+    var selectedAnnotation: MKAnnotation?
     
     var delegate: ClearSelectedAnnotation?
     
@@ -61,8 +61,8 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("Disapper")
-        guard let tempView = tempView else { return }
-        delegate?.clearAnnotation(view: tempView)
+        guard let selectedAnnotation = selectedAnnotation else { return }
+        delegate?.clearAnnotation(view: selectedAnnotation)
     }
     
     // MARK: - Actions

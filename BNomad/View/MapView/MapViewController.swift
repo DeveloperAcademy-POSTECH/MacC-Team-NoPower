@@ -229,7 +229,7 @@ extension MapViewController: MKMapViewDelegate {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             let controller = PlaceInfoModalViewController()
-            controller.tempView = annotation
+            controller.selectedAnnotation = annotation
             controller.delegate = self
             present(controller, animated: true)
         } else {
@@ -242,6 +242,8 @@ extension MapViewController: MKMapViewDelegate {
     }
     
 }
+
+// MARK: - ClearSelectedAnnotation
 
 extension MapViewController: ClearSelectedAnnotation {
     func clearAnnotation(view: MKAnnotation) {

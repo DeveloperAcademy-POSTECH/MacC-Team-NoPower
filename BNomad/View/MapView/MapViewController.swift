@@ -228,7 +228,10 @@ extension MapViewController: MKMapViewDelegate {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-            present(PlaceInfoModalViewController(), animated: true)
+            let controller = PlaceInfoModalViewController()
+            controller.tempView = annotation
+            controller.delegate = self
+            present(controller, animated: true)
         } else {
             print("THIS is CLUSTER")
         }
@@ -238,4 +241,16 @@ extension MapViewController: MKMapViewDelegate {
         self.dismiss(animated: true)
     }
     
+}
+
+extension MapViewController: ClearSelectedAnnotation {
+    func clearAnnotation(view: MKAnnotation) {
+        let tempAnnotations = map.selectedAnnotations
+        map.selectedAnnotations = []
+        for annotation in tempAnnotations {
+            if !annotation.isEqual(view) {
+                map.selectedAnnotations.append(annotation)
+            }
+        }
+    }
 }

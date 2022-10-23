@@ -6,10 +6,18 @@
 //
 
 import UIKit
+import MapKit
+
+protocol ClearSelectedAnnotation {
+    func clearAnnotation(view: MKAnnotation)
+}
 
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
+    var tempView: MKAnnotation?
+    
+    var delegate: ClearSelectedAnnotation?
     
     let collectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
@@ -48,6 +56,13 @@ class PlaceInfoModalViewController: UIViewController {
         configureCollectionView()
         configureCheckInButton()
         setupSheet()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("Disapper")
+        guard let tempView = tempView else { return }
+        delegate?.clearAnnotation(view: tempView)
     }
     
     // MARK: - Actions

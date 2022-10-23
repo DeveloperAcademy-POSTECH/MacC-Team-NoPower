@@ -71,6 +71,7 @@ class PlaceInfoModalViewController: UIViewController {
         checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
+            // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
             self.isCheckedIn = false
             self.checkInButton.isHidden = true
             self.checkOutButton.isHidden = false

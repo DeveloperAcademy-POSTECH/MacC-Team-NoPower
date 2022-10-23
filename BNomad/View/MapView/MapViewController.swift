@@ -21,7 +21,6 @@ class MapViewController: UIViewController {
     // 맵 띄우기
     private lazy var map: MKMapView = {
         let map = MKMapView()
-        map.setRegion(startRegion, animated: false)
         map.pointOfInterestFilter = .some(MKPointOfInterestFilter(including: [.airport, .beach, .campground, .publicTransport]))
         map.showsScale = false
         map.showsCompass = false
@@ -172,10 +171,7 @@ class MapViewController: UIViewController {
     func configueMapUI() {
         map.delegate = self
         view.addSubview(map)
-        
-        DispatchQueue.main.async {
-            self.map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 36.0129, longitude: 129.3255), latitudinalMeters: 1, longitudinalMeters: 1), animated: true)
-        }
+        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 36.0129, longitude: 129.3255), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
         
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
 

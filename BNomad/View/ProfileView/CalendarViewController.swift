@@ -12,9 +12,19 @@ class CalendarViewController: UIViewController {
     
     // MARK: - Properties
     
+    
     var monthAddedMemory: Int = 0
     private var selectedCell: Int? = 100
     let calendarDateFormatter = CalendarDateFormatter()
+    
+    var checkinDateData: [Bool] { //TODO: 파베 데이터로 판단하는 로직 필요
+        var data = Array(repeating: false, count: CalendarDateFormatter().days.count)
+        data[10] = true
+        data[11] = true
+        data[20] = true
+        data[21] = true
+        return data
+    }
     
     private let CalendarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -134,14 +144,13 @@ class CalendarViewController: UIViewController {
         
         configureUI()
         render()
-        // Do any additional setup after loading the view.
     }
     
     // MARK: - Actions
     
     @objc func plusMonthTapButton() {
         monthAddedMemory += 1
-        calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
+        calendarCollectionMonthHeader.text = String(calendarDateFormatter.getTargetMonth(addedMonth: monthAddedMemory))+"월"
         
         selectedCell = nil
         
@@ -152,7 +161,7 @@ class CalendarViewController: UIViewController {
     
     @objc func minusMonthTapButton() {
         monthAddedMemory -= 1
-        calendarCollectionMonthHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월"
+        calendarCollectionMonthHeader.text = String(calendarDateFormatter.getTargetMonth(addedMonth: monthAddedMemory))+"월"
         
         selectedCell = nil
 
@@ -233,15 +242,34 @@ extension CalendarViewController: UICollectionViewDelegate {
             }
             cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
+            //주말 텍스트 색 설정
             if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
                 cell.setWeekendColor()
             }
             
+            //오늘 텍스트 색 설정
+            if indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) + 1 == Contents.getTodayDate()[2]
+                && Contents.getTodayDate()[1] == calendarDateFormatter.getTargetMonth(addedMonth: monthAddedMemory){
+                cell.setTodayCell()
+            }else {
+                cell.setNormalCell()
+            }
+            
+            //선택한 셀 테두리 설정
             if indexPath.item == selectedCell {
                 cell.setSelectedCell()
             } else {
                 cell.setNormalCell()
             }
+            
+            //체크인한 날자 도장 설정
+            if checkinDateData[indexPath.item] { //TODO: ????왜이러는건지대체
+                cell.drawCheckinStemp()
+            }else {
+                cell.eraseCheckinStemp()
+            }
+            
+            
             return cell
             
         } else {
@@ -304,6 +332,11 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+
+
+
+
+
 class CalendarDateFormatter {
     private let calendar = Calendar.current
     private let dateFormatter = DateFormatter()
@@ -325,6 +358,14 @@ class CalendarDateFormatter {
             startingDay += 7
         }
         return startingDay
+    }
+    
+    func getTargetMonth(addedMonth: Int) -> Int {
+        let month = self.calendar.date(byAdding: .month, value: addedMonth, to: self.nowCalendarDate)
+
+        guard let month = month else { return 0 }
+        let targetMonth = self.calendar.component(.month, from: month)
+        return targetMonth
     }
 
     func getEndDateOfMonth(addedMonth: Int) -> Int {
@@ -350,3 +391,4 @@ class CalendarDateFormatter {
     }
 
 }
+

@@ -18,8 +18,17 @@ class ProfileViewController: UIViewController {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = resizeImage(image: UIImage(named: "ProfileDefault")!, targetSize: CGSize(width: 78.0, height: 78.0))
+        iv.image = Contents.resizeImage(image: UIImage(named: "ProfileDefault")!, targetSize: CGSize(width: 78.0, height: 78.0))
         iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    private lazy var DummyGraphImage: UIImageView = { //FIXME: 더미 그래프 이미지임 로직 생성 필요
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.isUserInteractionEnabled = true
+        iv.image = UIImage(named: "graph")
         return iv
     }()
     
@@ -76,6 +85,9 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
+        ProfileGraphCell.addedWeek = 0
+        ProfileGraphCell.editWeek(edit: 0)
         
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
@@ -123,8 +135,8 @@ class ProfileViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "M.d"
         
-        let sundayCalculator = (86400 * (1-Contents.todayOfTheWeek+1 + weekCalculator))
-        let saturdayCalculator = (86400 * (1-Contents.todayOfTheWeek+7 + weekCalculator))
+        let sundayCalculator = (86400 * (1-Contents.todayOfTheWeek + weekCalculator))
+        let saturdayCalculator = (86400 * (1-Contents.todayOfTheWeek+6 + weekCalculator))
         
         let sundayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(sundayCalculator)))
         let saturdayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(saturdayCalculator)))
@@ -175,6 +187,9 @@ class ProfileViewController: UIViewController {
         
         view.addSubview(plusWeek)
         plusWeek.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 570, paddingRight: 45)
+        
+        view.addSubview(DummyGraphImage)
+        DummyGraphImage.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 114, height: 154)
     }
     
 }
@@ -254,3 +269,4 @@ extension ProfileViewController: MovePage {
         navigationController?.pushViewController(ProfileEditViewController(), animated: true)
     }
 }
+

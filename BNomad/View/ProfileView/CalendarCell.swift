@@ -14,18 +14,30 @@ class CalendarCell: UICollectionViewCell {
     static let identifier = "CalendarCell"
     private lazy var dayLabel = UILabel()
     
-    // MARK: - LifeCycle
+    private lazy var stempImage: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.isUserInteractionEnabled = true
+        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStemp")!, targetSize: CGSize(width: 34.0, height: 34.0))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+
+
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        render()
-    }
+    //MARK: - init
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            render()
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(corder:) has not been implemented")
+        }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(corder:) has not been implemented")
-    }
-    
-    // MARK: - Actions
+    //MARK: -Actions
     
     func render() {
         
@@ -58,4 +70,18 @@ class CalendarCell: UICollectionViewCell {
         self.layer.borderWidth = 0
     }
     
+    func drawCheckinStemp() {
+        self.addSubview(stempImage)
+        self.stempImage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.stempImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    }
+    
+    func eraseCheckinStemp() {
+        self.stempImage.removeFromSuperview()
+    }
+    
+    func setTodayCell() {
+        self.dayLabel.textColor = CustomColor.nomadGreen
+    }
+
 }

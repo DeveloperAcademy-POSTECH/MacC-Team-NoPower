@@ -123,7 +123,35 @@ class MapViewController: UIViewController {
     }()
     
     var userCheckedIn: Bool = false
+    
+    lazy var listViewButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.setTitle("리스트 보기", for:.normal)
+        button.titleLabel!.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
+        button.setTitleColor(CustomColor.nomadBlue, for: .normal)
+        button.layer.cornerRadius = 20
+        button.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        button.layer.borderWidth = 1
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
+        return button
+    }()
 
+    @objc private func presentPlaceViewModal() {
+        let sheet = CustomModalViewController()
+        sheet.modalPresentationStyle = .pageSheet
+        if let sheet = sheet.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.delegate = self
+            sheet.prefersGrabberVisible = false
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 12
+        }
+        present(sheet, animated: true, completion: nil)
+    }
+    
     // MARK: - LifeCycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -188,6 +216,9 @@ class MapViewController: UIViewController {
             view.addSubview(workingView)
             workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)
         }
+        
+        map.addSubview(listViewButton)
+        listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
     }
     
     func registerAnnotationViewClasses() {
@@ -257,5 +288,13 @@ extension MapViewController: ClearSelectedAnnotation {
                 map.selectedAnnotations.append(annotation)
             }
         }
+    }
+}
+
+// MARK: - SheetModalView in MapView
+
+extension MapViewController: UISheetPresentationControllerDelegate {
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        print(sheetPresentationController.selectedDetentIdentifier == .large ? "large" : "medium")
     }
 }

@@ -13,8 +13,8 @@ class FirebaseManager {
     
     static let shared = FirebaseManager()
 
+    // 실사용시 withPath: "Dummy" 제거 필요.
     let ref = Database.database().reference(withPath: "Dummy")
-    
     
     // MARK: place
     // firebase
@@ -45,9 +45,10 @@ class FirebaseManager {
                 let placeUid = snapshot.key
                 let contact = dictionary["contact"] as? String
                 let address = dictionary["address"] as? String
-                // TODO: - type 추가
+                // TODO: - type 속성 추가
                 let place = Place(placeUid: placeUid, name: name, latitude: latitude, longitude: longitude
                                   ,contact: contact, address: address)
+                
                 completion(place)
             }
         })
@@ -77,6 +78,7 @@ class FirebaseManager {
             let occupation = dictionary["occupation"] as? String
             let introduction = dictionary["introduction"] as? String
             let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: introduction, checkInHistory: nil)
+            
             completion(user)
         })
     }
@@ -96,7 +98,7 @@ class FirebaseManager {
     //                checkOutTime
     //                checkInUid
     
-    // user의 모든 CheckInHistory 가져오기
+    /// user의 모든 CheckInHistory 가져오기
     func fetchCheckInHistory(userUid: String, completion: @escaping([CheckIn]) -> Void) {
         var checkInHistory: [CheckIn] = []
         ref.child("checkInUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshot in
@@ -113,8 +115,8 @@ class FirebaseManager {
                 }
     
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                
                 let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+                
                 checkInHistory.append(checkIn)
             }
             completion(checkInHistory)
@@ -142,57 +144,85 @@ class FirebaseManager {
             print("fail user fetchCheckInHistory from firebase")
             return nil
         }
+        
         let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
         let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+        
         return checkIn
     }
     
     /// (observeSingleEvent) 날짜별로 place의  checkInHistory 가져오기
     func fetchCheckInHistory(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
-        let date = date.toString()
+        let date = date.toDateString()
         var checkInHistory: [CheckIn] = []
+        
         ref.child("checkInPlace/\(placeUid)/\(date)").observeSingleEvent(of: .value, with: { snapshots in
             for child in snapshots.children {
-//                guard let checkIn = self.getCheckInFromPlace(snapshot: child, placeUid: placeUid) else {return}
-                guard
-                    let snapshot = child as? DataSnapshot,
-                    let dictionary = snapshot.value as? [String: String],
-                    let checkInUid = snapshot.key as? String,
-                    let userUid = dictionary["userUid"],
-                    let checkInTime = dictionary["checkInTime"]?.toDateTime()
-                else {
-                    print("fail user fetchCheckInHistory from firebase")
-                    return
-                }
-
-                let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
-                
+                guard let checkIn = self.getCheckInFromPlace(snapshot: child, placeUid: placeUid) else { return }
                 checkInHistory.append(checkIn)
             }
             completion(checkInHistory)
         })
     }
-    
-//    func setCheckIn(uid: String, pid: String, date: Date = Date()) {
-//        let date: String = date.toString()
-//        let checkInTime: String = "08:30"
-//        self.ref.child("/checkIn/\(pid)/\(date)/\(uid)").setValue(["checkInTime": checkInTime])
-//    }
-    
-    func fetchBool(completion: @escaping(Bool) -> Void) {
-        ref.child("places/test").observe(DataEventType.value, with: { snapshot in
-            guard let temp  = snapshot.value as? Bool else {return}
-            completion(temp)
+
+    /// (observe) 날짜별로 place의  checkInHistory 가져오기
+    func fetchCheckInHistoryObserve(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
+        let date = date.toDateString()
+        var checkInHistory: [CheckIn] = []
+        
+        ref.child("checkInPlace/\(placeUid)/\(date)").observe(.value, with: { snapshots in
+            for child in snapshots.children {
+                guard let checkIn = self.getCheckInFromPlace(snapshot: child, placeUid: placeUid) else { return }
+                checkInHistory.append(checkIn)
+            }
+            completion(checkInHistory)
         })
     }
 
-//    func setCheckOut(uid: String, pid: String, date: Date = Date()) {
-//        // 체크인 데이터에 종료 시간 업데이트
-//        let todayDate: String = ""
-//        let checkOutTime: String = "15:00"
-//
-//        // 존재할 경우에 대해서.
-//        self.ref.child("/checkOut/\(pid)/\(date)/\(uid)").setValue(["checkOutTime": checkOutTime])
-//    }
+    /// (observeSingleEvent) 모든 place의 checkInHistory 가져오기
+    func fetchCheckInHistoryAll(placeUid: String, completion: @escaping([CheckIn]) -> Void) {
+        var checkInHistory: [CheckIn] = []
+        
+        ref.child("checkInPlace/\(placeUid)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                for child in snapshot.children {
+                    guard let checkIn = self.getCheckInFromPlace(snapshot: child, placeUid: placeUid) else { return }
+                    checkInHistory.append(checkIn)
+                }
+            }
+            completion(checkInHistory)
+        })
+    }
+
+    func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
+        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
+        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
+        
+        ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())" : checkInUser,
+                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) { 
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("checkIn could not be saved: \(error).")
+            } else {
+                completion(checkIn)
+            }
+        }
+    }
+
+    func setCheckOut(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
+        var checkIn: CheckIn = checkIn
+        let checkOutTime = Date()
+        checkIn.checkOutTime = checkOutTime
+
+        ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())/checkOutTime" : checkOutTime.toDateTimeString(),
+                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)/checkOutTime" : checkOutTime.toDateTimeString()]) { 
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("checkOut could not be saved: \(error).")
+            } else {
+                completion(checkIn)
+            }
+        }
+    }
 }

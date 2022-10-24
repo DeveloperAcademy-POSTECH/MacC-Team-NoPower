@@ -82,7 +82,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - init
+    // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,6 +93,8 @@ class PlaceInfoViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(corder:) has not been implemented")
     }
+    
+    // MARK: - Helpers
     
     func renderInfo() {
         // 공간 이름

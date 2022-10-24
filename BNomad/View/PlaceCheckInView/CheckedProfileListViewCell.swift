@@ -45,7 +45,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - init
+    // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -59,7 +59,7 @@ class UserProfileViewCell: UICollectionViewCell {
         return divider
     }()
     
-    // MARK: - init
+    // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)

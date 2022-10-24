@@ -11,6 +11,8 @@ class CheckedProfileListHeader: UICollectionViewCell {
     
     static let identifier = "CheckedProfileListHeader"
     
+    // MARK: - Properties
+    
     private let label: UILabel = {
         let label = UILabel()
         label.text = "함께 일하고 있는 23명의 노마더"
@@ -47,6 +49,8 @@ class CheckedProfileListHeader: UICollectionViewCell {
         return menuView
     }()
     
+    // MARK: - LifeCycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
@@ -55,6 +59,8 @@ class CheckedProfileListHeader: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Helpers
     
     func render() {
         addSubview(label)

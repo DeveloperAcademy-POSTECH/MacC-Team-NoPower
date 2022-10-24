@@ -6,43 +6,121 @@
 //
 
 import UIKit
+import MapKit
+
+protocol ClearSelectedAnnotation {
+    func clearAnnotation(view: MKAnnotation)
+}
 
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
+    var selectedAnnotation: MKAnnotation?
+    
+    var delegate: ClearSelectedAnnotation?
     
     let collectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
-//        flowlayout.scrollDirection = .horizontal
         return cv
+    }()
+    
+    var isCheckedIn: Bool = false
+    
+    lazy var checkInButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("체크인 하기", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = CustomColor.nomadBlue
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
+        button.isHidden = self.isCheckedIn ? true : false
+        return button
+    }()
+    
+    lazy var checkOutButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("체크아웃 하기", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = CustomColor.nomadGray1
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(checkOut), for: .touchUpInside)
+        button.isHidden = self.isCheckedIn ? false : true
+        return button
     }()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureCollectionView()
+        configureCheckInButton()
+        setupSheet()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let selectedAnnotation = selectedAnnotation else { return }
+        delegate?.clearAnnotation(view: selectedAnnotation)
+    }
+    
+    // MARK: - Actions
+    
+    @objc func checkOut() {
+        print("CHECK OUT")
+        let checkOutAlert = UIAlertController(title: "체크아웃 하시겠습니까?", message: "체크아웃하냐?", preferredStyle: .alert)
+        checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        checkOutAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
+            // TODO: Firebase에서 checkIn되어 있는 데이터 삭제하는 로직 + checkInButton 업데이트
+            self.isCheckedIn = false
+            self.checkInButton.isHidden = false
+            self.checkOutButton.isHidden = true
+        }))
+        present(checkOutAlert, animated: true)
+    }
+    
+    @objc func checkIn() {
+        print("CHECK IN")
+        let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "노마드 제주에 체크인 하시겠습니까?", preferredStyle: .alert)
+        checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
+            // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
+            // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
+            self.isCheckedIn = false
+            self.checkInButton.isHidden = true
+            self.checkOutButton.isHidden = false
+            let controller = PlaceCheckInViewController()
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true)
+        }))
+        present(checkInAlert, animated: true)
+    }
+    
+    // MARK: - Helpers
+    
+    func configureCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .white
         collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
         collectionView.register(DemoCell2.self, forCellWithReuseIdentifier: DemoCell2.cellIdentifier)
         collectionView.register(DemoCell3.self, forCellWithReuseIdentifier: DemoCell3.cellIdentifier)
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        
-        collectionView.backgroundColor = .white
-        
-        setupSheet()
     }
     
-    // MARK: - Helpers
+    func configureCheckInButton() {
+        view.addSubview(checkInButton)
+        checkInButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
+        
+        view.addSubview(checkOutButton)
+        checkOutButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
+    }
     
     private func setupSheet() {
 //        밑으로 내려도 dismiss되지 않는 옵션 값
@@ -122,5 +200,3 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets (top: 10, left: 10, bottom: 10, right: 10)
     }
 }
-
-

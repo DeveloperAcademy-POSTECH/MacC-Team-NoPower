@@ -196,7 +196,7 @@ class ProfileEditViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
             self.saveEditedProfile { user in
-                self.dismiss(animated: true)
+                self.navigationController?.popViewController(animated: true)
             }
         }))
         present(alert, animated: true)

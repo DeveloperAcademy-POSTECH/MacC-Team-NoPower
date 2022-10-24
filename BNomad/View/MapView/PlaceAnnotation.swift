@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-class CoworkingAnnotationView: MKMarkerAnnotationView {
+class CoworkingAnnotationView: PlaceAnnotationView {
     
     static let ReuseID = "coworkingAnnotaion"
     
@@ -30,7 +30,7 @@ class CoworkingAnnotationView: MKMarkerAnnotationView {
 }
 
 
-class LibraryAnnotationView: MKMarkerAnnotationView {
+class LibraryAnnotationView: PlaceAnnotationView {
     
     static let ReuseID = "libraryAnnotaion"
 
@@ -52,7 +52,7 @@ class LibraryAnnotationView: MKMarkerAnnotationView {
 }
 
 
-class CafePlaceAnnotationView: MKMarkerAnnotationView {
+class CafePlaceAnnotationView: PlaceAnnotationView {
     
     static let ReuseID = "cafeAnnotaion"
 
@@ -73,3 +73,14 @@ class CafePlaceAnnotationView: MKMarkerAnnotationView {
     }
 }
 
+class PlaceAnnotationView: MKMarkerAnnotationView {
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}

@@ -101,10 +101,10 @@ class PlaceInfoModalViewController: UIViewController {
     func configureCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = CustomColor.nomadGray3
         collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
-        collectionView.register(DemoCell2.self, forCellWithReuseIdentifier: DemoCell2.cellIdentifier)
-        collectionView.register(DemoCell3.self, forCellWithReuseIdentifier: DemoCell3.cellIdentifier)
+        collectionView.register(BasicInfoCell.self, forCellWithReuseIdentifier: BasicInfoCell.cellIdentifier)
+        collectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
         view.addSubview(collectionView)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,11 +156,11 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
             return cell
         } else if indexPath.section == 1 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DemoCell2.cellIdentifier, for: indexPath) as? DemoCell2 else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BasicInfoCell.cellIdentifier, for: indexPath) as? BasicInfoCell else { return UICollectionViewCell() }
             return cell
         }
         else if indexPath.section == 2 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DemoCell3.cellIdentifier, for: indexPath) as? DemoCell3 else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SummaryInfoCell.cellIdentifier, for: indexPath) as? SummaryInfoCell else { return UICollectionViewCell() }
             return cell
         }
         
@@ -168,7 +168,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 2
     }
 }
 
@@ -185,18 +185,19 @@ extension PlaceInfoModalViewController: UICollectionViewDelegate {
 extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (view.frame.width) / 1, height: (view.frame.width) / 1)
+        return CGSize(width: (view.frame.width) / 1, height: (view.frame.width) / 1)
     }
     //셀 간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 8
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 8
+        
     }
     // 셀 크기 마진
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets (top: 10, left: 10, bottom: 10, right: 10)
+        return UIEdgeInsets (top: 0, left: 10, bottom: 8, right: 10)
     }
 }

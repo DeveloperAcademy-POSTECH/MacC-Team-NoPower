@@ -114,7 +114,6 @@ class FirebaseTestVC: UIViewController {
     func setCheckIn(completion: @escaping(User) -> Void) {
         var user: User = User(userUid: "01925c0c-799d-4b05-bee7-bdc68f64737b", nickname: "lance")
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
-        // let userUid: String = "01925c0c-799d-4b05-bee7-bdc68f64737b"
         let checkIn: CheckIn = CheckIn(userUid: user.userUid, placeUid: placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
         
         FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in

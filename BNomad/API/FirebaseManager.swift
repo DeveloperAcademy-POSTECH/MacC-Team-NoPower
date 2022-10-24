@@ -195,6 +195,7 @@ class FirebaseManager {
         })
     }
 
+    /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
         let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
@@ -210,6 +211,7 @@ class FirebaseManager {
         }
     }
 
+    /// checkOut할 경우 checkInUser, checkInPlace에 checkOutTime 추가
     func setCheckOut(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         var checkIn: CheckIn = checkIn
         let checkOutTime = Date()

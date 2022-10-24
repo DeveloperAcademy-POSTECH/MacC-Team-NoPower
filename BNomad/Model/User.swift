@@ -23,7 +23,6 @@ struct User {
 extension User {
     func toAnyObject() -> Any {
       return [
-        "userUid": userUid,
         "nickname": nickname,
         "occupation": occupation,
         "introduction": introduction

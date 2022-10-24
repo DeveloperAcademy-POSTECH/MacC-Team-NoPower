@@ -294,7 +294,5 @@ extension MapViewController: ClearSelectedAnnotation {
 // MARK: - SheetModalView in MapView
 
 extension MapViewController: UISheetPresentationControllerDelegate {
-    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
-        print(sheetPresentationController.selectedDetentIdentifier == .large ? "large" : "medium")
-    }
+
 }

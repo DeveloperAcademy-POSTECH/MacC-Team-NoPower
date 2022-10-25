@@ -63,6 +63,17 @@ class FirebaseManager {
     //            occupation
     //            introduction
     //
+
+    /// userUid 존재하는지 체크
+    func checkUserExist(userUid: String, completion: @escaping(Bool) -> Void) {
+        ref.child("users").child(userUid).observeSingleEvent(of: .value, with: { snapshot in
+            if snapshot.exists() {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        })
+    }
     
     /// userData 가져오기
     func fetchUser(id userUid: String, completion: @escaping(User) -> Void) {

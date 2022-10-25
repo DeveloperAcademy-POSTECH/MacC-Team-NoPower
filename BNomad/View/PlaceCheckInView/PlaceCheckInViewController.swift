@@ -11,6 +11,15 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let placeTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "쌍사벅스"
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
+        label.tintColor = CustomColor.nomadBlack
+        
+        return label
+    }()
+    
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     lazy var cancelButton: UIButton = {
@@ -31,6 +40,7 @@ class PlaceCheckInViewController: UIViewController {
         
         placeCheckInView()
         configureCancelButton()
+        view.backgroundColor = .white
         collectionView.backgroundColor = .white
     }
     
@@ -44,16 +54,20 @@ class PlaceCheckInViewController: UIViewController {
     
     func placeCheckInView() {
 
+        view.addSubview(placeTitleLabel)
+        placeTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        placeTitleLabel.anchor(top: view.topAnchor, paddingTop: 51)
+        
         view.addSubview(collectionView)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
         self.collectionView.register(ColorViewCell.self, forCellWithReuseIdentifier: ColorViewCell.identifier)
-        self.collectionView.register(UserProfileViewCell.self, forCellWithReuseIdentifier: UserProfileViewCell.identifier)
+        self.collectionView.register(CheckInCardViewCell.self, forCellWithReuseIdentifier: CheckInCardViewCell.identifier)
         self.collectionView.register(PlaceInfoViewCell.self, forCellWithReuseIdentifier: PlaceInfoViewCell.identifier)
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
-        collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
+        collectionView.anchor(top: placeTitleLabel.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
     }
     
     func configureCancelButton() {
@@ -68,7 +82,7 @@ class PlaceCheckInViewController: UIViewController {
 extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 4 {
+        if section == 3 {
             return 10
         }
         return 1
@@ -76,22 +90,19 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
-            guard let userProfileViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: UserProfileViewCell.identifier, for: indexPath) as? UserProfileViewCell else { return UICollectionViewCell() }
-            return userProfileViewCell
+            guard let checkInCardViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckInCardViewCell.identifier, for: indexPath) as? CheckInCardViewCell else { return UICollectionViewCell() }
+            checkInCardViewCell.delegate = self
+            return checkInCardViewCell
         }
         else if indexPath.section == 1 {
-            guard let colorViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorViewCell.identifier, for: indexPath) as? ColorViewCell else { return UICollectionViewCell() }
-            return colorViewCell
-        }
-        else if indexPath.section == 2 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
             return placeInfoViewCell
         }
-        else if indexPath.section == 3 {
+        else if indexPath.section == 2 {
             guard let CheckedProfileListHeader = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
             return CheckedProfileListHeader
         }
-        else if indexPath.section == 4 {
+        else if indexPath.section == 3 {
             guard let checkedProfileCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
             checkedProfileCell.backgroundColor = .white
             checkedProfileCell.layer.borderWidth = 1
@@ -103,7 +114,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 5
+        return 4
     }
 }
 
@@ -113,18 +124,30 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let viewWidth = view.bounds.width
+        let sectionZeroCardHeight: CGFloat = 266
+        let sectionZeroBottomPadding: CGFloat = 25
+        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
+        
         if indexPath.section == 0 {
-            return CGSize(width: 390, height: 150)
+            print(sectionZeroHeight)
+            return CGSize(width: viewWidth, height: sectionZeroHeight)
         } else if indexPath.section == 1 {
-            return CGSize(width: 390, height: 8)
+            return CGSize(width: viewWidth, height: 220)
         } else if indexPath.section == 2 {
-            return CGSize(width: 390, height: 220)
+            return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
-            return CGSize(width: 390, height: 40)
-        } else if indexPath.section == 4 {
             return CGSize(width: 356, height: 85)
         } else {
-            return CGSize(width: 390, height: 0)
+            return CGSize(width: viewWidth, height: 0)
         }
+    }
+}
+
+// MARK: - pageDismiss
+
+extension PlaceCheckInViewController: pageDismiss {
+    func checkOut() {
+        self.dismiss(animated: true)
     }
 }

@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+// TODO: - 하드코딩된 부분 전부 변경 필요. Place 객체 받아서.
 class CustomCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "CustomCollectionViewCell"
@@ -48,7 +50,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.backgroundColor = .clear
         title.textColor = .black
-        title.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        title.font = .preferredFont(forTextStyle: .body, weight: .regular)        
         title.text = "3명 체크인"
         title.font = UIFont(name: "SFProText-Regular", size: 17)
         title.textAlignment = .center
@@ -73,6 +75,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         title.backgroundColor = .clear
         title.textColor = CustomColor.nomadGray2
         title.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        // TODO: - "평균 \()시간 근무" 처럼 문자열 포맷팅 형식으로 변경 필요
         title.text = "평균 5시간 근무"
         title.font = UIFont(name: "SFProText-Regular", size: 13)
         title.textAlignment = .center

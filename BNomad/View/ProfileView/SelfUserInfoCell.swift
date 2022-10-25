@@ -11,10 +11,13 @@ protocol MovePage {
     func moveToEditingPage()
 }
 
+
+// TODO: 하드 코딩된 부분 제거 
 class SelfUserInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var user: User?
     static let identifier = "SelfUserInfoCell"
     
     var delegate: MovePage?

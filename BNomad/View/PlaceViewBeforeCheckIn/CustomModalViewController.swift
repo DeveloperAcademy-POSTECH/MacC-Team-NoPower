@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+// TODO: 화면에 보이는 map에서만 보이는 [Place] 받아와야함.
 class CustomModalViewController: UIViewController {
         
     // MARK: - Properties
@@ -25,6 +27,8 @@ class CustomModalViewController: UIViewController {
         number.backgroundColor = .clear
         number.textColor = .black
         number.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
+        
+        // TODO: - place.count로 변경 필요.
         number.text = "업무 공간 3개"
         number.textAlignment = .center
         number.translatesAutoresizingMaskIntoConstraints = false

@@ -11,6 +11,8 @@ class CheckedProfileListHeader: UICollectionViewCell {
     
     static let identifier = "CheckedProfileListHeader"
     
+    // var users: [User]
+
     // MARK: - Properties
     
     private let label: UILabel = {

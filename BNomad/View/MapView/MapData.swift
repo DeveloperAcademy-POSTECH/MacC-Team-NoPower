@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 
+// TODO: - 해당 파일 제거 후 Place의 extension으로 편입시키기
 enum PlaceType: Int {
     case coworking
     case library
@@ -25,6 +26,7 @@ class PlaceToMKAnnotation: NSObject, MKAnnotation {
         let annotation = PlaceToMKAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
         annotation.title = place.name
+        // TODO: - 랜덤 제거 후 PlaceType이 nil 경우의 annotation 사용. 
         let randomNum = Int.random(in: 0...1)
         let randomType = PlaceType(rawValue: randomNum)
         annotation.type = randomType ?? .coworking

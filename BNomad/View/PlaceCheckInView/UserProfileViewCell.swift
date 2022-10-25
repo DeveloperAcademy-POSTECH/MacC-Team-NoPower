@@ -11,6 +11,8 @@ class UserProfileViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    // var user: User
+
     static let identifier = "userProfileViewCell"
     
     private let userProfileImg: UIImageView = {

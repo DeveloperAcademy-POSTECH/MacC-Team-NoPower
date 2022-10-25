@@ -13,6 +13,8 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var place: Place = DummyData.place1
+
     private let placeNameLable: UILabel = {
         let label = UILabel()
         label.text = "노마딕 제주"

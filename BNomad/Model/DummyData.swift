@@ -18,3 +18,12 @@ struct DummyData {
     static var place3: Place = Place(placeUid: UUID().uuidString, name: "포스빌", latitude: 36.01511, longitude: 129.34587, contact: "054-279-0115")
     
 }
+
+struct visitDummyData {
+    static let formatter = DateFormatter()
+    static let rendomDate = 86400 * Double.random(in: 0...3)
+    static let sundayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(rendomDate)))
+    static let date = Date()
+    static let date1 = Date(timeInterval: rendomDate, since: date)
+
+}

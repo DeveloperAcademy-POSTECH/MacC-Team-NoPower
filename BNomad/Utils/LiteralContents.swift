@@ -40,13 +40,37 @@ struct Contents {
         return labelList
     }
     
-    static func getTodayDate() -> [Int] {
+    static func todayDate() -> [String: Int] {
         let calendar = Calendar.current
         let nowCalendarDate = Date()
         let year = calendar.component(.year, from: nowCalendarDate)
         let month = calendar.component(.month, from: nowCalendarDate)
         let day = calendar.component(.day, from: nowCalendarDate)
         
-        return [year, month, day]
+        return ["year": year, "month": month, "day": day]
     }
+    
+    static func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        
+        let rect = CGRect(origin: .zero, size: newSize)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+
 }

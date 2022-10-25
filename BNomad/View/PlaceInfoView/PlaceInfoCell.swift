@@ -12,6 +12,12 @@ class PlaceInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var place: Place? {
+        didSet {
+            placeNameLabel.text = place?.name
+        }
+    }
+    
     var configDetailedCheckinButton: UIButton.Configuration = {
         var configDetailedCheckinButton = UIButton.Configuration.filled()
         
@@ -27,6 +33,7 @@ class PlaceInfoCell: UICollectionViewCell {
         configDetailedCheckinButton.image = UIImage(named: "ProfileChecked")
         configDetailedCheckinButton.imagePlacement = .trailing
         configDetailedCheckinButton.imagePadding = 49
+        // jin 함수 참고 - numberofcheckin,
         configDetailedCheckinButton.attributedTitle = AttributedString("23명 체크인", attributes: titleFontstyle)
         configDetailedCheckinButton.attributedSubtitle = AttributedString("평균 5시간 근무", attributes: subTitleFontstyle)
         configDetailedCheckinButton.titlePadding = 7
@@ -38,9 +45,9 @@ class PlaceInfoCell: UICollectionViewCell {
         return configDetailedCheckinButton
     }()
     
-    private var placeNameLabel: UILabel = {
+    lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
-        placeNameLabel.text = "노마딕 제주"
+        placeNameLabel.text = ""
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -53,29 +60,43 @@ class PlaceInfoCell: UICollectionViewCell {
         distanceLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return distanceLabel
     }()
-    private var dateLabel: UILabel = {
+    
+    
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일"
+        return formatter
+    }()
+    
+    lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
-        dateLabel.text = "2022년 10월 23일"
+        dateLabel.text = formatter.string(from: Date())
         dateLabel.textColor = CustomColor.nomadBlack
         dateLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         return dateLabel
     }()
 
+    // 전화 연결 기능 구현하기
+    // 전화 번호 바인딩 (place.contact)
     var configCallButton: UIButton.Configuration = {
         var configCallButton = UIButton.Configuration.filled()
-        configCallButton.image = UIImage(named: "Phone")
+        configCallButton.image = UIImage(systemName: "phone")
         configCallButton.imagePadding = 1
         configCallButton.buttonSize = .mini
         configCallButton.baseBackgroundColor = .white
+        configCallButton.baseForegroundColor = .black
         return configCallButton
     }()
     
+    // 주소 복사 기능 구현
+    // 주소 바인딩 (place.address)
     var configmapButton: UIButton.Configuration = {
         var configmapButton = UIButton.Configuration.filled()
-        configmapButton.image = UIImage(named: "Map")
+        configmapButton.image = UIImage(systemName: "map")
         configmapButton.imagePadding = 1
         configmapButton.buttonSize = .mini
         configmapButton.baseBackgroundColor = .white
+        configmapButton.baseForegroundColor = .black
         return configmapButton
     }()
     private let dotImg : UIImageView = {
@@ -89,6 +110,7 @@ class PlaceInfoCell: UICollectionViewCell {
         return dotImg2
     }()
     
+    //영업시간 외에 영업끝 함수 만들기
     private var operatingStatusLabel: UILabel = {
          var operatingStatusLabel = UILabel()
         operatingStatusLabel.text = "영업중"
@@ -96,6 +118,8 @@ class PlaceInfoCell: UICollectionViewCell {
         operatingStatusLabel.textColor = CustomColor.nomadBlack
          return operatingStatusLabel
      }()
+    
+    // 영업시간 데이터 없음
     private var operatingTimeLabel: UILabel = {
          var operatingTimeLabel = UILabel()
         operatingTimeLabel.text = "9 : 00 ~ 21 : 00"
@@ -109,6 +133,17 @@ class PlaceInfoCell: UICollectionViewCell {
         print("전화로 이어주게나,,")
     }))
     lazy var mapButton = UIButton(configuration: self.configmapButton, primaryAction: nil)
+    
+    lazy var checkInButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("체크인 하기", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = CustomColor.nomadBlue
+        button.layer.cornerRadius = 8
+//        button.addTarget(self, action: #selector(setAttributes()), for: .touchUpInside)
+//        button.isHidden = self.isCheckedIn ? true : false
+        return button
+    }()
     
     // MARK: - Lifecycle
     
@@ -136,6 +171,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(dotImg2)
         self.addSubview(operatingStatusLabel)
         self.addSubview(operatingTimeLabel)
+        self.addSubview(checkInButton)
         
         setAttributes()
     }
@@ -152,6 +188,7 @@ class PlaceInfoCell: UICollectionViewCell {
         dotImg2.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 119)
         operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 138)
         operatingTimeLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 197)
+        checkInButton.anchor(left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
 
     }
 

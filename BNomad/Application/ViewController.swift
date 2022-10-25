@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemBackground
         
-        handeLogin()
+        handleLogin()
         
         let mapViewController = MapViewController()
         navigationController?.pushViewController(mapViewController, animated: true)
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
             
         FirebaseManager.shared.checkUserExist(userUid : deviceUid) { isExist in
             if isExist {
-                self.fetchUserAndCheckInHistroy(id: deviceUid)
+                self.fetchUserAndCheckInHistory(id: deviceUid)
             } else {
                 print("no user")
             }

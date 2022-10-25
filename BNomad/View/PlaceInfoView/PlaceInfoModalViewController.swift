@@ -22,6 +22,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     var delegate: ClearSelectedAnnotation?
     
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
     let collectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
@@ -88,8 +90,14 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     @objc func checkIn() {
-        print("CHECK IN")
-        distanceChecker()
+        print("CHECK IN")        
+        if !viewModel.isLogIn {
+            let signUpViewController = SignUpViewController()
+            signUpViewController.modalPresentationStyle = .fullScreen
+            present(signUpViewController, animated: true)
+        } else {
+            distanceChecker()
+        }
     }
     
     // 맵의 특정 장소가 500미터 반경 이내인지 체크

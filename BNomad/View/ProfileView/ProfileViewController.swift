@@ -11,7 +11,16 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Properties
     
-    var user: User?
+    var user: User? {
+        didSet {
+            profileCollectionView.reloadData()
+        }
+    }
+    var checkInHistory: [CheckIn]? {
+        didSet {
+            profileCollectionView.reloadData()
+        }
+    }
     
     static var weekAddedMemory: Int = 0
     
@@ -79,7 +88,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalender))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationItem.backButtonTitle = ""
         
     }
@@ -98,11 +107,18 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
+        FirebaseManager.shared.fetchUser(id: "002a99ac-542c-411c-8cde-38f4a8936c87") { user in
+            self.user = user
+        }
+        
+        FirebaseManager.shared.fetchCheckInHistory(userUid: "002a99ac-542c-411c-8cde-38f4a8936c87") { checkInHistory in
+            self.checkInHistory = checkInHistory
+        }
     }
     
     // MARK: - Actions
     
-    @objc func moveToCalender() {
+    @objc func moveToCalendar() {
         navigationController?.pushViewController(CalendarViewController(), animated: true)
     }
 
@@ -218,14 +234,17 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelfUserInfoCell.identifier , for: indexPath) as? SelfUserInfoCell else {
             return UICollectionViewCell()
         }
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 20
-        cell.delegate = self
-        return cell
+            cell.user = user
+            cell.backgroundColor = .white
+            cell.layer.cornerRadius = 20
+            cell.delegate = self
+            return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
+            
+            cell.checkInHistoryForProfile = checkInHistory
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             return cell

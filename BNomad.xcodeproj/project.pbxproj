@@ -41,6 +41,7 @@
 		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
 		DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747C929000FC80048E70A /* ProfileEditViewController.swift */; };
 		E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6D92907E49600638C15 /* UIViewController+Extension.swift */; };
+		E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6DB2907F07E00638C15 /* CombineViewModel.swift */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
@@ -98,6 +99,7 @@
 		DFE747B828FD75980048E70A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		DFE747C929000FC80048E70A /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
 		E251E6D92907E49600638C15 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		E251E6DB2907F07E00638C15 /* CombineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineViewModel.swift; sourceTree = "<group>"; };
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */,
 				DF288B5C28F7D710002838A4 /* Info.plist */,
 				F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */,
+				E251E6DB2907F07E00638C15 /* CombineViewModel.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
+				E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,

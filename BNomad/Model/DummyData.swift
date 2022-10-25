@@ -9,7 +9,7 @@ import Foundation
 
 struct DummyData {
     
-    static var user1: User = User(userUid: UUID().uuidString, nickname: "wil")
+    static var user1: User = User(userUid: "008F2526-37DC-4D3B-B351-BF07F88800B1", nickname: "wil")
     static var user2: User = User(userUid: UUID().uuidString, nickname: "jin")
     static var user3: User = User(userUid: UUID().uuidString, nickname: "lance")
 

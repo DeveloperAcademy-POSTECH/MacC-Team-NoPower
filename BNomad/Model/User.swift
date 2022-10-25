@@ -14,7 +14,7 @@ struct User {
     var introduction: String?
     var checkInHistory: [CheckIn]?
 
-    var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toString() && $0.checkOutTime == nil} }
+    var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toDateString() && $0.checkOutTime == nil} }
     var currentPlaceUid: String? { currentCheckIn?.placeUid }
     var isChecked: Bool { currentPlaceUid != nil ? true : false }
     
@@ -23,7 +23,6 @@ struct User {
 extension User {
     func toAnyObject() -> Any {
       return [
-        "userUid": userUid,
         "nickname": nickname,
         "occupation": occupation,
         "introduction": introduction

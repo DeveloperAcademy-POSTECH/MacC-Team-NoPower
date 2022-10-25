@@ -14,6 +14,6 @@ struct CheckIn {
     let checkInTime: Date
     var checkOutTime: Date?
     
-    // ex) "20221018"
-    var date: String { checkInTime.toString() }
+    // ex) "2022-10-18"
+    var date: String { checkInTime.toDateString() }
 }

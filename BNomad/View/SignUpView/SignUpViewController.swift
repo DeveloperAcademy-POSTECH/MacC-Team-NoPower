@@ -153,12 +153,16 @@ class SignUpViewController: UIViewController {
         statusLineView.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
+        
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Methods
     
     func setUser(nickname: String, occupation: String, intro: String) {
-        FirebaseManager.shared.setUser(user: User(userUid: UUID().uuidString, nickname: nickname, occupation: occupation, introduction: intro, checkInHistory: []))
+        let id = UUID().uuidString
+        FirebaseManager.shared.setUser(user: User(userUid: id, nickname: nickname, occupation: occupation, introduction: intro, checkInHistory: []))
+        print(id)
     }
     
     func configUI() {
@@ -290,12 +294,9 @@ class SignUpViewController: UIViewController {
                 if let occupation = occupationField.text {
                     if let intro = statusField.text {
                         setUser(nickname: nickname, occupation: occupation, intro: intro)
-                        print("setUser")
                     }
                 }
             }
-            print("이용자 정보 입력완료")
-            
         }
     }
 }

@@ -121,7 +121,7 @@ class SignUpViewController: UIViewController {
     
     private let statusField: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "상태"
+        textfield.placeholder = "커피챗 환영합니다:)"
         textfield.font = .preferredFont(forTextStyle: .title3)
         textfield.borderStyle = .none
         textfield.clearButtonMode = .whileEditing
@@ -221,6 +221,7 @@ class SignUpViewController: UIViewController {
             paddingLeft: 0,
             width: textFieldWidth
         )
+        nicknameField.becomeFirstResponder()
         
         view.addSubview(nicknameLineView)
         nicknameLineView.anchor(
@@ -321,6 +322,7 @@ class SignUpViewController: UIViewController {
                 occupationField.isHidden = false
                 occupationLineView.isHidden = false
                 occupationCounterLabel.isHidden = false
+                occupationField.becomeFirstResponder()
                 dot1View.backgroundColor = CustomColor.nomadGray2
                 dot2View.backgroundColor = CustomColor.nomadBlue
                 
@@ -336,6 +338,7 @@ class SignUpViewController: UIViewController {
                 statusField.isHidden = false
                 statusLineView.isHidden = false
                 statusCounterLabel.isHidden = false
+                statusField.becomeFirstResponder()
                 dot2View.backgroundColor = CustomColor.nomadGray2
                 dot3View.backgroundColor = CustomColor.nomadBlue
                 

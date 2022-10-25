@@ -13,6 +13,9 @@ class SignUpViewController: UIViewController {
     
     private let requestItem = ["닉네임", "직업", "상태"]
     private var index = 0
+    private let nicknameLimit = 20
+    private let occupationLimit = 40
+    private let statusLimit = 50
         
     lazy var requestLabel: UILabel = {
         let label = UILabel()
@@ -81,6 +84,15 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var nicknameCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(nicknameLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
+    }()
+    
     private let occupationField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "직업"
@@ -98,6 +110,15 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var occupationCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(occupationLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
+    }()
+    
     private let statusField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "상태"
@@ -113,6 +134,15 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = CustomColor.nomadGray1
         
         return view
+    }()
+    
+    private lazy var statusCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(statusLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
     }()
     
     private let inputConfirmButton: UIButton = {
@@ -149,8 +179,10 @@ class SignUpViewController: UIViewController {
         
         occupationField.isHidden = true
         occupationLineView.isHidden = true
+        occupationCounterLabel.isHidden = true
         statusField.isHidden = true
         statusLineView.isHidden = true
+        statusCounterLabel.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
         
@@ -199,6 +231,13 @@ class SignUpViewController: UIViewController {
             height: lineHeight
         )
         
+        view.addSubview(nicknameCounterLabel)
+        nicknameCounterLabel.anchor(
+            top: nicknameLineView.bottomAnchor,
+            right: nicknameLineView.rightAnchor,
+            paddingTop: 8
+        )
+        
         view.addSubview(occupationField)
         occupationField.inputAccessoryView = keyboardAccView
         occupationField.anchor(
@@ -219,6 +258,13 @@ class SignUpViewController: UIViewController {
             height: lineHeight
         )
         
+        view.addSubview(occupationCounterLabel)
+        occupationCounterLabel.anchor(
+            top: occupationLineView.bottomAnchor,
+            right: occupationLineView.rightAnchor,
+            paddingTop: 8
+        )
+        
         view.addSubview(statusField)
         statusField.inputAccessoryView = keyboardAccView
         statusField.anchor(
@@ -237,6 +283,13 @@ class SignUpViewController: UIViewController {
             paddingLeft: 0,
             width: textFieldWidth,
             height: lineHeight
+        )
+        
+        view.addSubview(statusCounterLabel)
+        statusCounterLabel.anchor(
+            top: statusLineView.bottomAnchor,
+            right: statusLineView.rightAnchor,
+            paddingTop: 8
         )
         
         keyboardAccView.addSubview(inputConfirmButton)
@@ -267,6 +320,7 @@ class SignUpViewController: UIViewController {
             } else {
                 occupationField.isHidden = false
                 occupationLineView.isHidden = false
+                occupationCounterLabel.isHidden = false
                 dot1View.backgroundColor = CustomColor.nomadGray2
                 dot2View.backgroundColor = CustomColor.nomadBlue
                 
@@ -281,6 +335,7 @@ class SignUpViewController: UIViewController {
             } else {
                 statusField.isHidden = false
                 statusLineView.isHidden = false
+                statusCounterLabel.isHidden = false
                 dot2View.backgroundColor = CustomColor.nomadGray2
                 dot3View.backgroundColor = CustomColor.nomadBlue
                 
@@ -322,5 +377,23 @@ extension SignUpViewController: UITextFieldDelegate {
         } else {
             statusLineView.backgroundColor = CustomColor.nomadGray1
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updateText = currentText.replacingCharacters(in: stringRange, with: string)
+        if textField == nicknameField {
+            nicknameCounterLabel.text = "\(updateText.count) / \(nicknameLimit)"
+            return updateText.count < nicknameLimit
+        } else if textField == occupationField {
+            occupationCounterLabel.text = "\(updateText.count) / \(occupationLimit)"
+            return updateText.count < occupationLimit
+        } else if textField == statusField {
+            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
+            return updateText.count < statusLimit
+        }
+        
+        return true
     }
 }

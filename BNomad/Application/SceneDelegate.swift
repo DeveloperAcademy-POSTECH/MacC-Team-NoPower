@@ -6,10 +6,8 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    static let bottomSheet = CustomModalViewController()
 
     var window: UIWindow?
 
@@ -19,14 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = FinalViewController(
-            contentViewController: UINavigationController(rootViewController: MapViewController()),
-            bottomSheetViewController: SceneDelegate.bottomSheet,
-            bottomSheetConfiguration: .init(
-                height: UIScreen.main.bounds.height * 0.6,
-                initialOffset: window!.safeAreaInsets.bottom
-            )
-        )
+        window?.rootViewController = UINavigationController(rootViewController: MapViewController()) 
         window?.makeKeyAndVisible()
     }
 

@@ -23,6 +23,7 @@
 		631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82C2906317200EEED02 /* SummaryInfoCell.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
+		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
@@ -30,7 +31,6 @@
 		8C21CC4528FF89BA009043AF /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4428FF89BA009043AF /* MapData.swift */; };
 		DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B4E28F7D70F002838A4 /* AppDelegate.swift */; };
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
-		DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5228F7D70F002838A4 /* ViewController.swift */; };
 		DF288B5828F7D710002838A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5728F7D710002838A4 /* Assets.xcassets */; };
 		DF288B5B28F7D710002838A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */; };
 		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
@@ -43,6 +43,8 @@
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
+		E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB2592906D44200082596 /* FirebaseTestVC.swift */; };
+		E2ADB25E2907863300082596 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB25D2907863300082596 /* ViewController.swift */; };
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
 		E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23328FE75F7005C0D77 /* String+Extension.swift */; };
@@ -52,9 +54,7 @@
 		F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB428FFA74000185A1F /* FirebaseStorage */; };
 		F6183CB728FFA83800185A1F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB628FFA83800185A1F /* FirebaseFirestore */; };
 		F6183CB928FFA83F00185A1F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB828FFA83F00185A1F /* FirebaseAnalytics */; };
-		F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBC28FFABEC00185A1F /* FinalViewController.swift */; };
 		F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */; };
-		F6183CC828FFC3B900185A1F /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC728FFC3B900185A1F /* ModalViewController.swift */; };
 		F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */; };
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -77,6 +77,7 @@
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
+		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -85,7 +86,6 @@
 		DF288B4B28F7D70F002838A4 /* BNomad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BNomad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF288B4E28F7D70F002838A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF288B5028F7D70F002838A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DF288B5228F7D70F002838A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DF288B5728F7D710002838A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF288B5A28F7D710002838A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF288B5C28F7D710002838A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,12 +99,12 @@
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
+		E2ADB2592906D44200082596 /* FirebaseTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTestVC.swift; sourceTree = "<group>"; };
+		E2ADB25D2907863300082596 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E2E6B22F28FE7542005C0D77 /* CheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIn.swift; sourceTree = "<group>"; };
 		E2E6B23128FE757D005C0D77 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		E2E6B23328FE75F7005C0D77 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
-		F6183CBC28FFABEC00185A1F /* FinalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalViewController.swift; sourceTree = "<group>"; };
 		F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
-		F6183CC728FFC3B900185A1F /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalViewController.swift; sourceTree = "<group>"; };
 		F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -181,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */,
+				E2ADB2592906D44200082596 /* FirebaseTestVC.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -245,6 +246,7 @@
 				15B621FE2901D22100E31125 /* ColorViewCell.swift */,
 				15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */,
 				15B621FA2901466700E31125 /* UserProfileViewCell.swift */,
+				7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */,
 			);
 			path = PlaceCheckInView;
 			sourceTree = "<group>";
@@ -284,7 +286,7 @@
 			children = (
 				DF288B4E28F7D70F002838A4 /* AppDelegate.swift */,
 				DF288B5028F7D70F002838A4 /* SceneDelegate.swift */,
-				DF288B5228F7D70F002838A4 /* ViewController.swift */,
+				E2ADB25D2907863300082596 /* ViewController.swift */,
 				DF288B5728F7D710002838A4 /* Assets.xcassets */,
 				DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */,
 				DF288B5C28F7D710002838A4 /* Info.plist */,
@@ -307,10 +309,8 @@
 		F6183CBA28FFABAB00185A1F /* PlaceViewBeforeCheckIn */ = {
 			isa = PBXGroup;
 			children = (
-				F6183CC728FFC3B900185A1F /* ModalViewController.swift */,
 				F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */,
 				F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */,
-				F6183CBC28FFABEC00185A1F /* FinalViewController.swift */,
 			);
 			path = PlaceViewBeforeCheckIn;
 			sourceTree = "<group>";
@@ -399,14 +399,12 @@
 			files = (
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */,
-				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
 				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
 				F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */,
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
 				041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
 				631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */,
-				F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				15B621FF2901D22100E31125 /* ColorViewCell.swift in Sources */,
@@ -429,10 +427,11 @@
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
+				E2ADB25E2907863300082596 /* ViewController.swift in Sources */,
 				159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */,
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
+				7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */,
 				15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */,
-				F6183CC828FFC3B900185A1F /* ModalViewController.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
@@ -442,6 +441,7 @@
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,
+				E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

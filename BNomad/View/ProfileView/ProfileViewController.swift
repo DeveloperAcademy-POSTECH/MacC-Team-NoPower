@@ -11,6 +11,8 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Properties
     
+    var user: User?
+    
     static var weekAddedMemory: Int = 0
     
     private lazy var profileImageView: UIImageView = {

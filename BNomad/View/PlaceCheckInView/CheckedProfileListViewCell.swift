@@ -11,6 +11,8 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    // var user: User
+    
     static let identifier = "CheckedProfileListViewCell"
     
     private let userProfileImg: UIImageView = {

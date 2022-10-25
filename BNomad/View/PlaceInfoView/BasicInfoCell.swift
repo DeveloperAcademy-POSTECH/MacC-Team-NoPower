@@ -11,6 +11,9 @@ class BasicInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    // TODO: - 하드 코딩된 부분 전부 제거
+    var place: Place = DummyData.place1
+
     static let cellIdentifier = "BasicInfoCell"
     let basicInfoTitleLabel = UILabel()
     

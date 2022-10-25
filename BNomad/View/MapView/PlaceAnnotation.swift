@@ -8,6 +8,8 @@
 import Foundation
 import MapKit
 
+// TODO: - nil 전용 annotation 추가하기
+
 class CoworkingAnnotationView: PlaceAnnotationView {
     
     static let ReuseID = "coworkingAnnotaion"

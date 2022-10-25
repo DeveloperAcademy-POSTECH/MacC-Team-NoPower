@@ -13,7 +13,7 @@ class SignUpViewController: UIViewController {
 
     private let requestItem = ["닉네임", "직업", "상태"]
     private var index = 0
-    
+        
     lazy var requestLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
@@ -251,6 +251,7 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Actions
     
+    // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
     @objc func didTapInputConfirmButton() {
 
         if occupationField.isHidden == true {

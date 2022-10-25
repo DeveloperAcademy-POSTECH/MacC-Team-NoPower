@@ -13,10 +13,13 @@ class MapViewController: UIViewController {
     
     // MARK: - Properties
 
-    let locationManager = CLLocationManager()
-    lazy var currentLocation = locationManager.location
+    private let locationManager = CLLocationManager()
+    lazy var currentLocation: CLLocation? = locationManager.location
     let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
     lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), span: span)
+    
+    // var user: User = DummyData.user1
+    // var isLogin: Bool = false
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -124,6 +127,7 @@ class MapViewController: UIViewController {
         return view
     }()
     
+    // TODO: 제거하고 user.isChecked 사용
     var userCheckedIn: Bool = false
     
     lazy var listViewButton: UIButton = {
@@ -180,6 +184,8 @@ class MapViewController: UIViewController {
         }
     }
     
+    
+    // TODO: isLogIn에 맞게 분기 처리 필요.
     @objc func moveToProfile() {
         self.dismiss(animated: false)
         navigationController?.pushViewController(ProfileViewController(), animated: true)
@@ -212,8 +218,10 @@ class MapViewController: UIViewController {
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
         
         map.addOverlay(circleOverlay)
+        
+        // TODO: - 비동기 처리로 수정
         map.addAnnotations(placeAnnotations)
-       
+        
         if userCheckedIn {
             view.addSubview(workingView)
             workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)

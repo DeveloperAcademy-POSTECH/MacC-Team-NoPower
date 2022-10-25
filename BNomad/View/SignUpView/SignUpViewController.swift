@@ -11,6 +11,8 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Properties
     
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
+
     private let requestItem = ["닉네임", "직업", "상태"]
     private var index = 0
     private let nicknameLimit = 20
@@ -356,6 +358,8 @@ class SignUpViewController: UIViewController {
             if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = statusField.text {
                 if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
                     setUser(nickname: nickname, occupation: occupation, intro: intro)
+                    viewModel.isLogIn = true
+                    self.dismiss(animated: true)
                 } else {
                     print("빈칸있음, 저장안함")
                 }

@@ -10,9 +10,12 @@ import UIKit
 class SignUpViewController: UIViewController {
     
     // MARK: - Properties
-
+    
     private let requestItem = ["닉네임", "직업", "상태"]
     private var index = 0
+    private let nicknameLimit = 20
+    private let occupationLimit = 40
+    private let statusLimit = 50
         
     lazy var requestLabel: UILabel = {
         let label = UILabel()
@@ -81,6 +84,15 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var nicknameCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(nicknameLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
+    }()
+    
     private let occupationField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "직업"
@@ -98,9 +110,18 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var occupationCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(occupationLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
+    }()
+    
     private let statusField: UITextField = {
         let textfield = UITextField()
-        textfield.placeholder = "상태"
+        textfield.placeholder = "커피챗 환영합니다:)"
         textfield.font = .preferredFont(forTextStyle: .title3)
         textfield.borderStyle = .none
         textfield.clearButtonMode = .whileEditing
@@ -113,6 +134,15 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = CustomColor.nomadGray1
         
         return view
+    }()
+    
+    private lazy var statusCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.text = "0 / \(statusLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
     }()
     
     private let inputConfirmButton: UIButton = {
@@ -149,13 +179,28 @@ class SignUpViewController: UIViewController {
         
         occupationField.isHidden = true
         occupationLineView.isHidden = true
+        occupationCounterLabel.isHidden = true
         statusField.isHidden = true
         statusLineView.isHidden = true
+        statusCounterLabel.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
+        
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Methods
+    
+    func setUser(nickname: String, occupation: String, intro: String) {
+        let deviceUid = UIDevice.current.identifierForVendor?.uuidString
+        guard let userUid = deviceUid else { return }
+        // userdefaults 추가
+        UserDefaults.standard.set(userUid, forKey: "userUid")
+        print(userUid)
+
+        let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
+        FirebaseManager.shared.setUser(user: user)
+    }
     
     func configUI() {
         let viewWidth = view.bounds.width
@@ -181,6 +226,7 @@ class SignUpViewController: UIViewController {
             paddingLeft: 0,
             width: textFieldWidth
         )
+        nicknameField.becomeFirstResponder()
         
         view.addSubview(nicknameLineView)
         nicknameLineView.anchor(
@@ -189,6 +235,13 @@ class SignUpViewController: UIViewController {
             paddingTop: textFieldLineSpacing,
             paddingLeft: 0, width: textFieldWidth,
             height: lineHeight
+        )
+        
+        view.addSubview(nicknameCounterLabel)
+        nicknameCounterLabel.anchor(
+            top: nicknameLineView.bottomAnchor,
+            right: nicknameLineView.rightAnchor,
+            paddingTop: 8
         )
         
         view.addSubview(occupationField)
@@ -211,6 +264,13 @@ class SignUpViewController: UIViewController {
             height: lineHeight
         )
         
+        view.addSubview(occupationCounterLabel)
+        occupationCounterLabel.anchor(
+            top: occupationLineView.bottomAnchor,
+            right: occupationLineView.rightAnchor,
+            paddingTop: 8
+        )
+        
         view.addSubview(statusField)
         statusField.inputAccessoryView = keyboardAccView
         statusField.anchor(
@@ -229,6 +289,13 @@ class SignUpViewController: UIViewController {
             paddingLeft: 0,
             width: textFieldWidth,
             height: lineHeight
+        )
+        
+        view.addSubview(statusCounterLabel)
+        statusCounterLabel.anchor(
+            top: statusLineView.bottomAnchor,
+            right: statusLineView.rightAnchor,
+            paddingTop: 8
         )
         
         keyboardAccView.addSubview(inputConfirmButton)
@@ -253,13 +320,14 @@ class SignUpViewController: UIViewController {
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
     @objc func didTapInputConfirmButton() {
-
         if occupationField.isHidden == true {
             if nicknameField.text?.isEmpty == true {
                 print("닉네임을 입력하세요.")
             } else {
                 occupationField.isHidden = false
                 occupationLineView.isHidden = false
+                occupationCounterLabel.isHidden = false
+                occupationField.becomeFirstResponder()
                 dot1View.backgroundColor = CustomColor.nomadGray2
                 dot2View.backgroundColor = CustomColor.nomadBlue
                 
@@ -274,6 +342,8 @@ class SignUpViewController: UIViewController {
             } else {
                 statusField.isHidden = false
                 statusLineView.isHidden = false
+                statusCounterLabel.isHidden = false
+                statusField.becomeFirstResponder()
                 dot2View.backgroundColor = CustomColor.nomadGray2
                 dot3View.backgroundColor = CustomColor.nomadBlue
                 
@@ -283,7 +353,13 @@ class SignUpViewController: UIViewController {
             }
             
         } else {
-            print("이용자 정보 입력완료")
+            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = statusField.text {
+                if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
+                    setUser(nickname: nickname, occupation: occupation, intro: intro)
+                } else {
+                    print("빈칸있음, 저장안함")
+                }
+            }
         }
     }
 }
@@ -309,5 +385,23 @@ extension SignUpViewController: UITextFieldDelegate {
         } else {
             statusLineView.backgroundColor = CustomColor.nomadGray1
         }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updateText = currentText.replacingCharacters(in: stringRange, with: string)
+        if textField == nicknameField {
+            nicknameCounterLabel.text = "\(updateText.count) / \(nicknameLimit)"
+            return updateText.count < nicknameLimit
+        } else if textField == occupationField {
+            occupationCounterLabel.text = "\(updateText.count) / \(occupationLimit)"
+            return updateText.count < occupationLimit
+        } else if textField == statusField {
+            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
+            return updateText.count < statusLimit
+        }
+        
+        return true
     }
 }

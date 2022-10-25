@@ -12,6 +12,13 @@ class PlaceInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var place: Place? {
+        didSet {
+            guard let place = place else { return }
+            mappingPlaceData(place)
+        }
+    }
+    
     var configDetailedCheckinButton: UIButton.Configuration = {
         var configDetailedCheckinButton = UIButton.Configuration.filled()
         
@@ -40,7 +47,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     private var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
-        placeNameLabel.text = "노마딕 제주"
+        placeNameLabel.text = "dd"
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -138,6 +145,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(operatingTimeLabel)
         
         setAttributes()
+        mappingPlaceData(place ?? DummyData.place2)
     }
     
     private func setAttributes() {
@@ -153,6 +161,10 @@ class PlaceInfoCell: UICollectionViewCell {
         operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 138)
         operatingTimeLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 197)
 
+    }
+    
+    func mappingPlaceData(_ place: Place) {
+        placeNameLabel.text = place.name
     }
 
 }

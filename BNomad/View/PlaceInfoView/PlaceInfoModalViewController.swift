@@ -15,7 +15,12 @@ protocol ClearSelectedAnnotation {
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
-    var selectedAnnotation: MKAnnotation?
+    var selectedPlace: Place? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+//    lazy var selectedAnnotation = MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace ?? DummyData.place2)
     
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
@@ -31,7 +36,7 @@ class PlaceInfoModalViewController: UIViewController {
     // TODO: user.isChecked로 대체
     var isCheckedIn: Bool = false
 
-    var place: Place = DummyData.place1
+    
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
@@ -65,11 +70,10 @@ class PlaceInfoModalViewController: UIViewController {
         setupSheet()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard let selectedAnnotation = selectedAnnotation else { return }
-        delegate?.clearAnnotation(view: selectedAnnotation)
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        delegate?.clearAnnotation(view: selectedAnnotation)
+//    }
     
     // MARK: - Actions
     
@@ -98,7 +102,7 @@ class PlaceInfoModalViewController: UIViewController {
         
               // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?"
 
-        if boundary.contains(CLLocationCoordinate2D(latitude: selectedAnnotation?.coordinate.latitude ?? 0, longitude: selectedAnnotation?.coordinate.longitude ?? 0)) {
+        if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace?.latitude ?? 0, longitude: selectedPlace?.longitude ?? 0)) {
             let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "노마드 제주에 체크인 하시겠습니까?", preferredStyle: .alert)
             checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
             checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
@@ -179,9 +183,11 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
+            cell.place = selectedPlace
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BasicInfoCell.cellIdentifier, for: indexPath) as? BasicInfoCell else { return UICollectionViewCell() }
+            cell.place = selectedPlace
             return cell
         }
         else if indexPath.section == 2 {

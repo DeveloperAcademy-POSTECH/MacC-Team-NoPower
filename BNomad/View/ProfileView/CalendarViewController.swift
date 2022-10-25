@@ -52,7 +52,8 @@ class CalendarViewController: UIViewController {
     }()
     
     private let VisitInfoHeader: UILabel = {
-        let day = String(Contents.getTodayDate()[1])+"월 "+String(Contents.getTodayDate()[2])+"일"
+        let content = Contents.todayDate()
+        let day = String(content["month"] ?? 0) + "월 " + String(content["day"] ?? 0) + "일"
         
         
         let label = UILabel()
@@ -248,8 +249,8 @@ extension CalendarViewController: UICollectionViewDelegate {
             }
             
             //오늘 텍스트 색 설정
-            if indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) + 1 == Contents.getTodayDate()[2]
-                && Contents.getTodayDate()[1] == calendarDateFormatter.getTargetMonth(addedMonth: monthAddedMemory){
+            let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
+            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && Contents.todayDate()["month"] == startDay {
                 cell.setTodayCell()
             }else {
                 cell.setNormalCell()
@@ -262,7 +263,7 @@ extension CalendarViewController: UICollectionViewDelegate {
                 cell.setNormalCell()
             }
             
-            //체크인한 날자 도장 설정
+            //체크인한 날짜 도장 설정
             if checkinDateData[indexPath.item] { //TODO: ????왜이러는건지대체
                 cell.drawCheckinStemp()
             }else {
@@ -289,9 +290,6 @@ extension CalendarViewController: UICollectionViewDelegate {
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
             CalendarCollectionView.reloadData()
-
-
-            VisitInfoHeader.text = String(Contents.getTodayDate()[1]+monthAddedMemory)+"월 "+String(indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)+"일"
         }
     }
     
@@ -332,17 +330,11 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
-
-
-
-
-
 class CalendarDateFormatter {
     private let calendar = Calendar.current
     private let dateFormatter = DateFormatter()
     private var nowCalendarDate = Date()
     private(set) var days = [String]()
-    
 
     init() {
         updateCurrentMonthDays(addedMonth: 0)

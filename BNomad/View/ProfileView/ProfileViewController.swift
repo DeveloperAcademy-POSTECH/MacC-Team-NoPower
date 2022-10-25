@@ -18,8 +18,7 @@ class ProfileViewController: UIViewController {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = Contents.resizeImage(image: UIImage(named: "ProfileDefault")!, targetSize: CGSize(width: 78.0, height: 78.0))
-        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = Contents.resizeImage(image: UIImage(named: "ProfileDefault") ?? UIImage(), targetSize: CGSize(width: 78.0, height: 78.0)) 
         return iv
     }()
     

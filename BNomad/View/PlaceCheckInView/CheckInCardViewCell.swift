@@ -129,6 +129,15 @@ class CheckInCardViewCell: UICollectionViewCell {
         return view
     }()
     
+    private let checkInTimeBar: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColor.nomadBlue
+        view.tintColor = CustomColor.nomadBlue
+        view.layer.cornerRadius = 4
+        
+        return view
+    }()
+    
     private lazy var checkOutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("체크아웃 하기", for: .normal)
@@ -260,6 +269,16 @@ class CheckInCardViewCell: UICollectionViewCell {
             paddingLeft: 22,
             paddingRight: 22,
             height: 8
+        )
+        
+        self.addSubview(checkInTimeBar)
+        checkInTimeBar.anchor(
+            top: timeBar.topAnchor,
+            left: timeBar.leftAnchor,
+            bottom: timeBar.bottomAnchor,
+            right: timeBar.rightAnchor,
+            paddingLeft: 30,
+            paddingRight: 100
         )
         
         self.addSubview(checkOutButton)

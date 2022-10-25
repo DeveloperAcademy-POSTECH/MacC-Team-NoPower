@@ -10,6 +10,8 @@ import Combine
 
 class CombineViewModel: ObservableObject {
     
+    static let shared = CombineViewModel()
+    
     @Published var user: User?
     @Published var placeInCurrentMap: [Place] = [DummyData.place1, DummyData.place1, DummyData.place2] //
     var isLogIn = false

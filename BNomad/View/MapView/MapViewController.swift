@@ -13,7 +13,7 @@ class MapViewController: UIViewController {
     
     // MARK: - Properties
 
-    private let locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
     let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
     lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), span: span)
@@ -81,6 +81,7 @@ class MapViewController: UIViewController {
         return stackView
     }()
     
+    // TODO: - 장소 모달 뷰 보다가 현재 위치로 이동 시 보던 장소 모달 dismiss 필요
     lazy var userTrackingBtn: MKUserTrackingButton = {
         let btn = MKUserTrackingButton(mapView: map)
         btn.backgroundColor = .white
@@ -105,7 +106,8 @@ class MapViewController: UIViewController {
         return stackView
     }()
     
-    // 추후 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
+    // 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
+    // TODO: - 실시간으로 위치 이동 시 Circle도 따라가 계속 그려져야 함
     lazy var circleOverlay: MKCircle = {
         guard let location = currentLocation else { return MKCircle(center: CLLocationCoordinate2D(), radius: 0) }
         let circle = MKCircle(center: location.coordinate, radius: 500)

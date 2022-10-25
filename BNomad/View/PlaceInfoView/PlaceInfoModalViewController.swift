@@ -17,6 +17,9 @@ class PlaceInfoModalViewController: UIViewController {
     // MARK: - Properties
     var selectedAnnotation: MKAnnotation?
     
+    let locationManager = CLLocationManager()
+    lazy var currentLocation = locationManager.location
+    
     var delegate: ClearSelectedAnnotation?
     
     let collectionView: UICollectionView = {
@@ -81,19 +84,32 @@ class PlaceInfoModalViewController: UIViewController {
     
     @objc func checkIn() {
         print("CHECK IN")
-        let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "노마드 제주에 체크인 하시겠습니까?", preferredStyle: .alert)
-        checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
-            // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
-            // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
-            self.isCheckedIn = false
-            self.checkInButton.isHidden = true
-            self.checkOutButton.isHidden = false
-            let controller = PlaceCheckInViewController()
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true)
-        }))
-        present(checkInAlert, animated: true)
+        distanceChecker()
+    }
+    
+    // 맵의 특정 장소가 500미터 반경 이내인지 체크
+    func distanceChecker() {
+        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500.0, identifier: "반경 500m")
+        
+        if boundary.contains(CLLocationCoordinate2D(latitude: selectedAnnotation?.coordinate.latitude ?? 0, longitude: selectedAnnotation?.coordinate.longitude ?? 0)) {
+            let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "노마드 제주에 체크인 하시겠습니까?", preferredStyle: .alert)
+            checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
+                // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
+                // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
+                self.isCheckedIn = false
+                self.checkInButton.isHidden = true
+                self.checkOutButton.isHidden = false
+                let controller = PlaceCheckInViewController()
+                controller.modalPresentationStyle = .fullScreen
+                self.present(controller, animated: true)
+            }))
+            present(checkInAlert, animated: true)
+        } else {
+            let distanceAlert = UIAlertController(title: "체크인 불가", message: "해당 장소에 500미터 이내로 접근하시면 체크인이 가능합니다.", preferredStyle: .alert)
+            distanceAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            present(distanceAlert, animated: true)
+        }
     }
     
     // MARK: - Helpers
@@ -139,8 +155,7 @@ class PlaceInfoModalViewController: UIViewController {
             sheet.preferredCornerRadius = 12
         }
     }
-
-
+    
 
 }
 

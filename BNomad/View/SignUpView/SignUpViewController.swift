@@ -192,9 +192,14 @@ class SignUpViewController: UIViewController {
     // MARK: - Methods
     
     func setUser(nickname: String, occupation: String, intro: String) {
-        let id = UUID().uuidString
-        FirebaseManager.shared.setUser(user: User(userUid: id, nickname: nickname, occupation: occupation, introduction: intro, checkInHistory: []))
-        print(id)
+        let deviceUid = UIDevice.current.identifierForVendor?.uuidString
+        guard let userUid = deviceUid else { return }
+        // userdefaults 추가
+        UserDefaults.standard.set(userUid, forKey: "userUid")
+        print(userUid)
+
+        let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
+        FirebaseManager.shared.setUser(user: user)
     }
     
     func configUI() {

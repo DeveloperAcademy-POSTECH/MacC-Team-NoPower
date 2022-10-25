@@ -11,9 +11,28 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let placeTitleLabel: UILabel = {
+    var user: User? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    var place: Place? {
+        didSet {
+            placeTitleLabel.text = self.place?.name
+        }
+    }
+    
+    // struct CheckIn
+    var checkIn: CheckIn? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    private lazy var placeTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "쌍사벅스"
+        label.text = " "
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         label.tintColor = CustomColor.nomadBlack
         
@@ -42,7 +61,40 @@ class PlaceCheckInViewController: UIViewController {
         configureCancelButton()
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
+        fetchUser()
+        fetchPlaceAll()
+        
+        // user의 모든 체크인 데이터 가져오기
+        fetchCheckInStatus(userUid: "002a99ac-542c-411c-8cde-38f4a8936c87")
+
+        
     }
+    
+    func fetchUser() {
+        let currentUserUid = "002a99ac-542c-411c-8cde-38f4a8936c87"
+        FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
+            self.user = user
+        }
+    }
+    
+    func fetchPlaceAll() {
+        FirebaseManager.shared.fetchPlaceAll { place in
+            print(place)
+            self.place = place
+        }
+    }
+    
+    func fetchCheckInStatus(userUid: String) {
+//        let userUid: String = "012f0180-669f-411e-91ee-dd45ee8d0cf7"
+        
+        FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
+            checkInHistory.sorted { $0.checkInTime > $1.checkInTime }
+            self.checkIn = checkInHistory.last
+        }
+    }
+    
+    
+    
     
     // MARK: - Actions
     
@@ -74,7 +126,6 @@ class PlaceCheckInViewController: UIViewController {
         view.addSubview(cancelButton)
         cancelButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 50, paddingRight: 20, width: 30, height: 30)
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -92,6 +143,10 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             guard let checkInCardViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckInCardViewCell.identifier, for: indexPath) as? CheckInCardViewCell else { return UICollectionViewCell() }
             checkInCardViewCell.delegate = self
+            
+            checkInCardViewCell.user = self.user
+            checkInCardViewCell.checkIn = self.checkIn
+            
             return checkInCardViewCell
         }
         else if indexPath.section == 1 {

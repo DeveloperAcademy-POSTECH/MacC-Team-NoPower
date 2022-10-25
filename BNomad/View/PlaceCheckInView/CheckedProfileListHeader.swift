@@ -12,6 +12,7 @@ class CheckedProfileListHeader: UICollectionViewCell {
     static let identifier = "CheckedProfileListHeader"
     
     // var users: [User]
+//    var users: [User]
 
     // MARK: - Properties
     
@@ -56,6 +57,7 @@ class CheckedProfileListHeader: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        
     }
     
     required init?(coder: NSCoder) {

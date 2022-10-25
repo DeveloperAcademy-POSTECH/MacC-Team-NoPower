@@ -17,7 +17,6 @@ struct User {
     var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toDateString() && $0.checkOutTime == nil} }
     var currentPlaceUid: String? { currentCheckIn?.placeUid }
     var isChecked: Bool { currentPlaceUid != nil ? true : false }
-    
 }
 
 extension User {

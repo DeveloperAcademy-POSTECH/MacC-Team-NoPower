@@ -351,7 +351,11 @@ class SignUpViewController: UIViewController {
             if let nickname = nicknameField.text {
                 if let occupation = occupationField.text {
                     if let intro = statusField.text {
-                        setUser(nickname: nickname, occupation: occupation, intro: intro)
+                        if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
+                            setUser(nickname: nickname, occupation: occupation, intro: intro)
+                        } else {
+                            print("빈칸있음, 저장안함")
+                        }
                     }
                 }
             }

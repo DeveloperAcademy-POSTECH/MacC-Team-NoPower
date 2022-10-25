@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
     }
     
-    func handeLogin() {
+    func handleLogin() {
         let deviceUid = UIDevice.current.identifierForVendor?.uuidString
         guard let deviceUid = deviceUid else { return }
             
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func fetchUserAndCheckInHistroy(id userUid: String) {
+    func fetchUserAndCheckInHistory(id userUid: String) {
         FirebaseManager.shared.fetchUser(id: userUid) { user in
             self.viewModel.user = user
             FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in

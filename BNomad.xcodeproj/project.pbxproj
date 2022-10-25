@@ -19,7 +19,8 @@
 		15B621FB2901466700E31125 /* UserProfileViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B621FA2901466700E31125 /* UserProfileViewCell.swift */; };
 		15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */; };
 		15B621FF2901D22100E31125 /* ColorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B621FE2901D22100E31125 /* ColorViewCell.swift */; };
-		6373D11629010F5300BD8500 /* DemoCell3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6373D11529010F5300BD8500 /* DemoCell3.swift */; };
+		631AD82B2906316B00EEED02 /* BasicInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82A2906316B00EEED02 /* BasicInfoCell.swift */; };
+		631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82C2906317200EEED02 /* SummaryInfoCell.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		638333102900FF3E005AB0C3 /* DemoCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330F2900FF3E005AB0C3 /* DemoCell2.swift */; };
@@ -73,10 +74,10 @@
 		15B621FA2901466700E31125 /* UserProfileViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewCell.swift; sourceTree = "<group>"; };
 		15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoViewCell.swift; sourceTree = "<group>"; };
 		15B621FE2901D22100E31125 /* ColorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewCell.swift; sourceTree = "<group>"; };
-		6373D11529010F5300BD8500 /* DemoCell3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell3.swift; sourceTree = "<group>"; };
+		631AD82A2906316B00EEED02 /* BasicInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicInfoCell.swift; sourceTree = "<group>"; };
+		631AD82C2906317200EEED02 /* SummaryInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryInfoCell.swift; sourceTree = "<group>"; };
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
-		6383330F2900FF3E005AB0C3 /* DemoCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCell2.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
@@ -232,8 +233,8 @@
 			children = (
 				6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */,
 				6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */,
-				6383330F2900FF3E005AB0C3 /* DemoCell2.swift */,
-				6373D11529010F5300BD8500 /* DemoCell3.swift */,
+				631AD82A2906316B00EEED02 /* BasicInfoCell.swift */,
+				631AD82C2906317200EEED02 /* SummaryInfoCell.swift */,
 			);
 			path = PlaceInfoView;
 			sourceTree = "<group>";
@@ -400,7 +401,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				638333102900FF3E005AB0C3 /* DemoCell2.swift in Sources */,
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */,
 				DF288B5328F7D70F002838A4 /* ViewController.swift in Sources */,
@@ -409,6 +409,7 @@
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
 				041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
+				631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */,
 				F6183CC128FFABEC00185A1F /* FinalViewController.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
@@ -421,13 +422,13 @@
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
-				6373D11629010F5300BD8500 /* DemoCell3.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
 				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
+				631AD82B2906316B00EEED02 /* BasicInfoCell.swift in Sources */,
 				15B621FB2901466700E31125 /* UserProfileViewCell.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */,
@@ -585,7 +586,7 @@
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 44Q9HUN6LA;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
@@ -614,7 +615,7 @@
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 44Q9HUN6LA;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";

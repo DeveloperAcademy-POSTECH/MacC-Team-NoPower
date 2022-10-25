@@ -193,15 +193,13 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Methods
     
-    func setUser(nickname: String, occupation: String, intro: String) {
+    func setUser(nickname: String, occupation: String, intro: String) -> User? {
         let deviceUid = UIDevice.current.identifierForVendor?.uuidString
-        guard let userUid = deviceUid else { return }
-        // userdefaults 추가
-        UserDefaults.standard.set(userUid, forKey: "userUid")
-        print(userUid)
-
+        guard let userUid = deviceUid else { return nil}
+        
         let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
         FirebaseManager.shared.setUser(user: user)
+        return user
     }
     
     func configUI() {
@@ -357,8 +355,8 @@ class SignUpViewController: UIViewController {
         } else {
             if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = statusField.text {
                 if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
-                    setUser(nickname: nickname, occupation: occupation, intro: intro)
-                    viewModel.isLogIn = true
+                    let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
+                    viewModel.user = user
                     self.dismiss(animated: true)
                 } else {
                     print("빈칸있음, 저장안함")

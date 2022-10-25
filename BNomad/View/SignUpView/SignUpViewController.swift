@@ -311,6 +311,26 @@ class SignUpViewController: UIViewController {
         requestLabel.text = "노마드가 되기 위해\n\(requestItem[index])을 알려주세요!"
     }
     
+    func showAlert() {
+        let alertLabel = UILabel()
+        alertLabel.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        alertLabel.text = "빈칸없이 입력해주세요!"
+        alertLabel.textColor = .red
+        alertLabel.alpha = 1.0
+        self.view.addSubview(alertLabel)
+        alertLabel.anchor(
+            top: statusLineView.bottomAnchor,
+            left: statusLineView.leftAnchor,
+            paddingTop: 21
+        )
+
+        UIView.animate(withDuration: 1.0, delay: 1, options: .curveEaseOut, animations: {
+            alertLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            alertLabel.removeFromSuperview()
+        })
+    }
+    
     // MARK: - Actions
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
@@ -352,7 +372,8 @@ class SignUpViewController: UIViewController {
                 if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
                     setUser(nickname: nickname, occupation: occupation, intro: intro)
                 } else {
-                    print("빈칸있음, 저장안함")
+                    showAlert()
+                    print("빈칸있음")
                 }
             }
         }

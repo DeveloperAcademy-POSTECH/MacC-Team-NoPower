@@ -14,6 +14,7 @@ class CalendarViewController: UIViewController {
     
     var checkInHistory: [CheckIn]? {
         didSet {
+            print(checkInHistory)
             CalendarCollectionView.reloadData()
         }
     }
@@ -153,7 +154,7 @@ class CalendarViewController: UIViewController {
         configureUI()
         render()
         
-        FirebaseManager.shared.fetchCheckInHistory(userUid: "002a99ac-542c-411c-8cde-38f4a8936c87") { checkInHistory in
+        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
             self.checkInHistory = checkInHistory
         }
     }
@@ -276,10 +277,9 @@ extension CalendarViewController: UICollectionViewDelegate {
             if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
                 
                 let year = "2022"
-                let month = String((Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
-                let day = String(indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
+                let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
+                let day = String(format: "%02d", indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
                 let thisCellsDate = year+"-"+month+"-"+day
-                
                 cell.thisCellsDate = thisCellsDate //클릭한 날자 inject (: String)
                 cell.checkInHistory = checkInHistory //체크인 all data inject (: Checkin)
                 

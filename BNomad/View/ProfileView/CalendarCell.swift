@@ -14,9 +14,7 @@ class CalendarCell: UICollectionViewCell {
     var thisCellsDate: String?
     var checkInHistory: [CheckIn]? {
         didSet {
-            guard let checkInHistory = checkInHistory else { return
-                
-            }
+            guard let checkInHistory = checkInHistory else { return }
             var checkInDates: [String] = []
             checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
             

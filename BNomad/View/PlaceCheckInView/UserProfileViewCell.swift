@@ -11,7 +11,7 @@ class UserProfileViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    // var user: User
+    var user: User?
 
     static let identifier = "userProfileViewCell"
     
@@ -22,17 +22,17 @@ class UserProfileViewCell: UICollectionViewCell {
         return userProfileImg
     }()
     
-    private let usernameLabel: UILabel = {
+    private lazy var usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = "김노마 (나)"
+        label.text = user?.nickname
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let occupationLabel: UILabel = {
+    private lazy var occupationLabel: UILabel = {
         let label = UILabel()
-        label.text = "iOS Developer"
+        label.text = user?.occupation
         label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
         label.textColor = CustomColor.nomadGray1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -66,6 +66,12 @@ class UserProfileViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        
+        guard let user = user else { return }
+        FirebaseManager.shared.fetchUser(id: user.userUid, completion: { user in
+            self.user = user
+        })
+        
     }
     
     required init?(coder: NSCoder) {

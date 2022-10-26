@@ -17,6 +17,38 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     static let identifier = "checkInCardViewCell"
     
+    var user: User? {
+        didSet {
+            userNameLabel.text = user?.nickname
+            userOccupationLabel.text = user?.occupation
+            userStatusMessage.text = user?.introduction
+        }
+    }
+    
+    var checkIn: CheckIn? {
+        didSet {
+            // 체크인 시간
+            let startTime = checkIn?.checkInTime
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US")
+            dateFormatter.dateFormat = "hh:mm a"
+            checkInTimeLabel.text = dateFormatter.string(from: startTime ?? Date())
+            
+            // 이용 시간
+            // MARK: 최근 체크인 시간을 불러와서 24시간이 넘어갈 수 있음
+            let current = Date()
+            let timeInterval = current.timeIntervalSince(startTime ?? Date())
+            let hour = Int(timeInterval / 3600)
+            let minute = Int(timeInterval / 60) % 60
+            userTimeSpentLabel.text = String(hour) + "시간" + String(minute) + "분"
+            
+            // 이용시간 상태바
+            // MARK: 상태바가 표현할 정보 논의 후,
+            // 운영시간 대비 이용시간 비율에 맞게 표시해야함
+            
+        }
+    }
+    
     var delegate: pageDismiss?
     
     private let cardRectangleView: UIView = {
@@ -40,16 +72,16 @@ class CheckInCardViewCell: UICollectionViewCell {
         return view
     }()
     
-    private let userNameLabel: UILabel = {
+    private lazy var userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "윌성수"
+        label.text = "김노마"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.textColor = CustomColor.nomadBlack
         
         return label
     }()
 
-    private let userOccupationLabel: UILabel = {
+    private lazy var userOccupationLabel: UILabel = {
         let label = UILabel()
         label.text = "iOS 개발자"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
@@ -58,10 +90,11 @@ class CheckInCardViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let userStatusMessage: UILabel = {
+    private lazy var userStatusMessage: UILabel = {
         let label = UILabel()
-        label.text = "학식 같이 드실분 연락주세요!"
+        label.text = "디자인을 좋아하는 개발자입니다."
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.numberOfLines = 1
         label.textColor = CustomColor.nomadGray1
         
         return label
@@ -87,8 +120,12 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     private let checkInTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "10:20 AM"
+//        label.text = "10:20 AM"
+        
+        
+        
         label.font = .preferredFont(forTextStyle: .body, weight: .semibold)
+        
         label.textColor = CustomColor.nomadBlack
         
         return label
@@ -214,7 +251,9 @@ class CheckInCardViewCell: UICollectionViewCell {
         userStatusMessage.anchor(
             top: userNameLabel.bottomAnchor,
             left: userNameLabel.leftAnchor,
-            paddingTop: 6
+            right: self.rightAnchor,
+            paddingTop: 6,
+            paddingRight: 20
         )
         
         self.addSubview(checkInLabel)

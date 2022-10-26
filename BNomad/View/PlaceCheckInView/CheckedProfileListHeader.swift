@@ -64,6 +64,7 @@ class CheckedProfileListHeader: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        
     }
     
     required init?(coder: NSCoder) {

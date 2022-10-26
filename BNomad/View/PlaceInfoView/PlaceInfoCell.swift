@@ -21,7 +21,7 @@ class PlaceInfoCell: UICollectionViewCell {
             guard let place = place else { return }
             guard let latitude = position?.coordinate.latitude else { return }
             guard let longitude = position?.coordinate.longitude else { return }
-            let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
             mappingPlaceData(place)
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
@@ -157,45 +157,7 @@ class PlaceInfoCell: UICollectionViewCell {
         print("전화로 이어주게나,,")
     }))
     lazy var mapButton = UIButton(configuration: self.configmapButton, primaryAction: nil)
-    
-    func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
-        let radLatitude1: Double = (latitude1 * .pi)/180
-        let radLatitude2: Double = (latitude2 * .pi)/180
-        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
-        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
-        let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
-        let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
-        return distance
-    }
-    
-    func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
-        var hour: Int
-        var minute: Int
-        var totalTime: Int = 0
-        var averageTime: Int
-        var stringTime: String
-        
-        guard let todayCheckInHistory = todayCheckInHistory else { return "fail"}
-        let filterCheckInHistory = todayCheckInHistory.filter { $0.checkOutTime != nil }
-        print("DEBUG:",filterCheckInHistory)
-        for history in filterCheckInHistory {
-            guard let checkOutTime = history.checkOutTime else { return "chekcOutt" }
-            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(history.checkInTime)/60))
-            totalTime += totalMinute
-        }
-        
-        if filterCheckInHistory.count != 0 {
-            averageTime = abs(totalTime / filterCheckInHistory.count)
-            hour = averageTime / 60
-            minute = averageTime - hour
-            stringTime = "평균 \(hour)시간 \(minute)분 근무"
-            print(stringTime)
-        } else {
-            return "평균 0시간"
-        }
-        return stringTime
-    }
-    
+
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -250,10 +212,9 @@ class PlaceInfoCell: UICollectionViewCell {
     }
     
     func mappingPlaceData(_ place: Place) {
+        
         placeNameLabel.text = place.name
-//        guard let current = place.currentCheckIn else { return }
-//        numberOfCheckIn = String(current.count) + "명 체크인"
-//        averageTime = calculateAverageTime(place: place)
+        
     }
 
 }

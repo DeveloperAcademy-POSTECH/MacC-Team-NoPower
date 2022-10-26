@@ -13,8 +13,18 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var place: Place = DummyData.place1
-
+//    var place: Place = DummyData.place1
+    var place: Place? {
+        didSet {
+            placeNameLable.text = place?.name
+            // MARK: 공지사항 data가 없어서 address으로 대체
+            placeNoteLabel.text = place?.address
+            FirebaseManager.shared.fetchCheckInHistoryAll(placeUid: place?.placeUid ?? "") { checkInHistory in
+                self.visitorsLabel.text = String(checkInHistory.count) + "명"
+            }
+        }
+    }
+    
     private let placeNameLable: UILabel = {
         let label = UILabel()
         label.text = "노마딕 제주"

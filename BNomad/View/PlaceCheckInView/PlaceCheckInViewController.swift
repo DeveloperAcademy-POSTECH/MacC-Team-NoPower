@@ -9,6 +9,9 @@ import UIKit
 
 class PlaceCheckInViewController: UIViewController {
     
+    // MARK: - Mock User
+    var tmpUserUid = "002a99ac-542c-411c-8cde-38f4a8936c87"
+    
     // MARK: - Properties
     
     var user: User? {
@@ -20,10 +23,10 @@ class PlaceCheckInViewController: UIViewController {
     var place: Place? {
         didSet {
             placeTitleLabel.text = self.place?.name
+            collectionView.reloadData()
         }
     }
     
-    // struct CheckIn
     var checkIn: CheckIn? {
         didSet {
             collectionView.reloadData()
@@ -61,17 +64,12 @@ class PlaceCheckInViewController: UIViewController {
         configureCancelButton()
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
-        fetchUser()
+        fetchUser(userUid: tmpUserUid)
         fetchPlaceAll()
-        
-        // user의 모든 체크인 데이터 가져오기
-        fetchCheckInStatus(userUid: "002a99ac-542c-411c-8cde-38f4a8936c87")
-
-        
+        fetchCheckInHistoryUser(userUid: tmpUserUid)
     }
     
-    func fetchUser() {
-        let currentUserUid = "002a99ac-542c-411c-8cde-38f4a8936c87"
+    func fetchUser(userUid: String) {
         FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
             self.user = user
         }
@@ -84,17 +82,13 @@ class PlaceCheckInViewController: UIViewController {
         }
     }
     
-    func fetchCheckInStatus(userUid: String) {
-//        let userUid: String = "012f0180-669f-411e-91ee-dd45ee8d0cf7"
+    func fetchCheckInHistoryUser(userUid: String) {
         
         FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
             checkInHistory.sorted { $0.checkInTime > $1.checkInTime }
             self.checkIn = checkInHistory.last
         }
     }
-    
-    
-    
     
     // MARK: - Actions
     
@@ -143,7 +137,6 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             guard let checkInCardViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckInCardViewCell.identifier, for: indexPath) as? CheckInCardViewCell else { return UICollectionViewCell() }
             checkInCardViewCell.delegate = self
-            
             checkInCardViewCell.user = self.user
             checkInCardViewCell.checkIn = self.checkIn
             
@@ -151,6 +144,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
+            placeInfoViewCell.place = self.place
             return placeInfoViewCell
         }
         else if indexPath.section == 2 {

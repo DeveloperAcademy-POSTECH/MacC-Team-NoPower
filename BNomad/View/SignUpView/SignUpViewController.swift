@@ -12,6 +12,17 @@ class SignUpViewController: UIViewController {
     // MARK: - Properties
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
+    lazy var cancelButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.layer.cornerRadius = 30 / 2
+        button.tintColor = .white
+        button.backgroundColor = .lightGray
+        button.layer.opacity = 0.5
+        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
+        return button
+    }()
 
     private let requestItem = ["닉네임", "직업", "상태"]
     private var index = 0
@@ -189,6 +200,11 @@ class SignUpViewController: UIViewController {
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
         
         hideKeyboardWhenTappedAround()
+        configCancelButton()
+    }
+    
+    @objc func dismissPage() {
+        self.dismiss(animated: true)
     }
     
     // MARK: - Methods
@@ -335,6 +351,19 @@ class SignUpViewController: UIViewController {
             alertLabel.removeFromSuperview()
         })
     }
+    
+    func configCancelButton() {
+        view.addSubview(cancelButton)
+        cancelButton.anchor(
+            top: view.topAnchor,
+            right: view.rightAnchor,
+            paddingTop: 50,
+            paddingRight: 20,
+            width: 30,
+            height: 30
+        )
+    }
+    
     
     // MARK: - Actions
     

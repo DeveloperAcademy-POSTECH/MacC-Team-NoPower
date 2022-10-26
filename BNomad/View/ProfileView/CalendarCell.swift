@@ -11,6 +11,20 @@ class CalendarCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var thisCellsDate: String?
+    var checkInHistory: [CheckIn]? {
+        didSet {
+            guard let checkInHistory = checkInHistory else { return }
+            var checkInDates: [String] = []
+            checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
+            
+            if checkInDates.contains(thisCellsDate ?? "") {
+                    self.drawCheckinStemp()
+            }
+            
+        }
+    }
+    
     static let identifier = "CalendarCell"
     private lazy var dayLabel = UILabel()
     
@@ -19,7 +33,7 @@ class CalendarCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStemp")!, targetSize: CGSize(width: 34.0, height: 34.0))
+        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStemp") ?? UIImage(), targetSize: CGSize(width: 34.0, height: 34.0))
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -30,6 +44,7 @@ class CalendarCell: UICollectionViewCell {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+            self.backgroundColor = .white
             render()
         }
         
@@ -68,6 +83,9 @@ class CalendarCell: UICollectionViewCell {
     
     func setNormalCell() {
         self.layer.borderWidth = 0
+        self.backgroundColor = .white
+        self.dayLabel.textColor = .black
+        self.stempImage.removeFromSuperview()
     }
     
     func drawCheckinStemp() {
@@ -76,12 +94,10 @@ class CalendarCell: UICollectionViewCell {
         self.stempImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
     
-    func eraseCheckinStemp() {
-        self.stempImage.removeFromSuperview()
-    }
-    
     func setTodayCell() {
-        self.dayLabel.textColor = CustomColor.nomadGreen
+        self.dayLabel.textColor = .white
+        self.backgroundColor = CustomColor.nomadSkyblue
+        self.layer.cornerRadius = 20
     }
 
 }

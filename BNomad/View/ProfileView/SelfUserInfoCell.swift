@@ -17,7 +17,13 @@ class SelfUserInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var user: User?
+    var user: User? {
+        didSet {
+            self.nameLabel.text = user?.nickname
+            self.jobLabel.text = user?.occupation
+            self.statusLabel.text = user?.introduction
+        }
+    }
     static let identifier = "SelfUserInfoCell"
     
     var delegate: MovePage?

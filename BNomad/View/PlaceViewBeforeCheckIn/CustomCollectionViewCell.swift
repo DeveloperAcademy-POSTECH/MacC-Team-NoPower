@@ -145,11 +145,16 @@ class CustomCollectionViewCell: UICollectionViewCell {
             let totalMinute = Int(floor(checkOutTime.timeIntervalSince(history.checkInTime)/60))
             totalTime += totalMinute
         }
-        averageTime = abs(totalTime / filterCheckInHistory.count)
-        hour = averageTime / 60
-        minute = averageTime - hour
-        stringTime = "평균 \(hour)시간 \(minute)분 근무"
-        print(stringTime)
+        
+        if filterCheckInHistory.count != 0 {
+            averageTime = abs(totalTime / filterCheckInHistory.count)
+            hour = averageTime / 60
+            minute = averageTime - hour
+            stringTime = "평균 \(hour)시간 \(minute)분 근무"
+            print(stringTime)
+        } else {
+            return "평균 0시간"
+        }
         return stringTime
     }
     

@@ -15,6 +15,8 @@ class PlaceCheckInViewController: UIViewController {
     
     var selectedPlace: Place?
     
+    var viewModel = CombineViewModel.shared
+    
     // MARK: - Properties
     
     var checkInList: [CheckIn]? {
@@ -205,7 +207,6 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
 
 extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
-    // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let flow = collectionViewLayout as? UICollectionViewFlowLayout else {
             return CGSize()
@@ -237,6 +238,17 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
 
 extension PlaceCheckInViewController: pageDismiss {
     func checkOut() {
-        self.dismiss(animated: true)
+        
+        guard var checkIn = self.viewModel.user?.currentCheckIn else { return }
+        checkIn.checkOutTime = Date()
+        FirebaseManager.shared.setCheckOut(checkIn: checkIn) { checkIn in
+            
+            let index = self.viewModel.user?.checkInHistory?.firstIndex { $0.checkInUid == checkIn.checkInUid }
+            
+            guard let index = index else { return }
+            
+            self.viewModel.user?.checkInHistory?[index] = checkIn
+            self.dismiss(animated: true)
+        }
     }
 }

@@ -12,6 +12,23 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     // MARK: - Properties
     
     // var user: User
+    var userUid: String? {
+        didSet {
+            guard let userUid = userUid else { return }
+            FirebaseManager.shared.fetchUser(id: userUid) { user in
+                self.user = user
+            }
+        }
+    }
+    
+    var user: User? {
+        didSet {
+            guard let user = user else { return }
+            usernameLabel.text = user.nickname
+            occupationLabel.text = user.occupation
+            noteLabel.text = user.introduction
+        }
+    }
     
     static let identifier = "CheckedProfileListViewCell"
     
@@ -24,7 +41,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = "스미스"
         label.font = .preferredFont(forTextStyle: .title3, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -32,7 +48,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let occupationLabel: UILabel = {
         let label = UILabel()
-        label.text = "iOS Developer"
         label.font = .preferredFont(forTextStyle: .body, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +56,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let noteLabel: UILabel = {
         let label = UILabel()
-        label.text = "커피챗 환영합니다:P"
         label.font = .preferredFont(forTextStyle: .body, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

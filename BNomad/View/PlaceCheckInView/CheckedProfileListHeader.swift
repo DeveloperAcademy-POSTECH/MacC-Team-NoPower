@@ -11,13 +11,18 @@ class CheckedProfileListHeader: UICollectionViewCell {
     
     static let identifier = "CheckedProfileListHeader"
     
-    // var users: [User]
+    var numberOfUsers: Int? {
+        didSet {
+            if let number = numberOfUsers {
+                label.text = "함께 일하고 있는 \(number)명의 노마더"
+            }
+        }
+    }
 
     // MARK: - Properties
     
-    private let label: UILabel = {
+    lazy var label: UILabel = {
         let label = UILabel()
-        label.text = "함께 일하고 있는 23명의 노마더"
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
         return label

@@ -11,6 +11,23 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
+    var checkIn: [CheckIn]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    var user: User? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    private var numberOfUsers: Int = 0
+    
+    // Dummy 박태준학술정보관 PlaceUid
+    let placeUid = "4c5f2dfe-42fc-49d4-a197-d02635227b5c"
+    
     private let placeTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "쌍사벅스"
@@ -34,6 +51,11 @@ class PlaceCheckInViewController: UIViewController {
     }()
     
     // MARK: - LifeCycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let date = "2022-10-25".toDate() else { return }
+        fetchCheckInHistoryPlace(placeUid: placeUid, date: date)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +97,15 @@ class PlaceCheckInViewController: UIViewController {
         cancelButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 50, paddingRight: 20, width: 30, height: 30)
     }
     
+    func fetchCheckInHistoryPlace(placeUid: String, date: Date) {
+        FirebaseManager.shared.fetchCheckInHistory(placeUid: placeUid, date: date) { checkInHistory in
+            self.checkIn = checkInHistory
+            if let checkIn = self.checkIn {
+                self.numberOfUsers = checkIn.count
+                print(self.numberOfUsers)
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -83,7 +114,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3 {
-            return 10
+            return self.checkIn?.count ?? 0
         }
         return 1
     }
@@ -99,16 +130,23 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             return placeInfoViewCell
         }
         else if indexPath.section == 2 {
-            guard let CheckedProfileListHeader = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
-            return CheckedProfileListHeader
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
+            cell.numberOfUsers = numberOfUsers
+            
+            return cell
         }
         else if indexPath.section == 3 {
-            guard let checkedProfileCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
-            checkedProfileCell.backgroundColor = .white
-            checkedProfileCell.layer.borderWidth = 1
-            checkedProfileCell.layer.borderColor = CustomColor.nomadGray2?.cgColor
-            checkedProfileCell.layer.cornerRadius = 12
-            return checkedProfileCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
+            
+            guard let checkIn = checkIn else { return UICollectionViewCell() }
+            let userUids = checkIn.compactMap {$0.userUid}
+            cell.userUid = userUids[indexPath.row]
+            cell.backgroundColor = .white
+            cell.layer.borderWidth = 1
+            cell.layer.borderColor = CustomColor.nomadGray2?.cgColor
+            cell.layer.cornerRadius = 12
+            
+            return cell
         }
         return UICollectionViewCell()
     }

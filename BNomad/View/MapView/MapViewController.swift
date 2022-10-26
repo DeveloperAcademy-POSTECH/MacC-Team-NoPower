@@ -18,8 +18,11 @@ class MapViewController: UIViewController {
     let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
     lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), span: span)
     
-    // var user: User = DummyData.user1
-    // var isLogin: Bool = false
+    // var isLogin: Bool = false -> profile view / signup view
+    var user: User = DummyData.user3
+    var isLogin: Bool = false // 어떻게 검증? user login이 안된 상태에서는 user = nil? guard let user = user else { }
+    
+    var places: [Place] = []
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -127,9 +130,6 @@ class MapViewController: UIViewController {
         return view
     }()
     
-    // TODO: 제거하고 user.isChecked 사용
-    var userCheckedIn: Bool = false
-    
     lazy var listViewButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -169,20 +169,13 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-        locationAuthorization()
+        locationFuncs()
         configueMapUI()
-//        registerAnnotationViewClasses()
         
     }
     
     // MARK: - Actions
-    
-    // 맵을 회전시켜 나침반이 등장한 상태로 유저 위치로 가기 버튼을 누르면 맵 회전된 상태 그대로 위치만 이동하고 있어서, 유저 위치로 갈 때 자동으로 정북 방향으로 회전까지 같이 시켜주는 방안 고민중입니다.
-    func userTrackingToCompass() {
-        if userTrackingBtn.isExclusiveTouch {
-            
-        }
-    }
+
     
     
     // TODO: isLogIn에 맞게 분기 처리 필요.
@@ -197,10 +190,13 @@ class MapViewController: UIViewController {
     // MARK: - Helpers
     
     // 위치 권한 받아서 현재 위치 확인
-    func locationAuthorization() {
+    func locationFuncs() {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        
     }
     
     // 맵 UI 그리기
@@ -219,22 +215,19 @@ class MapViewController: UIViewController {
         
         map.addOverlay(circleOverlay)
         
-        // TODO: - 비동기 처리로 수정
-        map.addAnnotations(placeAnnotations)
+        // TODO: - 비동기 처리로 수정 -> Firebase 비동기 함수로 처리 완료
+        FirebaseManager.shared.fetchPlaceAll { place in
+            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            self.places.append(place)
+        }
         
-        if userCheckedIn {
+        if user.isChecked {
             view.addSubview(workingView)
             workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)
         }
         
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
-    }
-    
-    func registerAnnotationViewClasses() {
-        map.register(CoworkingAnnotationView.self, forAnnotationViewWithReuseIdentifier: "dda")
-        map.register(LibraryAnnotationView.self, forAnnotationViewWithReuseIdentifier: "dd")
-        map.register(CafePlaceAnnotationView.self, forAnnotationViewWithReuseIdentifier: "cafeAnnotaion")
     }
     
 }
@@ -253,7 +246,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let annotation = annotation as? PlaceToMKAnnotation else { return nil }
+        guard let annotation = annotation as? MKAnnotationFromPlace else { return nil }
 
         switch annotation.type {
         case .coworking:
@@ -265,12 +258,14 @@ extension MapViewController: MKMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let view = view as? PlaceAnnotationView  {
-            guard let annotation = view.annotation else { return }
+    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        if let annotation = annotation as? MKAnnotationFromPlace {
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             let controller = PlaceInfoModalViewController()
-            controller.selectedAnnotation = annotation
+            let tempPlace = places.first { place in
+                annotation.placeUid == place.placeUid
+            }
+            controller.selectedPlace = tempPlace
             controller.delegate = self
             present(controller, animated: true)
         } else {
@@ -305,4 +300,15 @@ extension MapViewController: ClearSelectedAnnotation {
 
 extension MapViewController: UISheetPresentationControllerDelegate {
 
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        currentLocation = location
+        map.removeOverlay(circleOverlay)
+        map.addOverlay(circleOverlay)
+    }
 }

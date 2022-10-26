@@ -69,7 +69,8 @@ class BasicInfoCell: UICollectionViewCell {
         self.addSubview(divider4)
         self.addSubview(infoSuggestionButton)
         setAttributes()
-        mappingPlaceData(place ?? DummyData.place2)
+        guard let place = place else { return }
+        mappingPlaceData(place)
     }
     
     private func setAttributes() {

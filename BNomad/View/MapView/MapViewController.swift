@@ -169,7 +169,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-        locationAuthorization()
+        locationFuncs()
         configueMapUI()
         
     }
@@ -190,10 +190,13 @@ class MapViewController: UIViewController {
     // MARK: - Helpers
     
     // 위치 권한 받아서 현재 위치 확인
-    func locationAuthorization() {
+    func locationFuncs() {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        
     }
     
     // 맵 UI 그리기
@@ -297,4 +300,15 @@ extension MapViewController: ClearSelectedAnnotation {
 
 extension MapViewController: UISheetPresentationControllerDelegate {
 
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        currentLocation = location
+        map.removeOverlay(circleOverlay)
+        map.addOverlay(circleOverlay)
+    }
 }

@@ -47,7 +47,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     private var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
-        placeNameLabel.text = "dd"
+        placeNameLabel.text = "-"
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -145,7 +145,8 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(operatingTimeLabel)
         
         setAttributes()
-        mappingPlaceData(place ?? DummyData.place2)
+        guard let place = place else { return }
+        mappingPlaceData(place)
     }
     
     private func setAttributes() {

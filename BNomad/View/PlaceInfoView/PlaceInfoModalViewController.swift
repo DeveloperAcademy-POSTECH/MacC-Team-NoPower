@@ -20,8 +20,7 @@ class PlaceInfoModalViewController: UIViewController {
             collectionView.reloadData()
         }
     }
-//    lazy var selectedAnnotation = MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace ?? DummyData.place2)
-    
+        
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
     
@@ -70,10 +69,11 @@ class PlaceInfoModalViewController: UIViewController {
         setupSheet()
     }
     
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        delegate?.clearAnnotation(view: selectedAnnotation)
-//    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let selectedPlace = selectedPlace else { return }
+        delegate?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
+    }
     
     // MARK: - Actions
     
@@ -100,10 +100,9 @@ class PlaceInfoModalViewController: UIViewController {
     func distanceChecker() {
         let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500.0, identifier: "반경 500m")
         
-              // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?"
-
-        if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace?.latitude ?? 0, longitude: selectedPlace?.longitude ?? 0)) {
-            let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "노마드 제주에 체크인 하시겠습니까?", preferredStyle: .alert)
+        guard let selectedPlace = selectedPlace else { return }
+        if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)) {
+            let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "\(selectedPlace.name)에 체크인합니다.", preferredStyle: .alert)
             checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
             checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
                 // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함

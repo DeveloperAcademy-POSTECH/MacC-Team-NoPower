@@ -76,7 +76,8 @@ class CustomModalViewController: UIViewController {
             self.places?.append(place)
         }
         
-        self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
+//        self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
+        self.view.layer.backgroundColor = CustomColor.nomadGray3?.cgColor
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.layer.shadowColor = UIColor.black.cgColor
         self.view.layer.shadowOffset = .init(width: 0, height: -2)
@@ -111,7 +112,9 @@ extension CustomModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else  { return UICollectionViewCell() }
         cell.position = position
-        cell.place = places?[indexPath.item] ?? DummyData.place1
+        guard let places = places else { return UICollectionViewCell() }
+        cell.place = places[indexPath.item]
+        cell.position = position
         return cell
     }
     
@@ -125,7 +128,10 @@ extension CustomModalViewController: UICollectionViewDataSource {
 
 extension CustomModalViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        present(PlaceInfoModalViewController(), animated: true)
+        let controller = PlaceInfoModalViewController()
+        guard let places = places else { return }
+        controller.selectedPlace = places[indexPath.item]
+        present(controller, animated: true)
         // TODO: map의 해당 선택된 region으로 움직여줘야 한다.
     }
 }

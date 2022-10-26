@@ -11,18 +11,8 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Properties
     
-    var user: User? {
-        didSet {
-            profileCollectionView.reloadData()
-        }
-    }
-    var checkInHistory: [CheckIn]? {
-        didSet {
-            profileCollectionView.reloadData()
-            ProfileGraphCollectionView.reloadData()
-        }
-    }
-    
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
+        
     static var weekAddedMemory: Int = 0
     
     private lazy var profileImageView: UIImageView = {
@@ -98,19 +88,14 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Lifecycle
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
-        navigationItem.backButtonTitle = ""
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
         ProfileGraphCell.addedWeek = 0
         ProfileGraphCell.editWeek(edit: 0)
+        
         
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
@@ -123,18 +108,21 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
-        FirebaseManager.shared.fetchUser(id: "04d3acd1-a6ec-465e-845e-a319e42180e6") { user in
-            self.user = user
-        }
-        
-        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
-            self.checkInHistory = checkInHistory
-        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Actions
     
     @objc func moveToCalendar() {
+        CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
         navigationController?.pushViewController(CalendarViewController(), animated: true)
     }
 
@@ -261,7 +249,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelfUserInfoCell.identifier , for: indexPath) as? SelfUserInfoCell else {
                 return UICollectionViewCell()
             }
-                cell.user = user
+                cell.user = viewModel.user
                 cell.backgroundColor = .white
                 cell.layer.cornerRadius = 20
                 cell.delegate = self
@@ -271,7 +259,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                     return UICollectionViewCell()
                 }
                 
-                cell.checkInHistoryForProfile = checkInHistory
+                cell.checkInHistoryForProfile = viewModel.user?.checkInHistory
                 cell.backgroundColor = .white
                 cell.layer.cornerRadius = 20
                 return cell
@@ -286,7 +274,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 let dateString = year+"-"+month+"-"+day
                 
                 cell.thisCellsDate = dateString
-                cell.checkInHistory = checkInHistory
+                cell.checkInHistory = viewModel.user?.checkInHistory
                 
                 cell.backgroundColor = .white
                 cell.layer.cornerRadius = 20
@@ -305,7 +293,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             let cellDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(dayCalculator)))
             
             cell.cellDate = cellDate
-            cell.checkInHistory = checkInHistory
+            cell.checkInHistory = viewModel.user?.checkInHistory
             cell.backgroundColor = .white
             return cell
         }
@@ -353,6 +341,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileViewController: MovePage {
     func moveToEditingPage() {
+        ProfileEditViewController.user = viewModel.user
         navigationController?.pushViewController(ProfileEditViewController(), animated: true)
     }
 }

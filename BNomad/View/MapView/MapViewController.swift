@@ -154,6 +154,18 @@ class MapViewController: UIViewController {
         present(sheet, animated: true, completion: nil)
     }
     
+    var checkInNow: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = CustomColor.nomadBlue
+        button.tintColor = .white
+        button.clipsToBounds = true
+        button.layer.cornerRadius =  40 / 2
+        button.setTitle("업무중", for: .normal)
+        button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
+        button.isHidden = true
+        return button
+    }()
+    
     // MARK: - LifeCycle
     
     // override func viewWillAppear(_ animated: Bool) {
@@ -167,11 +179,10 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-        
+        configureFloating()
     }
     
     // MARK: - Actions
-
     
     
     // TODO: isLogIn에 맞게 분기 처리 필요.
@@ -182,6 +193,11 @@ class MapViewController: UIViewController {
         
     }
     
+    @objc func goToListPage() {
+        let controller = PlaceCheckInViewController()
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true)
+    }
     
     // MARK: - Helpers
     
@@ -225,6 +241,12 @@ class MapViewController: UIViewController {
         
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
+    }
+    
+    func configureFloating() {
+        view.addSubview(checkInNow)
+        checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
+        checkInNow.centerX(inView: view)
     }
     
 }

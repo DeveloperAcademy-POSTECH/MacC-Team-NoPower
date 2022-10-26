@@ -17,7 +17,6 @@ class PlaceInfoModalViewController: UIViewController {
     // MARK: - Properties
     var selectedPlace: Place? {
         didSet {
-            collectionView.reloadData()
         }
     }
         
@@ -36,8 +35,6 @@ class PlaceInfoModalViewController: UIViewController {
 
     // TODO: user.isChecked로 대체
     var isCheckedIn: Bool = false
-
-    
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
@@ -69,12 +66,20 @@ class PlaceInfoModalViewController: UIViewController {
         configureCollectionView()
         configureCheckInButton()
         setupSheet()
+        fetchPlaceAll()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let selectedPlace = selectedPlace else { return }
         delegate?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
+    }
+    
+    func fetchPlaceAll() {
+        FirebaseManager.shared.fetchPlaceAll { place in
+            self.selectedPlace = place
+            print(place)
+        }
     }
     
     // MARK: - Actions
@@ -108,14 +113,18 @@ class PlaceInfoModalViewController: UIViewController {
     func distanceChecker() {
         let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500.0, identifier: "반경 500m")
         
+
+              // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?" ---- 완료
+
         guard let selectedPlace = selectedPlace else { return }
         if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)) {
             let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "\(selectedPlace.name)에 체크인합니다.", preferredStyle: .alert)
+
             checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
             checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
                 // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
                 // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
-                                // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
+                // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
 
                 self.isCheckedIn = false
                 self.checkInButton.isHidden = true

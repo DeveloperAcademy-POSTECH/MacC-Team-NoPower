@@ -9,7 +9,13 @@ import UIKit
 
 class BasicInfoCell: UICollectionViewCell {
     
+    
+    
     // MARK: - Properties
+    
+
+    // TODO: - 하드 코딩된 부분 전부 제거 --- 데이터 있는 부분 완료
+    
     
     var place: Place? {
         didSet {
@@ -18,7 +24,6 @@ class BasicInfoCell: UICollectionViewCell {
         }
     }
 
-//    var place: Place = DummyData.place1
 
     static let cellIdentifier = "BasicInfoCell"
     let basicInfoTitleLabel = UILabel()
@@ -83,7 +88,7 @@ class BasicInfoCell: UICollectionViewCell {
         phoneImage.tintColor = UIColor.black
         phoneImage.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 101, paddingLeft: 20)
         
-        phoneNumberLabel.text = "080-000-0000"
+        phoneNumberLabel.text = ""
         phoneNumberLabel.font = UIFont.preferredFont(forTextStyle: .body, weight: .regular)
         phoneNumberLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 102, paddingLeft: 57)
         
@@ -97,9 +102,10 @@ class BasicInfoCell: UICollectionViewCell {
         mapImage.tintColor = UIColor.black
         mapImage.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 144, paddingLeft: 20)
         
-        addressLabel.text = "제주도 서귀포시 향교로"
+        addressLabel.text = ""
         addressLabel.font = UIFont.preferredFont(forTextStyle: .body, weight: .regular)
-        addressLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 145, paddingLeft: 57)
+        addressLabel.numberOfLines = 1
+        addressLabel.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 145, paddingLeft: 57, paddingRight: 5)
         
         divider2.backgroundColor = CustomColor.nomadGray3
         divider2.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -112,6 +118,7 @@ class BasicInfoCell: UICollectionViewCell {
         clockImage.tintColor = UIColor.black
         clockImage.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 187, paddingLeft: 20)
         
+        //함수짜기
         operatingStatusLabel.text = "영업 중"
         operatingStatusLabel.font = UIFont.preferredFont(forTextStyle: .body, weight: .regular)
         operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 188, paddingLeft: 57)
@@ -127,6 +134,7 @@ class BasicInfoCell: UICollectionViewCell {
         ticketImage.tintColor = UIColor.black
         ticketImage.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 231, paddingLeft: 20)
         
+        //함수짜기
         priceLabel.text = "1일 ---- 15,000원"
         priceLabel.font = UIFont.preferredFont(forTextStyle: .body, weight: .regular)
         priceLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 59)

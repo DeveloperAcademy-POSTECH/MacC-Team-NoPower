@@ -18,8 +18,7 @@ class CalendarCell: UICollectionViewCell {
             var checkInDates: [String] = []
             checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
             
-            if checkInDates.contains(thisCellsDate ?? "") {
-                    self.drawCheckinStemp()
+            if checkInDates.contains(thisCellsDate ?? "") {                    self.drawCheckinStamp()
             }
             
         }
@@ -28,12 +27,12 @@ class CalendarCell: UICollectionViewCell {
     static let identifier = "CalendarCell"
     private lazy var dayLabel = UILabel()
     
-    private lazy var stempImage: UIImageView = {
+    private lazy var stampImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStemp") ?? UIImage(), targetSize: CGSize(width: 34.0, height: 34.0))
+        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStamp") ?? UIImage(), targetSize: CGSize(width: 34.0, height: 34.0))
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -85,13 +84,13 @@ class CalendarCell: UICollectionViewCell {
         self.layer.borderWidth = 0
         self.backgroundColor = .white
         self.dayLabel.textColor = .black
-        self.stempImage.removeFromSuperview()
+        self.stampImage.removeFromSuperview()
     }
     
-    func drawCheckinStemp() {
-        self.addSubview(stempImage)
-        self.stempImage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.stempImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    func drawCheckinStamp() {
+        self.addSubview(stampImage)
+        self.stampImage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        self.stampImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
     
     func setTodayCell() {

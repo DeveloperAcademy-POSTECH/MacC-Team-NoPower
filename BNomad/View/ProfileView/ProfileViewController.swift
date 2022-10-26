@@ -141,10 +141,6 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = true
-    }
-    
     // MARK: - Actions
     
     @objc func moveToCalendar() {

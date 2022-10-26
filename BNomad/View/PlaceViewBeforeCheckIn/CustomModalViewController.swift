@@ -6,12 +6,23 @@
 //
 
 import UIKit
+import MapKit
 
 
 // TODO: 화면에 보이는 map에서만 보이는 [Place] 받아와야함.
 class CustomModalViewController: UIViewController {
         
     // MARK: - Properties
+    
+    var position: CLLocation?
+
+    var places: [Place]? = [] {
+        didSet {
+            collectionView.reloadData()
+            guard let places = places else { return }
+            self.numberOfPlaces.text = "업무 공간 " + String(places.count) + "개"
+        }
+    }
     
     var rectangle: UIView = {
         let rectangle = UIView()
@@ -22,14 +33,14 @@ class CustomModalViewController: UIViewController {
         return rectangle
     }()
     
-    var numberOfPlaces: UILabel = {
+    lazy var numberOfPlaces: UILabel = {
         let number = UILabel()
         number.backgroundColor = .clear
         number.textColor = .black
         number.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         
         // TODO: - place.count로 변경 필요.
-        number.text = "업무 공간 3개"
+        number.text = ""
         number.textAlignment = .center
         number.translatesAutoresizingMaskIntoConstraints = false
         return number
@@ -60,6 +71,11 @@ class CustomModalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        FirebaseManager.shared.fetchPlaceAll { place in
+            self.places?.append(place)
+        }
+        
         self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.layer.shadowColor = UIColor.black.cgColor
@@ -88,11 +104,14 @@ class CustomModalViewController: UIViewController {
 
 extension CustomModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
+        guard let places = places else {return 9}
+        return places.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else  { return UICollectionViewCell() }
+        cell.position = position
+        cell.place = places?[indexPath.item] ?? DummyData.place1
         return cell
     }
     

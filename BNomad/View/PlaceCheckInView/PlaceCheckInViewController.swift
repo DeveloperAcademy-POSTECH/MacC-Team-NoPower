@@ -11,7 +11,7 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Properties
     
-    var checkIn: [CheckIn]? {
+    var checkInList: [CheckIn]? {
         didSet {
             collectionView.reloadData()
         }
@@ -99,8 +99,8 @@ class PlaceCheckInViewController: UIViewController {
     
     func fetchCheckInHistoryPlace(placeUid: String, date: Date) {
         FirebaseManager.shared.fetchCheckInHistory(placeUid: placeUid, date: date) { checkInHistory in
-            self.checkIn = checkInHistory
-            if let checkIn = self.checkIn {
+            self.checkInList = checkInHistory
+            if let checkIn = self.checkInList {
                 self.numberOfUsers = checkIn.count
                 print(self.numberOfUsers)
             }
@@ -114,7 +114,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3 {
-            return self.checkIn?.count ?? 0
+            return self.checkInList?.count ?? 0
         }
         return 1
     }
@@ -138,7 +138,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         else if indexPath.section == 3 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
             
-            guard let checkIn = checkIn else { return UICollectionViewCell() }
+            guard let checkIn = checkInList else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
             cell.backgroundColor = .white

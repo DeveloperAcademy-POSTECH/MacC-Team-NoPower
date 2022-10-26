@@ -10,7 +10,52 @@ import UIKit
 class VisitingInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
+    var thisCellsDate: String?
+    var cardDataList: [CheckIn] = []
     
+    var checkInHistoryForCalendar: [CheckIn]? {
+        didSet {
+            cardDataList = []
+            guard let checkInHistory = checkInHistoryForCalendar else { return }
+            
+            for checkin in checkInHistory {
+                if checkin.date == thisCellsDate {
+                    self.cardDataList.append(checkin)
+                }
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            
+            if cardDataList.count != 0 {
+                cardDataList.forEach {
+                    let checkinTime = dateFormatter.string(from: $0.checkInTime)
+                    self.checkinTimeLabel.text = checkinTime
+                    
+                    let stayedTime = Int(($0.checkOutTime?.timeIntervalSince($0.checkInTime) ?? 0) / 60)
+                    self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+                }
+            } else {
+                self.checkinTimeLabel.text = ""
+                self.stayedTimeLabel.text = ""
+            }
+        }
+    }
+    
+    var checkInHistoryForProfile: [CheckIn]? {
+        didSet {
+            guard let lastCheckIn = checkInHistoryForProfile?.last else {return}
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            
+            let checkinTime = dateFormatter.string(from: lastCheckIn.checkInTime)
+            self.checkinTimeLabel.text = checkinTime
+            
+            let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+        }
+    }
     static let identifier = "VisitingInfoCell"
     
     private let nameLabel: UILabel = {
@@ -41,7 +86,7 @@ class VisitingInfoCell: UICollectionViewCell {
     
     private let checkinTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "10:30"
+        label.text = ""
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +95,7 @@ class VisitingInfoCell: UICollectionViewCell {
     
     private let stayedTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "1시간 20분"
+        label.text = ""
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false

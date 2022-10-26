@@ -12,9 +12,15 @@ class CalendarViewController: UIViewController {
     
     // MARK: - Properties
     
+    var checkInHistory: [CheckIn]? {
+        didSet {
+            print(checkInHistory)
+            CalendarCollectionView.reloadData()
+        }
+    }
     
     var monthAddedMemory: Int = 0
-    private var selectedCell: Int? = 100
+    private var selectedCell: Int? = Contents.todayDate()["day"]
     let calendarDateFormatter = CalendarDateFormatter()
     
     var checkinDateData: [Bool] { //TODO: 파베 데이터로 판단하는 로직 필요
@@ -134,6 +140,8 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        selectedCell = (Contents.todayDate()["day"] ?? 0)+calendarDateFormatter.getStartingDayOfWeek(addedMonth: 0)-1 // 오늘로 셀렉티드셀 초기화
+        
         CalendarCollectionView.dataSource = self
         CalendarCollectionView.delegate = self
         
@@ -145,6 +153,10 @@ class CalendarViewController: UIViewController {
         
         configureUI()
         render()
+        
+        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
+            self.checkInHistory = checkInHistory
+        }
     }
     
     // MARK: - Actions
@@ -196,9 +208,9 @@ class CalendarViewController: UIViewController {
         VisitInfInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
                                 paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
         
-        view.addSubview(VisitInfoHeader)
-        VisitInfoHeader.anchor(top: CalendarCollectionView.bottomAnchor, paddingTop: 21)
-        VisitInfoHeader.centerX(inView: view)
+//        view.addSubview(VisitInfoHeader)
+//        VisitInfoHeader.anchor(top: CalendarCollectionView.bottomAnchor, paddingTop: 21)
+//        VisitInfoHeader.centerX(inView: view)
         
         view.addSubview(dayOfWeekStackView)
         dayOfWeekStackView.anchor(top: calendarCollectionMonthHeader.bottomAnchor, paddingTop: 15, width: 358-358/7)
@@ -224,7 +236,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         if collectionView == CalendarCollectionView {
             return self.calendarDateFormatter.days.count
         } else {
-            return 2 //TODO: 반응형 수정 필요
+            return 1 //TODO: 반응형 수정 필요
         }
     }
     
@@ -243,33 +255,35 @@ extension CalendarViewController: UICollectionViewDelegate {
             }
             cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
-            //주말 텍스트 색 설정
-            if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
-                cell.setWeekendColor()
-            }
+            //셀 설정 초기화
+            cell.setNormalCell()
             
-            //오늘 텍스트 색 설정
+            //오늘 및 주말 텍스트 색 설정
             let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
-            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && Contents.todayDate()["month"] == startDay {
+            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && monthAddedMemory == 0 {
                 cell.setTodayCell()
-            }else {
-                cell.setNormalCell()
+            } else if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
+                cell.setWeekendColor()
             }
             
             //선택한 셀 테두리 설정
             if indexPath.item == selectedCell {
                 cell.setSelectedCell()
-            } else {
-                cell.setNormalCell()
             }
             
             //체크인한 날짜 도장 설정
-            if checkinDateData[indexPath.item] { //TODO: ????왜이러는건지대체
-                cell.drawCheckinStemp()
-            }else {
-                cell.eraseCheckinStemp()
+            //FIXME: 이번달 말고도 가능하게 해야됨 버그있음, 뷰컨에서 언래핑해야 수정가능
+            //TODO: 컬렉션뷰 안에 로직이 너무 많아서인지 반응이 느림 ㅜㅜ
+            if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
+                
+                let year = "2022"
+                let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
+                let day = String(format: "%02d", indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
+                let thisCellsDate = year+"-"+month+"-"+day
+                cell.thisCellsDate = thisCellsDate //클릭한 날자 inject (: String)
+                cell.checkInHistory = checkInHistory //체크인 all data inject (: Checkin)
+                
             }
-            
             
             return cell
             
@@ -278,8 +292,18 @@ extension CalendarViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
+            
+            let year = "2022"
+            let month = String((Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
+            let day = String((selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
+            let dateString = year+"-"+month+"-"+day
+            
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
+            
+            cell.thisCellsDate = dateString
+            cell.checkInHistoryForCalendar = checkInHistory
+            
             return cell
             
         }
@@ -290,6 +314,7 @@ extension CalendarViewController: UICollectionViewDelegate {
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
             CalendarCollectionView.reloadData()
+            VisitInfInfoView.reloadData()
         }
     }
     

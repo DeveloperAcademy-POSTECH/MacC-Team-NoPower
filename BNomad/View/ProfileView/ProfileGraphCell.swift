@@ -12,6 +12,21 @@ class ProfileGraphCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    var thisCellsDate: String?
+    var checkInHistory: [CheckIn]? {
+        didSet {
+            guard let checkInHistory = checkInHistory else { return
+                
+            }
+            var checkInDates: [String] = []
+            checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
+            
+            if checkInDates.contains(thisCellsDate ?? "") {
+            }
+            
+        }
+    }
+    
     static let identifier = "ProfileGraphCell"
     static var addedWeek: Int = 0
     
@@ -28,7 +43,7 @@ class ProfileGraphCell: UICollectionViewCell {
         
         for index in 0...3 {
             let time = UILabel()
-            time.text = String(9 + index*3)
+            time.text = String(9 + index*5) //FIXME: 그래프 간격 어떻게 할건지? 현재는 데이터 로직 기준
             time.textColor = .gray
             time.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
             time.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +90,7 @@ class ProfileGraphCell: UICollectionViewCell {
         
         let timeStack = UIStackView(arrangedSubviews: timeLabel)
         timeStack.axis = .vertical
-        timeStack.spacing = 31
+        timeStack.spacing = 35
         timeStack.distribution = .fillEqually
         timeStack.translatesAutoresizingMaskIntoConstraints = false
         

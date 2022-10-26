@@ -17,35 +17,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
     var position: CLLocation?
     // MARK: - Properties
     
-    func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
-        let radLatitude1: Double = (latitude1 * .pi)/180
-        let radLatitude2: Double = (latitude2 * .pi)/180
-        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
-        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
-        let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
-        let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
-        return distance
-    }
-    
-    func calculateAverageTime(place: Place) -> String {
-        var hour: Int
-        var minute: Int
-        var totalTime: Int = 0
-        var averageTime: Int
-        var stringTime: String
-        guard let totalCheckInHistory = place.totalCheckInHistory else { return "Error"}
-        for place in totalCheckInHistory {
-            guard let checkOutTime = place.checkOutTime else { return "Error"}
-            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(place.checkInTime)/60))
-            totalTime += totalMinute
-        }
-        averageTime = abs(totalTime / totalCheckInHistory.count)
-        hour = averageTime / 60
-        minute = averageTime - hour
-        stringTime = "\(hour)시간 \(minute)분"
-        return stringTime
-    }
-    
     var place: Place? {
         didSet {
             guard let place = place else { return }
@@ -134,6 +105,35 @@ class CustomCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
+    func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
+        let radLatitude1: Double = (latitude1 * .pi)/180
+        let radLatitude2: Double = (latitude2 * .pi)/180
+        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
+        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
+        let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
+        let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
+        return distance
+    }
+    
+    func calculateAverageTime(place: Place) -> String {
+        var hour: Int
+        var minute: Int
+        var totalTime: Int = 0
+        var averageTime: Int
+        var stringTime: String
+        guard let totalCheckInHistory = place.totalCheckInHistory else { return "Error"}
+        for place in totalCheckInHistory {
+            guard let checkOutTime = place.checkOutTime else { return "Error"}
+            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(place.checkInTime)/60))
+            totalTime += totalMinute
+        }
+        averageTime = abs(totalTime / totalCheckInHistory.count)
+        hour = averageTime / 60
+        minute = averageTime - hour
+        stringTime = "\(hour)시간 \(minute)분"
+        return stringTime
+    }
     
     // MARK: - LifeCycle
     

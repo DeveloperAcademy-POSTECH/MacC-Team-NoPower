@@ -40,6 +40,8 @@
 		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
 		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
 		DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747C929000FC80048E70A /* ProfileEditViewController.swift */; };
+		E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6D92907E49600638C15 /* UIViewController+Extension.swift */; };
+		E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6DB2907F07E00638C15 /* CombineViewModel.swift */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
@@ -96,6 +98,8 @@
 		DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		DFE747B828FD75980048E70A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		DFE747C929000FC80048E70A /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
+		E251E6D92907E49600638C15 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		E251E6DB2907F07E00638C15 /* CombineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineViewModel.swift; sourceTree = "<group>"; };
 		E25A675128F7E1CE004614B0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
@@ -269,6 +273,7 @@
 				7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */,
 				E2E6B23128FE757D005C0D77 /* Date+Extension.swift */,
 				E2E6B23328FE75F7005C0D77 /* String+Extension.swift */,
+				E251E6D92907E49600638C15 /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */,
 				DF288B5C28F7D710002838A4 /* Info.plist */,
 				F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */,
+				E251E6DB2907F07E00638C15 /* CombineViewModel.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -427,6 +433,7 @@
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
+				E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */,
 				E2ADB25E2907863300082596 /* ViewController.swift in Sources */,
 				159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */,
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
@@ -438,6 +445,7 @@
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
+				E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,

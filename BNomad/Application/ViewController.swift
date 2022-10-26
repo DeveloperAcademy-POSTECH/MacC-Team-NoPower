@@ -8,16 +8,41 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemBackground
-
-        // TODO: - userDefaults에 저장된 userUid를 가져와 로그인 유무 판단. 그 후에 MapViewController로 이동
         
-        // TODO: - userUid로 fetchUser()를 통해 user 정보를 가져오기
-
-        // TODO: - fetchPlaceAll()
+        handleLogin()
+        
+        let mapViewController = MapViewController()
+        navigationController?.pushViewController(mapViewController, animated: true)
+        
+    }
+    
+    func handleLogin() {
+        let deviceUid = UIDevice.current.identifierForVendor?.uuidString
+        guard let deviceUid = deviceUid else { return }
+            
+        FirebaseManager.shared.checkUserExist(userUid : deviceUid) { isExist in
+            if isExist {
+                self.fetchUserAndCheckInHistory(id: deviceUid)
+            } else {
+                print("no user")
+            }
+        }
+    }
+    
+    func fetchUserAndCheckInHistory(id userUid: String) {
+        FirebaseManager.shared.fetchUser(id: userUid) { user in
+            self.viewModel.user = user
+            FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
+                self.viewModel.user?.checkInHistory = checkInHistory
+                print(user)
+            }
+        }
     }
 }

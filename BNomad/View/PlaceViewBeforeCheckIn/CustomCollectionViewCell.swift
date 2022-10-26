@@ -48,7 +48,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
                 return
             }
             self.numberOfCheckIn.text = "\(todayCheckInHistory.count)명 체크인"
-            self.averageTime.text = self.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
+            self.averageTime.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
         }
     }
     
@@ -130,7 +130,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return distance
     }
     
-    func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
+    static func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
         var hour: Int
         var minute: Int
         var totalTime: Int = 0

@@ -12,18 +12,20 @@ protocol ClearSelectedAnnotation {
     func clearAnnotation(view: MKAnnotation)
 }
 
+protocol UpdateFloating {
+    func checkInFloating()
+}
+
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
-    var selectedPlace: Place? {
-        didSet {
-        }
-    }
+    var selectedPlace: Place?
         
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
     
-    var delegate: ClearSelectedAnnotation?
+    var delegateForClearAnnotation: ClearSelectedAnnotation?
+    var delegateForFloating: UpdateFloating?
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
@@ -72,7 +74,7 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let selectedPlace = selectedPlace else { return }
-        delegate?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
+        delegateForClearAnnotation?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
     }
     
     func fetchPlaceAll() {
@@ -97,7 +99,7 @@ class PlaceInfoModalViewController: UIViewController {
                 print("checkIn 이력이 없습니다.")
                 return
             }
-            checkIn.checkOutTime = Date() 
+            checkIn.checkOutTime = Date()
             FirebaseManager.shared.setCheckOut(checkIn: checkIn) { checkIn in
                 
                 
@@ -112,7 +114,13 @@ class PlaceInfoModalViewController: UIViewController {
                 print(self.viewModel.user?.isChecked)
                 print(self.viewModel.user?.currentPlaceUid)
             }
-          
+
+            
+            // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크아웃 타임 업데이트, FirebaseTestVC의 setCheckOUt() 참고
+            self.isCheckedIn = false
+            self.checkInButton.isHidden = false
+            self.checkOutButton.isHidden = true
+            self.delegateForFloating?.checkInFloating()
         }))
         present(checkOutAlert, animated: true)
     }
@@ -158,6 +166,12 @@ class PlaceInfoModalViewController: UIViewController {
                     print("checkin한 장소", self.viewModel.user?.currentPlaceUid)
                 }
                 
+                // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
+
+                self.isCheckedIn = false
+                self.checkInButton.isHidden = true
+                self.checkOutButton.isHidden = false
+                self.delegateForFloating?.checkInFloating()
                 let controller = PlaceCheckInViewController()
                 controller.modalPresentationStyle = .fullScreen
                 self.present(controller, animated: true)

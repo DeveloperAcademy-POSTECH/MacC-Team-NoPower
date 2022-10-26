@@ -25,5 +25,5 @@ struct visitDummyData {
     static let sundayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(rendomDate)))
     static let date = Date()
     static let date1 = Date(timeInterval: rendomDate, since: date)
-
+    
 }

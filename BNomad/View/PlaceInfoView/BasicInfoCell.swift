@@ -16,17 +16,13 @@ class BasicInfoCell: UICollectionViewCell {
 
     // TODO: - 하드 코딩된 부분 전부 제거 --- 데이터 있는 부분 완료
     
-    var place: Place? {
-        didSet {
-            phoneNumberLabel.text = place?.contact
-            addressLabel.text = place?.address
-        }
-    }
     
     var place: Place? {
         didSet {
             guard let place = place else { return }
             mappingPlaceData(place)
+            phoneNumberLabel.text = place.contact
+            addressLabel.text = place.address
         }
     }
 

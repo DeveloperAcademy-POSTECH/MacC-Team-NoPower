@@ -78,7 +78,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     func fetchPlaceAll() {
         FirebaseManager.shared.fetchPlaceAll { place in
-            self.place = place
+            self.selectedPlace = place
             print(place)
         }
     }

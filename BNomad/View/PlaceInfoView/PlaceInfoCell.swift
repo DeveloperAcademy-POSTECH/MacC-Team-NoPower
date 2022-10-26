@@ -13,15 +13,10 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Properties
     
     //current 데이터 없어서 우선 더미로 출력
- 
-    var place: Place? {
-        didSet {
-            guard let place = place else { return }
-            mappingPlaceData(place)
-        }
-    }
+    var numberOfCheckIn = "23명 체크인"
+     var averageTime = "평균 5시간 근무"
     
-    
+
     var place: Place? {
         didSet {
             guard let place = place else { return }
@@ -29,6 +24,7 @@ class PlaceInfoCell: UICollectionViewCell {
             guard let current = place.currentCheckIn else { return }
             numberOfCheckIn = String(current.count) + "명 체크인"
             averageTime = calculateAverageTime(place: place)
+            mappingPlaceData(place)
         }
     }
     
@@ -234,8 +230,6 @@ class PlaceInfoCell: UICollectionViewCell {
     
     func mappingPlaceData(_ place: Place) {
         placeNameLabel.text = place.name
-         var numberOfCheckIn = "23명 체크인"
-          var averageTime = "평균 5시간 근무"
     }
 
 }

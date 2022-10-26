@@ -203,10 +203,6 @@ class SignUpViewController: UIViewController {
         configCancelButton()
     }
     
-    @objc func dismissPage() {
-        self.dismiss(animated: true)
-    }
-    
     // MARK: - Methods
     
     func setUser(nickname: String, occupation: String, intro: String) -> User? {
@@ -366,6 +362,10 @@ class SignUpViewController: UIViewController {
     
     
     // MARK: - Actions
+    
+    @objc func dismissPage() {
+        self.dismiss(animated: true)
+    }
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
     @objc func didTapInputConfirmButton() {

@@ -17,7 +17,6 @@ class PlaceInfoModalViewController: UIViewController {
     // MARK: - Properties
     var selectedPlace: Place? {
         didSet {
-            collectionView.reloadData()
         }
     }
         

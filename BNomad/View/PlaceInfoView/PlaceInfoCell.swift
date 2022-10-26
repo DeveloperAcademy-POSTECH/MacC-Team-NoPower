@@ -20,11 +20,11 @@ class PlaceInfoCell: UICollectionViewCell {
     var place: Place? {
         didSet {
             guard let place = place else { return }
-            self.placeNameLabel.text = place.name
+            mappingPlaceData(place)
             guard let current = place.currentCheckIn else { return }
             numberOfCheckIn = String(current.count) + "명 체크인"
             averageTime = calculateAverageTime(place: place)
-            mappingPlaceData(place)
+            
         }
     }
     

@@ -69,6 +69,8 @@ class PlaceCheckInViewController: UIViewController {
         fetchCheckInHistoryUser(userUid: tmpUserUid)
     }
     
+    // MARK: - Helpers
+    
     func fetchUser(userUid: String) {
         FirebaseManager.shared.fetchUser(id: tmpUserUid) { user in
             self.user = user

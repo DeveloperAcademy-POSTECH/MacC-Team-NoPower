@@ -13,21 +13,42 @@ import MapKit
 class CustomCollectionViewCell: UICollectionViewCell {
 
     static let identifier = "CustomCollectionViewCell"
-
-    var position: CLLocation?
+    
     // MARK: - Properties
     
     var place: Place? {
         didSet {
-            guard let place = place else { return }
+            guard let place = place else {
+                print("CustomCollectionViewCell : place 가져오기 실패" )
+                return
+            }
             self.name.text = place.name
-            guard let latitude = position?.coordinate.latitude else { return }
-            guard let longitude = position?.coordinate.longitude else { return }
+            
+            FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
+                self.todayCheckInHistory = checkInHistory
+            }
+        }
+    }
+    
+    var position: CLLocation? {
+        didSet {
+            guard let position = self.position else { return }
+            guard let place = self.place else { return }
+            let latitude: Double = position.coordinate.latitude
+            let longitude = position.coordinate.longitude
             let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
-            guard let current = place.currentCheckIn else { return }
-            self.numberOfCheckIn.text = String(current.count) + " 명 체크인"
-            self.averageTime.text = calculateAverageTime(place: place)
+        }
+    }
+    
+    var todayCheckInHistory: [CheckIn]? {
+        didSet {
+            guard let todayCheckInHistory = todayCheckInHistory else {
+                print("CustomCollectionViewCell : todayCheckInHistory 가져오기 실패" )
+                return
+            }
+            self.numberOfCheckIn.text = "\(todayCheckInHistory.count)명 체크인"
+            self.averageTime.text = self.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
         }
     }
     
@@ -36,7 +57,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         view.clipsToBounds = true
         view.layer.cornerRadius = 12
         view.backgroundColor = .white
-        view.layer.borderWidth = 1
         view.addSubview(name)
         view.addSubview(numberOfCheckIn)
         view.addSubview(distance)
@@ -66,9 +86,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.backgroundColor = .clear
         title.textColor = .black
-        title.font = .preferredFont(forTextStyle: .body, weight: .regular)        
-        title.text = "9명 체크인"
-        title.font = UIFont(name: "SFProText-Regular", size: 17)
+        title.font = .preferredFont(forTextStyle: .body, weight: .regular)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
@@ -77,10 +95,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
     var distance: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
-        title.textColor = CustomColor.nomadGray2
+        title.textColor = CustomColor.nomadGray1
         title.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         title.text = "1.5km"
-        title.font = UIFont(name: "SFProText-Regular", size: 15)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
@@ -89,11 +106,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
     var averageTime: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
-        title.textColor = CustomColor.nomadGray2
+        title.textColor = CustomColor.nomadGray1
         title.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        // TODO: - "평균 \()시간 근무" 처럼 문자열 포맷팅 형식으로 변경 필요
-        title.text = "평균 5시간 근무"
-        title.font = UIFont(name: "SFProText-Regular", size: 13)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
@@ -116,22 +130,31 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return distance
     }
     
-    func calculateAverageTime(place: Place) -> String {
+    func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
         var hour: Int
         var minute: Int
         var totalTime: Int = 0
         var averageTime: Int
         var stringTime: String
-        guard let totalCheckInHistory = place.totalCheckInHistory else { return "Error"}
-        for place in totalCheckInHistory {
-            guard let checkOutTime = place.checkOutTime else { return "Error"}
-            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(place.checkInTime)/60))
+        
+        guard let todayCheckInHistory = todayCheckInHistory else { return "fail"}
+        let filterCheckInHistory = todayCheckInHistory.filter { $0.checkOutTime != nil }
+        print("DEBUG:",filterCheckInHistory)
+        for history in filterCheckInHistory {
+            guard let checkOutTime = history.checkOutTime else { return "chekcOutt" }
+            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(history.checkInTime)/60))
             totalTime += totalMinute
         }
-        averageTime = abs(totalTime / totalCheckInHistory.count)
-        hour = averageTime / 60
-        minute = averageTime - hour
-        stringTime = "\(hour)시간 \(minute)분"
+        
+        if filterCheckInHistory.count != 0 {
+            averageTime = abs(totalTime / filterCheckInHistory.count)
+            hour = averageTime / 60
+            minute = averageTime - hour
+            stringTime = "평균 \(hour)시간 \(minute)분 근무"
+            print(stringTime)
+        } else {
+            return "평균 0시간"
+        }
         return stringTime
     }
     

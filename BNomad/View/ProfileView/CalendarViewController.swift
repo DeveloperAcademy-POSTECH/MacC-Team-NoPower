@@ -13,11 +13,6 @@ class CalendarViewController: UIViewController {
     // MARK: - Properties
     
     static var checkInHistory: [CheckIn]?
-//    var checkInHistory: [CheckIn]? {
-//        didSet {
-//            CalendarCollectionView.reloadData()
-//        }
-//    }
     
     var monthAddedMemory: Int = 0
     private var selectedCell: Int? = Contents.todayDate()["day"]
@@ -153,10 +148,7 @@ class CalendarViewController: UIViewController {
         
         configureUI()
         render()
-        
-//        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
-//            self.checkInHistory = checkInHistory
-//        }
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {

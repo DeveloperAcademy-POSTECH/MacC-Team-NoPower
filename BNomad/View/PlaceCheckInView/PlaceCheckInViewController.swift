@@ -9,8 +9,9 @@ import UIKit
 
 class PlaceCheckInViewController: UIViewController {
     
-    // MARK: - Mock User
+    // MARK: - Mock Data
     var tmpUserUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
+    let placeUid = "49ab61cf-f05f-45b7-9168-8ab58983620c"
     
     // MARK: - Properties
     
@@ -41,10 +42,7 @@ class PlaceCheckInViewController: UIViewController {
     
     private var numberOfUsers: Int = 0
     
-    // Dummy PlaceUid
-    let placeUid = "49ab61cf-f05f-45b7-9168-8ab58983620c"
-    
-    private let placeTitleLabel: UILabel = {
+    private lazy var placeTitleLabel: UILabel = {
         let label = UILabel()
         label.text = " "
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)

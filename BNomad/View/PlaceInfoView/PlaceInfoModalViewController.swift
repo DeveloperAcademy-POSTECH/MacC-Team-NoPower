@@ -125,10 +125,20 @@ class PlaceInfoModalViewController: UIViewController {
                 // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
                 // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
                 // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
-
-                self.isCheckedIn = false
-                self.checkInButton.isHidden = true
-                self.checkOutButton.isHidden = false
+                
+                guard let userUid = self.viewModel.user?.userUid else { return }
+                
+                let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+                FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
+                    if self.viewModel.user?.checkInHistory == nil {
+                        self.viewModel.user?.checkInHistory = [checkIn]
+                    } else {
+                        self.viewModel.user?.checkInHistory?.append(checkIn)
+                    }
+                    print("checkin 성공 여부", self.viewModel.user?.isChecked)
+                    print("checkin한 장소", self.viewModel.user?.currentPlaceUid)
+                }
+                
                 let controller = PlaceCheckInViewController()
                 controller.modalPresentationStyle = .fullScreen
                 self.present(controller, animated: true)

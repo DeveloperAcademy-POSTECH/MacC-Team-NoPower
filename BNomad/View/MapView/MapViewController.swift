@@ -195,7 +195,9 @@ class MapViewController: UIViewController {
         if viewModel.isLogIn {
             navigationController?.pushViewController(ProfileViewController(), animated: true)
         } else {
-            navigationController?.pushViewController(SignUpViewController(), animated: true)
+            let controller = SignUpViewController()
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true)
         }
         map.selectedAnnotations = []
     }

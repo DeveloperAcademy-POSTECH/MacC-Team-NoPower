@@ -13,10 +13,7 @@ class PlaceCheckInViewController: UIViewController {
     var tmpUserUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
     let placeUid = "49ab61cf-f05f-45b7-9168-8ab58983620c"
     
-    var selectedPlace: Place? {
-        didSet {
-        }
-    }
+    var selectedPlace: Place?
     
     // MARK: - Properties
     

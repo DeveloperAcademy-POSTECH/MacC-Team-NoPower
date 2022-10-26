@@ -18,8 +18,7 @@ class CalendarCell: UICollectionViewCell {
             var checkInDates: [String] = []
             checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
             
-            if checkInDates.contains(thisCellsDate ?? "") {
-                    self.drawCheckinStemp()
+            if checkInDates.contains(thisCellsDate ?? "") {                    self.drawCheckinStemp()
             }
             
         }

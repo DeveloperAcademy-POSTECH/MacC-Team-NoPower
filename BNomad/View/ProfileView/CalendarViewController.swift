@@ -12,12 +12,12 @@ class CalendarViewController: UIViewController {
     
     // MARK: - Properties
     
-    var checkInHistory: [CheckIn]? {
-        didSet {
-            print(checkInHistory)
-            CalendarCollectionView.reloadData()
-        }
-    }
+    static var checkInHistory: [CheckIn]?
+//    var checkInHistory: [CheckIn]? {
+//        didSet {
+//            CalendarCollectionView.reloadData()
+//        }
+//    }
     
     var monthAddedMemory: Int = 0
     private var selectedCell: Int? = Contents.todayDate()["day"]
@@ -154,9 +154,9 @@ class CalendarViewController: UIViewController {
         configureUI()
         render()
         
-        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
-            self.checkInHistory = checkInHistory
-        }
+//        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
+//            self.checkInHistory = checkInHistory
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -279,13 +279,12 @@ extension CalendarViewController: UICollectionViewDelegate {
             //FIXME: 이번달 말고도 가능하게 해야됨 버그있음, 뷰컨에서 언래핑해야 수정가능
             //TODO: 컬렉션뷰 안에 로직이 너무 많아서인지 반응이 느림 ㅜㅜ
             if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
-                
                 let year = "2022"
                 let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
                 let day = String(format: "%02d", indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
                 let thisCellsDate = year+"-"+month+"-"+day
                 cell.thisCellsDate = thisCellsDate //클릭한 날자 inject (: String)
-                cell.checkInHistory = checkInHistory //체크인 all data inject (: Checkin)
+                cell.checkInHistory = CalendarViewController.checkInHistory //체크인 all data inject (: Checkin)
                 
             }
             
@@ -306,7 +305,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             cell.thisCellsDate = dateString
-            cell.checkInHistoryForCalendar = checkInHistory
+            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory
             
             return cell
             

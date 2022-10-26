@@ -148,6 +148,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Actions
     
     @objc func moveToCalendar() {
+        CalendarViewController.checkInHistory = checkInHistory
         navigationController?.pushViewController(CalendarViewController(), animated: true)
     }
 

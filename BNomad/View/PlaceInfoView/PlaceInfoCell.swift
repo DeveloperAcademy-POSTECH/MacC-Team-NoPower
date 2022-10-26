@@ -36,7 +36,8 @@ class PlaceInfoCell: UICollectionViewCell {
                 print("CustomCollectionViewCell : todayCheckInHistory 가져오기 실패" )
                 return
             }
-            self.chekedinViewLabel.text = "\(todayCheckInHistory.count)명 체크인"
+            let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
+            self.chekedinViewLabel.text = "\(history.count)명 체크인"
             self.averageTimeLabel.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: todayCheckInHistory)
         }
     }

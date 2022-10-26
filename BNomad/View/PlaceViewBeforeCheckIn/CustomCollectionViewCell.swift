@@ -47,7 +47,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
                 print("CustomCollectionViewCell : todayCheckInHistory 가져오기 실패" )
                 return
             }
-            self.numberOfCheckIn.text = "\(todayCheckInHistory.count)명 체크인"
+            let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
+            self.numberOfCheckIn.text = "\(history.count)명 체크인"
             self.averageTime.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
         }
     }

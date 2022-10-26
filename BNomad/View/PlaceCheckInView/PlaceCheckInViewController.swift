@@ -17,7 +17,8 @@ class PlaceCheckInViewController: UIViewController {
         didSet {
             guard let selectedPlace = selectedPlace else { return }
             FirebaseManager.shared.fetchCheckInHistory(placeUid: selectedPlace.placeUid) { checkInHistory in
-                self.checkInHistory = checkInHistory
+                let history = checkInHistory.filter { $0.checkOutTime == nil }
+                self.checkInHistory = history
             }
         }
     }
@@ -29,7 +30,7 @@ class PlaceCheckInViewController: UIViewController {
             collectionView.reloadData()
         }
     }
-        
+
     // MARK: - Properties
     private var numberOfUsers: Int {
         checkInHistory?.count ?? 0

@@ -66,7 +66,7 @@ class PlaceInfoModalViewController: UIViewController {
         configureCollectionView()
         configureCheckInButton()
         setupSheet()
-        fetchPlaceAll()
+//        fetchPlaceAll()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,12 +75,12 @@ class PlaceInfoModalViewController: UIViewController {
         delegate?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
     }
     
-    func fetchPlaceAll() {
-        FirebaseManager.shared.fetchPlaceAll { place in
-            self.selectedPlace = place
-            print(place)
-        }
-    }
+//    func fetchPlaceAll() {
+//        FirebaseManager.shared.fetchPlaceAll { place in
+//            self.selectedPlace = place
+////            print(place)
+//        }
+//    }
     
     // MARK: - Actions
     
@@ -199,6 +199,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
+            cell.position = currentLocation
             cell.place = selectedPlace
             return cell
         } else if indexPath.section == 1 {

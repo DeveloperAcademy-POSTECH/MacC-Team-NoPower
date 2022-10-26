@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 class PlaceInfoCell: UICollectionViewCell {
     static let cellIdentifier = "PlaceInfoCell"
@@ -14,12 +15,16 @@ class PlaceInfoCell: UICollectionViewCell {
     
     //current 데이터 없어서 우선 더미로 출력
     var numberOfCheckIn = "23명 체크인"
-     var averageTime = "평균 5시간 근무"
-    
+    var averageTime = "평균 5시간 근무"
+    var position: CLLocation?
 
     var place: Place? {
         didSet {
             guard let place = place else { return }
+            guard let latitude = position?.coordinate.latitude else { return }
+            guard let longitude = position?.coordinate.longitude else { return }
+            let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
             mappingPlaceData(place)
         }
     }

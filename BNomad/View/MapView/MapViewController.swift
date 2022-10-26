@@ -151,6 +151,7 @@ class MapViewController: UIViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
         }
+        sheet.position = currentLocation
         present(sheet, animated: true, completion: nil)
     }
     

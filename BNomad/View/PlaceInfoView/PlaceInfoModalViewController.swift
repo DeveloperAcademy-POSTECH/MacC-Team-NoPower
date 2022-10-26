@@ -159,6 +159,7 @@ class PlaceInfoModalViewController: UIViewController {
                 }
                 
                 let controller = PlaceCheckInViewController()
+                controller.selectedPlace = selectedPlace
                 controller.modalPresentationStyle = .fullScreen
                 self.present(controller, animated: true)
             }))

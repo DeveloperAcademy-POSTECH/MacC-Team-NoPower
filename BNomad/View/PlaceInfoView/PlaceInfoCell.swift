@@ -14,8 +14,6 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Properties
     
     //current 데이터 없어서 우선 더미로 출력
-    var numberOfCheckIn = "23명 체크인"
-    var averageTime = "평균 5시간 근무"
     var position: CLLocation?
 
     var place: Place? {
@@ -23,12 +21,26 @@ class PlaceInfoCell: UICollectionViewCell {
             guard let place = place else { return }
             guard let latitude = position?.coordinate.latitude else { return }
             guard let longitude = position?.coordinate.longitude else { return }
-            let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
             mappingPlaceData(place)
+            FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
+                self.todayCheckInHistory = checkInHistory
+            }
         }
     }
     
+    var todayCheckInHistory: [CheckIn]? {
+        didSet {
+            guard let todayCheckInHistory = todayCheckInHistory else {
+                print("CustomCollectionViewCell : todayCheckInHistory 가져오기 실패" )
+                return
+            }
+            self.chekedinViewLabel.text = "\(todayCheckInHistory.count)명 체크인"
+            self.averageTimeLabel.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: todayCheckInHistory)
+        }
+    }
+
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
         placeNameLabel.textColor = CustomColor.nomadBlack
@@ -68,7 +80,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var chekedinViewLabel: UILabel = {
         let chekedinViewLabel = UILabel()
-        chekedinViewLabel.text = numberOfCheckIn
+        chekedinViewLabel.text = ""
         chekedinViewLabel.textColor = CustomColor.nomadBlack
         chekedinViewLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
         return chekedinViewLabel
@@ -76,7 +88,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var averageTimeLabel: UILabel = {
         let averageTimeLabel = UILabel()
-        averageTimeLabel.text = averageTime
+        averageTimeLabel.text = ""
         averageTimeLabel.textColor = CustomColor.nomadGray1
         averageTimeLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return averageTimeLabel
@@ -145,34 +157,7 @@ class PlaceInfoCell: UICollectionViewCell {
         print("전화로 이어주게나,,")
     }))
     lazy var mapButton = UIButton(configuration: self.configmapButton, primaryAction: nil)
-    
-    func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
-        let radLatitude1: Double = (latitude1 * .pi)/180
-        let radLatitude2: Double = (latitude2 * .pi)/180
-        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
-        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
-        let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
-        let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
-        return distance
-    }
-    
-    func calculateAverageTime(place: Place) -> String {
-        var hour: Int
-        var totalTime: Int = 0
-        var averageTime: Int
-        var stringTime: String
-        guard let totalCheckInHistory = place.totalCheckInHistory else { return "Error"}
-        for place in totalCheckInHistory {
-            guard let checkOutTime = place.checkOutTime else { return "Error"}
-            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(place.checkInTime)/60))
-            totalTime += totalMinute
-        }
-        averageTime = abs(totalTime / totalCheckInHistory.count)
-        hour = averageTime / 60
-        stringTime = "\(hour)시간"
-        return stringTime
-    }
-    
+
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -227,10 +212,9 @@ class PlaceInfoCell: UICollectionViewCell {
     }
     
     func mappingPlaceData(_ place: Place) {
+        
         placeNameLabel.text = place.name
-        guard let current = place.currentCheckIn else { return }
-        numberOfCheckIn = String(current.count) + "명 체크인"
-        averageTime = calculateAverageTime(place: place)
+        
     }
 
 }

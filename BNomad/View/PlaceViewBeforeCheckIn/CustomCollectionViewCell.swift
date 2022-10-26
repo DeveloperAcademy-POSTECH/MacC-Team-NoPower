@@ -36,7 +36,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
             guard let place = self.place else { return }
             let latitude: Double = position.coordinate.latitude
             let longitude = position.coordinate.longitude
-            let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
         }
     }
@@ -48,7 +48,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
                 return
             }
             self.numberOfCheckIn.text = "\(todayCheckInHistory.count)명 체크인"
-            self.averageTime.text = self.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
+            self.averageTime.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
         }
     }
     
@@ -120,7 +120,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
+    static func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
         let radLatitude1: Double = (latitude1 * .pi)/180
         let radLatitude2: Double = (latitude2 * .pi)/180
         let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
@@ -130,7 +130,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return distance
     }
     
-    func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
+    static func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
         var hour: Int
         var minute: Int
         var totalTime: Int = 0

@@ -13,6 +13,7 @@ class BasicInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+
     // TODO: - 하드 코딩된 부분 전부 제거 --- 데이터 있는 부분 완료
     
     var place: Place? {
@@ -21,6 +22,14 @@ class BasicInfoCell: UICollectionViewCell {
             addressLabel.text = place?.address
         }
     }
+    
+    var place: Place? {
+        didSet {
+            guard let place = place else { return }
+            mappingPlaceData(place)
+        }
+    }
+
 
     static let cellIdentifier = "BasicInfoCell"
     let basicInfoTitleLabel = UILabel()
@@ -71,6 +80,8 @@ class BasicInfoCell: UICollectionViewCell {
         self.addSubview(divider4)
         self.addSubview(infoSuggestionButton)
         setAttributes()
+        guard let place = place else { return }
+        mappingPlaceData(place)
     }
     
     private func setAttributes() {
@@ -147,6 +158,13 @@ class BasicInfoCell: UICollectionViewCell {
 
         
     }
+    
+    func mappingPlaceData(_ place: Place) {
+        // 영업중 표기 등 추가 수정 필요
+        phoneNumberLabel.text = place.contact
+        addressLabel.text = place.address
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

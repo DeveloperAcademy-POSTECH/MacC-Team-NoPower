@@ -13,8 +13,14 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Properties
     
     //current 데이터 없어서 우선 더미로 출력
-    var numberOfCheckIn = "23명 체크인"
-    var averageTime = "평균 5시간 근무"
+ 
+    var place: Place? {
+        didSet {
+            guard let place = place else { return }
+            mappingPlaceData(place)
+        }
+    }
+    
     
     var place: Place? {
         didSet {
@@ -28,7 +34,9 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
+
         placeNameLabel.text = ""
+
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -203,6 +211,8 @@ class PlaceInfoCell: UICollectionViewCell {
 
         
         setAttributes()
+        guard let place = place else { return }
+        mappingPlaceData(place)
     }
     
     private func setAttributes() {
@@ -220,6 +230,12 @@ class PlaceInfoCell: UICollectionViewCell {
         dotImg2.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 119)
         operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 138)
         operatingTimeLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 197)
+    }
+    
+    func mappingPlaceData(_ place: Place) {
+        placeNameLabel.text = place.name
+         var numberOfCheckIn = "23명 체크인"
+          var averageTime = "평균 5시간 근무"
     }
 
 }

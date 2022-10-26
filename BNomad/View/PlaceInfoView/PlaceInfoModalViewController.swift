@@ -15,8 +15,12 @@ protocol ClearSelectedAnnotation {
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
-    var selectedAnnotation: MKAnnotation?
-    
+    var selectedPlace: Place? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+        
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
     
@@ -32,15 +36,6 @@ class PlaceInfoModalViewController: UIViewController {
 
     // TODO: user.isChecked로 대체
     var isCheckedIn: Bool = false
-
-    var selectedPlaceUid: String?
-    var message: String = ""
-    var place: Place? {
-        didSet {
-            collectionView.reloadData()
-            self.message = place!.name + "에 체크인 하시겠습니까?"
-        }
-    }
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
@@ -77,8 +72,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard let selectedAnnotation = selectedAnnotation else { return }
-        delegate?.clearAnnotation(view: selectedAnnotation)
+        guard let selectedPlace = selectedPlace else { return }
+        delegate?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
     }
     
     func fetchPlaceAll() {
@@ -126,10 +121,13 @@ class PlaceInfoModalViewController: UIViewController {
     func distanceChecker() {
         let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500.0, identifier: "반경 500m")
         
+
               // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?" ---- 완료
 
-        if boundary.contains(CLLocationCoordinate2D(latitude: selectedAnnotation?.coordinate.latitude ?? 0, longitude: selectedAnnotation?.coordinate.longitude ?? 0)) {
-            let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: message, preferredStyle: .alert)
+        guard let selectedPlace = selectedPlace else { return }
+        if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)) {
+            let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "\(selectedPlace.name)에 체크인합니다.", preferredStyle: .alert)
+
             checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
             checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
                 // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
@@ -209,11 +207,11 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
-            cell.place = self.place
+            cell.place = selectedPlace
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BasicInfoCell.cellIdentifier, for: indexPath) as? BasicInfoCell else { return UICollectionViewCell() }
-            cell.place = self.place
+            cell.place = selectedPlace
             return cell
         }
         else if indexPath.section == 2 {

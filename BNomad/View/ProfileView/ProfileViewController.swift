@@ -10,6 +10,7 @@ import UIKit
 class ProfileViewController: UIViewController {
 
     // MARK: - Properties
+    let userUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
     
     var user: User? {
         didSet {
@@ -104,6 +105,9 @@ class ProfileViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationItem.backButtonTitle = ""
         
+        FirebaseManager.shared.fetchUser(id: userUid) { user in
+            self.user = user
+        }
     }
     
     override func viewDidLoad() {
@@ -111,6 +115,7 @@ class ProfileViewController: UIViewController {
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
         ProfileGraphCell.addedWeek = 0
         ProfileGraphCell.editWeek(edit: 0)
+        
         
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
@@ -123,11 +128,11 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
-        FirebaseManager.shared.fetchUser(id: "04d3acd1-a6ec-465e-845e-a319e42180e6") { user in
+        FirebaseManager.shared.fetchUser(id: userUid) { user in
             self.user = user
         }
         
-        FirebaseManager.shared.fetchCheckInHistory(userUid: "04d3acd1-a6ec-465e-845e-a319e42180e6") { checkInHistory in
+        FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
             self.checkInHistory = checkInHistory
         }
     }

@@ -13,8 +13,15 @@ class ProfileEditViewController: UIViewController {
 
     // MARK: - Properties
 
-    var user: User?
-    // var user: User = DummyData.user1
+    var user: User? {
+        didSet {
+            nickNameTextField.text = user?.nickname
+            occupationTextField.text = user?.occupation
+            descriprionTextView.text = user?.introduction
+        }
+    }
+    
+    let userUID = "04d3acd1-a6ec-465e-845e-a319e42180e6"
 
     private lazy var profileImageButton: UIButton = {
         let button = UIButton()
@@ -60,7 +67,7 @@ class ProfileEditViewController: UIViewController {
         textField.layer.borderWidth = 1
         
         // TODO: - 
-        textField.text = "윌로우 류"
+        textField.text = user?.nickname
         textField.delegate = self
         return textField
     }()
@@ -196,6 +203,10 @@ class ProfileEditViewController: UIViewController {
         configureProfileImage()
         configureStackView()
         configureSaveButton()
+        
+        FirebaseManager.shared.fetchUser(id: userUID) { user in
+            self.user = user
+        }
     }
     
     // MARK: - Actions
@@ -209,10 +220,17 @@ class ProfileEditViewController: UIViewController {
     
     // TODO: - user 객체 수정 & firebase에 업데이트
     @objc func saveProfile() {
+        
+        
+        
         // TODO: - 바꾼 profile 최신화함
         let alert = UIAlertController(title: "프로필 수정", message: "프로필 수정을 완료하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
+            
+            let user = User(userUid: self.userUID, nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
+            FirebaseManager.shared.setUser(user: user)
+            
             self.saveEditedProfile { user in
                 self.navigationController?.popViewController(animated: true)
             }

@@ -70,7 +70,7 @@ class PlaceCheckInViewController: UIViewController {
     }
     
     func fetchUser(userUid: String) {
-        FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
+        FirebaseManager.shared.fetchUser(id: tmpUserUid) { user in
             self.user = user
         }
     }

@@ -13,6 +13,11 @@ class PlaceCheckInViewController: UIViewController {
     var tmpUserUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
     let placeUid = "49ab61cf-f05f-45b7-9168-8ab58983620c"
     
+    var selectedPlace: Place? {
+        didSet {
+        }
+    }
+    
     // MARK: - Properties
     
     var checkInList: [CheckIn]? {
@@ -29,7 +34,7 @@ class PlaceCheckInViewController: UIViewController {
     
     var place: Place? {
         didSet {
-            placeTitleLabel.text = self.place?.name
+            placeTitleLabel.text = selectedPlace?.name
             collectionView.reloadData()
         }
     }
@@ -170,7 +175,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
-            placeInfoViewCell.place = self.place
+            placeInfoViewCell.place = selectedPlace
             return placeInfoViewCell
         }
         else if indexPath.section == 2 {

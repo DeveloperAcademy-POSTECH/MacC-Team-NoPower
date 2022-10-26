@@ -158,46 +158,17 @@ class MapViewController: UIViewController {
         present(sheet, animated: true, completion: nil)
     }
     
-    static var checkInTimer: UIButton = {
+    var checkInNow: UIButton = {
         let button = UIButton()
         button.backgroundColor = CustomColor.nomadBlue
         button.tintColor = .white
         button.clipsToBounds = true
         button.layer.cornerRadius =  40 / 2
-        button.setTitle("00:00", for: .normal)
+        button.setTitle("업무중", for: .normal)
         button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
-    
-    static var count: Int = 0 {
-        didSet {
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = UIImage(systemName: "timer")
-
-            // If you want to enable Color in the SF Symbols.
-            imageAttachment.image = UIImage(systemName: "timer")?.withTintColor(.white)
-            let hour: Int = MapViewController.count / 60
-            let minute: Int = MapViewController.count % 60
-            var tempString: String = ""
-            print("hour:\(hour) minutes:\(minute)")
-            if hour < 10 {
-                tempString += "0\(hour):"
-            } else if hour > 9 {
-                tempString += "\(hour):"
-            }
-            if minute < 10 {
-                tempString += "0\(minute)"
-            } else if minute > 9 {
-                tempString += "\(minute)"
-            }
-            
-            let fullString = NSMutableAttributedString(string: "")
-            fullString.append(NSAttributedString(attachment: imageAttachment))
-            fullString.append(NSAttributedString(string: tempString))
-            
-            checkInTimer.setTitle(fullString.string, for: .normal)
-        }
-    }
     
     // MARK: - LifeCycle
     
@@ -212,19 +183,10 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-        view.addSubview(MapViewController.checkInTimer)
-        MapViewController.checkInTimer.anchor(top: view.topAnchor, paddingTop: 50, width: 100, height: 40)
-        MapViewController.checkInTimer.centerX(inView: view)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countUp), userInfo: nil, repeats: true)
-        MapViewController.count += Int(AppDelegate.restartTime?.timeIntervalSince(AppDelegate.endTime ?? Date()) ?? 0)
+        configureFloating()
     }
     
     // MARK: - Actions
-
-    @objc func countUp() {
-        MapViewController.count += 1
-        print(MapViewController.count)
-    }
     
     
     // TODO: isLogIn에 맞게 분기 처리 필요.
@@ -236,8 +198,8 @@ class MapViewController: UIViewController {
     }
     
     @objc func goToListPage() {
-        let controller = UIViewController()
-        controller.view.backgroundColor = .systemBackground
+        let controller = PlaceCheckInViewController()
+        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true)
     }
     
@@ -282,6 +244,12 @@ class MapViewController: UIViewController {
         
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
+    }
+    
+    func configureFloating() {
+        view.addSubview(checkInNow)
+        checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
+        checkInNow.centerX(inView: view)
     }
     
 }

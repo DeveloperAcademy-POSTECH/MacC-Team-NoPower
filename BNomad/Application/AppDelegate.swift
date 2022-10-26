@@ -11,20 +11,10 @@ import FirebaseCore
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static var endTime: Date? = Date()
-    static var restartTime: Date? = Date()
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        AppDelegate.restartTime = Date()
-        if let date = UserDefaults.standard.value(forKey: "endTime") as? Date {
-            AppDelegate.endTime = date
-        }
-        if let count = UserDefaults.standard.value(forKey: "savedTime") as? Int {
-            MapViewController.count = count
-        }
         return true
     }
 
@@ -41,12 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
-        UserDefaults.standard.set(Date(), forKey: "endTime")
-        UserDefaults.standard.set(MapViewController.count, forKey: "savedTime")
-    }
-    
 
 
 

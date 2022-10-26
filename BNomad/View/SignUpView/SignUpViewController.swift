@@ -377,7 +377,7 @@ class SignUpViewController: UIViewController {
                 if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
                     let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                     viewModel.user = user
-                    self.dismiss(animated: true)
+                    self.dismiss(animated: true) // 마지막 확인 버튼 클릭 후 dismiss 안됨
                 } else {
                     showAlert()
                     print("빈칸있음")

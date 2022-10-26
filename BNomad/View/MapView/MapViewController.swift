@@ -161,20 +161,19 @@ class MapViewController: UIViewController {
         button.clipsToBounds = true
         button.layer.cornerRadius =  40 / 2
         button.setTitle("업무중", for: .normal)
-        button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
+        button.addTarget(MapViewController.self, action: #selector(goToListPage), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
     
     // MARK: - LifeCycle
     
-
-
     // override func viewWillAppear(_ animated: Bool) {
     //     super.viewWillAppear(true)
     //     navigationController?.navigationBar.isHidden = true
     //     navigationItem.backButtonTitle = ""
     // }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,9 +189,17 @@ class MapViewController: UIViewController {
     // TODO: isLogIn에 맞게 분기 처리 필요.
     @objc func moveToProfile() {
         self.dismiss(animated: false)
-        navigationController?.pushViewController(ProfileViewController(), animated: true)
+        /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
+        if viewModel.isLogIn {
+            navigationController?.pushViewController(ProfileViewController(), animated: true)
+        } else {
+            let controller = SignUpViewController()
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true)
+        }
         map.selectedAnnotations = []
-        
     }
     
     @objc func goToListPage() {

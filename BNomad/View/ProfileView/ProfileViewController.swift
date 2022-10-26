@@ -10,22 +10,9 @@ import UIKit
 class ProfileViewController: UIViewController {
 
     // MARK: - Properties
-//    let userUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
-    
-//    var user: User? {
-//        didSet {
-//            profileCollectionView.reloadData()
-//        }
-//    }
-//    var checkInHistory: [CheckIn]? {
-//        didSet {
-//            profileCollectionView.reloadData()
-//            ProfileGraphCollectionView.reloadData()
-//        }
-//    }
-    
+        
     static var weekAddedMemory: Int = 0
     
     private lazy var profileImageView: UIImageView = {

@@ -168,11 +168,11 @@ class MapViewController: UIViewController {
     
     // MARK: - LifeCycle
     
-     override func viewWillAppear(_ animated: Bool) {
-         super.viewWillAppear(true)
-         navigationController?.navigationBar.isHidden = true
-         navigationItem.backButtonTitle = ""
-     }
+//     override func viewWillAppear(_ animated: Bool) {
+//         super.viewWillAppear(true)
+//         navigationController?.navigationBar.isHidden = true
+//         navigationItem.backButtonTitle = ""
+//     }
 
     override func viewDidLoad() {
         super.viewDidLoad()

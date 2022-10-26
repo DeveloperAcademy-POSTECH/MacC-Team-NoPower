@@ -67,8 +67,7 @@ class PlaceCheckInViewController: UIViewController {
     // MARK: - LifeCycle
     
     override func viewWillAppear(_ animated: Bool) {
-        guard let date = "2022-10-26".toDate() else { return }
-        fetchCheckInHistoryPlace(placeUid: placeUid, date: date)
+        fetchCheckInHistoryPlace(placeUid: placeUid, date: Date())
     }
     
     override func viewDidLoad() {

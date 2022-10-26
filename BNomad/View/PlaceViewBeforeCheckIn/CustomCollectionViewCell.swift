@@ -55,7 +55,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
             let distance: Double = calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
             guard let current = place.currentCheckIn else { return }
-            // TODO: 여기 이후에 self.distance.text 넣으면 안되는 이유가 currentCheckIn 이 nil 값이어서 return 이 되서 그 이후가 실행이 안됨
             self.numberOfCheckIn.text = String(current.count) + " 명 체크인"
             self.averageTime.text = calculateAverageTime(place: place)
         }

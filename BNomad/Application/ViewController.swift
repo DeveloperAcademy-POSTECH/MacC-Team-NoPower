@@ -40,8 +40,9 @@ class ViewController: UIViewController {
         FirebaseManager.shared.fetchUser(id: userUid) { user in
             self.viewModel.user = user
             FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
+//                print("checkInHistory", checkInHistory)
                 self.viewModel.user?.checkInHistory = checkInHistory
-                print(user)
+                print("checkIn 유무", self.viewModel.user?.isChecked)
             }
         }
     }

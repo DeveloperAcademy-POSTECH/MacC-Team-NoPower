@@ -47,7 +47,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
-        placeNameLabel.text = ""
+        placeNameLabel.text = "애플디벨로퍼디벨로퍼아카"
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -179,7 +179,7 @@ class PlaceInfoCell: UICollectionViewCell {
     private func setAttributes() {
         
         placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 45, paddingLeft: 18)
-        distanceLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 56, paddingLeft: 167)
+        distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
         dateLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 97, paddingLeft: 18)
         detailedCheckinViewButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 121, paddingLeft: 17)
         callButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 20)

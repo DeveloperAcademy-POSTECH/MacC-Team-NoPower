@@ -89,11 +89,30 @@ class PlaceInfoModalViewController: UIViewController {
         let checkOutAlert = UIAlertController(title: "체크아웃 하시겠습니까?", message: "체크아웃하냐?", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
-            
-            // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크아웃 타임 업데이트, FirebaseTestVC의 setCheckOUt() 참고
-            self.isCheckedIn = false
-            self.checkInButton.isHidden = false
-            self.checkOutButton.isHidden = true
+            // checkIn Uid 받아오기
+
+            guard
+                var checkIn = self.viewModel.user?.currentCheckIn
+            else {
+                print("checkIn 이력이 없습니다.")
+                return
+            }
+            checkIn.checkOutTime = Date() 
+            FirebaseManager.shared.setCheckOut(checkIn: checkIn) { checkIn in
+                
+                
+                let index = self.viewModel.user?.checkInHistory?.firstIndex { $0.checkInUid == checkIn.checkInUid }
+                guard let index = index else {
+                    print("fail index")
+                    return
+                }
+                self.viewModel.user?.checkInHistory?[index] = checkIn
+                print("checkOut 완료")
+                print(checkIn)
+                print(self.viewModel.user?.isChecked)
+                print(self.viewModel.user?.currentPlaceUid)
+            }
+          
         }))
         present(checkOutAlert, animated: true)
     }
@@ -111,7 +130,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     // 맵의 특정 장소가 500미터 반경 이내인지 체크
     func distanceChecker() {
-        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500.0, identifier: "반경 500m")
+        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 100000000500.0, identifier: "반경 500m")
         
 
               // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?" ---- 완료

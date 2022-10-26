@@ -69,6 +69,11 @@ class PlaceInfoModalViewController: UIViewController {
 //        fetchPlaceAll()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkButton()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let selectedPlace = selectedPlace else { return }
@@ -107,10 +112,22 @@ class PlaceInfoModalViewController: UIViewController {
                     return
                 }
                 self.viewModel.user?.checkInHistory?[index] = checkIn
+                
                 print("checkOut 완료")
                 print(checkIn)
                 print(self.viewModel.user?.isChecked)
                 print(self.viewModel.user?.currentPlaceUid)
+                guard let user = self.viewModel.user else { return }
+                if user.isChecked && self.selectedPlace?.placeUid == user.checkInHistory?.last?.placeUid {
+                    self.checkInButton.isHidden = true
+                    self.checkOutButton.isHidden = false
+                } else if user.isChecked && self.selectedPlace?.placeUid != user.checkInHistory?.last?.placeUid {
+                    self.checkInButton.isHidden = true
+                    self.checkOutButton.isHidden = true
+                } else {
+                    self.checkInButton.isHidden = false
+                    self.checkOutButton.isHidden = true
+                }
             }
           
         }))
@@ -172,6 +189,20 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     // MARK: - Helpers
+    
+    func checkButton() {
+        guard let user = viewModel.user else { return }
+        if user.isChecked && selectedPlace?.placeUid == user.checkInHistory?.last?.placeUid {
+            checkInButton.isHidden = true
+            checkOutButton.isHidden = false
+        } else if user.isChecked && selectedPlace?.placeUid != user.checkInHistory?.last?.placeUid {
+            checkInButton.isHidden = true
+            checkOutButton.isHidden = true
+        } else {
+            checkInButton.isHidden = false
+            checkOutButton.isHidden = true
+        }
+    }
     
     func configureCollectionView() {
         collectionView.dataSource = self

@@ -18,11 +18,7 @@ class MapViewController: UIViewController {
     let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
     lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), span: span)
     
-    // var isLogin: Bool = false -> profile view / signup view
-    var user: User = DummyData.user3
-    var isLogin: Bool = false // 어떻게 검증? user login이 안된 상태에서는 user = nil? guard let user = user else { }
-    
-    var places: [Place] = []
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -160,11 +156,11 @@ class MapViewController: UIViewController {
     
     // MARK: - LifeCycle
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        navigationController?.navigationBar.isHidden = true
-        navigationItem.backButtonTitle = ""
-    }
+    // override func viewWillAppear(_ animated: Bool) {
+    //     super.viewWillAppear(true)
+    //     navigationController?.navigationBar.isHidden = true
+    //     navigationItem.backButtonTitle = ""
+    // }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -215,15 +211,16 @@ class MapViewController: UIViewController {
         
         map.addOverlay(circleOverlay)
         
-        // TODO: - 비동기 처리로 수정 -> Firebase 비동기 함수로 처리 완료
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-            self.places.append(place)
+            self.viewModel.places.append(place)
         }
         
-        if user.isChecked {
-            view.addSubview(workingView)
-            workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)
+        if let user = viewModel.user {
+            if user.isChecked {
+                view.addSubview(workingView)
+                workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)
+            }
         }
         
         map.addSubview(listViewButton)
@@ -262,7 +259,7 @@ extension MapViewController: MKMapViewDelegate {
         if let annotation = annotation as? MKAnnotationFromPlace {
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             let controller = PlaceInfoModalViewController()
-            let tempPlace = places.first { place in
+            let tempPlace = self.viewModel.places.first { place in
                 annotation.placeUid == place.placeUid
             }
             controller.selectedPlace = tempPlace

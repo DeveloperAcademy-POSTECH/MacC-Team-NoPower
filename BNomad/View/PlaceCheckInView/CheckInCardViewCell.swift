@@ -43,7 +43,8 @@ class CheckInCardViewCell: UICollectionViewCell {
             userTimeSpentLabel.text = String(hour) + "시간" + String(minute) + "분"
             
             // 이용시간 상태바
-            // MARK: 운영시간 대비 이용시간 비율에 맞게 표시해야함
+            // MARK: 상태바가 표현할 정보 논의 후,
+            // 운영시간 대비 이용시간 비율에 맞게 표시해야함
             
         }
     }
@@ -82,7 +83,7 @@ class CheckInCardViewCell: UICollectionViewCell {
 
     private lazy var userOccupationLabel: UILabel = {
         let label = UILabel()
-        label.text = user?.occupation
+        label.text = "iOS 개발자"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
         label.textColor = CustomColor.nomadGray1
         
@@ -91,7 +92,7 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     private lazy var userStatusMessage: UILabel = {
         let label = UILabel()
-        label.text = user?.introduction
+        label.text = "디자인을 좋아하는 개발자입니다."
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.numberOfLines = 1
         label.textColor = CustomColor.nomadGray1

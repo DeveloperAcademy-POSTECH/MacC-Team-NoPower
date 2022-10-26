@@ -10,7 +10,7 @@ import UIKit
 class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Mock User
-    var tmpUserUid = "002a99ac-542c-411c-8cde-38f4a8936c87"
+    var tmpUserUid = "04d3acd1-a6ec-465e-845e-a319e42180e6"
     
     // MARK: - Properties
     

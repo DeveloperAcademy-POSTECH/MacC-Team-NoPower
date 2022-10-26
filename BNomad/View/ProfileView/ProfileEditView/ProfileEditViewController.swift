@@ -197,9 +197,6 @@ class ProfileEditViewController: UIViewController {
         configureSaveButton()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = false
-    }
     
     // MARK: - Actions
     

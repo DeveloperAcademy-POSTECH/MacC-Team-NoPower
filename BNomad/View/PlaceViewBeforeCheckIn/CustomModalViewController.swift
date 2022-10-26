@@ -128,7 +128,10 @@ extension CustomModalViewController: UICollectionViewDataSource {
 
 extension CustomModalViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        present(PlaceInfoModalViewController(), animated: true)
+        let controller = PlaceInfoModalViewController()
+        guard let places = places else { return }
+        controller.selectedPlace = places[indexPath.item]
+        present(controller, animated: true)
         // TODO: map의 해당 선택된 region으로 움직여줘야 한다.
     }
 }

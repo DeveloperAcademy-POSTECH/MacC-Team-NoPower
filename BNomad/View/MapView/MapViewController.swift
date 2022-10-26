@@ -166,6 +166,8 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    private var currentAnnotation: MKAnnotation?
+    
     // MARK: - LifeCycle
     
     // override func viewWillAppear(_ animated: Bool) {
@@ -257,13 +259,12 @@ class MapViewController: UIViewController {
         checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
         checkInNow.centerX(inView: view)
     }
-    
 }
 
 // MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
-    
+
     // 맵 오버레이 rendering
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let overlay = MKCircleRenderer(circle: circleOverlay)
@@ -288,6 +289,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
         if let annotation = annotation as? MKAnnotationFromPlace {
+            self.currentAnnotation = annotation
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             let controller = PlaceInfoModalViewController()
             let tempPlace = self.viewModel.places.first { place in
@@ -295,13 +297,16 @@ extension MapViewController: MKMapViewDelegate {
             }
             controller.selectedPlace = tempPlace
             controller.delegate = self
+            controller.presentationController?.delegate = self
             present(controller, animated: true)
+            
         } else {
             print("THIS is CLUSTER")
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        self.currentAnnotation = nil
         self.dismiss(animated: true)
     }
     
@@ -327,8 +332,14 @@ extension MapViewController: ClearSelectedAnnotation {
 // MARK: - SheetModalView in MapView
 
 extension MapViewController: UISheetPresentationControllerDelegate {
-
+    
+    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        print("will dismiss")
+        print("current map: \(self.map)")
+        self.map.deselectAnnotation(self.currentAnnotation, animated: true)
+    }
 }
+
 
 // MARK: - CLLocationManagerDelegate
 

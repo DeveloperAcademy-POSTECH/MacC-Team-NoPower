@@ -159,6 +159,10 @@ class CalendarViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     // MARK: - Actions
     
     @objc func plusMonthTapButton() {

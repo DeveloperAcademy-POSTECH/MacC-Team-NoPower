@@ -34,7 +34,8 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let userProfileImg: UIImageView = {
         let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(named: "othersProfile")
+        userProfileImg.image = UIImage(systemName: "person.crop.circle.fill")
+        userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
         return userProfileImg
     }()
@@ -75,18 +76,19 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     func render() {
         // 프로필 이미지
         self.addSubview(userProfileImg)
-        userProfileImg.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 17, paddingLeft: 24)
+        userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 20, width: 56, height: 56)
+        userProfileImg.centerY(inView: self)
         
         // 사용자 이름
         self.addSubview(usernameLabel)
-        usernameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 102)
+        usernameLabel.anchor(left: userProfileImg.rightAnchor, bottom: userProfileImg.centerYAnchor, paddingLeft: 24, paddingBottom: 2)
         
         // 직업
         self.addSubview(occupationLabel)
-        occupationLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 178)
+        occupationLabel.anchor(bottom: usernameLabel.bottomAnchor, right: self.rightAnchor, paddingRight: 20)
         
         // 상태 메세지
         self.addSubview(noteLabel)
-        noteLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 44, paddingLeft: 102)
+        noteLabel.anchor(top: userProfileImg.centerYAnchor, left: usernameLabel.leftAnchor, right: self.rightAnchor, paddingTop: 2, paddingRight: 20)
     }
 }

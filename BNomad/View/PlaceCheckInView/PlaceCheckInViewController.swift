@@ -25,8 +25,8 @@ class PlaceCheckInViewController: UIViewController {
     
     private var numberOfUsers: Int = 0
     
-    // Dummy 박태준학술정보관 PlaceUid
-    let placeUid = "4c5f2dfe-42fc-49d4-a197-d02635227b5c"
+    // Dummy PlaceUid
+    let placeUid = "49ab61cf-f05f-45b7-9168-8ab58983620c"
     
     private let placeTitleLabel: UILabel = {
         let label = UILabel()
@@ -53,7 +53,7 @@ class PlaceCheckInViewController: UIViewController {
     // MARK: - LifeCycle
     
     override func viewWillAppear(_ animated: Bool) {
-        guard let date = "2022-10-25".toDate() else { return }
+        guard let date = "2022-10-26".toDate() else { return }
         fetchCheckInHistoryPlace(placeUid: placeUid, date: date)
     }
     
@@ -162,6 +162,10 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     // cell size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let flow = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize()
+        }
+        
         let viewWidth = view.bounds.width
         let sectionZeroCardHeight: CGFloat = 266
         let sectionZeroBottomPadding: CGFloat = 25
@@ -173,8 +177,10 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 220)
         } else if indexPath.section == 2 {
-            return CGSize(width: viewWidth, height: 40)
+            return CGSize(width: viewWidth, height: 27)
         } else if indexPath.section == 3 {
+            flow.sectionInset.top = 13
+            
             return CGSize(width: 356, height: 85)
         } else {
             return CGSize(width: viewWidth, height: 0)

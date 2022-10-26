@@ -21,8 +21,6 @@ class BasicInfoCell: UICollectionViewCell {
         didSet {
             guard let place = place else { return }
             mappingPlaceData(place)
-            phoneNumberLabel.text = place.contact
-            addressLabel.text = place.address
         }
     }
 

@@ -21,18 +21,11 @@ class PlaceInfoCell: UICollectionViewCell {
         didSet {
             guard let place = place else { return }
             mappingPlaceData(place)
-            guard let current = place.currentCheckIn else { return }
-            numberOfCheckIn = String(current.count) + "명 체크인"
-            averageTime = calculateAverageTime(place: place)
-            
         }
     }
     
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
-
-        placeNameLabel.text = ""
-
         placeNameLabel.textColor = CustomColor.nomadBlack
         placeNameLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         return placeNameLabel
@@ -230,6 +223,9 @@ class PlaceInfoCell: UICollectionViewCell {
     
     func mappingPlaceData(_ place: Place) {
         placeNameLabel.text = place.name
+        guard let current = place.currentCheckIn else { return }
+        numberOfCheckIn = String(current.count) + "명 체크인"
+        averageTime = calculateAverageTime(place: place)
     }
 
 }

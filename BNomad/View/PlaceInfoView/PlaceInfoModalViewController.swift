@@ -82,13 +82,6 @@ class PlaceInfoModalViewController: UIViewController {
         }
     }
     
-    func fetchUser() {
-        let currentUserUid = "01b651da-79ce-4089-85ad-966d3a0463b0"
-        FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
-            print(user)
-        }
-    }
-    
     // MARK: - Actions
     
     @objc func checkOut() {

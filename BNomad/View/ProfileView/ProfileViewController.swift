@@ -139,12 +139,10 @@ class ProfileViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = false
-        navigationItem.backButtonTitle = ""
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = true
-        navigationItem.backButtonTitle = ""
     }
     
     // MARK: - Actions
@@ -368,6 +366,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileViewController: MovePage {
     func moveToEditingPage() {
+        ProfileEditViewController.user = self.user
         navigationController?.pushViewController(ProfileEditViewController(), animated: true)
     }
 }

@@ -13,15 +13,7 @@ class ProfileEditViewController: UIViewController {
 
     // MARK: - Properties
 
-    var user: User? {
-        didSet {
-            nickNameTextField.text = user?.nickname
-            occupationTextField.text = user?.occupation
-            descriprionTextView.text = user?.introduction
-        }
-    }
-    
-    let userUID = "04d3acd1-a6ec-465e-845e-a319e42180e6"
+    static var user: User?
 
     private lazy var profileImageButton: UIButton = {
         let button = UIButton()
@@ -67,7 +59,7 @@ class ProfileEditViewController: UIViewController {
         textField.layer.borderWidth = 1
         
         // TODO: - 
-        textField.text = user?.nickname
+        textField.text = ProfileEditViewController.user?.nickname
         textField.delegate = self
         return textField
     }()
@@ -127,7 +119,7 @@ class ProfileEditViewController: UIViewController {
         textView.isEditable = true
         
         // TODO: - 
-        textView.text = "안녕하세요. 반갑습니다."
+        textView.text = ProfileEditViewController.user?.introduction
         textView.layer.cornerRadius = 5
         textView.layer.masksToBounds = true
         textView.layer.borderColor = CustomColor.nomadGray2?.cgColor
@@ -203,10 +195,10 @@ class ProfileEditViewController: UIViewController {
         configureProfileImage()
         configureStackView()
         configureSaveButton()
-        
-        FirebaseManager.shared.fetchUser(id: userUID) { user in
-            self.user = user
-        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Actions
@@ -228,7 +220,7 @@ class ProfileEditViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
             
-            let user = User(userUid: self.userUID, nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
+            let user = User(userUid: ProfileEditViewController.user?.userUid ?? "", nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
             FirebaseManager.shared.setUser(user: user)
             
             self.saveEditedProfile { user in

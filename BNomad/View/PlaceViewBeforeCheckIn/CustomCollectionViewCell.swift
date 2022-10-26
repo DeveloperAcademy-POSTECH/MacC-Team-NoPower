@@ -150,7 +150,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
             averageTime = abs(totalTime / filterCheckInHistory.count)
             hour = averageTime / 60
             minute = averageTime - hour
-            stringTime = "평균 \(hour)시간 \(minute)분 근무"
+            stringTime = hour > 0 ? "평균 \(hour)시간 \(minute)분 근무" : "평균 \(minute)분 근무"
             print(stringTime)
         } else {
             return "평균 0시간"

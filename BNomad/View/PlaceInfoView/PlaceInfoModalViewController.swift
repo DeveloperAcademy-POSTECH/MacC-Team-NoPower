@@ -90,7 +90,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     @objc func checkOut() {
         print("CHECK OUT")
-        let checkOutAlert = UIAlertController(title: "체크아웃 하시겠습니까?", message: "체크아웃하냐?", preferredStyle: .alert)
+        let checkOutAlert = UIAlertController(title: "체크아웃", message: "체크아웃하시겠습니까?", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             // checkIn Uid 받아오기

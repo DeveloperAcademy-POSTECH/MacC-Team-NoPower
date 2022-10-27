@@ -16,9 +16,13 @@ class MapViewController: UIViewController {
     private let locationManager = CLLocationManager()
     lazy var currentLocation: CLLocation? = locationManager.location
     let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-    lazy var startRegion: MKCoordinateRegion = MKCoordinateRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), span: span)
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
+    lazy var checkedPlace: Place? = viewModel.places.first { place in
+        place.placeUid == viewModel.user?.currentPlaceUid
+    }
+
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -166,6 +170,7 @@ class MapViewController: UIViewController {
          super.viewWillAppear(true)
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
+         setStartingRegion()
          checkInFloating()
 
      }
@@ -173,9 +178,9 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
+        setStartingRegion()
         locationFuncs()
         configueMapUI()
-        
     }
     
     // MARK: - Actions
@@ -219,12 +224,31 @@ class MapViewController: UIViewController {
         
     }
     
+    func setStartingRegion() {
+        guard let user = viewModel.user else { return }
+        if user.isChecked {
+            print("체크인 상태로 맵 세팅")
+//            guard let place = checkedPlace else { return }
+//            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+            
+            guard let location = currentLocation else { return }
+            map.setRegion(MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
+
+            
+            print("체크인 상태로 맵 세팅")
+        } else {
+            print("체크아웃 상태로 맵 세팅")
+            guard let location = currentLocation else { return }
+            
+            map.setRegion(MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
+            print("체크아웃 상태로 맵 세팅")
+        }
+    }
+    
     // 맵 UI 그리기
     func configueMapUI() {
         map.delegate = self
         view.addSubview(map)
-        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 36.0129, longitude: 129.3255), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
-        
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
 
         map.addSubview(mapButtons)

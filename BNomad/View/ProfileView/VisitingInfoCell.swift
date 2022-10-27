@@ -42,6 +42,7 @@ class VisitingInfoCell: UICollectionViewCell {
                 self.checkinTimeLabel.text = ""
                 self.stayedTimeLabel.text = ""
             }
+            nameLabel.reloadInputViews()
         }
     }
     
@@ -58,6 +59,8 @@ class VisitingInfoCell: UICollectionViewCell {
             
             let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            
+            nameLabel.reloadInputViews()
         }
     }
     static let identifier = "VisitingInfoCell"

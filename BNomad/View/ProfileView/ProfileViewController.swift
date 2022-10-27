@@ -35,7 +35,7 @@ class ProfileViewController: UIViewController {
     
     private let plusWeek: UIButton = {
         let button = UIButton()
-        button.setTitle(">", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +44,7 @@ class ProfileViewController: UIViewController {
     
     private let minusWeek: UIButton = {
         let button = UIButton()
-        button.setTitle("<", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

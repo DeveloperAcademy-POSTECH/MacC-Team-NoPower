@@ -37,7 +37,7 @@ class ProfileEditViewController: UIViewController {
     
     private let nickNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "이름⋆"
+        label.text = "닉네임⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.asColor(targetString: "⋆", color: .systemRed)
         return label
@@ -70,7 +70,7 @@ class ProfileEditViewController: UIViewController {
     
     private let occupationLabel: UILabel = {
         let label = UILabel()
-        label.text = "직책⋆"
+        label.text = "직업⋆"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.asColor(targetString: "⋆", color: .systemRed)
         return label
@@ -128,7 +128,7 @@ class ProfileEditViewController: UIViewController {
         textView.layer.masksToBounds = true
         textView.layer.borderColor = CustomColor.nomadGray2?.cgColor
         textView.layer.borderWidth = 1
-        textView.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        textView.font = .preferredFont(forTextStyle: .body, weight: .regular)
         textView.delegate = self
         return textView
     }()
@@ -199,6 +199,7 @@ class ProfileEditViewController: UIViewController {
         configureProfileImage()
         configureStackView()
         configureSaveButton()
+        hideKeyboardWhenTappedAround()
     }
     
     

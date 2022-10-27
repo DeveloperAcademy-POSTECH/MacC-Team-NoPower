@@ -142,17 +142,18 @@ class MapViewController: UIViewController {
             sheet.preferredCornerRadius = 12
         }
         sheet.position = currentLocation
+        sheet.delegateForFloating = self
         present(sheet, animated: true, completion: nil)
     }
     
-    var checkInNow: UIButton = {
+    lazy var checkInNow: UIButton = {
         let button = UIButton()
         button.backgroundColor = CustomColor.nomadBlue
         button.tintColor = .white
         button.clipsToBounds = true
         button.layer.cornerRadius =  40 / 2
         button.setTitle("업무중", for: .normal)
-        button.addTarget(MapViewController.self, action: #selector(goToListPage), for: .touchUpInside)
+        button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -174,17 +175,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-//        checkInFloating()
-//        viewModel.$checkIn.sink { checkIn in
-//            if let checkIn = checkIn {
-//                if checkIn {
-//                    self.checkInNow.isHidden = false
-//                } else {
-//                    self.checkInNow.isHidden = true
-//                }
-//            }
-//          
-//        }.store(in: &cancellable)
+        
     }
     
     // MARK: - Actions
@@ -204,8 +195,14 @@ class MapViewController: UIViewController {
         map.selectedAnnotations = []
     }
     
+    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
     @objc func goToListPage() {
         let controller = PlaceCheckInViewController()
+        guard let user = viewModel.user else { return print("USER ERR")}
+        let tempPlace = self.viewModel.places.first { place in
+            user.currentPlaceUid == place.placeUid
+        }
+        controller.selectedPlace = tempPlace
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true)
     }
@@ -292,7 +289,6 @@ extension MapViewController: MKMapViewDelegate {
             controller.selectedPlace = tempPlace
             controller.delegateForClearAnnotation = self
             controller.delegateForFloating = self
-            controller.delegate = self
             controller.presentationController?.delegate = self
             present(controller, animated: true)
             
@@ -324,6 +320,8 @@ extension MapViewController: ClearSelectedAnnotation {
 //        }
     }
 }
+
+// MARK: - UpdateFloating
 
 extension MapViewController: UpdateFloating {
     func checkInFloating() {

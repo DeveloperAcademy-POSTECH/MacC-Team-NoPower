@@ -17,9 +17,6 @@ class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         handleLogin()
-        
-       
-        
     }
     
     func handleLogin() {
@@ -34,8 +31,6 @@ class ViewController: UIViewController {
                 let mapViewController = MapViewController()
                 self.navigationController?.pushViewController(mapViewController, animated: true)
             }
-//            let mapViewController = MapViewController()
-//            self.navigationController?.pushViewController(mapViewController, animated: true)
         }
     }
     
@@ -49,8 +44,6 @@ class ViewController: UIViewController {
                 
                 let mapViewController = MapViewController()
                 self.navigationController?.pushViewController(mapViewController, animated: true)
-//                let mapViewController = MapViewController()
-//                mapViewController.checkInFloating()
             }
         }
     }

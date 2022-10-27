@@ -35,9 +35,6 @@ class PlaceInfoModalViewController: UIViewController {
         return cv
     }()
 
-    // TODO: user.isChecked로 대체
-    var isCheckedIn: Bool = false
-
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
         var button = UIButton()
@@ -46,7 +43,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
-        button.isHidden = self.isCheckedIn ? true : false
+//        button.isHidden = self.isCheckedIn ? true : false
         return button
     }()
     
@@ -57,7 +54,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadGray1
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkOut), for: .touchUpInside)
-        button.isHidden = self.isCheckedIn ? false : true
+//        button.isHidden = self.isCheckedIn ? false : true
         return button
     }()
     
@@ -130,14 +127,10 @@ class PlaceInfoModalViewController: UIViewController {
                     self.checkInButton.isHidden = false
                     self.checkOutButton.isHidden = true
                 }
+                
+                self.delegateForFloating?.checkInFloating()
             }
 
-            
-            // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크아웃 타임 업데이트, FirebaseTestVC의 setCheckOUt() 참고
-            self.isCheckedIn = false
-            self.checkInButton.isHidden = false
-            self.checkOutButton.isHidden = true
-            self.delegateForFloating?.checkInFloating()
         }))
         present(checkOutAlert, animated: true)
     }
@@ -165,6 +158,7 @@ class PlaceInfoModalViewController: UIViewController {
             let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "\(selectedPlace.name)에 체크인합니다.", preferredStyle: .alert)
 
             checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+            
             checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
                 // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
                 // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
@@ -179,15 +173,10 @@ class PlaceInfoModalViewController: UIViewController {
                     } else {
                         self.viewModel.user?.checkInHistory?.append(checkIn)
                     }
+                    self.delegateForFloating?.checkInFloating()
                     print("checkin 성공 여부", self.viewModel.user?.isChecked)
                     print("checkin한 장소", self.viewModel.user?.currentPlaceUid)
                 }
-                
-                // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
-
-                self.isCheckedIn = false
-                self.checkInButton.isHidden = true
-                self.checkOutButton.isHidden = false
                 self.delegateForFloating?.checkInFloating()
                 let controller = PlaceCheckInViewController()
                 controller.selectedPlace = selectedPlace

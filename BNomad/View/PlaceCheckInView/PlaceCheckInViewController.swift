@@ -28,9 +28,7 @@ class PlaceCheckInViewController: UIViewController {
             collectionView.reloadData()
         }
     }
-    
-    var viewModel = CombineViewModel.shared
-    
+        
     // MARK: - Properties
     private var numberOfUsers: Int {
         checkInHistory?.count ?? 0

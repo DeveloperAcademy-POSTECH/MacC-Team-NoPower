@@ -47,7 +47,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
                 print("CustomCollectionViewCell : todayCheckInHistory 가져오기 실패" )
                 return
             }
-            self.numberOfCheckIn.text = "\(todayCheckInHistory.count)명 체크인"
+            let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
+            self.numberOfCheckIn.text = "\(history.count)명 체크인"
             self.averageTime.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
         }
     }
@@ -149,8 +150,14 @@ class CustomCollectionViewCell: UICollectionViewCell {
         if filterCheckInHistory.count != 0 {
             averageTime = abs(totalTime / filterCheckInHistory.count)
             hour = averageTime / 60
-            minute = averageTime - hour
-            stringTime = hour > 0 ? "평균 \(hour)시간 \(minute)분 근무" : "평균 \(minute)분 근무"
+            minute = hour > 0 ? averageTime % hour : averageTime
+            if hour > 0 && minute == 0 {
+                stringTime = "평균 \(hour)시간 근무"
+            } else if hour > 0 {
+                stringTime = "평균 \(hour)시간 \(minute)분 근무"
+            } else {
+                stringTime = "평균 \(minute)분 근무"
+            }
             print(stringTime)
         } else {
             return "평균 0시간"

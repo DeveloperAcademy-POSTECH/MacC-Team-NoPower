@@ -17,18 +17,20 @@ class PlaceCheckInViewController: UIViewController {
         didSet {
             guard let selectedPlace = selectedPlace else { return }
             FirebaseManager.shared.fetchCheckInHistory(placeUid: selectedPlace.placeUid) { checkInHistory in
-                self.checkInHistory = checkInHistory
+                let history = checkInHistory.filter { $0.checkOutTime == nil }
+                self.checkInHistory = history
             }
         }
     }
     
     var checkInHistory: [CheckIn]? {
         didSet {
+            placeTitleLabel.text =  selectedPlace?.name
             guard let checkInHistory = checkInHistory else { return }
             collectionView.reloadData()
         }
     }
-        
+
     // MARK: - Properties
     private var numberOfUsers: Int {
         checkInHistory?.count ?? 0
@@ -85,7 +87,6 @@ class PlaceCheckInViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
-        self.collectionView.register(ColorViewCell.self, forCellWithReuseIdentifier: ColorViewCell.identifier)
         self.collectionView.register(CheckInCardViewCell.self, forCellWithReuseIdentifier: CheckInCardViewCell.identifier)
         self.collectionView.register(PlaceInfoViewCell.self, forCellWithReuseIdentifier: PlaceInfoViewCell.identifier)
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)

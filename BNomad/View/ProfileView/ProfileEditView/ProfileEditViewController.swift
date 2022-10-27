@@ -218,9 +218,13 @@ class ProfileEditViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
             guard let userUid = self.viewModel.user?.userUid else { return }
-            let user = User(userUid: userUid, nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
+            guard let nickname = self.nickNameTextField.text else { return }
+            let user = User(userUid: userUid, nickname: nickname, occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
             FirebaseManager.shared.setUser(user: user)
-            self.viewModel.user = user
+            self.viewModel.user?.nickname = nickname
+            self.viewModel.user?.occupation = self.occupationTextField.text
+            self.viewModel.user?.introduction = self.descriprionTextView.text
+            
             self.delegate?.editNow()
             self.navigationController?.popViewController(animated: true)
         }))

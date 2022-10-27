@@ -341,8 +341,18 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
 extension ProfileViewController: MovePage {
     func moveToEditingPage() {
-        ProfileEditViewController.user = viewModel.user
-        navigationController?.pushViewController(ProfileEditViewController(), animated: true)
+        let vc = ProfileEditViewController()
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
+        
     }
 }
 
+
+extension ProfileViewController: EditNow {
+    func editNow() {
+        profileCollectionView.reloadData()
+    }
+    
+    
+}

@@ -77,6 +77,7 @@ class CheckInCardViewCell: UICollectionViewCell {
         label.text = "김노마"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.textColor = CustomColor.nomadBlack
+        label.numberOfLines = 1
         
         return label
     }()
@@ -237,14 +238,18 @@ class CheckInCardViewCell: UICollectionViewCell {
             top: cardRectangleView.topAnchor,
             left: profileImageView.rightAnchor,
             paddingTop: 28,
-            paddingLeft: 18
+            paddingLeft: 18,
+            width: 150
+            
         )
         
         self.addSubview(userOccupationLabel)
         userOccupationLabel.anchor(
             left: userNameLabel.rightAnchor,
             bottom: userNameLabel.bottomAnchor,
-            paddingLeft: 20
+            right: cardRectangleView.rightAnchor,
+            paddingLeft: 20,
+            paddingRight: 20
         )
         
         self.addSubview(userStatusMessage)

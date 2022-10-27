@@ -81,11 +81,11 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         
         // 사용자 이름
         self.addSubview(usernameLabel)
-        usernameLabel.anchor(left: userProfileImg.rightAnchor, bottom: userProfileImg.centerYAnchor, paddingLeft: 24, paddingBottom: 2)
+        usernameLabel.anchor(left: userProfileImg.rightAnchor, bottom: userProfileImg.centerYAnchor, right: self.rightAnchor, paddingLeft: 24, paddingBottom: 2, paddingRight: 100)
         
         // 직업
         self.addSubview(occupationLabel)
-        occupationLabel.anchor(bottom: usernameLabel.bottomAnchor, right: self.rightAnchor, paddingRight: 20)
+        occupationLabel.anchor(left: usernameLabel.rightAnchor, bottom: userProfileImg.centerYAnchor, right: self.rightAnchor, paddingLeft: 10, paddingBottom: 2, paddingRight: 20)
         
         // 상태 메세지
         self.addSubview(noteLabel)

@@ -11,7 +11,8 @@ import UIKit
 class ProfileGraphCell: UICollectionViewCell {
     
     // MARK: - Properties
-    
+    lazy var viewModel = CombineViewModel.shared
+
     var thisCellsDate: String?
     var checkInHistory: [CheckIn]? {
         didSet {
@@ -30,9 +31,12 @@ class ProfileGraphCell: UICollectionViewCell {
     static let identifier = "ProfileGraphCell"
     static var addedWeek: Int = 0
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = DummyData.place1.name
+
+        let lastCheckIn = self.viewModel.user?.checkInHistory?.last
+        let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+        label.text = place?.name
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

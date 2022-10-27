@@ -114,7 +114,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let checkInCardViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckInCardViewCell.identifier, for: indexPath) as? CheckInCardViewCell else { return UICollectionViewCell() }
-            checkInCardViewCell.delegate = self
+            checkInCardViewCell.checkOutDelegate = self
             checkInCardViewCell.user = viewModel.user
             checkInCardViewCell.checkIn = viewModel.user?.currentCheckIn
             
@@ -185,19 +185,28 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - pageDismiss
 
-extension PlaceCheckInViewController: pageDismiss {
+extension PlaceCheckInViewController {
     func checkOut() {
-        
         guard var checkIn = self.viewModel.user?.currentCheckIn else { return }
         checkIn.checkOutTime = Date()
         FirebaseManager.shared.setCheckOut(checkIn: checkIn) { checkIn in
-            
             let index = self.viewModel.user?.checkInHistory?.firstIndex { $0.checkInUid == checkIn.checkInUid }
-            
             guard let index = index else { return }
-            
             self.viewModel.user?.checkInHistory?[index] = checkIn
             self.dismiss(animated: true)
         }
+    }
+}
+
+// MARK: - checkOutAlert
+
+extension PlaceCheckInViewController: CheckOutAlert {
+    func checkOutAlert(place: Place) {
+        var alert = UIAlertController(title: "체크아웃", message: "\(place.name)에서 체크아웃 하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
+            self.checkOut()
+        }))
+        present(alert, animated: true)
     }
 }

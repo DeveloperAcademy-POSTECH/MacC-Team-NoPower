@@ -12,6 +12,7 @@ class VisitingInfoCell: UICollectionViewCell {
     // MARK: - Properties
     var thisCellsDate: String?
     var cardDataList: [CheckIn] = []
+    lazy var viewModel = CombineViewModel.shared
     
     var checkInHistoryForCalendar: [CheckIn]? {
         didSet {
@@ -58,9 +59,11 @@ class VisitingInfoCell: UICollectionViewCell {
     }
     static let identifier = "VisitingInfoCell"
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = DummyData.place1.name
+        let lastCheckIn = self.viewModel.user?.checkInHistory?.last
+        let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+        label.text = place?.name
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

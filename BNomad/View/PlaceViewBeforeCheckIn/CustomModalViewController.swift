@@ -14,6 +14,8 @@ class CustomModalViewController: UIViewController {
         
     // MARK: - Properties
     
+    var delegateForFloating: UpdateFloating?
+    
     var position: CLLocation?
 
     var places: [Place]? = [] {
@@ -131,6 +133,7 @@ extension CustomModalViewController: UICollectionViewDelegate {
         let controller = PlaceInfoModalViewController()
         guard let places = places else { return }
         controller.selectedPlace = places[indexPath.item]
+        controller.delegateForFloating = self
         present(controller, animated: true)
         // TODO: map의 해당 선택된 region으로 움직여줘야 한다.
     }
@@ -144,4 +147,11 @@ extension CustomModalViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: view.bounds.width, height: 86)
     }
     
+}
+
+
+extension CustomModalViewController: UpdateFloating {
+    func checkInFloating() {
+        self.delegateForFloating?.checkInFloating()
+    }
 }

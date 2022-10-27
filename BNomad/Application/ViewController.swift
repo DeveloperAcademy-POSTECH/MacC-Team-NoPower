@@ -17,10 +17,6 @@ class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         handleLogin()
-        
-        let mapViewController = MapViewController()
-        navigationController?.pushViewController(mapViewController, animated: true)
-        
     }
     
     func handleLogin() {
@@ -32,6 +28,8 @@ class ViewController: UIViewController {
                 self.fetchUserAndCheckInHistory(id: deviceUid)
             } else {
                 print("no user")
+                let mapViewController = MapViewController()
+                self.navigationController?.pushViewController(mapViewController, animated: true)
             }
         }
     }
@@ -40,9 +38,12 @@ class ViewController: UIViewController {
         FirebaseManager.shared.fetchUser(id: userUid) { user in
             self.viewModel.user = user
             FirebaseManager.shared.fetchCheckInHistory(userUid: userUid) { checkInHistory in
-//                print("checkInHistory", checkInHistory)
+                //                print("checkInHistory", checkInHistory)
                 self.viewModel.user?.checkInHistory = checkInHistory
                 print("checkIn 유무", self.viewModel.user?.isChecked)
+                
+                let mapViewController = MapViewController()
+                self.navigationController?.pushViewController(mapViewController, animated: true)
             }
         }
     }

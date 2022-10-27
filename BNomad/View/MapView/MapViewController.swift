@@ -116,16 +116,6 @@ class MapViewController: UIViewController {
         return circle
     }()
     
-    let workingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 20
-        view.layer.borderWidth = 1
-        view.layer.borderColor = CustomColor.nomadBlue?.cgColor
-        return view
-    }()
-    
     lazy var listViewButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -152,17 +142,18 @@ class MapViewController: UIViewController {
             sheet.preferredCornerRadius = 12
         }
         sheet.position = currentLocation
+        sheet.delegateForFloating = self
         present(sheet, animated: true, completion: nil)
     }
     
-    var checkInNow: UIButton = {
+    lazy var checkInNow: UIButton = {
         let button = UIButton()
         button.backgroundColor = CustomColor.nomadBlue
         button.tintColor = .white
         button.clipsToBounds = true
         button.layer.cornerRadius =  40 / 2
         button.setTitle("업무중", for: .normal)
-        button.addTarget(MapViewController.self, action: #selector(goToListPage), for: .touchUpInside)
+        button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -175,21 +166,20 @@ class MapViewController: UIViewController {
          super.viewWillAppear(true)
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
-     }
+         checkInFloating()
 
+     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-        configureFloating()
+        
     }
     
     // MARK: - Actions
     
-    
-    // TODO: isLogIn에 맞게 분기 처리 필요.
     @objc func moveToProfile() {
         self.dismiss(animated: false)
         /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
@@ -205,8 +195,14 @@ class MapViewController: UIViewController {
         map.selectedAnnotations = []
     }
     
+    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
     @objc func goToListPage() {
         let controller = PlaceCheckInViewController()
+        guard let user = viewModel.user else { return print("USER ERR")}
+        let tempPlace = self.viewModel.places.first { place in
+            user.currentPlaceUid == place.placeUid
+        }
+        controller.selectedPlace = tempPlace
         controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true)
     }
@@ -244,16 +240,10 @@ class MapViewController: UIViewController {
             self.viewModel.places.append(place)
         }
         
-        if let user = viewModel.user {
-            if user.isChecked {
-                view.addSubview(workingView)
-                workingView.anchor(top: view.topAnchor, left: view.leftAnchor, right: mapButtons.leftAnchor, paddingTop: 50, paddingLeft: 50, paddingRight: 30, height: 44)
-            }
-        }
-        
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
     }
+
     
     func configureFloating() {
         view.addSubview(checkInNow)
@@ -297,7 +287,8 @@ extension MapViewController: MKMapViewDelegate {
                 annotation.placeUid == place.placeUid
             }
             controller.selectedPlace = tempPlace
-            controller.delegate = self
+            controller.delegateForClearAnnotation = self
+            controller.delegateForFloating = self
             controller.presentationController?.delegate = self
             present(controller, animated: true)
             
@@ -327,6 +318,24 @@ extension MapViewController: ClearSelectedAnnotation {
 //                map.selectedAnnotations.append(annotation)
 //            }
 //        }
+    }
+}
+
+// MARK: - UpdateFloating
+
+extension MapViewController: UpdateFloating {
+    func checkInFloating() {
+        print("checkInFloating")
+        guard let user = viewModel.user else { return }
+        if user.isChecked {
+            print("DUBG")
+            checkInNow.isHidden = false
+            map.addSubview(checkInNow)
+            checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
+            checkInNow.centerX(inView: view)
+        } else {
+            checkInNow.isHidden = true
+        }
     }
 }
 

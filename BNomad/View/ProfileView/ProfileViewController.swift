@@ -113,6 +113,8 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
+        navigationItem.backButtonTitle = "취소"
     }
     
     override func viewDidAppear(_ animated: Bool) {

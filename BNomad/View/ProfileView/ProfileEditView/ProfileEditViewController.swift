@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol EditNow {
+    func editNow()
+}
 
-// TODO: - 하드 코딩된 부분 전부 교체 필요.
 class ProfileEditViewController: UIViewController {
 
     // MARK: - Properties
-
-    static var user: User?
-
+    
+    lazy var viewModel : CombineViewModel = CombineViewModel.shared
+    
+    var delegate: EditNow?
+    
     private lazy var profileImageButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "ProfileDefault"), for: .normal)
@@ -59,7 +63,7 @@ class ProfileEditViewController: UIViewController {
         textField.layer.borderWidth = 1
         
         // TODO: - 
-        textField.text = ProfileEditViewController.user?.nickname
+        textField.text = viewModel.user?.nickname
         textField.delegate = self
         return textField
     }()
@@ -119,7 +123,7 @@ class ProfileEditViewController: UIViewController {
         textView.isEditable = true
         
         // TODO: - 
-        textView.text = ProfileEditViewController.user?.introduction
+        textView.text =  viewModel.user?.introduction
         textView.layer.cornerRadius = 5
         textView.layer.masksToBounds = true
         textView.layer.borderColor = CustomColor.nomadGray2?.cgColor
@@ -210,30 +214,20 @@ class ProfileEditViewController: UIViewController {
     // TODO: - user 객체 수정 & firebase에 업데이트
     @objc func saveProfile() {
         
-        
-        
-        // TODO: - 바꾼 profile 최신화함
         let alert = UIAlertController(title: "프로필 수정", message: "프로필 수정을 완료하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
-            
-            let user = User(userUid: ProfileEditViewController.user?.userUid ?? "", nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
+            guard let userUid = self.viewModel.user?.userUid else { return }
+            let user = User(userUid: userUid, nickname: self.nickNameTextField.text ?? "", occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text)
             FirebaseManager.shared.setUser(user: user)
-            
-            self.saveEditedProfile { user in
-                self.navigationController?.popViewController(animated: true)
-            }
+            self.viewModel.user = user
+            self.delegate?.editNow()
+            self.navigationController?.popViewController(animated: true)
         }))
         present(alert, animated: true)
     }
     
-    // TODO: - Firebase 프로필 업데이트 로직과 연결할 지점
-    private func saveEditedProfile(completion: @escaping(User) -> Void) {
-        completion(User(userUid: "userUid", nickname: "nickname"))
-    }
-    
     // MARK: - Helpers
-    
     func configureProfileImage() {
         view.addSubview(profileImageButton)
         profileImageButton.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 136, paddingLeft: 29, width: 78, height: 78)

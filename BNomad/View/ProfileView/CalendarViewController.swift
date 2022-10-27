@@ -18,14 +18,6 @@ class CalendarViewController: UIViewController {
     private var selectedCell: Int? = Contents.todayDate()["day"]
     let calendarDateFormatter = CalendarDateFormatter()
     
-    var checkinDateData: [Bool] { //TODO: 파베 데이터로 판단하는 로직 필요
-        var data = Array(repeating: false, count: CalendarDateFormatter().days.count)
-        data[10] = true
-        data[11] = true
-        data[20] = true
-        data[21] = true
-        return data
-    }
     
     private let CalendarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -113,7 +105,7 @@ class CalendarViewController: UIViewController {
     
     private let plusMonthButton: UIButton = {
         let button = UIButton()
-        button.setTitle(">", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +114,7 @@ class CalendarViewController: UIViewController {
     
     private let minusMonthButton: UIButton = {
         let button = UIButton()
-        button.setTitle("<", for: .normal)
+        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false

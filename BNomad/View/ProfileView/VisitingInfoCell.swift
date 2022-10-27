@@ -12,10 +12,12 @@ class VisitingInfoCell: UICollectionViewCell {
     // MARK: - Properties
     var thisCellsDate: String?
     var cardDataList: [CheckIn] = []
+    var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
     var checkInHistoryForCalendar: [CheckIn]? {
         didSet {
+            viewOption = "calendar"
             cardDataList = []
             guard let checkInHistory = checkInHistoryForCalendar else { return }
             
@@ -40,11 +42,13 @@ class VisitingInfoCell: UICollectionViewCell {
                 self.checkinTimeLabel.text = ""
                 self.stayedTimeLabel.text = ""
             }
+            nameLabel.reloadInputViews()
         }
     }
     
     var checkInHistoryForProfile: [CheckIn]? {
         didSet {
+            viewOption = "profile"
             guard let lastCheckIn = checkInHistoryForProfile?.last else {return}
             
             let dateFormatter = DateFormatter()
@@ -55,15 +59,25 @@ class VisitingInfoCell: UICollectionViewCell {
             
             let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            
+            nameLabel.reloadInputViews()
         }
     }
     static let identifier = "VisitingInfoCell"
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        let lastCheckIn = self.viewModel.user?.checkInHistory?.last
-        let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-        label.text = place?.name
+        
+        if viewOption == "calendar" {
+            let lastCheckIn = self.viewModel.user?.checkInHistory?.first {$0.date == thisCellsDate ?? ""}
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            label.text = place?.name
+        }else {
+            let lastCheckIn = self.viewModel.user?.checkInHistory?.last
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            label.text = place?.name
+        }
+        
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

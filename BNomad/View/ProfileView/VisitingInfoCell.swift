@@ -12,10 +12,12 @@ class VisitingInfoCell: UICollectionViewCell {
     // MARK: - Properties
     var thisCellsDate: String?
     var cardDataList: [CheckIn] = []
+    var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
     var checkInHistoryForCalendar: [CheckIn]? {
         didSet {
+            viewOption = "calendar"
             cardDataList = []
             guard let checkInHistory = checkInHistoryForCalendar else { return }
             
@@ -45,6 +47,7 @@ class VisitingInfoCell: UICollectionViewCell {
     
     var checkInHistoryForProfile: [CheckIn]? {
         didSet {
+            viewOption = "profile"
             guard let lastCheckIn = checkInHistoryForProfile?.last else {return}
             
             let dateFormatter = DateFormatter()
@@ -61,9 +64,17 @@ class VisitingInfoCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        let lastCheckIn = self.viewModel.user?.checkInHistory?.last
-        let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-        label.text = place?.name
+        
+        if viewOption == "calendar" {
+            let lastCheckIn = self.viewModel.user?.checkInHistory?.first {$0.date == thisCellsDate ?? ""}
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            label.text = place?.name
+        }else {
+            let lastCheckIn = self.viewModel.user?.checkInHistory?.last
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            label.text = place?.name
+        }
+        
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

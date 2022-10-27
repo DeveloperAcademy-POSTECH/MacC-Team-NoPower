@@ -18,14 +18,6 @@ class CalendarViewController: UIViewController {
     private var selectedCell: Int? = Contents.todayDate()["day"]
     let calendarDateFormatter = CalendarDateFormatter()
     
-    var checkinDateData: [Bool] { //TODO: 파베 데이터로 판단하는 로직 필요
-        var data = Array(repeating: false, count: CalendarDateFormatter().days.count)
-        data[10] = true
-        data[11] = true
-        data[20] = true
-        data[21] = true
-        return data
-    }
     
     private let CalendarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

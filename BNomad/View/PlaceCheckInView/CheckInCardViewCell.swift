@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol pageDismiss {
-    func checkOut()
+protocol CheckOutAlert {
+    func checkOutAlert(place: Place)
 }
 
 class CheckInCardViewCell: UICollectionViewCell {
@@ -16,6 +16,10 @@ class CheckInCardViewCell: UICollectionViewCell {
     // MARK: - Properties
     
     static let identifier = "checkInCardViewCell"
+    
+    var checkOutDelegate: CheckOutAlert?
+    
+    var viewModel = CombineViewModel.shared
     
     var user: User? {
         didSet {
@@ -49,7 +53,7 @@ class CheckInCardViewCell: UICollectionViewCell {
         }
     }
     
-    var delegate: pageDismiss?
+//    var delegate: pageDismiss?
     
     private let cardRectangleView: UIView = {
         let view = UIView()
@@ -121,12 +125,7 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     private let checkInTimeLabel: UILabel = {
         let label = UILabel()
-//        label.text = "10:20 AM"
-        
-        
-        
         label.font = .preferredFont(forTextStyle: .body, weight: .semibold)
-        
         label.textColor = CustomColor.nomadBlack
         
         return label
@@ -203,7 +202,8 @@ class CheckInCardViewCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc func checkOutTapped() {
-        delegate?.checkOut()
+        let checkOutPlace = viewModel.places.first { $0.placeUid == viewModel.user?.checkInHistory?.last?.placeUid }
+        checkOutDelegate?.checkOutAlert(place: checkOutPlace!)
     }
     
     // MARK: - Methods

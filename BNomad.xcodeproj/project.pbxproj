@@ -14,6 +14,7 @@
 		041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A628FFF459005D19CC /* CalendarViewController.swift */; };
 		041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A828FFF4FB005D19CC /* CalendarCell.swift */; };
 		041351AD29081D16005D19CC /* ProfileGraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */; };
+		157CE714290A3B51000272E9 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157CE713290A3B51000272E9 /* LaunchScreenViewController.swift */; };
 		159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */; };
 		159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */; };
 		159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */; };
@@ -68,6 +69,7 @@
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		041351A828FFF4FB005D19CC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCollectionCell.swift; sourceTree = "<group>"; };
+		157CE713290A3B51000272E9 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceCheckInViewController.swift; sourceTree = "<group>"; };
 		159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListViewCell.swift; sourceTree = "<group>"; };
 		159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListHeader.swift; sourceTree = "<group>"; };
@@ -128,6 +130,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		157CE712290A3B34000272E9 /* LaunchScreenView */ = {
+			isa = PBXGroup;
+			children = (
+				157CE713290A3B51000272E9 /* LaunchScreenViewController.swift */,
+			);
+			path = LaunchScreenView;
+			sourceTree = "<group>";
+		};
 		DF288B4228F7D70F002838A4 = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +178,7 @@
 		DF96189C28FCEEE900E21D30 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				157CE712290A3B34000272E9 /* LaunchScreenView */,
 				F6183CBA28FFABAB00185A1F /* PlaceViewBeforeCheckIn */,
 				DF96189F28FCEF0100E21D30 /* MapView */,
 				DF9618A328FCEF1700E21D30 /* PlaceInfoView */,
@@ -432,6 +443,7 @@
 				E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */,
 				E2ADB25E2907863300082596 /* ViewController.swift in Sources */,
 				159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */,
+				157CE714290A3B51000272E9 /* LaunchScreenViewController.swift in Sources */,
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
 				7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */,
 				15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */,
@@ -589,8 +601,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 앱에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -618,8 +631,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 앱에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

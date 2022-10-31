@@ -86,7 +86,7 @@ class SelfUserInfoCell: UICollectionViewCell {
     func render() {
 
         contentView.addSubview(nameLabel)
-        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
+        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20)
         
         contentView.addSubview(editingButton)
         editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 18, paddingRight: 12, width: 55, height: 13)

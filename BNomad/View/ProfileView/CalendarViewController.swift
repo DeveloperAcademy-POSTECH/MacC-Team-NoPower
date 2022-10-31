@@ -311,7 +311,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == CalendarCollectionView {
             return CGSize(width: 358/8, height: 358/7)
         } else {
-            return CGSize(width: 358, height: 119)
+            return CGSize(width: VisitInfInfoView.frame.width, height: 119)
         }
         
     }

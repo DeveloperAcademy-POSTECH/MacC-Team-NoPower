@@ -196,10 +196,10 @@ class PlaceInfoModalViewController: UIViewController {
     
     func checkButton() {
         guard let user = viewModel.user else { return }
-        if user.isChecked && selectedPlace?.placeUid == user.checkInHistory?.last?.placeUid {
+        if user.isChecked && selectedPlace?.placeUid == user.currentCheckIn?.placeUid {
             checkInButton.isHidden = true
             checkOutButton.isHidden = false
-        } else if user.isChecked && selectedPlace?.placeUid != user.checkInHistory?.last?.placeUid {
+        } else if user.isChecked && selectedPlace?.placeUid != user.currentCheckIn?.placeUid {
             checkInButton.isHidden = true
             checkOutButton.isHidden = true
         } else {
@@ -225,11 +225,11 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func configureCheckInButton() {
-        view.addSubview(checkInButton)
-        checkInButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
-        
         view.addSubview(checkOutButton)
         checkOutButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
+        
+        view.addSubview(checkInButton)
+        checkInButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 17, paddingBottom: 50, paddingRight: 17, height: 50)
     }
     
     private func setupSheet() {

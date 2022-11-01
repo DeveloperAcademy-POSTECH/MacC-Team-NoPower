@@ -65,7 +65,7 @@ class ProfileViewController: UIViewController {
         return collectionView
     }()
     
-    private let ProfileGraphCollectionView:  UICollectionView = {
+    private let profileGraphCollectionView:  UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -91,8 +91,8 @@ class ProfileViewController: UIViewController {
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
         
-        ProfileGraphCollectionView.dataSource = self
-        ProfileGraphCollectionView.delegate = self
+        profileGraphCollectionView.dataSource = self
+        profileGraphCollectionView.delegate = self
         
         plusWeek.addTarget(self, action: #selector(plusWeekTapButton), for: .touchUpInside)
         minusWeek.addTarget(self, action: #selector(minusWeekTapButton), for: .touchUpInside)
@@ -160,7 +160,7 @@ class ProfileViewController: UIViewController {
     @objc func plusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: 1)
         profileCollectionView.reloadData()
-        ProfileGraphCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
     }
@@ -168,7 +168,7 @@ class ProfileViewController: UIViewController {
     @objc func minusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: -1)
         profileCollectionView.reloadData()
-        ProfileGraphCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
     }
@@ -202,8 +202,8 @@ class ProfileViewController: UIViewController {
         view.addSubview(plusWeek)
         plusWeek.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 570, paddingRight: 45)
         
-        view.addSubview(ProfileGraphCollectionView)
-        ProfileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width, height: 154)
+        view.addSubview(profileGraphCollectionView)
+        profileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width, height: 154)
     }
     
 }

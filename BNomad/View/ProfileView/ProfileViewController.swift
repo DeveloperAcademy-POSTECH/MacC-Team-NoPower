@@ -24,15 +24,6 @@ class ProfileViewController: UIViewController {
         return iv
     }()
     
-    private lazy var DummyGraphImage: UIImageView = { //FIXME: 더미 그래프 이미지임 로직 생성 필요
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.isUserInteractionEnabled = true
-        iv.image = UIImage(named: "graph")
-        return iv
-    }()
-    
     private let plusWeek: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
@@ -74,7 +65,7 @@ class ProfileViewController: UIViewController {
         return collectionView
     }()
     
-    private let ProfileGraphCollectionView:  UICollectionView = {
+    private let profileGraphCollectionView:  UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -100,8 +91,8 @@ class ProfileViewController: UIViewController {
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
         
-        ProfileGraphCollectionView.dataSource = self
-        ProfileGraphCollectionView.delegate = self
+        profileGraphCollectionView.dataSource = self
+        profileGraphCollectionView.delegate = self
         
         plusWeek.addTarget(self, action: #selector(plusWeekTapButton), for: .touchUpInside)
         minusWeek.addTarget(self, action: #selector(minusWeekTapButton), for: .touchUpInside)
@@ -171,7 +162,7 @@ class ProfileViewController: UIViewController {
     @objc func plusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: 1)
         profileCollectionView.reloadData()
-        ProfileGraphCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
     }
@@ -179,7 +170,7 @@ class ProfileViewController: UIViewController {
     @objc func minusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: -1)
         profileCollectionView.reloadData()
-        ProfileGraphCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
     }
@@ -213,8 +204,8 @@ class ProfileViewController: UIViewController {
         view.addSubview(plusWeek)
         plusWeek.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 570, paddingRight: 45)
         
-        view.addSubview(ProfileGraphCollectionView)
-        ProfileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 286, height: 154)
+        view.addSubview(profileGraphCollectionView)
+        profileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width, height: 154)
     }
     
 }
@@ -310,11 +301,11 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if collectionView == profileCollectionView {
             if indexPath.section == 0 {
-                return CGSize(width: 358, height: 166)
+                return CGSize(width: profileCollectionView.frame.width, height: 166)
             } else if indexPath.section == 1 {
-                return CGSize(width: 358, height: 119)
+                return CGSize(width: profileCollectionView.frame.width, height: 119)
             } else {
-                return CGSize(width: 358, height: 190)
+                return CGSize(width: profileCollectionView.frame.width, height: 190)
             }
         }else {
             return CGSize(width: 27, height: 154)
@@ -334,7 +325,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == profileCollectionView {
             return CGFloat(0)
         }else {
-            return CGFloat(15)
+            return CGFloat(profileCollectionView.frame.width - 55 - 27*7)/6
         }
     }
 }

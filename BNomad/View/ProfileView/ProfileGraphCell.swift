@@ -100,7 +100,7 @@ class ProfileGraphCell: UICollectionViewCell {
         
         let dayStack = UIStackView(arrangedSubviews: ProfileGraphCell.dayLabel)
         dayStack.axis = .horizontal
-        dayStack.spacing = 19
+        dayStack.spacing = (CGFloat(contentView.frame.width)-55-24*7)/6
         dayStack.distribution = .fillEqually
         dayStack.translatesAutoresizingMaskIntoConstraints = false
         

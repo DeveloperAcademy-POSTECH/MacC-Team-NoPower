@@ -229,9 +229,17 @@ class MapViewController: UIViewController {
                 if let place = viewModel.places.first(where: { place in
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
-                    self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
-                    print("place1")
+                    self.setMapRegion(place.latitude - 0.004, place.longitude, spanDelta: 0.01)
+                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
+                    self.map.selectAnnotation(annotation, animated: true)
+                    let controller = PlaceInfoModalViewController()
+                    controller.selectedPlace = place
+                    controller.delegateForClearAnnotation = self
+                    controller.delegateForFloating = self
+                    controller.presentationController?.delegate = self
+                    present(controller, animated: true)
                 }
+                
                 print("체크인 상태로 맵 세팅 끝")
             } else {
                 if let location = currentLocation {

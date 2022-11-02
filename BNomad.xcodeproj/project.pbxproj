@@ -45,7 +45,6 @@
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
 		E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB2592906D44200082596 /* FirebaseTestVC.swift */; };
-		E2ADB25E2907863300082596 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB25D2907863300082596 /* ViewController.swift */; };
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
 		E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23328FE75F7005C0D77 /* String+Extension.swift */; };
@@ -102,7 +101,6 @@
 		E25A675328F7E2C6004614B0 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		E25A675728F7E515004614B0 /* DummyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyData.swift; sourceTree = "<group>"; };
 		E2ADB2592906D44200082596 /* FirebaseTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTestVC.swift; sourceTree = "<group>"; };
-		E2ADB25D2907863300082596 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E2E6B22F28FE7542005C0D77 /* CheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIn.swift; sourceTree = "<group>"; };
 		E2E6B23128FE757D005C0D77 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		E2E6B23328FE75F7005C0D77 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -288,7 +286,6 @@
 			children = (
 				DF288B4E28F7D70F002838A4 /* AppDelegate.swift */,
 				DF288B5028F7D70F002838A4 /* SceneDelegate.swift */,
-				E2ADB25D2907863300082596 /* ViewController.swift */,
 				DF288B5728F7D710002838A4 /* Assets.xcassets */,
 				DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */,
 				DF288B5C28F7D710002838A4 /* Info.plist */,
@@ -430,7 +427,6 @@
 				159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */,
-				E2ADB25E2907863300082596 /* ViewController.swift in Sources */,
 				159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */,
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
 				7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */,

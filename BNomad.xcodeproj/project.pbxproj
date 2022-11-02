@@ -39,11 +39,13 @@
 		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
 		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
 		DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747C929000FC80048E70A /* ProfileEditViewController.swift */; };
+		E226DA6E29120A540071E289 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = E226DA6D29120A540071E289 /* FirebasePerformance */; };
 		E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6D92907E49600638C15 /* UIViewController+Extension.swift */; };
 		E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E6DB2907F07E00638C15 /* CombineViewModel.swift */; };
 		E25A675228F7E1CE004614B0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675128F7E1CE004614B0 /* User.swift */; };
 		E25A675428F7E2C6004614B0 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675328F7E2C6004614B0 /* Place.swift */; };
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
+		E25AD9E42912239A00F815B2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = E25AD9E32912239A00F815B2 /* FirebaseRemoteConfig */; };
 		E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB2592906D44200082596 /* FirebaseTestVC.swift */; };
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
@@ -114,12 +116,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E226DA6E29120A540071E289 /* FirebasePerformance in Frameworks */,
 				F6183CB328FFA74000185A1F /* FirebaseDatabaseSwift in Frameworks */,
 				F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */,
 				F6183CB928FFA83F00185A1F /* FirebaseAnalytics in Frameworks */,
 				F6183CB128FFA74000185A1F /* FirebaseDatabase in Frameworks */,
 				F6183CB728FFA83800185A1F /* FirebaseFirestore in Frameworks */,
 				F6183CAF28FFA74000185A1F /* FirebaseAuth in Frameworks */,
+				E25AD9E42912239A00F815B2 /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +342,8 @@
 				F6183CB428FFA74000185A1F /* FirebaseStorage */,
 				F6183CB628FFA83800185A1F /* FirebaseFirestore */,
 				F6183CB828FFA83F00185A1F /* FirebaseAnalytics */,
+				E226DA6D29120A540071E289 /* FirebasePerformance */,
+				E25AD9E32912239A00F815B2 /* FirebaseRemoteConfig */,
 			);
 			productName = BNomad;
 			productReference = DF288B4B28F7D70F002838A4 /* BNomad.app */;
@@ -674,6 +680,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E226DA6D29120A540071E289 /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
+		};
+		E25AD9E32912239A00F815B2 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
 		F6183CAE28FFA74000185A1F /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

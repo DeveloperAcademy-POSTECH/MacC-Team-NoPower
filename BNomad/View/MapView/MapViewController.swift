@@ -15,13 +15,9 @@ class MapViewController: UIViewController {
 
     private let locationManager = CLLocationManager()
     lazy var currentLocation: CLLocation? = locationManager.location
-    let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+    let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
-    
-    lazy var checkedPlace: Place? = viewModel.places.first { place in
-        place.placeUid == viewModel.user?.currentPlaceUid
-    }
 
     
     // 맵 띄우기
@@ -55,6 +51,22 @@ class MapViewController: UIViewController {
         btn.addTarget(self, action: #selector(moveToProfile), for: .touchUpInside)
         return btn
     }()
+    
+    // TODO: - 회원가입, 로그인 화면 모두 넣어 연결하기
+    @objc func moveToProfile() {
+        self.dismiss(animated: false)
+        /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
+        if viewModel.isLogIn {
+            navigationController?.pushViewController(ProfileViewController(), animated: true)
+        } else {
+            let controller = SignUpViewController()
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: true)
+        }
+        map.selectedAnnotations = []
+    }
     
     private let divider: UIView = {
         let divider = UIView()
@@ -157,10 +169,22 @@ class MapViewController: UIViewController {
         button.clipsToBounds = true
         button.layer.cornerRadius =  40 / 2
         button.setTitle("업무중", for: .normal)
-        button.addTarget(self, action: #selector(goToListPage), for: .touchUpInside)
+        button.addTarget(self, action: #selector(goBackToCheckInView), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
+    
+    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
+    @objc func goBackToCheckInView() {
+        let controller = PlaceCheckInViewController()
+        guard let user = viewModel.user else { return print("USER ERR") }
+        let tempPlace = self.viewModel.places.first { place in
+            user.currentPlaceUid == place.placeUid
+        }
+        controller.selectedPlace = tempPlace
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true)
+    }
     
     private var currentAnnotation: MKAnnotation?
     
@@ -170,47 +194,17 @@ class MapViewController: UIViewController {
          super.viewWillAppear(true)
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
-         setStartingRegion()
          checkInFloating()
-
      }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = true
-        setStartingRegion()
         locationFuncs()
         configueMapUI()
     }
     
     // MARK: - Actions
-    
-    @objc func moveToProfile() {
-        self.dismiss(animated: false)
-        /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
-        /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
-        /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
-        if viewModel.isLogIn {
-            navigationController?.pushViewController(ProfileViewController(), animated: true)
-        } else {
-            let controller = SignUpViewController()
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: true)
-        }
-        map.selectedAnnotations = []
-    }
-    
-    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
-    @objc func goToListPage() {
-        let controller = PlaceCheckInViewController()
-        guard let user = viewModel.user else { return print("USER ERR")}
-        let tempPlace = self.viewModel.places.first { place in
-            user.currentPlaceUid == place.placeUid
-        }
-        controller.selectedPlace = tempPlace
-        controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true)
-    }
     
     // MARK: - Helpers
     
@@ -224,24 +218,38 @@ class MapViewController: UIViewController {
         
     }
     
-    func setStartingRegion() {
-        guard let user = viewModel.user else { return }
-        if user.isChecked {
-            print("체크인 상태로 맵 세팅")
-//            guard let place = checkedPlace else { return }
-//            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
-            
-            guard let location = currentLocation else { return }
-            map.setRegion(MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
-
-            
-            print("체크인 상태로 맵 세팅")
-        } else {
-            print("체크아웃 상태로 맵 세팅")
-            guard let location = currentLocation else { return }
-            
-            map.setRegion(MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
-            print("체크아웃 상태로 맵 세팅")
+    func setMapRegion(_ latitude: Double, _ longitude: Double, spanDelta: Double) {
+        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: MKCoordinateSpan(latitudeDelta: spanDelta, longitudeDelta: spanDelta)), animated: true)
+    }
+    
+    func checkInBinding() {
+        print("체크인 바인딩 -> 위치 전달")
+        if let user = viewModel.user {
+            if user.isChecked {
+                if let place = viewModel.places.first(where: { place in
+                    place.placeUid == viewModel.user?.currentPlaceUid
+                }) {
+                    self.setMapRegion(place.latitude - 0.004, place.longitude, spanDelta: 0.01)
+                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
+                    self.map.selectAnnotation(annotation, animated: true)
+                    let controller = PlaceInfoModalViewController()
+                    controller.selectedPlace = place
+                    controller.delegateForClearAnnotation = self
+                    controller.delegateForFloating = self
+                    controller.presentationController?.delegate = self
+                    present(controller, animated: true)
+                }
+                
+                print("체크인 상태로 맵 세팅 끝")
+            } else {
+                if let location = currentLocation {
+                    setMapRegion(location.coordinate.latitude, location.coordinate.longitude, spanDelta: 0.03)
+                    print("체크아웃 상태 + 현재 위치 받아서 시작")
+                } else {
+                    setMapRegion(customStartLocation.latitude, customStartLocation.longitude, spanDelta: 0.01)
+                    print("체크아웃 상태 + 현재 위치 확인 불가")
+                }
+            }
         }
     }
     
@@ -262,6 +270,7 @@ class MapViewController: UIViewController {
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
+            self.checkInBinding()
         }
         
         map.addSubview(listViewButton)

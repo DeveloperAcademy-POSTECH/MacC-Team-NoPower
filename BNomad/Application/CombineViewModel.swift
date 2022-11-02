@@ -22,6 +22,13 @@ class CombineViewModel: ObservableObject {
         }
     }
     @Published var checkIn: Bool?
+    @Published var checkInPlace: Place? {
+        didSet {
+            checkInPlace = places.first { place in
+                place.placeUid == user?.currentPlaceUid
+            }
+        }
+    }
     @Published var placeInCurrentMap: [Place] = [DummyData.place1, DummyData.place1, DummyData.place2] //
     
     var places: [Place] = []

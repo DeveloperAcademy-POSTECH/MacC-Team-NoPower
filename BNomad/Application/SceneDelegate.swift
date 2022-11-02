@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+        _ = RCValue.shared
         let deviceUid = UIDevice.current.identifierForVendor?.uuidString
         guard let deviceUid = deviceUid else { return }
         

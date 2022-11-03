@@ -15,7 +15,7 @@ class MapViewController: UIViewController {
 
     private let locationManager = CLLocationManager()
     lazy var currentLocation: CLLocation? = locationManager.location
-    let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
+    let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?) -> 우선은 제주도. 디바이스 위치 허용하면 제주도 볼 일 없음 ㅋㅋ
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
 
@@ -195,6 +195,7 @@ class MapViewController: UIViewController {
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
          checkInFloating()
+         checkInBinding()
      }
 
     override func viewDidLoad() {
@@ -246,9 +247,17 @@ class MapViewController: UIViewController {
                     setMapRegion(location.coordinate.latitude, location.coordinate.longitude, spanDelta: 0.03)
                     print("체크아웃 상태 + 현재 위치 받아서 시작")
                 } else {
-                    setMapRegion(customStartLocation.latitude, customStartLocation.longitude, spanDelta: 0.01)
+                    setMapRegion(customStartLocation.latitude, customStartLocation.longitude, spanDelta: 0.05)
                     print("체크아웃 상태 + 현재 위치 확인 불가")
                 }
+            }
+        } else {
+            if let location = currentLocation {
+                setMapRegion(location.coordinate.latitude, location.coordinate.longitude, spanDelta: 0.05)
+                print("비로그인 상태 + 현재 위치 받아서 시작")
+            } else {
+                setMapRegion(customStartLocation.latitude, customStartLocation.longitude, spanDelta: 0.2)
+                print("비로그인 상태 + 현재 위치 확인 불가")
             }
         }
     }
@@ -311,21 +320,41 @@ extension MapViewController: MKMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
-        if let annotation = annotation as? MKAnnotationFromPlace {
-            self.currentAnnotation = annotation
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+//    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+//        if let annotation = annotation as? MKAnnotationFromPlace {
+//            self.currentAnnotation = annotation
+//            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - 0.004, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+//            let controller = PlaceInfoModalViewController()
+//            let tempPlace = self.viewModel.places.first { place in
+//                annotation.placeUid == place.placeUid
+//            }
+//            controller.selectedPlace = tempPlace
+//            controller.delegateForClearAnnotation = self
+//            controller.delegateForFloating = self
+//            controller.presentationController?.delegate = self
+//            present(controller, animated: true)
+//            
+//        } else {
+//            print("THIS is CLUSTER")
+//        }
+//    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let view = view as? PlaceAnnotationView  {
+            guard let annotation = view.annotation else { return }
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.003 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
             let controller = PlaceInfoModalViewController()
+            let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
-                annotation.placeUid == place.placeUid
+                tempAnnotation?.placeUid == place.placeUid
             }
             controller.selectedPlace = tempPlace
-            controller.delegateForClearAnnotation = self
             controller.delegateForFloating = self
-            controller.presentationController?.delegate = self
+            controller.delegateForClearAnnotation = self
             present(controller, animated: true)
-            
         } else {
+            guard let annotation = view.annotation else { return }
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 4, longitudeDelta: map.region.span.longitudeDelta / 4)), animated: true)
             print("THIS is CLUSTER")
         }
     }

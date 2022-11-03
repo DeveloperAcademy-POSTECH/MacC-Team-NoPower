@@ -35,7 +35,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
             guard let position = self.position else { return }
             guard let place = self.place else { return }
             let latitude: Double = position.coordinate.latitude
-            let longitude = position.coordinate.longitude
+            let longitude: Double = position.coordinate.longitude
             let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
         }

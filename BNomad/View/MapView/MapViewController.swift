@@ -141,7 +141,7 @@ class MapViewController: UIViewController {
             sheet.detents = [.medium()]
             sheet.delegate = self
             sheet.prefersGrabberVisible = false
-            sheet.largestUndimmedDetentIdentifier = .medium
+//            sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
         }

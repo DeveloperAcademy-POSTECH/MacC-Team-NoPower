@@ -63,6 +63,9 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
              return view
          }()
     
+    
+    
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -79,8 +82,8 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
     // MARK: - Helpers
     
     func render() {
-//        contentView.addSubview(graphRectView)
-//        graphRectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: self.startAnchor, paddingBottom: self.endAnchor)
+        contentView.addSubview(graphRectView)
+        graphRectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: self.startAnchor, paddingBottom: self.endAnchor)
         
     }
 

@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Combine
 
 class MapViewController: UIViewController {
     
@@ -183,10 +184,14 @@ class MapViewController: UIViewController {
         }
         controller.selectedPlace = tempPlace
         controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true)
+        self.dismiss(animated: true) {
+            self.present(controller, animated: true)
+        }
     }
     
     private var currentAnnotation: MKAnnotation?
+    
+    var store = Set<AnyCancellable>()
     
     // MARK: - LifeCycle
     
@@ -203,6 +208,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
+        userSink()
     }
     
     // MARK: - Actions
@@ -291,6 +297,15 @@ class MapViewController: UIViewController {
         view.addSubview(checkInNow)
         checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
         checkInNow.centerX(inView: view)
+    }
+    
+    func userSink() {
+        viewModel.$user
+            .sink { user in
+                guard let user = user else { return }
+                self.checkInNow.isHidden = user.isChecked ? false : true
+            }
+            .store(in: &store)
     }
 }
 

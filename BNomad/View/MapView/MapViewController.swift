@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Combine
 
 class MapViewController: UIViewController {
     
@@ -174,6 +175,8 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    var store = Set<AnyCancellable>()
+    
     // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
     @objc func goBackToCheckInView() {
         let controller = PlaceCheckInViewController()
@@ -183,7 +186,9 @@ class MapViewController: UIViewController {
         }
         controller.selectedPlace = tempPlace
         controller.modalPresentationStyle = .fullScreen
-        present(controller, animated: true)
+        self.dismiss(animated: true) {
+            self.present(controller, animated: true)
+        }
     }
     
     private var currentAnnotation: MKAnnotation?
@@ -203,6 +208,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
+        userCombine()
     }
     
     // MARK: - Actions
@@ -291,6 +297,15 @@ class MapViewController: UIViewController {
         view.addSubview(checkInNow)
         checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
         checkInNow.centerX(inView: view)
+    }
+    
+    func userCombine() {
+        viewModel.$user
+            .sink { user in
+                guard let user = user else { return }
+                self.checkInNow.isHidden = user.isChecked ? false : true
+            }
+            .store(in: &store)
     }
 }
 

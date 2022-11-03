@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignUpViewController: UIViewController {
     
@@ -21,6 +22,9 @@ class SignUpViewController: UIViewController {
         button.backgroundColor = .lightGray
         button.layer.opacity = 0.5
         button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
+        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) { 
+            button.isHidden = true 
+        }
         return button
     }()
 
@@ -175,6 +179,10 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        Analytics.logEvent("signUpViewLoaded", parameters: [
+            AnalyticsParameterItemName: "signUpViewLoaded",
+          ])
 
         configUI()
         
@@ -406,6 +414,7 @@ class SignUpViewController: UIViewController {
                 if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
                     let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                     viewModel.user = user
+                    Analytics.logEvent("signUpCompleted", parameters: nil)
                     self.dismiss(animated: true) // 마지막 확인 버튼 클릭 후 dismiss 안됨
                 } else {
                     showAlert()

@@ -264,6 +264,12 @@ class MapViewController: UIViewController {
     
     // 맵 UI 그리기
     func configueMapUI() {
+        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
+            let controller = SignUpViewController()
+            controller.modalPresentationStyle = .fullScreen
+            present(controller, animated: false)
+        }
+        
         map.delegate = self
         view.addSubview(map)
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)

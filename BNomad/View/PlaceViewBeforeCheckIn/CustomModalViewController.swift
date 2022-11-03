@@ -21,11 +21,11 @@ class CustomModalViewController: UIViewController {
     var places: [Place]? = [] {
         didSet {
             collectionView.reloadData()
-            guard let places = places else { return }
+            guard var places = places else { return }
             self.numberOfPlaces.text = "업무 공간 " + String(places.count) + "개"
         }
     }
-    
+
     var rectangle: UIView = {
         let rectangle = UIView()
         rectangle.frame = CGRect(x: 0, y: 0, width: 80, height: 5)
@@ -113,8 +113,11 @@ extension CustomModalViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else  { return UICollectionViewCell() }
-        cell.position = position
-        guard let places = places else { return UICollectionViewCell() }
+        guard var places = places else { return UICollectionViewCell() }
+        guard let position = self.position else { return UICollectionViewCell() }
+        let latitude: Double = position.coordinate.latitude
+        let longitude: Double = position.coordinate.longitude
+        places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         cell.place = places[indexPath.item]
         cell.position = position
         return cell
@@ -131,7 +134,11 @@ extension CustomModalViewController: UICollectionViewDataSource {
 extension CustomModalViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = PlaceInfoModalViewController()
-        guard let places = places else { return }
+        guard var places = places else { return }
+        guard let position = self.position else { return }
+        let latitude: Double = position.coordinate.latitude
+        let longitude: Double = position.coordinate.longitude
+        places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         controller.selectedPlace = places[indexPath.item]
         controller.delegateForFloating = self
         present(controller, animated: true)

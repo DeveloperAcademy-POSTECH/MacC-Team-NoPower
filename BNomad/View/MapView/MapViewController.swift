@@ -402,17 +402,10 @@ extension MapViewController: ClearSelectedAnnotation {
 
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
-        print("checkInFloating")
-        guard let user = viewModel.user else { return }
-        if user.isChecked {
-            print("DUBG")
-            checkInNow.isHidden = false
-            map.addSubview(checkInNow)
-            checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
-            checkInNow.centerX(inView: view)
-        } else {
-            checkInNow.isHidden = true
-        }
+        map.addSubview(checkInNow)
+        checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
+        checkInNow.centerX(inView: view)
+        
     }
 }
 

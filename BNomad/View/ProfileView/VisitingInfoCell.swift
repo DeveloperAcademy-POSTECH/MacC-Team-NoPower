@@ -20,7 +20,6 @@ class VisitingInfoCell: UICollectionViewCell {
             viewOption = "calendar"
             cardDataList = []
             guard let checkInHistory = checkInHistoryForCalendar else { return }
-            
             for checkin in checkInHistory {
                 if checkin.date == thisCellsDate {
                     self.cardDataList.append(checkin)
@@ -42,7 +41,9 @@ class VisitingInfoCell: UICollectionViewCell {
                 self.checkinTimeLabel.text = ""
                 self.stayedTimeLabel.text = ""
             }
-            nameLabel.reloadInputViews()
+            let lastCheckIn = cardDataList.last
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            nameLabel.text = place?.name
         }
     }
     

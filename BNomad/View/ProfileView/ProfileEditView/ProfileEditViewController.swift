@@ -97,7 +97,7 @@ class ProfileEditViewController: UIViewController {
         textField.delegate = self
         
         // TODO: - 
-        textField.text = "iOS Developer"
+        textField.text = viewModel.user?.occupation
         return textField
     }()
     

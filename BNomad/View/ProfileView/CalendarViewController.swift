@@ -32,7 +32,7 @@ class CalendarViewController: UIViewController {
         return collectionView
     }()
     
-    private let VisitInfInfoView: UICollectionView = {
+    private let VisitInfoView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -132,8 +132,8 @@ class CalendarViewController: UIViewController {
         CalendarCollectionView.dataSource = self
         CalendarCollectionView.delegate = self
         
-        VisitInfInfoView.dataSource = self
-        VisitInfInfoView.delegate = self
+        VisitInfoView.dataSource = self
+        VisitInfoView.delegate = self
         
         plusMonthButton.addTarget(self, action: #selector(plusMonthTapButton), for: .touchUpInside)
         minusMonthButton.addTarget(self, action: #selector(minusMonthTapButton), for: .touchUpInside)
@@ -189,8 +189,8 @@ class CalendarViewController: UIViewController {
         calendarCollectionMonthHeader.anchor(top: CalendarCollectionView.topAnchor, paddingTop: 10)
         calendarCollectionMonthHeader.centerX(inView: view)
         
-        view.addSubview(VisitInfInfoView)
-        VisitInfInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+        view.addSubview(VisitInfoView)
+        VisitInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
                                 paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
         
 //        view.addSubview(VisitInfoHeader)
@@ -272,14 +272,13 @@ extension CalendarViewController: UICollectionViewDelegate {
             return cell
             
         } else {
-            
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
             
             let year = "2022"
-            let month = String((Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
-            let day = String((selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
+            let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
+            let day = String(format: "%02d", (selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
             let dateString = year+"-"+month+"-"+day
             
             cell.backgroundColor = .white
@@ -298,7 +297,7 @@ extension CalendarViewController: UICollectionViewDelegate {
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
             CalendarCollectionView.reloadData()
-            VisitInfInfoView.reloadData()
+            VisitInfoView.reloadData()
         }
     }
     
@@ -311,7 +310,7 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == CalendarCollectionView {
             return CGSize(width: 358/8, height: 358/7)
         } else {
-            return CGSize(width: VisitInfInfoView.frame.width, height: 119)
+            return CGSize(width: VisitInfoView.frame.width, height: 119)
         }
         
     }

@@ -181,9 +181,7 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
 
         Analytics.logEvent("signUpViewLoaded", parameters: [
-            AnalyticsParameterItemID: "id-title",
-            AnalyticsParameterItemName: "title",
-            AnalyticsParameterContentType: "cont",
+            AnalyticsParameterItemName: "signUpViewLoaded",
           ])
 
         configUI()

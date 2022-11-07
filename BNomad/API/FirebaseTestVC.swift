@@ -165,8 +165,10 @@ class FirebaseTestVC: UIViewController {
     }
 
     func createMeetUp() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+        let organizerUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
 
-        let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80", organizerUid: "7F57CF97-E200-4496-92C7-E7B30311D4F8", title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
+        let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: organizerUid, title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
                 
         FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in
             print(meetUp)

@@ -243,14 +243,6 @@ class FirebaseManager {
     // meetUpUser
     //     userUid
     //         meetUpUid
-    //             placeUid
-    //             time
-    //             title
-    //             description
-    //             maxPeopleNum
-    //             currentPeopleUids
-    //             meetUpPlaceName
-    //             organizerUid
 
     // MARK: firebase - meetUpPlace
     // meetUpPlace
@@ -264,6 +256,19 @@ class FirebaseManager {
     //                 currentPeopleUids
     //                 meetUpPlaceName
     //                 organizerUid
+
+    // MARK: firebase - meetUp
+    // meetUp
+    //     meetUpUid
+    //         placeUid
+    //         time
+    //         title
+    //         description
+    //         maxPeopleNum
+    //         currentPeopleUids
+    //         meetUpPlaceName
+    //         organizerUid
+
 
     /// completion를 이용해 meetUp을 place의 meetUpHistory에 넘겨주기
     func createMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
@@ -279,7 +284,8 @@ class FirebaseManager {
                            "currentPeopleUids": currentPeopleUids, "meetUpPlaceName": meetUp.meetUpPlaceName,
                            "organizerUid": meetUp.organizerUid] as [String : Any]
 
-        ref.updateChildValues(["meetUpUser/\(meetUp.organizerUid)/\(meetUp.meetUpUid)" : meetUpUser,
+        ref.updateChildValues(["meetUpUser/\(meetUp.organizerUid)/\(meetUp.meetUpUid)" : true,
+                                "meetUp/\(meetUp.meetUpUid)" : meetUpUser,
                                "meetUpPlace/\(meetUp.placeUid)/\(meetUp.date)/\(meetUp.meetUpUid)" : meetUpPlace]) { 
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {

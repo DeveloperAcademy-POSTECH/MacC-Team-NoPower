@@ -32,6 +32,9 @@
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5828F7D710002838A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5728F7D710002838A4 /* Assets.xcassets */; };
 		DF288B5B28F7D710002838A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */; };
+		DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA42918A0B40099D41D /* MeetUpViewController.swift */; };
+		DF561CA82918A0C40099D41D /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA72918A0C40099D41D /* ReviewViewController.swift */; };
+		DF561CAB2918A0DA0099D41D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CAA2918A0DA0099D41D /* SettingViewController.swift */; };
 		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
 		DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */; };
 		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
@@ -91,6 +94,9 @@
 		DF288B5728F7D710002838A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF288B5A28F7D710002838A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF288B5C28F7D710002838A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF561CA42918A0B40099D41D /* MeetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetUpViewController.swift; sourceTree = "<group>"; };
+		DF561CA72918A0C40099D41D /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
+		DF561CAA2918A0DA0099D41D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		DF9618A528FCEF6A00E21D30 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +168,22 @@
 			path = BNomad;
 			sourceTree = "<group>";
 		};
+		DF561CA62918A0B70099D41D /* ReviewView */ = {
+			isa = PBXGroup;
+			children = (
+				DF561CA72918A0C40099D41D /* ReviewViewController.swift */,
+			);
+			path = ReviewView;
+			sourceTree = "<group>";
+		};
+		DF561CA92918A0CF0099D41D /* SettingView */ = {
+			isa = PBXGroup;
+			children = (
+				DF561CAA2918A0DA0099D41D /* SettingViewController.swift */,
+			);
+			path = SettingView;
+			sourceTree = "<group>";
+		};
 		DF96185928F8052200E21D30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +194,9 @@
 		DF96189C28FCEEE900E21D30 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DF561CA92918A0CF0099D41D /* SettingView */,
+				DF561CA62918A0B70099D41D /* ReviewView */,
+				DFDBBAAB2918A064009DC462 /* MeetUpView */,
 				F6183CBA28FFABAB00185A1F /* PlaceViewBeforeCheckIn */,
 				DF96189F28FCEF0100E21D30 /* MapView */,
 				DF9618A328FCEF1700E21D30 /* PlaceInfoView */,
@@ -254,6 +279,14 @@
 				7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */,
 			);
 			path = PlaceCheckInView;
+			sourceTree = "<group>";
+		};
+		DFDBBAAB2918A064009DC462 /* MeetUpView */ = {
+			isa = PBXGroup;
+			children = (
+				DF561CA42918A0B40099D41D /* MeetUpViewController.swift */,
+			);
+			path = MeetUpView;
 			sourceTree = "<group>";
 		};
 		DFE747B628FD75690048E70A /* Utils */ = {
@@ -427,6 +460,7 @@
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
+				DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
 				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
@@ -443,6 +477,7 @@
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */,
 				E27CEECF2912C38900369A6E /* RCValue.swift in Sources */,
+				DF561CA82918A0C40099D41D /* ReviewViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
@@ -451,6 +486,7 @@
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,
+				DF561CAB2918A0DA0099D41D /* SettingViewController.swift in Sources */,
 				E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

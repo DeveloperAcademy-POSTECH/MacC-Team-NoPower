@@ -44,7 +44,9 @@ class FirebaseTestVC: UIViewController {
         // // meetUp 생성
         // createMeetUp()
 
-        fetchMeetUpPlace()
+        // fetchMeetUpPlace()
+
+         fetchMeetUpUser()
     }
     
     func fetchPlaceAll() {
@@ -177,5 +179,13 @@ class FirebaseTestVC: UIViewController {
         FirebaseManager.shared.fetchMeetUpHistory(placeUid: placeUid) { meetUpHistory in
             print(meetUpHistory)
         }        
+    }
+
+    func fetchMeetUpUser() {
+        let userUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
+
+        FirebaseManager.shared.fetchMeetUpHistory(userUid: userUid) { meetUpHistory in
+            print(meetUpHistory)
+        }
     }
 }

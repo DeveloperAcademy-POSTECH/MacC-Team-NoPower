@@ -157,4 +157,12 @@ class FirebaseTestVC: UIViewController {
         }
     }
 
+    func createMeetUp() {
+
+        let meetUp = MeetUp(placeUid: "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80", organizerUid: "7F57CF97-E200-4496-92C7-E7B30311D4F8", title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
+                
+        FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in
+            print(meetUp)
+        }
+    }
 }

@@ -117,6 +117,13 @@ class MeetUpViewController: UIViewController {
         
         participantCollectionView.dataSource = self
         participantCollectionView.delegate = self
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
+    }
+    
+    @objc func editMeetUpContent() {
+        // TODO: 편집뷰로 이동
     }
     
     // MARK: - Helpers
@@ -125,8 +132,11 @@ class MeetUpViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        let viewHeight = view.bounds.height
+        let paddingTop = viewHeight * 160/844
+        
         view.addSubview(meetUpTitleLabel)
-        meetUpTitleLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 90, paddingLeft: 20)
+        meetUpTitleLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: paddingTop, paddingLeft: 20)
         
         view.addSubview(location)
         location.anchor(top: meetUpTitleLabel.bottomAnchor, left: meetUpTitleLabel.leftAnchor, paddingTop: 43)

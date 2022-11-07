@@ -37,9 +37,14 @@ class FirebaseTestVC: UIViewController {
         // fetchCheckInHistoryAll()
         
         // checkin 후 checkOut
-        setCheckIn() { user in
-            self.setCheckOut(user: user)
-        }
+        // setCheckIn() { user in
+        //     self.setCheckOut(user: user)
+        // }
+
+        // // meetUp 생성
+        // createMeetUp()
+
+        fetchMeetUpPlace()
     }
     
     func fetchPlaceAll() {
@@ -159,10 +164,18 @@ class FirebaseTestVC: UIViewController {
 
     func createMeetUp() {
 
-        let meetUp = MeetUp(placeUid: "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80", organizerUid: "7F57CF97-E200-4496-92C7-E7B30311D4F8", title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
+        let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80", organizerUid: "7F57CF97-E200-4496-92C7-E7B30311D4F8", title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
                 
         FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in
             print(meetUp)
         }
+    }
+
+    func fetchMeetUpPlace() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+
+        FirebaseManager.shared.fetchMeetUpHistory(placeUid: placeUid) { meetUpHistory in
+            print(meetUpHistory)
+        }        
     }
 }

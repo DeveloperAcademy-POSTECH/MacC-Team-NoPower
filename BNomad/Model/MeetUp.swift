@@ -9,18 +9,18 @@ import Foundation
 
 struct MeetUp {
     
-    let questUid: String = UUID().uuidString
-    var participantUid: [String] = []
+    let meetUpUid: String = UUID().uuidString
+    var currentPeopleUid: [String] = []
 
     let placeUid: String
     let organizerUid: String
     
-    var name: String
-    var meetPlace: String
+    var title: String
+    var meetUpPlaceName: String
     var time: Date
-    var maxNum: Int
+    var maxPeopleNum: Int
     
-    var memo: String?
+    var description: String?
 
     var date: String { time.toDateString()}
 }

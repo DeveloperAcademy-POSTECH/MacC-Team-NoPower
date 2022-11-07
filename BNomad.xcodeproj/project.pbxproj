@@ -23,6 +23,7 @@
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
+		7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
@@ -83,6 +84,7 @@
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
+		7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantCell.swift; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				DF561CA42918A0B40099D41D /* MeetUpViewController.swift */,
+				7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */,
 			);
 			path = MeetUpView;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
 				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
+				7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */,
 				631AD82B2906316B00EEED02 /* BasicInfoCell.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				041351AD29081D16005D19CC /* ProfileGraphCollectionCell.swift in Sources */,

@@ -367,4 +367,19 @@ class FirebaseManager {
             completion(meetUp)
         })
     }
+
+    func participateMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : true,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : true,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : true]) { 
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
 }

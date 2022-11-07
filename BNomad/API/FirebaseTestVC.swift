@@ -44,9 +44,17 @@ class FirebaseTestVC: UIViewController {
         // // meetUp 생성
         // createMeetUp()
 
+        // // place의 특정 날 meetUp 가져오기
         // fetchMeetUpPlace()
+        
+        // // 특정 meetUpUid의 meetUp 가져오기
+        // fetchMeetUp()
 
-         fetchMeetUpUser()
+        // // user의 모든 meetUpUid 가져오기
+        // fetchMeetUpUidFromUser()
+        
+        // // meetUp 참가하기
+        participateMeetUp()
     }
     
     func fetchPlaceAll() {
@@ -199,4 +207,13 @@ class FirebaseTestVC: UIViewController {
         }
     }
     
+   func participateMeetUp() {
+        let userUid = "0735EBD4-DF99-44B8-B290-24DFE3D69E27" // 진은좀
+        let meetUpUid = "E5E9F761-F77B-423D-805C-01153522735C"
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80" // 커뮤니티 24시
+
+        FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+            print("참여 완료")
+        }
+   }
 }

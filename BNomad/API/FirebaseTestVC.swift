@@ -190,4 +190,13 @@ class FirebaseTestVC: UIViewController {
             print(meetUpHistory)
         }
     }
+    
+    func fetchMeetUp() {
+        let meetUid: String = "69F0CEAE-AD5C-4854-B6DE-1B33B8C6DBA7"
+
+        FirebaseManager.shared.fetchMeetUp(meetUpUid: meetUid) { meetUp in
+            print(meetUp)
+        }
+    }
+    
 }

@@ -361,4 +361,32 @@ class FirebaseManager {
             completion(meetUpHistory)
         })
     }
+
+    func fetchMeetUp(meetUpUid: String, completion: @escaping(MeetUp) -> Void) {
+        ref.child("meetUp/\(meetUpUid)").observeSingleEvent(of: .value, with: { snapshot in
+            guard let meetUpDict = snapshot.value as? [String: Any] else { return }
+            
+            guard let placeUid = meetUpDict["placeUid"] as? String else { return }
+            guard let time = meetUpDict["time"] as? String else { return }
+            guard let title = meetUpDict["title"] as? String else { return }
+            guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
+            guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
+            guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
+            
+            guard let time = time.toDateTime() else { return }
+            
+            let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
+            
+            var currentPeopleUidsArray: [String] = []
+            
+            if let currentPeopleUids = currentPeopleUids {
+                currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
+            }
+            
+            let description = meetUpDict["description"] as? String
+            
+            let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
+            completion(meetUp)
+        })
+    }
 }

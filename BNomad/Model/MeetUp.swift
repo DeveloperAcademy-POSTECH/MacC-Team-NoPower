@@ -10,7 +10,7 @@ import Foundation
 struct MeetUp {
     
     let meetUpUid: String = UUID().uuidString
-    var currentPeopleUid: [String] = []
+    var currentPeopleUids: [String]?
 
     let placeUid: String
     let organizerUid: String

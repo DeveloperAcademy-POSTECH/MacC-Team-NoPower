@@ -329,36 +329,14 @@ class FirebaseManager {
         })
     }
     
-    func fetchMeetUpHistory(userUid: String, completion: @escaping( [MeetUp]) -> Void) {
-        var meetUpHistory: [MeetUp] = []
-        
+    func fetchMeetUpUidAll(userUid: String, completion: @escaping(String) -> Void) {
+
         ref.child("meetUpUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshots in
             for child in snapshots.children {
                 guard let snapshot = child as? DataSnapshot else { return }
-                guard let meetUpDict = snapshot.value as? [String: Any] else { return }
-                
-                guard let placeUid = meetUpDict["placeUid"] as? String else { return }
-                guard let time = meetUpDict["time"] as? String else { return }
-                guard let title = meetUpDict["title"] as? String else { return }
-                guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
-                guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
-                guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
-                
-                guard let time = time.toDateTime() else { return }
-                
-                let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
-                
-                var currentPeopleUidsArray: [String] = []
-                
-                if let currentPeopleUids = currentPeopleUids {
-                    currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
-                }
-                
-                let description = meetUpDict["description"] as? String
-                let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
-                meetUpHistory.append(meetUp)
+                guard let meetUpUid = snapshot.key as? String else { return }
+                completion(meetUpUid)
             }
-            completion(meetUpHistory)
         })
     }
 

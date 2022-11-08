@@ -14,6 +14,9 @@ class NewMeetUpViewController: UIViewController {
     private let subjectLimit = 15
     private let locationLimit = 15
     
+    private let minimumPeople = 2
+    private var counter = 2
+    
     private let subject: UILabel = {
         let label = UILabel()
         label.text = "제목"
@@ -98,6 +101,13 @@ class NewMeetUpViewController: UIViewController {
         textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         textField.borderStyle = .none
         
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "ko_KR")
+        textField.text = formatter.string(from: Date())
+        
         return textField
     }()
     
@@ -154,11 +164,21 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var peopleCounterLabel: UILabel = {
+        let label = UILabel()
+        label.text = "\(counter)"
+        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        label.textColor = CustomColor.nomadBlack
+        
+        return label
+    }()
+    
     private let plusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
+        button.addTarget(self, action: #selector(didTapPlusButton), for: .touchUpInside)
         
         return button
     }()
@@ -176,6 +196,7 @@ class NewMeetUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "minus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
+        button.addTarget(self, action: #selector(didTapMinusButton), for: .touchUpInside)
         
         return button
     }()
@@ -261,6 +282,18 @@ class NewMeetUpViewController: UIViewController {
     
     @objc func didTapDoneTimePicker() {
         timeField.resignFirstResponder()
+    }
+    
+    @objc func didTapPlusButton() {
+        counter = counter + 1
+        peopleCounterLabel.text = "\(counter)"
+    }
+    
+    @objc func didTapMinusButton() {
+        if counter > minimumPeople {
+            counter = counter - 1
+            peopleCounterLabel.text = "\(counter)"
+        }
     }
     
     @objc func didTapDoneCreatingMeetUp() {
@@ -368,6 +401,9 @@ class NewMeetUpViewController: UIViewController {
             width: halfRectWidth,
             height: 48
         )
+        
+        peopleRectangle.addSubview(peopleCounterLabel)
+        peopleCounterLabel.center(inView: peopleRectangle)
         
         view.addSubview(peopleCounterView)
         peopleCounterView.anchor(

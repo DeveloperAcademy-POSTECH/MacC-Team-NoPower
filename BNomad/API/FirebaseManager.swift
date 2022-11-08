@@ -8,6 +8,8 @@
 import Foundation
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+import FirebaseStorage
+import UIKit
 
 class FirebaseManager {
     
@@ -236,6 +238,42 @@ class FirebaseManager {
                 print("checkOut could not be saved: \(error).")
             } else {
                 completion(checkIn)
+            }
+        }
+    }
+    
+    func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userUid)")
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            print("DEBUG - fail compression")
+            return
+        }
+
+        imageRef.putData(imageData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                print("DEBUG \(error.localizedDescription)")
+                return
+            }
+            
+            imageRef.downloadURL { (url, error) in
+                if let error = error {
+                    print("DEBUG \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let downloadURL = url else {
+                    print("DEBUG - url fail")
+                    return
+                }
+
+                self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString]) {
+                    (error: Error?, ref: DatabaseReference) in
+                    if let error: Error = error {
+                        print("DEBUG \(error).")
+                    }
+                }
+                completion(downloadURL.absoluteString)
             }
         }
     }

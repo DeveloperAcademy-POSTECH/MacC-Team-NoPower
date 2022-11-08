@@ -16,7 +16,7 @@ class FirebaseTestVC: UIViewController {
         // fetchPlaceAll()
         
         // // 특정 user 가져오기
-        // fetchUser()
+        fetchUser()
         
         // // user 업로드하기
         // setUser()
@@ -37,9 +37,11 @@ class FirebaseTestVC: UIViewController {
         // fetchCheckInHistoryAll()
         
         // checkin 후 checkOut
-        setCheckIn() { user in
-            self.setCheckOut(user: user)
-        }
+        // setCheckIn() { user in
+        //     self.setCheckOut(user: user)
+        // }
+
+//        uploadUserProfileImage()
     }
     
     func fetchPlaceAll() {
@@ -49,7 +51,7 @@ class FirebaseTestVC: UIViewController {
     }
     
     func fetchUser() {
-        let currentUserUid = "01b651da-79ce-4089-85ad-966d3a0463b0"
+        let currentUserUid = "04FDF4B0-5975-4D9F-9424-41092F5112E2"
         FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
             print(user)
         }
@@ -157,4 +159,15 @@ class FirebaseTestVC: UIViewController {
         }
     }
 
+    func uploadUserProfileImage() {
+        guard let image = UIImage(named: "will.jpg") else {
+            print("DEBUG - fail image load")
+            return
+        }
+        let userUid = "04FDF4B0-5975-4D9F-9424-41092F5112E2"
+
+        FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
+            print(url)
+        }
+    }
 }

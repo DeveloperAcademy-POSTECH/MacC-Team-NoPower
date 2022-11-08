@@ -193,6 +193,17 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var contentField: UITextView = {
+        let textView = UITextView()
+        textView.text = "내용을 입력하세요."
+        textView.textColor = .tertiaryLabel
+        textView.font = .preferredFont(forTextStyle: .body)
+        textView.backgroundColor = .clear
+        textView.delegate = self
+        
+        return textView
+    }()
+    
     // MARK: - LifeCycle
 
     override func viewDidLoad() {
@@ -291,5 +302,26 @@ class NewMeetUpViewController: UIViewController {
         view.addSubview(contentRectangle)
         contentRectangle.anchor(top: content.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 120)
         
+        contentRectangle.addSubview(contentField)
+        contentField.anchor(top: contentRectangle.topAnchor, left: contentRectangle.leftAnchor, bottom: contentRectangle.bottomAnchor, right: contentRectangle.rightAnchor, paddingTop: 13, paddingLeft: 20, paddingBottom: 15, paddingRight: 20)
+
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension NewMeetUpViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .tertiaryLabel {
+            textView.text = nil
+            textView.textColor = CustomColor.nomadBlack
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "내용을 입력하세요."
+            textView.textColor = .tertiaryLabel
+        }
     }
 }

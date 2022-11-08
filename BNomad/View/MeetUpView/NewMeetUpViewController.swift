@@ -11,6 +11,9 @@ class NewMeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
+    private let subjectLimit = 15
+    private let locationLimit = 15
+    
     private let subject: UILabel = {
         let label = UILabel()
         label.text = "제목"
@@ -28,7 +31,7 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
-    private let subjectField: UITextField = {
+    private var subjectField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "모임 제목을 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
@@ -36,6 +39,15 @@ class NewMeetUpViewController: UIViewController {
         textField.clearButtonMode = .whileEditing
         
         return textField
+    }()
+    
+    private lazy var subjectCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption2)
+        label.text = "0 / \(subjectLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
     }()
     
     private let time: UILabel = {
@@ -59,6 +71,7 @@ class NewMeetUpViewController: UIViewController {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
         picker.preferredDatePickerStyle = .wheels
+        picker.minuteInterval = 10
         picker.frame.size = CGSize(width: 0, height: 250)
         picker.locale = Locale(identifier: "ko_KR")
         picker.addTarget(self, action: #selector(didTimePickerValueChange), for: .valueChanged)
@@ -80,7 +93,7 @@ class NewMeetUpViewController: UIViewController {
         return toolBar
     }()
     
-    private let timeField: UITextField = {
+    private var timeField: UITextField = {
         let textField = UITextField()
         textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         textField.borderStyle = .none
@@ -105,7 +118,7 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
-    private let locationField: UITextField = {
+    private var locationField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "모임 장소를 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
@@ -113,6 +126,15 @@ class NewMeetUpViewController: UIViewController {
         textField.clearButtonMode = .whileEditing
         
         return textField
+    }()
+    
+    private lazy var locationCounterLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption2)
+        label.text = "0 / \(locationLimit)"
+        label.textColor = CustomColor.nomadGray1
+        
+        return label
     }()
     
     private let people: UILabel = {
@@ -215,6 +237,11 @@ class NewMeetUpViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneCreatingMeetUp))
                  navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelCreatingMeetUp))
+        
+        subjectField.delegate = self
+        locationField.delegate = self
+        
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Actions
@@ -257,17 +284,42 @@ class NewMeetUpViewController: UIViewController {
         subject.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: paddingTop, paddingLeft: 20)
         
         view.addSubview(subjectRectangle)
-        subjectRectangle.anchor(top: subject.bottomAnchor, left: subject.leftAnchor, right: view.rightAnchor, paddingTop: 8, paddingRight: 20, height: 48)
+        subjectRectangle.anchor(
+            top: subject.bottomAnchor,
+            left: subject.leftAnchor,
+            right: view.rightAnchor,
+            paddingTop: 8,
+            paddingRight: 20,
+            height: 48
+        )
         
         subjectRectangle.addSubview(subjectField)
         subjectField.centerY(inView: subjectRectangle)
-        subjectField.anchor(left: subjectRectangle.leftAnchor, right: subjectRectangle.rightAnchor, paddingLeft: 20, paddingRight: 10)
+        subjectField.anchor(
+            left: subjectRectangle.leftAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingLeft: 20,
+            paddingRight: 10
+        )
+        
+        view.addSubview(subjectCounterLabel)
+        subjectCounterLabel.anchor(
+            top: subjectRectangle.bottomAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingTop: 4
+        )
         
         view.addSubview(time)
         time.anchor(top: subjectRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         view.addSubview(timeRectangle)
-        timeRectangle.anchor(top: time.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 48)
+        timeRectangle.anchor(
+            top: time.bottomAnchor,
+            left: subject.leftAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingTop: 8,
+            height: 48
+        )
         
         timeRectangle.addSubview(timeField)
         timeField.center(inView: timeRectangle)
@@ -278,11 +330,29 @@ class NewMeetUpViewController: UIViewController {
         location.anchor(top: timeRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         view.addSubview(locationRectangle)
-        locationRectangle.anchor(top: location.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 48)
+        locationRectangle.anchor(
+            top: location.bottomAnchor,
+            left: subject.leftAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingTop: 8,
+            height: 48
+        )
         
         locationRectangle.addSubview(locationField)
         locationField.centerY(inView: locationRectangle)
-        locationField.anchor(left: subjectRectangle.leftAnchor, right: subjectRectangle.rightAnchor, paddingLeft: 20, paddingRight: 10)
+        locationField.anchor(
+            left: subjectRectangle.leftAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingLeft: 20,
+            paddingRight: 10
+        )
+        
+        view.addSubview(locationCounterLabel)
+        locationCounterLabel.anchor(
+            top: locationRectangle.bottomAnchor,
+            right: locationRectangle.rightAnchor,
+            paddingTop: 4
+        )
         
         view.addSubview(people)
         people.anchor(top: locationRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
@@ -291,21 +361,69 @@ class NewMeetUpViewController: UIViewController {
         let halfRectWidth = (viewWidth - 20*2 - 10*2)/2
         
         view.addSubview(peopleRectangle)
-        peopleRectangle.anchor(top: people.bottomAnchor, left: subject.leftAnchor, paddingTop: 8, width: halfRectWidth, height: 48)
+        peopleRectangle.anchor(
+            top: people.bottomAnchor,
+            left: subject.leftAnchor,
+            paddingTop: 8,
+            width: halfRectWidth,
+            height: 48
+        )
         
         view.addSubview(peopleCounterView)
-        peopleCounterView.anchor(top: peopleRectangle.topAnchor, right: view.rightAnchor, paddingRight: 20, width: halfRectWidth, height: 48)
+        peopleCounterView.anchor(
+            top: peopleRectangle.topAnchor,
+            right: view.rightAnchor,
+            paddingRight: 20,
+            width: halfRectWidth,
+            height: 48
+        )
         
         view.addSubview(content)
         content.anchor(top: peopleRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         view.addSubview(contentRectangle)
-        contentRectangle.anchor(top: content.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 120)
+        contentRectangle.anchor(
+            top: content.bottomAnchor,
+            left: subject.leftAnchor,
+            right: subjectRectangle.rightAnchor,
+            paddingTop: 8,
+            height: 120
+        )
         
         contentRectangle.addSubview(contentField)
-        contentField.anchor(top: contentRectangle.topAnchor, left: contentRectangle.leftAnchor, bottom: contentRectangle.bottomAnchor, right: contentRectangle.rightAnchor, paddingTop: 13, paddingLeft: 20, paddingBottom: 15, paddingRight: 20)
+        contentField.anchor(
+            top: contentRectangle.topAnchor,
+            left: contentRectangle.leftAnchor,
+            bottom: contentRectangle.bottomAnchor,
+            right: contentRectangle.rightAnchor,
+            paddingTop: 13,
+            paddingLeft: 20,
+            paddingBottom: 15,
+            paddingRight: 20
+        )
 
     }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension NewMeetUpViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updateText = currentText.replacingCharacters(in: stringRange, with: string)
+        if textField == subjectField {
+            subjectCounterLabel.text = "\(updateText.count) / \(subjectLimit)"
+            return updateText.count < subjectLimit
+        } else if textField == locationField {
+            locationCounterLabel.text = "\(updateText.count) / \(locationLimit)"
+            return updateText.count < locationLimit
+        }
+        
+        return true
+    }
+    
+    
 }
 
 // MARK: - UITextViewDelegate

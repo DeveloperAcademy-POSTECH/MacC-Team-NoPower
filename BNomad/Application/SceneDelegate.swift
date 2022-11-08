@@ -28,13 +28,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     FirebaseManager.shared.fetchCheckInHistory(userUid: deviceUid) { checkInHistory in
                         self.viewModel.user?.checkInHistory = checkInHistory
                         print("checkIn 유무", self.viewModel.user?.isChecked)
-                        self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                        self.window?.rootViewController = UINavigationController(rootViewController: NewMeetUpViewController())
                         self.window?.makeKeyAndVisible()
                     }
                 }
             } else {
                 print("no user")
-                self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                self.window?.rootViewController = UINavigationController(rootViewController: NewMeetUpViewController())
                 self.window?.makeKeyAndVisible()
             }
         }

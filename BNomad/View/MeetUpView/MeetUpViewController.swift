@@ -64,6 +64,24 @@ class MeetUpViewController: UIViewController {
         
         return label
     }()
+        
+    lazy var locationStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [location, locationLabel])
+        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 14
+        
+        return stack
+    }()
+        
+    lazy var timeStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [time, timeLabel])
+        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 14
+        
+        return stack
+    }()
     
     private let contentLabel: UILabel = {
         let label = UILabel()
@@ -138,25 +156,18 @@ class MeetUpViewController: UIViewController {
         view.addSubview(meetUpTitleLabel)
         meetUpTitleLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: paddingTop, paddingLeft: 20)
         
-        view.addSubview(location)
-        location.anchor(top: meetUpTitleLabel.bottomAnchor, left: meetUpTitleLabel.leftAnchor, paddingTop: 43)
+        view.addSubview(locationStack)
+        locationStack.anchor(top: meetUpTitleLabel.bottomAnchor, left: meetUpTitleLabel.leftAnchor, paddingTop: 43)
 
-        view.addSubview(locationLabel)
-        locationLabel.anchor(top: location.bottomAnchor, left: location.leftAnchor, paddingTop: 14)
-        
         view.addSubview(divider)
         divider.anchor(top: location.topAnchor, bottom: locationLabel.bottomAnchor, width: 1)
         divider.centerX(inView: view)
         
-        view.addSubview(time)
-        time.anchor(top: location.topAnchor, left: divider.rightAnchor, paddingLeft: 20)
-        
-        view.addSubview(timeLabel)
-        timeLabel.centerY(inView: locationLabel)
-        timeLabel.anchor(left: time.leftAnchor)
+        view.addSubview(timeStack)
+        timeStack.anchor(top: location.topAnchor, left: divider.rightAnchor, paddingLeft: 20)
         
         view.addSubview(contentLabel)
-        contentLabel.anchor(top: divider.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 48, paddingLeft: 20, paddingRight: 20)
+        contentLabel.anchor(top: locationStack.bottomAnchor, left: meetUpTitleLabel.leftAnchor, right: view.rightAnchor, paddingTop: 48, paddingRight: 20)
 
         view.addSubview(participants)
         participants.anchor(top: contentLabel.bottomAnchor, left: meetUpTitleLabel.leftAnchor, paddingTop: 100)

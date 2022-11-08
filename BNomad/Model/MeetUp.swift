@@ -10,8 +10,6 @@ import Foundation
 struct MeetUp {
     
     let meetUpUid: String
-    var currentPeopleUids: [String]?
-
     let placeUid: String
     let organizerUid: String
     
@@ -21,6 +19,7 @@ struct MeetUp {
     var maxPeopleNum: Int
     
     var description: String?
+    var currentPeopleUids: [String]?
 
     var date: String { time.toDateString()}
 }

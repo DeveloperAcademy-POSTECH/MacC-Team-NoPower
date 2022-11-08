@@ -269,8 +269,8 @@ class FirebaseManager {
     //         meetUpPlaceName
     //         organizerUid
 
-
-    /// completion를 이용해 meetUp을 place의 meetUpHistory에 넘겨주기
+    /// 새로운 meetUp을 생성
+    /// completion로 place의 meetUpHistory에 MeetUp을 넘겨줘야함.
     func createMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
         let currentPeopleUids = [meetUp.organizerUid: true]
         
@@ -296,6 +296,7 @@ class FirebaseManager {
         }
     }
 
+    /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
         let date = date.toDateString()
         var meetUpHistory: [MeetUp] = []
@@ -329,6 +330,7 @@ class FirebaseManager {
         })
     }
     
+    /// 특정 유저가 참여한 모든 meetUp의 Uid 가져오기
     func fetchMeetUpUidAll(userUid: String, completion: @escaping(String) -> Void) {
 
         ref.child("meetUpUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshots in
@@ -340,6 +342,7 @@ class FirebaseManager {
         })
     }
 
+    /// meetUpUid의 meetUp 가져오기
     func fetchMeetUp(meetUpUid: String, completion: @escaping(MeetUp) -> Void) {
         ref.child("meetUp/\(meetUpUid)").observeSingleEvent(of: .value, with: { snapshot in
             guard let meetUpDict = snapshot.value as? [String: Any] else { return }
@@ -368,6 +371,9 @@ class FirebaseManager {
         })
     }
 
+    /// meetUp 참여하기
+    /// completion으로 place - meetUpHistory - meetUp - currentPeopleUids에 userUid 추가
+    /// completion으로 user - meetUpHistory에 meetUp 추가
     func participateMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
         let date = Date().toDateString()
         

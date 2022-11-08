@@ -55,14 +55,14 @@ class FirebaseManager {
     }
     
     
-    // MARK: user
+    // MARK: users
     // firebase
     //    users
     //        userUid
     //            nickname
     //            occupation
     //            introduction
-    //
+    //            profileImageUrl
 
     /// userUid 존재하는지 체크
     func checkUserExist(userUid: String, completion: @escaping(Bool) -> Void) {

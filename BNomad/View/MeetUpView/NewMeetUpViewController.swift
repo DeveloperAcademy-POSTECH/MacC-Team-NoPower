@@ -28,6 +28,16 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
+    private let subjectField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "모임 제목을 입력하세요."
+        textField.font = .preferredFont(forTextStyle: .body)
+        textField.borderStyle = .none
+        textField.clearButtonMode = .whileEditing
+        
+        return textField
+    }()
+    
     private let time: UILabel = {
         let label = UILabel()
         label.text = "모임 시간"
@@ -45,6 +55,39 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
+    private let timePicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .time
+        picker.preferredDatePickerStyle = .wheels
+        picker.frame.size = CGSize(width: 0, height: 250)
+        picker.locale = Locale(identifier: "ko_KR")
+        picker.addTarget(self, action: #selector(didTimePickerValueChange), for: .valueChanged)
+        
+        return picker
+    }()
+    
+    private let timePickerToolBar: UIToolbar = {
+        let toolBar = UIToolbar()
+        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelTimePicker))
+        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneTimePicker))
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        cancelButton.tintColor = CustomColor.nomadBlue
+        doneButton.tintColor = CustomColor.nomadBlue
+        
+        toolBar.sizeToFit()
+        toolBar.setItems([cancelButton, space, doneButton], animated: false)
+        
+        return toolBar
+    }()
+    
+    private let timeField: UITextField = {
+        let textField = UITextField()
+        textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        textField.borderStyle = .none
+        
+        return textField
+    }()
+    
     private let location: UILabel = {
         let label = UILabel()
         label.text = "모임 장소"
@@ -60,6 +103,16 @@ class NewMeetUpViewController: UIViewController {
         view.layer.cornerRadius = 12
         
         return view
+    }()
+    
+    private let locationField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "모임 장소를 입력하세요."
+        textField.font = .preferredFont(forTextStyle: .body)
+        textField.borderStyle = .none
+        textField.clearButtonMode = .whileEditing
+        
+        return textField
     }()
     
     private let people: UILabel = {
@@ -155,6 +208,23 @@ class NewMeetUpViewController: UIViewController {
     
     // MARK: - Actions
     
+    @objc func didTimePickerValueChange() {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        formatter.dateFormat = "HH:mm"
+        formatter.locale = Locale(identifier: "ko_KR")
+        self.timeField.text = formatter.string(from: timePicker.date)
+    }
+    
+    @objc func didTapCancelTimePicker() {
+        timeField.resignFirstResponder()
+    }
+    
+    @objc func didTapDoneTimePicker() {
+        timeField.resignFirstResponder()
+    }
+    
     @objc func didTapDoneCreatingMeetUp() {
         // TODO: 내용 저장
     }
@@ -178,17 +248,30 @@ class NewMeetUpViewController: UIViewController {
         view.addSubview(subjectRectangle)
         subjectRectangle.anchor(top: subject.bottomAnchor, left: subject.leftAnchor, right: view.rightAnchor, paddingTop: 8, paddingRight: 20, height: 48)
         
+        subjectRectangle.addSubview(subjectField)
+        subjectField.centerY(inView: subjectRectangle)
+        subjectField.anchor(left: subjectRectangle.leftAnchor, right: subjectRectangle.rightAnchor, paddingLeft: 20, paddingRight: 10)
+        
         view.addSubview(time)
         time.anchor(top: subjectRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         view.addSubview(timeRectangle)
         timeRectangle.anchor(top: time.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 48)
         
+        timeRectangle.addSubview(timeField)
+        timeField.center(inView: timeRectangle)
+        timeField.inputView = timePicker
+        timeField.inputAccessoryView = timePickerToolBar
+        
         view.addSubview(location)
         location.anchor(top: timeRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         view.addSubview(locationRectangle)
         locationRectangle.anchor(top: location.bottomAnchor, left: subject.leftAnchor, right: subjectRectangle.rightAnchor, paddingTop: 8, height: 48)
+        
+        locationRectangle.addSubview(locationField)
+        locationField.centerY(inView: locationRectangle)
+        locationField.anchor(left: subjectRectangle.leftAnchor, right: subjectRectangle.rightAnchor, paddingLeft: 20, paddingRight: 10)
         
         view.addSubview(people)
         people.anchor(top: locationRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)

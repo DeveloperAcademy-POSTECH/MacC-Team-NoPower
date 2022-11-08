@@ -88,7 +88,8 @@ class FirebaseManager {
             let userUid = snapshot.key
             let occupation = dictionary["occupation"] as? String
             let introduction = dictionary["introduction"] as? String
-            let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: introduction, checkInHistory: nil)
+            let profileImageUrl = dictionary["profileImageUrl"] as? String
+            let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: introduction, checkInHistory: nil, profileImageUrl: profileImageUrl)
             
             completion(user)
         })

@@ -80,10 +80,11 @@ class PlaceCheckInViewController: UIViewController {
     func placeCheckInView() {
 
         view.addSubview(placeTitleLabel)
-        placeTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        placeTitleLabel.anchor(top: view.topAnchor, paddingTop: 51)
+        placeTitleLabel.centerX(inView: view)
+        placeTitleLabel.anchor(top: view.topAnchor, paddingTop: 58)
         
         view.addSubview(collectionView)
+        collectionView.contentInsetAdjustmentBehavior = .never
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.collectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
@@ -91,7 +92,7 @@ class PlaceCheckInViewController: UIViewController {
         self.collectionView.register(PlaceInfoViewCell.self, forCellWithReuseIdentifier: PlaceInfoViewCell.identifier)
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
-        collectionView.anchor(top: placeTitleLabel.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 15, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
+        collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     func configureCancelButton() {
@@ -117,7 +118,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             checkInCardViewCell.checkOutDelegate = self
             checkInCardViewCell.user = viewModel.user
             checkInCardViewCell.checkIn = viewModel.user?.currentCheckIn
-            
+            checkInCardViewCell.selectedPlaceTitle.text = selectedPlace?.name
             return checkInCardViewCell
         }
         else if indexPath.section == 1 {
@@ -167,8 +168,7 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
         
         if indexPath.section == 0 {
-            print(sectionZeroHeight)
-            return CGSize(width: viewWidth, height: sectionZeroHeight)
+            return CGSize(width: viewWidth, height: 390)
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 220)
         } else if indexPath.section == 2 {
@@ -181,6 +181,7 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: viewWidth, height: 0)
         }
     }
+    
 }
 
 // MARK: - pageDismiss

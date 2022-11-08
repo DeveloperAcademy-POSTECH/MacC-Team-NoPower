@@ -213,7 +213,7 @@ class PlaceInfoModalViewController: UIViewController {
         collectionView.delegate = self
         collectionView.backgroundColor = CustomColor.nomadGray3
         collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
-        collectionView.register(BasicInfoCell.self, forCellWithReuseIdentifier: BasicInfoCell.cellIdentifier)
+        collectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
         collectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
         view.addSubview(collectionView)
         
@@ -267,7 +267,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             cell.place = selectedPlace
             return cell
         } else if indexPath.section == 1 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BasicInfoCell.cellIdentifier, for: indexPath) as? BasicInfoCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
             cell.place = selectedPlace
             return cell
         }
@@ -296,20 +296,36 @@ extension PlaceInfoModalViewController: UICollectionViewDelegate {
 
 extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width) / 1, height: (view.frame.width) / 1)
-    }
-    //셀 간격
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        guard let flow = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize()
+        }
+        
+        let viewWidth = view.bounds.width
+        let sectionZeroCardHeight: CGFloat = 266
+        let sectionZeroBottomPadding: CGFloat = 25
+        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
+        
+        if indexPath.section == 0 {
+            print(sectionZeroHeight)
+            return CGSize(width: viewWidth, height: 294)
+        } else if indexPath.section == 1 {
+            return CGSize(width: viewWidth, height: 294)
+        } else if indexPath.section == 2 {
+            return CGSize(width: viewWidth, height: 375)
+        } else if indexPath.section == 3 {
+            flow.sectionInset.top = 13
+            
+            return CGSize(width: 356, height: 85)
+        } else {
+            return CGSize(width: viewWidth, height: 0)
+        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-        
-    }
     // 셀 크기 마진
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets (top: 0, left: 10, bottom: 8, right: 10)
+        return UIEdgeInsets (top: 0, left: 10, bottom: 0, right: 10)
     }
+    
 }

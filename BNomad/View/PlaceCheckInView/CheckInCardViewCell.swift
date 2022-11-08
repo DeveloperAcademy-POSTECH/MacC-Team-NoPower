@@ -169,7 +169,6 @@ class CheckInCardViewCell: UICollectionViewCell {
         userStack.spacing = 9
         userStack.alignment = .leading
         
-        
         let wholeStack = UIStackView(arrangedSubviews: [profileImageView, userStack])
         wholeStack.alignment = .leading
         wholeStack.axis = .horizontal
@@ -248,6 +247,7 @@ class CheckInCardViewCell: UICollectionViewCell {
     func configUI() {
         let spacer = UIView()
         let stack = UIStackView(arrangedSubviews: [userProfileStack, spendingTimeStack, timeBarStack, checkOutButton, spacer])
+        timeBarStack.anchor(top: spendingTimeStack.bottomAnchor, paddingTop: 15)
         spacer.anchor(height: 15)
         stack.axis = .vertical
         stack.distribution = .equalCentering

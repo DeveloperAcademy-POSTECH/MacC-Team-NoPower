@@ -23,7 +23,8 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     let participateButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 32)
+        button.setImage(UIImage(systemName: "checkmark.circle.fill", withConfiguration: config), for: .normal)
         button.tintColor = CustomColor.nomadBlue
         return button
     }()
@@ -99,12 +100,8 @@ class QuestCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        shadowSetting()
         configureUI()
-        
-        for person in 1...Int(currentCheckedPeople)! + 1 {
-            checkedInPeople.append(checkedInPeople[person])
-        }
-        
     }
     
     required init?(coder: NSCoder) {
@@ -116,29 +113,37 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Helpers
     
-    func configureUI() {
+    func shadowSetting() {
         backgroundColor = .systemBackground
         self.layer.cornerRadius = 12
+        self.clipsToBounds = true
         
+        self.layer.masksToBounds = false
+        self.layer.shadowRadius = 15
+        self.layer.shadowOffset = CGSize(width: 3, height: 4)
+        self.layer.shadowOpacity = 0.1
+    }
+    
+    func configureUI() {
         self.addSubview(participateButton)
-        participateButton.anchor(top: self.topAnchor, right: self.rightAnchor, width: 32, height: 32)
+        participateButton.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10)
         
         self.addSubview(title)
-        title.anchor(top: self.topAnchor, left: self.leftAnchor, right: participateButton.leftAnchor, paddingTop: 16, paddingLeft: 12, paddingRight: 10)
+        title.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 16, paddingLeft: 12)
         
-        let upperStack = UIStackView(arrangedSubviews: [timeImage, time])
-        upperStack.axis = .horizontal
-        upperStack.spacing = 12
-        upperStack.alignment = .leading
-        let downStack = UIStackView(arrangedSubviews: [locationImage, location])
-        downStack.axis = .horizontal
-        downStack.spacing = 12
-        downStack.alignment = .leading
+        let timeStack = UIStackView(arrangedSubviews: [timeImage, time])
+        timeStack.axis = .horizontal
+        timeStack.spacing = 12
+        timeStack.alignment = .leading
+        let locationStack = UIStackView(arrangedSubviews: [locationImage, location])
+        locationStack.axis = .horizontal
+        locationStack.spacing = 12
+        locationStack.alignment = .leading
         
-        self.addSubview(upperStack)
-        upperStack.anchor(top: title.bottomAnchor, left: self.leftAnchor, paddingTop: 25, paddingLeft: 14)
-        self.addSubview(downStack)
-        downStack.anchor(top: upperStack.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 14)
+        self.addSubview(timeStack)
+        timeStack.anchor(top: title.bottomAnchor, left: self.leftAnchor, paddingTop: 25, paddingLeft: 14)
+        self.addSubview(locationStack)
+        locationStack.anchor(top: timeStack.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 14)
         
         let peopleStack = UIStackView(arrangedSubviews: checkedInPeople)
         peopleStack.axis = .horizontal

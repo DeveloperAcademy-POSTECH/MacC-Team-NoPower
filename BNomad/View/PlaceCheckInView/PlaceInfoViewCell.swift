@@ -74,7 +74,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         self.addSubview(collectionView)
-        collectionView.backgroundColor = .systemBlue
+        collectionView.backgroundColor = .systemBackground
         collectionView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         collectionView.register(QuestCollectionViewCell.self, forCellWithReuseIdentifier: QuestCollectionViewCell.identifier)
         

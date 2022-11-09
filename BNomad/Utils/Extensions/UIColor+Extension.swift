@@ -42,4 +42,5 @@ class CustomColor {
     static let nomadGray3 = UIColor(hex: "F4F4F4")
     static let nomadSkyblue = UIColor(hex: "82B5D2")
     static let nomadGreen = UIColor(hex: "5DC878")
+    static let nomadRed = UIColor(hex: "FF6961")
 }

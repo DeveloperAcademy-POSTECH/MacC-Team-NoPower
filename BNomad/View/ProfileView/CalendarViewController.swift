@@ -94,9 +94,12 @@ class CalendarViewController: UIViewController {
             label.text = $0
             label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
             label.textColor = .black
-            if $0 == "일" || $0 == "토" {
+            if $0 == "일" {
+                label.textColor = CustomColor.nomadRed
+            } else if $0 == "토" {
                 label.textColor = CustomColor.nomadSkyblue
             }
+            
             label.textAlignment = .center
             stack.addArrangedSubview(label)
         }
@@ -238,27 +241,16 @@ extension CalendarViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCell.identifier , for: indexPath) as? CalendarCell else {
                 return UICollectionViewCell()
             }
-            cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
             //셀 설정 초기화
             cell.setNormalCell()
+            cell.removeTodayCell()
             
-            //오늘 및 주말 텍스트 색 설정
-            let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
-            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && monthAddedMemory == 0 {
-                cell.setTodayCell()
-            } else if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
-                cell.setWeekendColor()
-            }
-            
-            //선택한 셀 테두리 설정
             if indexPath.item == selectedCell {
-                cell.setSelectedCell()
+                cell.drawCircleBackground(opt: "select")
             }
             
             //체크인한 날짜 도장 설정
-            //FIXME: 이번달 말고도 가능하게 해야됨 버그있음, 뷰컨에서 언래핑해야 수정가능
-            //TODO: 컬렉션뷰 안에 로직이 너무 많아서인지 반응이 느림 ㅜㅜ
             if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
                 let year = "2022"
                 let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
@@ -267,6 +259,22 @@ extension CalendarViewController: UICollectionViewDelegate {
                 cell.thisCellsDate = thisCellsDate //클릭한 날자 inject (: String)
                 cell.checkInHistory = CalendarViewController.checkInHistory //체크인 all data inject (: Checkin)
                 
+            }
+            cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
+            
+            //오늘 및 주말 텍스트 색 설정
+            let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
+            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && monthAddedMemory == 0 {
+                cell.setWhiteText()
+            } else if indexPath.item%7 == 0 {
+                cell.setSundayColor()
+            } else if indexPath.item%7 == 6 {
+                
+            }
+            
+            //선택한 셀 흰글씨 설정
+            if indexPath.item == selectedCell {
+                cell.setWhiteText()
             }
             
             return cell

@@ -28,11 +28,13 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let requestItem = ["닉네임", "직업", "상태"]
+    private let requestItem = ["닉네임", "직업", "상태", "멋진 사진"]
+    private let requestSentence = ["닉네임을 알려주세요!", "직업을 알려주세요!", "상태를 알려주세요!", "멋진 사진을 올려주세요!"]
     private var index = 0
     private let nicknameLimit = 20
     private let occupationLimit = 40
-    private let statusLimit = 50
+    private let statusLimit = 150
+    private let introPlaceholder = "자기소개를 작성해주세요!"
         
     lazy var requestLabel: UILabel = {
         let label = UILabel()
@@ -153,6 +155,25 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var introductionField: UITextView = {
+        let textView = UITextView()
+        textView.text = introPlaceholder
+        textView.textColor = .tertiaryLabel
+        textView.font = .preferredFont(forTextStyle: .footnote)
+        textView.backgroundColor = .clear
+        
+        return textView
+    }()
+    
+    private var introRectangle: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.layer.borderWidth = 2
+        view.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        
+        return view
+    }()
+    
     private lazy var statusCounterLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
@@ -162,9 +183,9 @@ class SignUpViewController: UIViewController {
         return label
     }()
     
-    private let inputConfirmButton: UIButton = {
+    private var inputConfirmButton: UIButton = {
         let button = UIButton()
-        button.setTitle("확인", for: .normal)
+        button.setTitle("다음", for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .semibold)
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
@@ -173,7 +194,7 @@ class SignUpViewController: UIViewController {
     }()
     
     private lazy var keyboardAccView: UIView = {
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 80.0))
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 58))
         
 //        view.addSubview(inputConfirmButton)
         
@@ -203,6 +224,7 @@ class SignUpViewController: UIViewController {
         nicknameField.delegate = self
         occupationField.delegate = self
         statusField.delegate = self
+        introductionField.delegate = self
         
         occupationField.isHidden = true
         occupationLineView.isHidden = true
@@ -210,6 +232,8 @@ class SignUpViewController: UIViewController {
         statusField.isHidden = true
         statusLineView.isHidden = true
         statusCounterLabel.isHidden = true
+        introRectangle.isHidden = true
+        introductionField.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
         
@@ -317,10 +341,32 @@ class SignUpViewController: UIViewController {
             height: lineHeight
         )
         
+        view.addSubview(introRectangle)
+        introRectangle.anchor(
+            top: occupationField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldTopSpacing,
+            width: textFieldWidth,
+            height: 106
+        )
+        
+        view.addSubview(introductionField)
+        introductionField.inputAccessoryView = keyboardAccView
+        introductionField.anchor(
+            top: introRectangle.topAnchor,
+            left: introRectangle.leftAnchor,
+            bottom: introRectangle.bottomAnchor,
+            right: introRectangle.rightAnchor,
+            paddingTop: 4,
+            paddingLeft: 8,
+            paddingBottom: 4,
+            paddingRight: 8
+        )
+        
         view.addSubview(statusCounterLabel)
         statusCounterLabel.anchor(
-            top: statusLineView.bottomAnchor,
-            right: statusLineView.rightAnchor,
+            top: introRectangle.bottomAnchor,
+            right: introRectangle.rightAnchor,
             paddingTop: 8
         )
         
@@ -343,7 +389,7 @@ class SignUpViewController: UIViewController {
     }
     
     func updateRequestLabel(index: Int) {
-        requestLabel.text = "노마드가 되기 위해\n\(requestItem[index])을 알려주세요!"
+        requestLabel.text = "노마드가 되기 위해\n\(requestSentence[index])"
     }
     
     func showAlert() {
@@ -354,9 +400,9 @@ class SignUpViewController: UIViewController {
         alertLabel.alpha = 1.0
         self.view.addSubview(alertLabel)
         alertLabel.anchor(
-            top: statusLineView.bottomAnchor,
-            left: statusLineView.leftAnchor,
-            paddingTop: 21
+            top: introRectangle.bottomAnchor,
+            left: introRectangle.leftAnchor,
+            paddingTop: 8
         )
 
         UIView.animate(withDuration: 1.0, delay: 1, options: .curveEaseOut, animations: {
@@ -403,14 +449,17 @@ class SignUpViewController: UIViewController {
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
             
-        } else if occupationField.isHidden == false && statusField.isHidden == true {
+        } else if occupationField.isHidden == false && introductionField.isHidden == true {
             if occupationField.text?.isEmpty == true {
                 print("직업을 입력하세요.")
             } else {
-                statusField.isHidden = false
-                statusLineView.isHidden = false
+//                statusField.isHidden = false
+//                statusLineView.isHidden = false
                 statusCounterLabel.isHidden = false
-                statusField.becomeFirstResponder()
+//                statusField.becomeFirstResponder()
+                introRectangle.isHidden = false
+                introductionField.isHidden = false
+                introductionField.becomeFirstResponder()
                 dot2View.backgroundColor = CustomColor.nomadGray2
                 dot3View.backgroundColor = CustomColor.nomadBlue
                 
@@ -420,8 +469,14 @@ class SignUpViewController: UIViewController {
             }
             
         } else {
-            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = statusField.text {
-                if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
+            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
+                var isIntroDone = false
+                if intro != introPlaceholder && intro.isEmpty == false {
+                    isIntroDone = true
+                }
+                
+                if nickname.isEmpty == false && occupation.isEmpty == false && isIntroDone == true {
+                    print("입력완료")
                     let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                     viewModel.user = user
                     Analytics.logEvent("signUpCompleted", parameters: nil)
@@ -482,10 +537,11 @@ extension SignUpViewController: UITextFieldDelegate {
         } else if textField == occupationField {
             occupationCounterLabel.text = "\(updateText.count) / \(occupationLimit)"
             return updateText.count < occupationLimit
-        } else if textField == statusField {
-            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
-            return updateText.count < statusLimit
         }
+//        else if textField == statusField {
+//            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
+//            return updateText.count < statusLimit
+//        }
         
         return true
     }
@@ -494,4 +550,34 @@ extension SignUpViewController: UITextFieldDelegate {
         didTapInputConfirmButton()
         return true
     }
+}
+
+// MARK: - UITextViewDelegate
+
+extension SignUpViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .tertiaryLabel {
+            textView.text = nil
+            textView.textColor = CustomColor.nomadBlack
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = introPlaceholder
+            textView.textColor = .tertiaryLabel
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updateText = currentText.replacingCharacters(in: stringRange, with: text)
+        if textView == introductionField {
+            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
+            return updateText.count < statusLimit
+        }
+        return true
+    }
+    
 }

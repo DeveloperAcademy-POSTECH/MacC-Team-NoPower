@@ -37,6 +37,7 @@
 		DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA42918A0B40099D41D /* MeetUpViewController.swift */; };
 		DF561CA82918A0C40099D41D /* ReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA72918A0C40099D41D /* ReviewViewController.swift */; };
 		DF561CAB2918A0DA0099D41D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CAA2918A0DA0099D41D /* SettingViewController.swift */; };
+		DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CAC291A02840099D41D /* QuestCollectionViewCell.swift */; };
 		DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618A528FCEF6A00E21D30 /* MapViewController.swift */; };
 		DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */; };
 		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
@@ -102,6 +103,7 @@
 		DF561CA42918A0B40099D41D /* MeetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetUpViewController.swift; sourceTree = "<group>"; };
 		DF561CA72918A0C40099D41D /* ReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewViewController.swift; sourceTree = "<group>"; };
 		DF561CAA2918A0DA0099D41D /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		DF561CAC291A02840099D41D /* QuestCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestCollectionViewCell.swift; sourceTree = "<group>"; };
 		DF9618A528FCEF6A00E21D30 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		DF9618AB28FCEFB600E21D30 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */,
 				15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */,
 				7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */,
+				DF561CAC291A02840099D41D /* QuestCollectionViewCell.swift */,
 			);
 			path = PlaceCheckInView;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
+				DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */,
 				7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
@@ -476,7 +480,7 @@
 				8C21CC4528FF89BA009043AF /* MapData.swift in Sources */,
 				DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */,
 				7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */,
-				631AD82B2906316B00EEED02 /* BasicInfoCell.swift in Sources */,
+				631AD82B2906316B00EEED02 /* ReviewInfoCell.swift in Sources */,
 				631AD82B2906316B00EEED02 /* ReviewInfoCell.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				041351AD29081D16005D19CC /* ProfileGraphCollectionCell.swift in Sources */,

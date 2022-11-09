@@ -62,7 +62,6 @@ class PlaceCheckInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         placeCheckInView()
         configureCancelButton()
         view.backgroundColor = .white
@@ -124,6 +123,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
             placeInfoViewCell.place = selectedPlace
+            
             return placeInfoViewCell
         }
         else if indexPath.section == 2 {

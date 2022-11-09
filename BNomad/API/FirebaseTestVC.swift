@@ -37,9 +37,24 @@ class FirebaseTestVC: UIViewController {
         // fetchCheckInHistoryAll()
         
         // checkin 후 checkOut
-        setCheckIn() { user in
-            self.setCheckOut(user: user)
-        }
+        // setCheckIn() { user in
+        //     self.setCheckOut(user: user)
+        // }
+
+        // // meetUp 생성
+        // createMeetUp()
+
+        // // place의 특정 날 meetUp 가져오기
+        // fetchMeetUpPlace()
+        
+        // // 특정 meetUpUid의 meetUp 가져오기
+        // fetchMeetUp()
+
+        // // user의 모든 meetUpUid 가져오기
+        // fetchMeetUpUidFromUser()
+        
+        // // meetUp 참가하기
+        participateMeetUp()
     }
     
     func fetchPlaceAll() {
@@ -157,4 +172,48 @@ class FirebaseTestVC: UIViewController {
         }
     }
 
+    func createMeetUp() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+        let organizerUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
+
+        let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: organizerUid, title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
+                
+        FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in
+            print(meetUp)
+        }
+    }
+
+    func fetchMeetUpPlace() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+
+        FirebaseManager.shared.fetchMeetUpHistory(placeUid: placeUid) { meetUpHistory in
+            print(meetUpHistory)
+        }        
+    }
+
+    func fetchMeetUpUidFromUser() {
+        let userUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
+
+        FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid) { meetUpUid in
+            print(meetUpUid)
+        }
+    }
+    
+    func fetchMeetUp() {
+        let meetUid: String = "69F0CEAE-AD5C-4854-B6DE-1B33B8C6DBA7"
+
+        FirebaseManager.shared.fetchMeetUp(meetUpUid: meetUid) { meetUp in
+            print(meetUp)
+        }
+    }
+    
+   func participateMeetUp() {
+        let userUid = "0735EBD4-DF99-44B8-B290-24DFE3D69E27" // 진은좀
+        let meetUpUid = "E5E9F761-F77B-423D-805C-01153522735C"
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80" // 커뮤니티 24시
+
+        FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+            print("참여 완료")
+        }
+   }
 }

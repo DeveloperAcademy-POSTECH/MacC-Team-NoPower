@@ -10,6 +10,18 @@ import MapKit
 import CoreLocation
 import Combine
 
+protocol ClearSelectedAnnotation {
+    func clearAnnotation(view: MKAnnotation)
+}
+
+protocol UpdateFloating {
+    func checkInFloating()
+}
+
+protocol setMap {
+    func setMapRegion(_ latitude: Double, _ longitude: Double, spanDelta: Double)
+}
+
 class MapViewController: UIViewController {
     
     // MARK: - Properties
@@ -19,7 +31,8 @@ class MapViewController: UIViewController {
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?) -> 우선은 제주도. 디바이스 위치 허용하면 제주도 볼 일 없음 ㅋㅋ
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
-
+    
+    var selectedRegion: Region?
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -45,9 +58,8 @@ class MapViewController: UIViewController {
     lazy var profileBtn: UIButton = {
         var btn = UIButton()
         btn.setImage(UIImage(systemName: "person"), for: .normal)
-        btn.tintColor = .systemGray
-        btn.backgroundColor = .white
-        btn.layer.cornerRadius = 10
+//        btn.tintColor = CustomColor.nomadBlue
+//        btn.backgroundColor = .white
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.addTarget(self, action: #selector(moveToProfile), for: .touchUpInside)
         return btn
@@ -71,58 +83,100 @@ class MapViewController: UIViewController {
     
     private let divider: UIView = {
         let divider = UIView()
-        divider.backgroundColor = .systemGray
+//        divider.tintColor = CustomColor.nomadBlue
+        divider.backgroundColor = CustomColor.nomadBlue
         divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        divider.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        divider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
         return divider
     }()
     
     private let settingBtn: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "gearshape"), for: .normal)
-        btn.tintColor = .systemGray
-        btn.backgroundColor = .white
-        btn.layer.cornerRadius = 10
+//        btn.tintColor = CustomColor.nomadBlue
+//        btn.backgroundColor = .white
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     
-    lazy var profileAndSetting: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileBtn, divider, settingBtn])
-        stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.spacing = 1
-        stackView.distribution = .fillProportionally
-        stackView.backgroundColor = .white
-        stackView.layer.cornerRadius = 10
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+
+    
+    // 지역명 표기 및 지역 변경
+    lazy var regionTitle: UILabel = {
+        let title = UILabel()
+        title.text = selectedRegion?.name ?? "지역 선택"
+        title.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
+        return title
+    }()
+    
+    var regionChangeBtn: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        btn.changesSelectionAsPrimaryAction = true
+        btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
+        return btn
+    }()
+    
+    @objc private func presentRegionSelector() {
+        let sheet = RegionSelectViewController()
+        sheet.modalPresentationStyle = .pageSheet
+        if let sheet = sheet.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.delegate = self
+            sheet.prefersGrabberVisible = false
+//            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 12
+        }
+        sheet.regionChangeDelegate = self
+        present(sheet, animated: true, completion: nil)
+    }
+    
+    lazy var upperStack: UIStackView = {
+        let topLeftTitle = UIStackView(arrangedSubviews: [regionTitle, regionChangeBtn])
+        topLeftTitle.axis = .horizontal
+        topLeftTitle.alignment = .center
+        topLeftTitle.spacing = 10
+        topLeftTitle.distribution = .fillProportionally
+        topLeftTitle.anchor(width: 100)
+        topLeftTitle.translatesAutoresizingMaskIntoConstraints = false
+
+        let topRightBtn = UIStackView(arrangedSubviews: [profileBtn, divider, settingBtn])
+        topRightBtn.axis = .horizontal
+        topRightBtn.alignment = .center
+        topRightBtn.spacing = 5
+        topRightBtn.tintColor = CustomColor.nomadBlue
+        topRightBtn.distribution = .fillProportionally
+        topRightBtn.anchor(width: 60)
+        topRightBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        let upperStack = UIStackView(arrangedSubviews: [topLeftTitle, topRightBtn])
+        upperStack.axis = .horizontal
+        upperStack.alignment = .fill
+        upperStack.distribution = .equalSpacing
+        upperStack.translatesAutoresizingMaskIntoConstraints = false
+        return upperStack
+    }()
+    
+    // 화면 상단 스택 백그라운드
+    private let blurBackground: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .light)
+        let background = UIVisualEffectView(effect: blur)
+        background.translatesAutoresizingMaskIntoConstraints = false
+        return background
     }()
     
     // TODO: - 장소 모달 뷰 보다가 현재 위치로 이동 시 보던 장소 모달 dismiss 필요
     lazy var userTrackingBtn: MKUserTrackingButton = {
         let btn = MKUserTrackingButton(mapView: map)
         btn.backgroundColor = .white
-        btn.tintColor = .systemGray
-        btn.layer.cornerRadius = 10
+        btn.tintColor = CustomColor.nomadBlue
+        btn.layer.cornerRadius = 20
+        btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        btn.layer.borderWidth = 1
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
-    }()
-    
-    lazy var mapButtons: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [profileAndSetting, userTrackingBtn])
-        stackView.sizeToFit()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 2
-        stackView.distribution = .equalCentering
-        stackView.backgroundColor = .clear
-        stackView.layer.cornerRadius = 10
-        profileAndSetting.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        profileAndSetting.heightAnchor.constraint(equalToConstant: 90).isActive = true
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
     }()
     
     // 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
@@ -136,8 +190,7 @@ class MapViewController: UIViewController {
     lazy var listViewButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("리스트 보기", for:.normal)
-        button.titleLabel!.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
+        button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.setTitleColor(CustomColor.nomadBlue, for: .normal)
         button.layer.cornerRadius = 20
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
@@ -225,10 +278,6 @@ class MapViewController: UIViewController {
         
     }
     
-    func setMapRegion(_ latitude: Double, _ longitude: Double, spanDelta: Double) {
-        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: MKCoordinateSpan(latitudeDelta: spanDelta, longitudeDelta: spanDelta)), animated: true)
-    }
-    
     func checkInBinding() {
         print("체크인 바인딩 -> 위치 전달")
         if let user = viewModel.user {
@@ -239,12 +288,12 @@ class MapViewController: UIViewController {
                     self.setMapRegion(place.latitude - 0.004, place.longitude, spanDelta: 0.01)
                     let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
                     self.map.selectAnnotation(annotation, animated: true)
-                    let controller = PlaceInfoModalViewController()
-                    controller.selectedPlace = place
-                    controller.delegateForClearAnnotation = self
-                    controller.delegateForFloating = self
-                    controller.presentationController?.delegate = self
-                    present(controller, animated: true)
+//                    let controller = PlaceInfoModalViewController()
+//                    controller.selectedPlace = place
+//                    controller.delegateForClearAnnotation = self
+//                    controller.delegateForFloating = self
+//                    controller.presentationController?.delegate = self
+//                    present(controller, animated: true)
                 }
                 
                 print("체크인 상태로 맵 세팅 끝")
@@ -279,9 +328,12 @@ class MapViewController: UIViewController {
         map.delegate = self
         view.addSubview(map)
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        
+        map.addSubview(blurBackground)
+        blurBackground.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, height: 100)
 
-        map.addSubview(mapButtons)
-        mapButtons.anchor(top: map.topAnchor, right: map.rightAnchor, paddingTop: 50, paddingRight: 20, width: 40, height: 140)
+        map.addSubview(upperStack)
+        upperStack.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 30, paddingLeft: 20, paddingRight: 20, height: 80)
         
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
@@ -295,15 +347,18 @@ class MapViewController: UIViewController {
         }
         
         map.addSubview(listViewButton)
-        listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 88, height: 43.73)
+        listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)
+        
+        map.addSubview(userTrackingBtn)
+        userTrackingBtn.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 70, paddingRight: 15, width: 40, height: 40)
     }
 
     
-    func configureFloating() {
-        view.addSubview(checkInNow)
-        checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
-        checkInNow.centerX(inView: view)
-    }
+//    func configureFloating() {
+//        view.addSubview(checkInNow)
+//        checkInNow.anchor(top: upperStack.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 200, paddingLeft: 0, paddingRight: 0, width: 100, height: 40)
+//        checkInNow.centerX(inView: view)
+//    }
     
     func userCombine() {
         viewModel.$user
@@ -409,9 +464,8 @@ extension MapViewController: ClearSelectedAnnotation {
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
         map.addSubview(checkInNow)
-        checkInNow.anchor(top: view.topAnchor, paddingTop: 60, width: 100, height: 40)
+        checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 100, height: 40)
         checkInNow.centerX(inView: view)
-        
     }
 }
 
@@ -435,5 +489,12 @@ extension MapViewController: CLLocationManagerDelegate {
         currentLocation = location
         map.removeOverlay(circleOverlay)
         map.addOverlay(circleOverlay)
+    }
+}
+
+// MARK: - MapRegionChange
+extension MapViewController: setMap {
+    func setMapRegion(_ latitude: Double, _ longitude: Double, spanDelta: Double) {
+        map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: MKCoordinateSpan(latitudeDelta: spanDelta, longitudeDelta: spanDelta)), animated: true)
     }
 }

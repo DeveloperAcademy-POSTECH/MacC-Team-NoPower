@@ -74,6 +74,7 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 맵 뷰에서 한 번 다 불러오는데 모달에서 또 따로 불러와야 하는지 고민 필요! (데이터를 아끼기 위해...)
         FirebaseManager.shared.fetchPlaceAll { place in
             self.places?.append(place)
         }

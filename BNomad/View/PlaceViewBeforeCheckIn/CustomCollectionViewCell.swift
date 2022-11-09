@@ -77,7 +77,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         title.backgroundColor = .clear
         title.textColor = .black
         title.font = .preferredFont(forTextStyle: .title2, weight: .bold)
-        title.text = "스타스타"
+        title.text = "스타스타" // ???
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title

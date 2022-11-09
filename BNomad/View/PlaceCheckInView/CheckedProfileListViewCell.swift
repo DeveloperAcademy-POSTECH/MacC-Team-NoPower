@@ -33,7 +33,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let userProfileImg: UIImageView = {
         let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(systemName: "person.crop.circle.fill")
+        userProfileImg.image = UIImage(systemName: "person.circle.fill")
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
         return userProfileImg
@@ -41,14 +41,14 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title3, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let occupationLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -56,7 +56,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let noteLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -75,7 +75,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     func render() {
         self.addSubview(userProfileImg)
-        userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 56, height: 56)
+        userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
         
         let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
@@ -96,6 +96,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         self.layer.masksToBounds = false
         self.layer.shadowRadius = 15
         self.layer.shadowOffset = CGSize(width: 3, height: 4)
-        self.layer.shadowOpacity = 0.1
+        self.layer.shadowOpacity = 0.05
     }
 }

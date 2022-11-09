@@ -71,8 +71,17 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    lazy var dot4View: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        view.backgroundColor = CustomColor.nomadGray2
+        view.layer.cornerRadius = 2.5
+        view.contentMode = .scaleAspectFit
+
+        return view
+    }()
+    
     lazy var dotsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [dot1View, dot2View, dot3View])
+        let stackView = UIStackView(arrangedSubviews: [dot1View, dot2View, dot3View, dot4View])
         stackView.axis = .horizontal
         stackView.spacing = 8.0
         stackView.alignment = .fill
@@ -82,6 +91,7 @@ class SignUpViewController: UIViewController {
         dot1View.anchor(width: 5, height: 5)
         dot2View.anchor(width: 5, height: 5)
         dot3View.anchor(width: 5, height: 5)
+        dot4View.anchor(width: 5, height: 5)
 
         return stackView
     }()
@@ -183,6 +193,22 @@ class SignUpViewController: UIViewController {
         return label
     }()
     
+    private lazy var profileImageButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
+        button.tintColor = CustomColor.nomadGray2
+        
+        return button
+    }()
+    
+    private let plusView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(systemName: "plus.circle.fill")
+        view.tintColor = CustomColor.nomadBlue
+        
+        return view
+    }()
+    
     private var inputConfirmButton: UIButton = {
         let button = UIButton()
         button.setTitle("다음", for: .normal)
@@ -197,8 +223,6 @@ class SignUpViewController: UIViewController {
         let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 58))
         
 //        view.addSubview(inputConfirmButton)
-        
-        
         return view
     }()
     
@@ -234,6 +258,8 @@ class SignUpViewController: UIViewController {
         statusCounterLabel.isHidden = true
         introRectangle.isHidden = true
         introductionField.isHidden = true
+        profileImageButton.isHidden = true
+        plusView.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
         
@@ -250,6 +276,11 @@ class SignUpViewController: UIViewController {
         let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
         FirebaseManager.shared.setUser(user: user)
         return user
+    }
+    
+    func configHiddenUI() {
+        
+        
     }
     
     func configUI() {
@@ -370,21 +401,27 @@ class SignUpViewController: UIViewController {
             paddingTop: 8
         )
         
-//        keyboardAccView.addSubview(inputConfirmButton)
+        let profileImageSize = viewWidth * 127/390
+        let plusImageSize = profileImageSize * 30/127
         
-//        guard let inputConfirmButtonSuperview = inputConfirmButton.superview
-//        else {
-//            return
-//        }
-//
-//        inputConfirmButton.anchor(
-//            top: inputConfirmButtonSuperview.topAnchor,
-//            left: inputConfirmButtonSuperview.leftAnchor,
-//            right: inputConfirmButtonSuperview.rightAnchor,
-//            paddingLeft: 20,
-//            paddingRight: 20,
-//            height: 48
-//        )
+        view.addSubview(profileImageButton)
+
+        profileImageButton.setPreferredSymbolConfiguration(.init(pointSize: profileImageSize, weight: .regular, scale: .default), forImageIn: .normal)
+        profileImageButton.centerX(inView: view)
+        profileImageButton.anchor(
+            top: requestLabel.bottomAnchor,
+            paddingTop: 35
+        )
+        
+        view.addSubview(plusView)
+        plusView.anchor(
+            bottom: profileImageButton.bottomAnchor,
+            right: profileImageButton.rightAnchor,
+            paddingBottom: 15,
+            paddingRight: 10,
+            width: plusImageSize,
+            height: plusImageSize
+        )
 
     }
     
@@ -468,6 +505,19 @@ class SignUpViewController: UIViewController {
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
             
+        } else if introductionField.isHidden == false && profileImageButton.isHidden == true {
+            if introductionField.text.isEmpty == true {
+                print("자기소개를 입력하세요.")
+            } else {
+                profileImageButton.isHidden = false
+                plusView.isHidden = false
+                dot3View.backgroundColor = CustomColor.nomadGray2
+                dot4View.backgroundColor = CustomColor.nomadBlue
+                
+                index = 3
+                updateRequestLabel(index: index)
+                requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
+            }
         } else {
             if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
                 var isIntroDone = false

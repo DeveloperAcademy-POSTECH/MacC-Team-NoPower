@@ -208,7 +208,7 @@ class NewMeetUpViewController: UIViewController {
     }()
     
     private lazy var peopleCounterView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [plusButton, divider, minusButton])
+        let stackView = UIStackView(arrangedSubviews: [minusButton, divider, plusButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = 1

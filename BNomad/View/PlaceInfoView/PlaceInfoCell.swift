@@ -134,6 +134,24 @@ class PlaceInfoCell: UICollectionViewCell {
         mapButton.tintColor = CustomColor.nomadBlack
         return mapButton
     }()
+    let addressLabel: UILabel = {
+        let addressLable = UILabel()
+        addressLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
+        addressLable.textColor = CustomColor.nomadBlack
+        return addressLable
+    }()
+    
+    private var chevronDirection: String = "chevron.down"
+    
+    private lazy var openOperatingTimeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: chevronDirection)?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.addTarget(self, action: #selector(openOrClose), for: .touchUpInside)
+        return button
+    }()
+    
     let horizontalDivider2: UILabel = {
         let horizontalDivider2 = UILabel()
         horizontalDivider2.backgroundColor = CustomColor.nomadGray2
@@ -151,13 +169,6 @@ class PlaceInfoCell: UICollectionViewCell {
         horizontalDivider3.backgroundColor = CustomColor.nomadGray2
         return horizontalDivider3
     }()
-    
-    let addressLabel: UILabel = {
-        let addressLable = UILabel()
-        addressLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
-        addressLable.textColor = CustomColor.nomadBlack
-        return addressLable
-    }()
     //영업시간 외에 영업끝 함수 만들기
     private var operatingStatusLabel: UILabel = {
          var operatingStatusLabel = UILabel()
@@ -170,9 +181,12 @@ class PlaceInfoCell: UICollectionViewCell {
     // 영업시간 데이터 없음
     private var operatingTimeLabel: UILabel = {
          var operatingTimeLabel = UILabel()
-        operatingTimeLabel.text = "9 : 00 ~ 21 : 00"
+        operatingTimeLabel.numberOfLines = 1
+        operatingTimeLabel.lineBreakMode = .byWordWrapping
+        operatingTimeLabel.text = "            9 : 00 ~ 21 : 00\n\n월 9 : 00 ~ 21 : 00          토 9 : 00 ~ 21 : 00\n화 9 : 00 ~ 21 : 00          일 9 : 00 ~ 21 : 00\n수 9 : 00 ~ 21 : 00\n목 9 : 00 ~ 21 : 00\n금 9 : 00 ~ 21 : 00"
         operatingTimeLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         operatingTimeLabel.textColor = CustomColor.nomadBlack
+
          return operatingTimeLabel
      }()
 
@@ -205,10 +219,12 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(mapButton)
         self.addSubview(horizontalDivider2)
         self.addSubview(clockButton)
-        self.addSubview(horizontalDivider3)
-        self.addSubview(addressLabel)
         self.addSubview(operatingStatusLabel)
         self.addSubview(operatingTimeLabel)
+        self.addSubview(openOperatingTimeButton)
+        self.addSubview(horizontalDivider3)
+        self.addSubview(addressLabel)
+
 
         
         
@@ -237,8 +253,9 @@ class PlaceInfoCell: UICollectionViewCell {
         horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
         clockButton.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
         operatingStatusLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
-        operatingTimeLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 103)
-        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
+        operatingTimeLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        openOperatingTimeButton.anchor(top: horizontalDivider2.bottomAnchor, right: self.rightAnchor, paddingTop: 9, paddingRight: 38)
+        horizontalDivider3.anchor(top: operatingTimeLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 20, paddingRight: 20, height: 1)
         checkInButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
     }
     
@@ -247,6 +264,17 @@ class PlaceInfoCell: UICollectionViewCell {
         addressLabel.text = place.address
         phoneNumberLable.text = place.contact
     }
-
+    @objc func openOrClose() {
+        print("succedd")
+        if self.chevronDirection == "chevron.down" {
+            self.chevronDirection = "chevron.up"
+            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.up")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+            self.operatingTimeLabel.numberOfLines = 0
+        } else if self.chevronDirection == "chevron.up" {
+            self.chevronDirection = "chevron.down"
+            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.down")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+            self.operatingTimeLabel.numberOfLines = 1
+        } else { return }
+    }
 }
 

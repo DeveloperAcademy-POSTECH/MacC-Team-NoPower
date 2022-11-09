@@ -309,7 +309,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         if indexPath.section == 0 {
             print(sectionZeroHeight)
-            return CGSize(width: viewWidth, height: 294)
+            return CGSize(width: viewWidth, height: 500)
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 294)
         } else if indexPath.section == 2 {

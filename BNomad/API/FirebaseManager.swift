@@ -323,7 +323,7 @@ class FirebaseManager {
                 }
                 
                 let description = meetUpDict["description"] as? String
-                let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
+                let meetUp = MeetUp(meetUpUid: snapshot.key, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description, currentPeopleUids: currentPeopleUidsArray)
                 meetUpHistory.append(meetUp)
             }
             completion(meetUpHistory)
@@ -366,7 +366,7 @@ class FirebaseManager {
             
             let description = meetUpDict["description"] as? String
             
-            let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
+            let meetUp = MeetUp(meetUpUid: snapshot.key, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum,description: description, currentPeopleUids: currentPeopleUidsArray)
             completion(meetUp)
         })
     }

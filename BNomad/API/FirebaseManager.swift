@@ -238,4 +238,154 @@ class FirebaseManager {
             }
         }
     }
+
+    // MARK: firebase - meetUpUser
+    // meetUpUser
+    //     userUid
+    //         meetUpUid
+
+    // MARK: firebase - meetUpPlace
+    // meetUpPlace
+    //     placeUid
+    //         date
+    //             meetUpUid
+    //                 time
+    //                 title
+    //                 description
+    //                 maxPeopleNum
+    //                 currentPeopleUids
+    //                 meetUpPlaceName
+    //                 organizerUid
+
+    // MARK: firebase - meetUp
+    // meetUp
+    //     meetUpUid
+    //         placeUid
+    //         time
+    //         title
+    //         description
+    //         maxPeopleNum
+    //         currentPeopleUids
+    //         meetUpPlaceName
+    //         organizerUid
+
+    /// 새로운 meetUp을 생성
+    /// completion로 place의 meetUpHistory에 MeetUp을 넘겨줘야함.
+    func createMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
+        let currentPeopleUids = [meetUp.organizerUid: true]
+        
+        let meetUpUser = ["placeUid": meetUp.placeUid, "time": meetUp.time.toDateTimeString(),
+                          "title": meetUp.title, "description": meetUp.description,
+                          "maxPeopleNum": meetUp.maxPeopleNum, "currentPeopleUids": currentPeopleUids,
+                          "meetUpPlaceName": meetUp.meetUpPlaceName, "organizerUid": meetUp.organizerUid] as [String : Any]
+        
+        let meetUpPlace = ["time": meetUp.time.toDateTimeString(), "title": meetUp.title,
+                           "description": meetUp.description, "maxPeopleNum": meetUp.maxPeopleNum,
+                           "currentPeopleUids": currentPeopleUids, "meetUpPlaceName": meetUp.meetUpPlaceName,
+                           "organizerUid": meetUp.organizerUid] as [String : Any]
+
+        ref.updateChildValues(["meetUpUser/\(meetUp.organizerUid)/\(meetUp.meetUpUid)" : true,
+                                "meetUp/\(meetUp.meetUpUid)" : meetUpUser,
+                               "meetUpPlace/\(meetUp.placeUid)/\(meetUp.date)/\(meetUp.meetUpUid)" : meetUpPlace]) { 
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion(meetUp)
+            }
+        }
+    }
+
+    /// place의 특정 날짜의 meetUp들 가져오기
+    func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
+        let date = date.toDateString()
+        var meetUpHistory: [MeetUp] = []
+        
+        ref.child("meetUpPlace/\(placeUid)/\(date)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let meetUpDict = snapshot.value as? [String: Any] else { return }
+                
+                guard let time = meetUpDict["time"] as? String else { return }
+                guard let title = meetUpDict["title"] as? String else { return }
+                guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
+                guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
+                guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
+                
+                guard let time = time.toDateTime() else { return }
+                
+                let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
+                
+                var currentPeopleUidsArray: [String] = []
+                
+                if let currentPeopleUids = currentPeopleUids {
+                    currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
+                }
+                
+                let description = meetUpDict["description"] as? String
+                let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
+                meetUpHistory.append(meetUp)
+            }
+            completion(meetUpHistory)
+        })
+    }
+    
+    /// 특정 유저가 참여한 모든 meetUp의 Uid 가져오기
+    func fetchMeetUpUidAll(userUid: String, completion: @escaping(String) -> Void) {
+
+        ref.child("meetUpUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let meetUpUid = snapshot.key as? String else { return }
+                completion(meetUpUid)
+            }
+        })
+    }
+
+    /// meetUpUid의 meetUp 가져오기
+    func fetchMeetUp(meetUpUid: String, completion: @escaping(MeetUp) -> Void) {
+        ref.child("meetUp/\(meetUpUid)").observeSingleEvent(of: .value, with: { snapshot in
+            guard let meetUpDict = snapshot.value as? [String: Any] else { return }
+            
+            guard let placeUid = meetUpDict["placeUid"] as? String else { return }
+            guard let time = meetUpDict["time"] as? String else { return }
+            guard let title = meetUpDict["title"] as? String else { return }
+            guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
+            guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
+            guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
+            
+            guard let time = time.toDateTime() else { return }
+            
+            let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
+            
+            var currentPeopleUidsArray: [String] = []
+            
+            if let currentPeopleUids = currentPeopleUids {
+                currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
+            }
+            
+            let description = meetUpDict["description"] as? String
+            
+            let meetUp = MeetUp(meetUpUid: snapshot.key, currentPeopleUids: currentPeopleUidsArray, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description)
+            completion(meetUp)
+        })
+    }
+
+    /// meetUp 참여하기
+    /// completion으로 place - meetUpHistory - meetUp - currentPeopleUids에 userUid 추가
+    /// completion으로 user - meetUpHistory에 meetUp 추가
+    func participateMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : true,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : true,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : true]) { 
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
 }

@@ -269,7 +269,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             } else if indexPath.item%7 == 0 {
                 cell.setSundayColor()
             } else if indexPath.item%7 == 6 {
-                
+                cell.setSaturdayColor()
             }
             
             //선택한 셀 흰글씨 설정

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BasicInfoCell: UICollectionViewCell {
+class ReviewInfoCell: UICollectionViewCell {
     
     
     
@@ -79,10 +79,10 @@ class BasicInfoCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-        basicInfoTitleLabel.text = "기본 정보"
+        basicInfoTitleLabel.text = "방문자 리뷰"
         basicInfoTitleLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
-        basicInfoTitleLabel.textColor = CustomColor.nomadBlue
-        basicInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 49, paddingLeft: 155)
+        basicInfoTitleLabel.textColor = CustomColor.nomadBlack
+        basicInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
         
         phoneImage.image = UIImage(systemName: "phone")
         phoneImage.tintColor = UIColor.black
@@ -102,7 +102,6 @@ class BasicInfoCell: UICollectionViewCell {
         mapImage.tintColor = UIColor.black
         mapImage.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 144, paddingLeft: 20)
         
-        addressLabel.text = ""
         addressLabel.font = UIFont.preferredFont(forTextStyle: .body, weight: .regular)
         addressLabel.numberOfLines = 1
         addressLabel.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 145, paddingLeft: 57, paddingRight: 5)

@@ -36,11 +36,12 @@ extension UIColor {
 
 class CustomColor {
     static let nomadBlack = UIColor(hex: "000000")
-    static let nomadBlue = UIColor(hex: "148DAC")
+    static let nomadBlue = UIColor(hex: "04919E")
     static let nomadGray1 = UIColor(hex: "8E8E93")
     static let nomadGray2 = UIColor(hex: "D1D1D6")
     static let nomadGray3 = UIColor(hex: "F4F4F4")
     static let nomadSkyblue = UIColor(hex: "82B5D2")
     static let nomadGreen = UIColor(hex: "5DC878")
     static let nomadRed = UIColor(hex: "FF6961")
+    static let nomadYellow = UIColor(hex: "FFBA33")
 }

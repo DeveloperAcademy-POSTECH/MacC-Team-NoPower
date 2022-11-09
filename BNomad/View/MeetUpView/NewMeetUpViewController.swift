@@ -99,6 +99,7 @@ class NewMeetUpViewController: UIViewController {
     private var timeField: UITextField = {
         let textField = UITextField()
         textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        textField.tintColor = .clear
         textField.borderStyle = .none
         
         let formatter = DateFormatter()

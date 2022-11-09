@@ -11,6 +11,11 @@ class NewMeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
+    private enum Value {
+        static let cornerRadius: CGFloat = 12.0
+        static let paddingLeftRight: CGFloat = 20.0
+    }
+    
     private let subjectLimit = 15
     private let locationLimit = 15
     
@@ -29,7 +34,7 @@ class NewMeetUpViewController: UIViewController {
     private let subjectRectangle: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray3
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Value.cornerRadius
         
         return view
     }()
@@ -65,7 +70,7 @@ class NewMeetUpViewController: UIViewController {
     private let timeRectangle: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray3
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Value.cornerRadius
         
         return view
     }()
@@ -124,7 +129,7 @@ class NewMeetUpViewController: UIViewController {
     private let locationRectangle: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray3
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Value.cornerRadius
         
         return view
     }()
@@ -160,7 +165,7 @@ class NewMeetUpViewController: UIViewController {
     private let peopleRectangle: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray3
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Value.cornerRadius
         
         return view
     }()
@@ -202,14 +207,14 @@ class NewMeetUpViewController: UIViewController {
         return button
     }()
     
-    lazy var peopleCounterView: UIStackView = {
+    private lazy var peopleCounterView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [plusButton, divider, minusButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = 1
         stackView.distribution = .fillProportionally
         stackView.backgroundColor = .white
-        stackView.layer.cornerRadius = 12
+        stackView.layer.cornerRadius = Value.cornerRadius
         stackView.layer.borderWidth = 1
         stackView.layer.borderColor = CustomColor.nomadGray2?.cgColor
         stackView.layer.shadowRadius = 5
@@ -232,7 +237,7 @@ class NewMeetUpViewController: UIViewController {
     private let contentRectangle: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadGray3
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Value.cornerRadius
         
         return view
     }()
@@ -315,7 +320,7 @@ class NewMeetUpViewController: UIViewController {
         let paddingTop = viewHeight * 100/844
         
         view.addSubview(subject)
-        subject.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: paddingTop, paddingLeft: 20)
+        subject.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: paddingTop, paddingLeft: Value.paddingLeftRight)
         
         view.addSubview(subjectRectangle)
         subjectRectangle.anchor(
@@ -323,7 +328,7 @@ class NewMeetUpViewController: UIViewController {
             left: subject.leftAnchor,
             right: view.rightAnchor,
             paddingTop: 8,
-            paddingRight: 20,
+            paddingRight: Value.paddingLeftRight,
             height: 48
         )
         
@@ -332,7 +337,7 @@ class NewMeetUpViewController: UIViewController {
         subjectField.anchor(
             left: subjectRectangle.leftAnchor,
             right: subjectRectangle.rightAnchor,
-            paddingLeft: 20,
+            paddingLeft: Value.paddingLeftRight,
             paddingRight: 10
         )
         
@@ -377,7 +382,7 @@ class NewMeetUpViewController: UIViewController {
         locationField.anchor(
             left: subjectRectangle.leftAnchor,
             right: subjectRectangle.rightAnchor,
-            paddingLeft: 20,
+            paddingLeft: Value.paddingLeftRight,
             paddingRight: 10
         )
         
@@ -392,7 +397,7 @@ class NewMeetUpViewController: UIViewController {
         people.anchor(top: locationRectangle.bottomAnchor, left: subject.leftAnchor, paddingTop: 30)
         
         let viewWidth = view.bounds.width
-        let halfRectWidth = (viewWidth - 20*2 - 10*2)/2
+        let halfRectWidth = (viewWidth - Value.paddingLeftRight*2 - 10*2)/2
         
         view.addSubview(peopleRectangle)
         peopleRectangle.anchor(
@@ -410,7 +415,7 @@ class NewMeetUpViewController: UIViewController {
         peopleCounterView.anchor(
             top: peopleRectangle.topAnchor,
             right: view.rightAnchor,
-            paddingRight: 20,
+            paddingRight: Value.paddingLeftRight,
             width: halfRectWidth,
             height: 48
         )
@@ -434,9 +439,9 @@ class NewMeetUpViewController: UIViewController {
             bottom: contentRectangle.bottomAnchor,
             right: contentRectangle.rightAnchor,
             paddingTop: 13,
-            paddingLeft: 20,
+            paddingLeft: Value.paddingLeftRight,
             paddingBottom: 15,
-            paddingRight: 20
+            paddingRight: Value.paddingLeftRight
         )
 
     }

@@ -29,7 +29,7 @@ class SignUpViewController: UIViewController {
     }()
 
     private let requestItem = ["닉네임", "직업", "상태", "멋진 사진"]
-    private let requestSentence = ["닉네임을 알려주세요!", "직업을 알려주세요!", "상태를 알려주세요!", "멋진 사진을 올려주세요!"]
+    private lazy var requestSentence = ["\(requestItem[0])을 알려주세요!", "\(requestItem[1])을 알려주세요!", "\(requestItem[2])를 알려주세요!", "\(requestItem[3])을 올려주세요!"]
     private var index = 0
     private let nicknameLimit = 20
     private let occupationLimit = 40
@@ -179,7 +179,7 @@ class SignUpViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .clear
         view.layer.borderWidth = 2
-        view.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        view.layer.borderColor = CustomColor.nomadGray1?.cgColor
         
         return view
     }()
@@ -197,6 +197,8 @@ class SignUpViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
         button.tintColor = CustomColor.nomadGray2
+        button.addTarget(self, action: #selector(didTapProfileImageButton), for: .touchUpInside)
+        button.layer.masksToBounds = true
         
         return button
     }()
@@ -221,8 +223,7 @@ class SignUpViewController: UIViewController {
     
     private lazy var keyboardAccView: UIView = {
         let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 58))
-        
-//        view.addSubview(inputConfirmButton)
+
         return view
     }()
     
@@ -276,11 +277,6 @@ class SignUpViewController: UIViewController {
         let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
         FirebaseManager.shared.setUser(user: user)
         return user
-    }
-    
-    func configHiddenUI() {
-        
-        
     }
     
     func configUI() {
@@ -405,24 +401,25 @@ class SignUpViewController: UIViewController {
         let plusImageSize = profileImageSize * 30/127
         
         view.addSubview(profileImageButton)
-
         profileImageButton.setPreferredSymbolConfiguration(.init(pointSize: profileImageSize, weight: .regular, scale: .default), forImageIn: .normal)
+        profileImageButton.layer.cornerRadius = profileImageSize / 2
         profileImageButton.centerX(inView: view)
         profileImageButton.anchor(
-            top: requestLabel.bottomAnchor,
-            paddingTop: 35
+            top: introRectangle.bottomAnchor,
+            paddingTop: 35,
+            width: profileImageSize,
+            height: profileImageSize
         )
         
         view.addSubview(plusView)
         plusView.anchor(
             bottom: profileImageButton.bottomAnchor,
             right: profileImageButton.rightAnchor,
-            paddingBottom: 15,
-            paddingRight: 10,
+            paddingBottom: 10,
+            paddingRight: 5,
             width: plusImageSize,
             height: plusImageSize
         )
-
     }
     
     func updateRequestLabel(index: Int) {
@@ -461,11 +458,17 @@ class SignUpViewController: UIViewController {
         )
     }
     
-    
     // MARK: - Actions
     
     @objc func dismissPage() {
         self.dismiss(animated: true)
+    }
+    
+    @objc func didTapProfileImageButton() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true)
     }
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
@@ -490,10 +493,7 @@ class SignUpViewController: UIViewController {
             if occupationField.text?.isEmpty == true {
                 print("직업을 입력하세요.")
             } else {
-//                statusField.isHidden = false
-//                statusLineView.isHidden = false
                 statusCounterLabel.isHidden = false
-//                statusField.becomeFirstResponder()
                 introRectangle.isHidden = false
                 introductionField.isHidden = false
                 introductionField.becomeFirstResponder()
@@ -506,13 +506,14 @@ class SignUpViewController: UIViewController {
             }
             
         } else if introductionField.isHidden == false && profileImageButton.isHidden == true {
-            if introductionField.text.isEmpty == true {
+            if introductionField.text.isEmpty == true || introductionField.text == introPlaceholder {
                 print("자기소개를 입력하세요.")
             } else {
                 profileImageButton.isHidden = false
                 plusView.isHidden = false
                 dot3View.backgroundColor = CustomColor.nomadGray2
                 dot4View.backgroundColor = CustomColor.nomadBlue
+                inputConfirmButton.setTitle("확인", for: .normal)
                 
                 index = 3
                 updateRequestLabel(index: index)
@@ -588,10 +589,6 @@ extension SignUpViewController: UITextFieldDelegate {
             occupationCounterLabel.text = "\(updateText.count) / \(occupationLimit)"
             return updateText.count < occupationLimit
         }
-//        else if textField == statusField {
-//            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
-//            return updateText.count < statusLimit
-//        }
         
         return true
     }
@@ -610,6 +607,7 @@ extension SignUpViewController: UITextViewDelegate {
             textView.text = nil
             textView.textColor = CustomColor.nomadBlack
         }
+        introRectangle.layer.borderColor = CustomColor.nomadBlue?.cgColor
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -617,6 +615,7 @@ extension SignUpViewController: UITextViewDelegate {
             textView.text = introPlaceholder
             textView.textColor = .tertiaryLabel
         }
+        introRectangle.layer.borderColor = CustomColor.nomadGray1?.cgColor
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -628,6 +627,18 @@ extension SignUpViewController: UITextViewDelegate {
             return updateText.count < statusLimit
         }
         return true
+    }
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageButton.setImage(image, for: .normal)
+        }
+        dismiss(animated: true)
     }
     
 }

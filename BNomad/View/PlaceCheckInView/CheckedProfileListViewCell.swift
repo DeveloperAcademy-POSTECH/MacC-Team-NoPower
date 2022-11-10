@@ -11,7 +11,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    // var user: User
     var userUid: String? {
         didSet {
             guard let userUid = userUid else { return }

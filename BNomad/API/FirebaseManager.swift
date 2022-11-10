@@ -14,7 +14,7 @@ import UIKit
 class FirebaseManager {
     
     static let shared = FirebaseManager()
-
+    
     // 실사용시 withPath: "Dummy" 제거 필요.
     let ref = Database.database().reference(withPath: "Dummy")
     
@@ -28,7 +28,7 @@ class FirebaseManager {
     //            longitude
     //            contact
     //            address
-        
+    
     /// 모든 PlaceData를 가져오기
     func fetchPlaceAll(completion: @escaping(Place) -> Void) {
         ref.child("places").observeSingleEvent(of: .value, with: { snapshot in
@@ -65,7 +65,7 @@ class FirebaseManager {
     //            occupation
     //            introduction
     //            profileImageUrl
-
+    
     /// userUid 존재하는지 체크
     func checkUserExist(userUid: String, completion: @escaping(Bool) -> Void) {
         ref.child("users").child(userUid).observeSingleEvent(of: .value, with: { snapshot in
@@ -127,7 +127,7 @@ class FirebaseManager {
                     print("fail user fetchCheckInHistory from firebase")
                     return
                 }
-    
+                
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
                 let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
                 
@@ -146,7 +146,7 @@ class FirebaseManager {
     //                    userUid
     //                    checkInTime
     //                    checkOutTime
-        
+    
     func getCheckInFromPlace(snapshot: Any, placeUid: String) -> CheckIn? {
         guard
             let snapshot = snapshot as? DataSnapshot,
@@ -178,7 +178,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-
+    
     /// (observe) 날짜별로 place의  checkInHistory 가져오기
     func fetchCheckInHistoryObserve(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
         let date = date.toDateString()
@@ -192,7 +192,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-
+    
     /// (observeSingleEvent) 모든 place의 checkInHistory 가져오기
     func fetchCheckInHistoryAll(placeUid: String, completion: @escaping([CheckIn]) -> Void) {
         var checkInHistory: [CheckIn] = []
@@ -208,14 +208,14 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-
+    
     /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
         let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
         
         ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())" : checkInUser,
-                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) { 
+                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("checkIn could not be saved: \(error).")
@@ -224,15 +224,15 @@ class FirebaseManager {
             }
         }
     }
-
+    
     /// checkOut할 경우 checkInUser, checkInPlace에 checkOutTime 추가
     func setCheckOut(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         var checkIn: CheckIn = checkIn
         let checkOutTime = Date()
         checkIn.checkOutTime = checkOutTime
-
+        
         ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())/checkOutTime" : checkOutTime.toDateTimeString(),
-                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)/checkOutTime" : checkOutTime.toDateTimeString()]) { 
+                               "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)/checkOutTime" : checkOutTime.toDateTimeString()]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("checkOut could not be saved: \(error).")
@@ -242,6 +242,157 @@ class FirebaseManager {
         }
     }
     
+    // MARK: firebase - meetUpUser
+    // meetUpUser
+    //     userUid
+    //         meetUpUid
+    
+    // MARK: firebase - meetUpPlace
+    // meetUpPlace
+    //     placeUid
+    //         date
+    //             meetUpUid
+    //                 time
+    //                 title
+    //                 description
+    //                 maxPeopleNum
+    //                 currentPeopleUids
+    //                 meetUpPlaceName
+    //                 organizerUid
+    
+    // MARK: firebase - meetUp
+    // meetUp
+    //     meetUpUid
+    //         placeUid
+    //         time
+    //         title
+    //         description
+    //         maxPeopleNum
+    //         currentPeopleUids
+    //         meetUpPlaceName
+    //         organizerUid
+    
+    /// 새로운 meetUp을 생성
+    /// completion로 place의 meetUpHistory에 MeetUp을 넘겨줘야함.
+    func createMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
+        let currentPeopleUids = [meetUp.organizerUid: true]
+        
+        let meetUpUser = ["placeUid": meetUp.placeUid, "time": meetUp.time.toDateTimeString(),
+                          "title": meetUp.title, "description": meetUp.description,
+                          "maxPeopleNum": meetUp.maxPeopleNum, "currentPeopleUids": currentPeopleUids,
+                          "meetUpPlaceName": meetUp.meetUpPlaceName, "organizerUid": meetUp.organizerUid] as [String : Any]
+        
+        let meetUpPlace = ["time": meetUp.time.toDateTimeString(), "title": meetUp.title,
+                           "description": meetUp.description, "maxPeopleNum": meetUp.maxPeopleNum,
+                           "currentPeopleUids": currentPeopleUids, "meetUpPlaceName": meetUp.meetUpPlaceName,
+                           "organizerUid": meetUp.organizerUid] as [String : Any]
+        
+        ref.updateChildValues(["meetUpUser/\(meetUp.organizerUid)/\(meetUp.meetUpUid)" : true,
+                               "meetUp/\(meetUp.meetUpUid)" : meetUpUser,
+                               "meetUpPlace/\(meetUp.placeUid)/\(meetUp.date)/\(meetUp.meetUpUid)" : meetUpPlace]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion(meetUp)
+            }
+        }
+    }
+    
+    /// place의 특정 날짜의 meetUp들 가져오기
+    func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
+        let date = date.toDateString()
+        var meetUpHistory: [MeetUp] = []
+        
+        ref.child("meetUpPlace/\(placeUid)/\(date)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let meetUpDict = snapshot.value as? [String: Any] else { return }
+                
+                guard let time = meetUpDict["time"] as? String else { return }
+                guard let title = meetUpDict["title"] as? String else { return }
+                guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
+                guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
+                guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
+                
+                guard let time = time.toDateTime() else { return }
+                
+                let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
+                
+                var currentPeopleUidsArray: [String] = []
+                
+                if let currentPeopleUids = currentPeopleUids {
+                    currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
+                }
+                
+                let description = meetUpDict["description"] as? String
+                let meetUp = MeetUp(meetUpUid: snapshot.key, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum, description: description, currentPeopleUids: currentPeopleUidsArray)
+                meetUpHistory.append(meetUp)
+            }
+            completion(meetUpHistory)
+        })
+    }
+    
+    /// 특정 유저가 참여한 모든 meetUp의 Uid 가져오기
+    func fetchMeetUpUidAll(userUid: String, completion: @escaping(String) -> Void) {
+        
+        ref.child("meetUpUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let meetUpUid = snapshot.key as? String else { return }
+                completion(meetUpUid)
+            }
+        })
+    }
+    
+    /// meetUpUid의 meetUp 가져오기
+    func fetchMeetUp(meetUpUid: String, completion: @escaping(MeetUp) -> Void) {
+        ref.child("meetUp/\(meetUpUid)").observeSingleEvent(of: .value, with: { snapshot in
+            guard let meetUpDict = snapshot.value as? [String: Any] else { return }
+            
+            guard let placeUid = meetUpDict["placeUid"] as? String else { return }
+            guard let time = meetUpDict["time"] as? String else { return }
+            guard let title = meetUpDict["title"] as? String else { return }
+            guard let maxPeopleNum = meetUpDict["maxPeopleNum"] as? Int else { return }
+            guard let meetUpPlaceName = meetUpDict["meetUpPlaceName"] as? String else { return }
+            guard let organizerUid = meetUpDict["organizerUid"] as? String else { return }
+            
+            guard let time = time.toDateTime() else { return }
+            
+            let currentPeopleUids = (meetUpDict["currentPeopleUids"] as? [String: Any])?.keys
+            
+            var currentPeopleUidsArray: [String] = []
+            
+            if let currentPeopleUids = currentPeopleUids {
+                currentPeopleUids.forEach { currentPeopleUidsArray.append($0)}
+            }
+            
+            let description = meetUpDict["description"] as? String
+            
+            let meetUp = MeetUp(meetUpUid: snapshot.key, placeUid: placeUid, organizerUid: organizerUid, title: title, meetUpPlaceName: meetUpPlaceName, time: time, maxPeopleNum: maxPeopleNum,description: description, currentPeopleUids: currentPeopleUidsArray)
+            completion(meetUp)
+        })
+    }
+    
+    /// meetUp 참여하기
+    /// completion으로 place - meetUpHistory - meetUp - currentPeopleUids에 userUid 추가
+    /// completion으로 user - meetUpHistory에 meetUp 추가
+    func participateMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : true,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : true,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : true]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
+    
+    /// profile 이미지 업로드
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()
         let imageRef = storageRef.child("userProfileImage/\(userUid)")
@@ -249,7 +400,7 @@ class FirebaseManager {
             print("DEBUG - fail compression")
             return
         }
-
+        
         imageRef.putData(imageData, metadata: nil) { (metadata, error) in
             if let error = error {
                 print("DEBUG \(error.localizedDescription)")
@@ -266,7 +417,7 @@ class FirebaseManager {
                     print("DEBUG - url fail")
                     return
                 }
-
+                
                 self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString]) {
                     (error: Error?, ref: DatabaseReference) in
                     if let error: Error = error {

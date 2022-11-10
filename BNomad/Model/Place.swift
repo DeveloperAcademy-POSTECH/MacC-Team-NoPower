@@ -22,3 +22,9 @@ struct Place {
     var currentCheckIn: [CheckIn]? { todayCheckInHistory?.filter { $0.checkOutTime == nil } }
     
 }
+
+enum PlaceType: Int {
+    case coworking
+    case library
+    case cafe
+}

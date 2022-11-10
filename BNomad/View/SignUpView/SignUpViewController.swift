@@ -35,7 +35,10 @@ class SignUpViewController: UIViewController {
     private let occupationLimit = 40
     private let statusLimit = 150
     private let introPlaceholder = "자기소개를 작성해주세요!"
-        
+    
+    private var keyboardHeight: CGFloat = 0
+    private var moveValue: CGFloat = 0
+
     lazy var requestLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
@@ -266,6 +269,8 @@ class SignUpViewController: UIViewController {
         
         hideKeyboardWhenTappedAround()
         configCancelButton()
+        
+        setKeyboardObserver()
     }
     
     // MARK: - Methods
@@ -476,7 +481,18 @@ class SignUpViewController: UIViewController {
         inputConfirmButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 33, paddingRight: 20, height: 48)
     }
     
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
     // MARK: - Actions
+    
+    @objc func keyboardWillShow(notification: NSNotification)  {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            keyboardHeight = keyboardRectangle.height
+        }
+    }
     
     @objc func dismissPage() {
         self.dismiss(animated: true)
@@ -616,6 +632,20 @@ extension SignUpViewController: UITextViewDelegate {
         }
         introRectangle.layer.borderColor = CustomColor.nomadBlue?.cgColor
         showKeyboardAcc()
+        
+        let screenHeight = UIScreen.main.bounds.height
+        let keyboardAndAccHeight = keyboardHeight + self.keyboardAccView.frame.height
+        let keyboardAndAccY = screenHeight - keyboardAndAccHeight
+        let introY = statusCounterLabel.frame.minY + statusCounterLabel.frame.height
+        
+        if introY > keyboardAndAccY {
+            moveValue = introY - keyboardAndAccY
+            UIView.animate(withDuration: 0.2) {
+                self.view.window?.frame.origin.y -= self.moveValue
+            }
+        } else {
+            moveValue = 0
+        }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -625,6 +655,10 @@ extension SignUpViewController: UITextViewDelegate {
         }
         introRectangle.layer.borderColor = CustomColor.nomadGray1?.cgColor
         showInputConfirmButton()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.window?.frame.origin.y += self.moveValue
+        }
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

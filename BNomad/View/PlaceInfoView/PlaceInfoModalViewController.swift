@@ -214,7 +214,7 @@ class PlaceInfoModalViewController: UIViewController {
         placeInfocollectionView.backgroundColor = CustomColor.nomadGray3
         placeInfocollectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
         placeInfocollectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
-        placeInfocollectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
+        placeInfocollectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
         view.addSubview(placeInfocollectionView)
         
         placeInfocollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -271,7 +271,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             return cell
         }
         else if indexPath.section == 2 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SummaryInfoCell.cellIdentifier, for: indexPath) as? SummaryInfoCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
             return cell
         }
         
@@ -279,7 +279,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
 }
 
@@ -312,7 +312,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 450)
         } else if indexPath.section == 2 {
-            return CGSize(width: viewWidth, height: 375)
+            return CGSize(width: viewWidth, height: 664)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
             

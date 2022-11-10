@@ -223,17 +223,12 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(openOperatingTimeButton)
         self.addSubview(horizontalDivider3)
         self.addSubview(addressLabel)
-
-
-        
-        
         setAttributes()
         guard let place = place else { return }
         mappingPlaceData(place)
     }
     
     private func setAttributes() {
-        
         placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
         chekedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)

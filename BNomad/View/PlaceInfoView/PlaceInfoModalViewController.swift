@@ -23,10 +23,10 @@ class PlaceInfoModalViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
-    let placeInfocolleCtionView: UICollectionView = {
+    let placeInfoCollectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
-        let placeInfocolleCtionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
-        return placeInfocolleCtionView
+        let placeInfoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        return placeInfoCollectionView
     }()
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
@@ -203,14 +203,14 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func configureCollectionView() {
-        placeInfocolleCtionView.dataSource = self
-        placeInfocolleCtionView.delegate = self
-        placeInfocolleCtionView.backgroundColor = CustomColor.nomadGray3
-        placeInfocolleCtionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
-        placeInfocolleCtionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
-        placeInfocolleCtionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
-        view.addSubview(placeInfocolleCtionView)
-        placeInfocolleCtionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        placeInfoCollectionView.dataSource = self
+        placeInfoCollectionView.delegate = self
+        placeInfoCollectionView.backgroundColor = CustomColor.nomadGray3
+        placeInfoCollectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
+        placeInfoCollectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
+        placeInfoCollectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
+        view.addSubview(placeInfoCollectionView)
+        placeInfoCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     func configureCheckInButton() {

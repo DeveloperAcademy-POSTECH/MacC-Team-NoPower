@@ -9,8 +9,6 @@ import UIKit
 
 class ReviewInfoCell: UICollectionViewCell {
     
-    
-    
     // MARK: - Properties
 
     static let cellIdentifier = "ReviewInfoCell"
@@ -24,7 +22,7 @@ class ReviewInfoCell: UICollectionViewCell {
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        let reviewCollectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
+        let reviewCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         reviewCollectionView.backgroundColor = UIColor.white
 
         return reviewCollectionView
@@ -115,7 +113,7 @@ extension ReviewInfoCell: UICollectionViewDataSource {
         }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 4
-    }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

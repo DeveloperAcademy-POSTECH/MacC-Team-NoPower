@@ -14,10 +14,10 @@ import UIKit
 class FirebaseManager {
     
     static let shared = FirebaseManager()
-    
+
     // 실사용시 withPath: "Dummy" 제거 필요.
     let ref = Database.database().reference(withPath: "Dummy")
-    
+
     // MARK: place
     // firebase
     //    places
@@ -28,7 +28,7 @@ class FirebaseManager {
     //            longitude
     //            contact
     //            address
-    
+
     /// 모든 PlaceData를 가져오기
     func fetchPlaceAll(completion: @escaping(Place) -> Void) {
         ref.child("places").observeSingleEvent(of: .value, with: { snapshot in
@@ -54,9 +54,9 @@ class FirebaseManager {
                 completion(place)
             }
         })
-    }
-    
-    
+    }    
+
+
     // MARK: users
     // firebase
     //    users
@@ -65,7 +65,7 @@ class FirebaseManager {
     //            occupation
     //            introduction
     //            profileImageUrl
-    
+
     /// userUid 존재하는지 체크
     func checkUserExist(userUid: String, completion: @escaping(Bool) -> Void) {
         ref.child("users").child(userUid).observeSingleEvent(of: .value, with: { snapshot in
@@ -76,7 +76,7 @@ class FirebaseManager {
             }
         })
     }
-    
+
     /// userData 가져오기
     func fetchUser(id userUid: String, completion: @escaping(User) -> Void) {
         ref.child("users/\(userUid)").observeSingleEvent(of: .value, with: { snapshot in
@@ -96,13 +96,13 @@ class FirebaseManager {
             completion(user)
         })
     }
-    
+
     /// 새로운 user 추가 & user 정보 업데이트
     func setUser(user: User) {
         self.ref.child("users").child(user.userUid).setValue(user.toAnyObject())
     }
     
-    
+
     // MARK: checkInUser
     // firebase
     //    checkInUser
@@ -111,7 +111,7 @@ class FirebaseManager {
     //                placeUid
     //                checkOutTime
     //                checkInUid
-    
+
     /// user의 모든 CheckInHistory 가져오기
     func fetchCheckInHistory(userUid: String, completion: @escaping([CheckIn]) -> Void) {
         var checkInHistory: [CheckIn] = []
@@ -136,7 +136,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-    
+
     // MARK: checkInPlace
     // firebase
     //    checkInPlace
@@ -146,7 +146,7 @@ class FirebaseManager {
     //                    userUid
     //                    checkInTime
     //                    checkOutTime
-    
+
     func getCheckInFromPlace(snapshot: Any, placeUid: String) -> CheckIn? {
         guard
             let snapshot = snapshot as? DataSnapshot,
@@ -164,7 +164,7 @@ class FirebaseManager {
         
         return checkIn
     }
-    
+
     /// (observeSingleEvent) 날짜별로 place의  checkInHistory 가져오기
     func fetchCheckInHistory(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
         let date = date.toDateString()
@@ -178,7 +178,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-    
+
     /// (observe) 날짜별로 place의  checkInHistory 가져오기
     func fetchCheckInHistoryObserve(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
         let date = date.toDateString()
@@ -192,7 +192,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-    
+
     /// (observeSingleEvent) 모든 place의 checkInHistory 가져오기
     func fetchCheckInHistoryAll(placeUid: String, completion: @escaping([CheckIn]) -> Void) {
         var checkInHistory: [CheckIn] = []
@@ -208,7 +208,7 @@ class FirebaseManager {
             completion(checkInHistory)
         })
     }
-    
+
     /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
@@ -224,7 +224,7 @@ class FirebaseManager {
             }
         }
     }
-    
+
     /// checkOut할 경우 checkInUser, checkInPlace에 checkOutTime 추가
     func setCheckOut(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
         var checkIn: CheckIn = checkIn
@@ -241,12 +241,12 @@ class FirebaseManager {
             }
         }
     }
-    
+
     // MARK: firebase - meetUpUser
     // meetUpUser
     //     userUid
     //         meetUpUid
-    
+
     // MARK: firebase - meetUpPlace
     // meetUpPlace
     //     placeUid
@@ -259,7 +259,7 @@ class FirebaseManager {
     //                 currentPeopleUids
     //                 meetUpPlaceName
     //                 organizerUid
-    
+
     // MARK: firebase - meetUp
     // meetUp
     //     meetUpUid
@@ -271,7 +271,7 @@ class FirebaseManager {
     //         currentPeopleUids
     //         meetUpPlaceName
     //         organizerUid
-    
+
     /// 새로운 meetUp을 생성
     /// completion로 place의 meetUpHistory에 MeetUp을 넘겨줘야함.
     func createMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
@@ -298,7 +298,7 @@ class FirebaseManager {
             }
         }
     }
-    
+
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
         let date = date.toDateString()
@@ -332,7 +332,7 @@ class FirebaseManager {
             completion(meetUpHistory)
         })
     }
-    
+
     /// 특정 유저가 참여한 모든 meetUp의 Uid 가져오기
     func fetchMeetUpUidAll(userUid: String, completion: @escaping(String) -> Void) {
         
@@ -344,7 +344,7 @@ class FirebaseManager {
             }
         })
     }
-    
+
     /// meetUpUid의 meetUp 가져오기
     func fetchMeetUp(meetUpUid: String, completion: @escaping(MeetUp) -> Void) {
         ref.child("meetUp/\(meetUpUid)").observeSingleEvent(of: .value, with: { snapshot in
@@ -373,7 +373,7 @@ class FirebaseManager {
             completion(meetUp)
         })
     }
-    
+
     /// meetUp 참여하기
     /// completion으로 place - meetUpHistory - meetUp - currentPeopleUids에 userUid 추가
     /// completion으로 user - meetUpHistory에 meetUp 추가
@@ -391,7 +391,7 @@ class FirebaseManager {
             }
         }
     }
-    
+
     /// profile 이미지 업로드
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()

@@ -8,13 +8,7 @@
 import UIKit
 import MapKit
 
-protocol ClearSelectedAnnotation {
-    func clearAnnotation(view: MKAnnotation)
-}
 
-protocol UpdateFloating {
-    func checkInFloating()
-}
 
 class PlaceInfoModalViewController: UIViewController {
     

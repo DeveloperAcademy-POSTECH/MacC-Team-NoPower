@@ -58,9 +58,7 @@ class MapViewController: UIViewController {
     lazy var profileBtn: UIButton = {
         var btn = UIButton()
         btn.setImage(UIImage(systemName: "person"), for: .normal)
-//        btn.tintColor = CustomColor.nomadBlue
-//        btn.backgroundColor = .white
-        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.anchor(width: 22, height: 22)
         btn.addTarget(self, action: #selector(moveToProfile), for: .touchUpInside)
         return btn
     }()
@@ -74,6 +72,9 @@ class MapViewController: UIViewController {
         if viewModel.isLogIn {
             navigationController?.pushViewController(ProfileViewController(), animated: true)
         } else {
+            
+            // TODO: - 회원가입 창 띄우기 전에 모달 띄우기
+            
             let controller = SignUpViewController()
             controller.modalPresentationStyle = .fullScreen
             present(controller, animated: true)
@@ -81,22 +82,18 @@ class MapViewController: UIViewController {
         map.selectedAnnotations = []
     }
     
-    private let divider: UIView = {
-        let divider = UIView()
-//        divider.tintColor = CustomColor.nomadBlue
-        divider.backgroundColor = CustomColor.nomadBlue
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
+    private let divider: UIButton = {
+        let divider = UIButton()
+        divider.setImage(UIImage(systemName: "squareshape.fill"), for: .normal)
+        divider.isUserInteractionEnabled = false
+        divider.anchor(width: 1.5, height: 24)
         return divider
     }()
     
     private let settingBtn: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(systemName: "gearshape"), for: .normal)
-//        btn.tintColor = CustomColor.nomadBlue
-//        btn.backgroundColor = .white
-        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setImage(UIImage(systemName: "gearshape")?.withRenderingMode(.automatic), for: .normal)
+        btn.anchor(width: 22, height: 22)
         return btn
     }()
     
@@ -114,6 +111,7 @@ class MapViewController: UIViewController {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         btn.changesSelectionAsPrimaryAction = true
+        btn.tintColor = CustomColor.nomadBlue
         btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
         return btn
     }()

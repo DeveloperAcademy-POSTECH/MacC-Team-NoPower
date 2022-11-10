@@ -138,10 +138,6 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
-            cell.backgroundColor = .white
-            cell.layer.borderWidth = 1
-            cell.layer.borderColor = CustomColor.nomadGray2?.cgColor
-            cell.layer.cornerRadius = 12
             
             return cell
         }
@@ -176,7 +172,7 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
             
-            return CGSize(width: 356, height: 85)
+            return CGSize(width: 349, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 0)
         }

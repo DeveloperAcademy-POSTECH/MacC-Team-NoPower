@@ -123,6 +123,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
             placeInfoViewCell.place = selectedPlace
+            placeInfoViewCell.meetUpViewDelegate = self
             
             return placeInfoViewCell
         }
@@ -205,5 +206,15 @@ extension PlaceCheckInViewController: CheckOutAlert {
             self.checkOut()
         }))
         present(alert, animated: true)
+    }
+}
+
+// MARK: - newMeetUpViewShowable
+
+extension PlaceCheckInViewController: NewMeetUpViewShowable {
+    func didTapNewMeetUpButton() {
+        let newMeetUpView = NewMeetUpViewController()
+        let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
+        present(navBarOnModal, animated: true, completion: nil)
     }
 }

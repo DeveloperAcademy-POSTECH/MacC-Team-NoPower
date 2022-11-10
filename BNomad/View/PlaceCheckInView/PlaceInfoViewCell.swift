@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol NewMeetUpViewShowable {
+    func didTapNewMeetUpButton()
+}
+
 class PlaceInfoViewCell: UICollectionViewCell {
     
     static let identifier = "placeInforViewCell"
@@ -23,6 +27,8 @@ class PlaceInfoViewCell: UICollectionViewCell {
             }
         }
     }
+    
+    var meetUpViewDelegate: NewMeetUpViewShowable?
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -54,7 +60,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .black
-        button.addTarget(self, action: #selector(questAdd), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addNewMeetUp), for: .touchUpInside)
         
         return button
     }()
@@ -74,8 +80,8 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     // MARK: - Actions
     
-    @objc func questAdd() {
-        print("QUEST ADD!!")
+    @objc func addNewMeetUp() {
+        meetUpViewDelegate?.didTapNewMeetUpButton()
     }
     
     // MARK: - Helpers
@@ -87,9 +93,6 @@ class PlaceInfoViewCell: UICollectionViewCell {
         collectionView.backgroundColor = .systemBackground
         collectionView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         collectionView.register(QuestCollectionViewCell.self, forCellWithReuseIdentifier: QuestCollectionViewCell.identifier)
-        
-//        self.addSubview(questLabel)
-//        questLabel.anchor(top: collectionView.topAnchor, left: collectionView.leftAnchor, paddingTop: 10, paddingLeft: 20)
         
         self.addSubview(plusButton)
         plusButton.anchor(top: collectionView.topAnchor, right: collectionView.rightAnchor, paddingTop: 10, paddingRight: 20, width: 24, height: 24)
@@ -117,7 +120,6 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource

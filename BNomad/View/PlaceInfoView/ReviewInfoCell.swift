@@ -24,23 +24,23 @@ class ReviewInfoCell: UICollectionViewCell {
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        let reviewCollectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
+        let reviewCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         reviewCollectionView.backgroundColor = UIColor.white
 
         return reviewCollectionView
     }()
-    let ViewallButton: UIButton = {
-        let ViewallButton = UIButton()
-        ViewallButton.setTitle("모든 리뷰 보기 ", for: .normal)
-        ViewallButton.setTitleColor(CustomColor.nomadGray1, for: .normal)
-        ViewallButton.semanticContentAttribute = .forceRightToLeft
-        ViewallButton.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
+    let ViewAllButton: UIButton = {
+        let viewAllButton = UIButton()
+        viewAllButton.setTitle("모든 리뷰 보기 ", for: .normal)
+        viewAllButton.setTitleColor(CustomColor.nomadGray1, for: .normal)
+        viewAllButton.semanticContentAttribute = .forceRightToLeft
+        viewAllButton.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         let config = UIImage.SymbolConfiguration(pointSize: 13)
-        ViewallButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
-        ViewallButton.tintColor = CustomColor.nomadGray1
+        viewAllButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
+        viewAllButton.tintColor = CustomColor.nomadGray1
         
         
-        return ViewallButton
+        return viewAllButton
     }()
     // MARK: - Lifecycle
     
@@ -65,7 +65,7 @@ class ReviewInfoCell: UICollectionViewCell {
         self.addSubview(horizontalDivider3)
         self.addSubview(horizontalDivider4)
         self.addSubview(horizontalDivider5)
-        self.addSubview(ViewallButton)
+        self.addSubview(ViewAllButton)
         setAttributes()
     }
     
@@ -98,7 +98,7 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        ViewallButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
+        ViewAllButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
     }
 }
 

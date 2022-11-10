@@ -24,12 +24,12 @@ class ReviewInfoCell: UICollectionViewCell {
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        let reviewCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        let reviewCollectionView = UICollectionView(frame: .init(x: 0, y: 0, width: 100, height: 100), collectionViewLayout: flowLayout)
         reviewCollectionView.backgroundColor = UIColor.white
 
         return reviewCollectionView
     }()
-    let ViewAllButton: UIButton = {
+    let viewAllButton: UIButton = {
         let viewAllButton = UIButton()
         viewAllButton.setTitle("모든 리뷰 보기 ", for: .normal)
         viewAllButton.setTitleColor(CustomColor.nomadGray1, for: .normal)
@@ -65,7 +65,7 @@ class ReviewInfoCell: UICollectionViewCell {
         self.addSubview(horizontalDivider3)
         self.addSubview(horizontalDivider4)
         self.addSubview(horizontalDivider5)
-        self.addSubview(ViewAllButton)
+        self.addSubview(viewAllButton)
         setAttributes()
     }
     
@@ -98,7 +98,7 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        ViewAllButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
+        viewAllButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
     }
 }
 
@@ -120,7 +120,7 @@ extension ReviewInfoCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath)
-        cell.backgroundColor = UIColor.red
+        cell.backgroundColor = UIColor.white
         return cell
     }
 

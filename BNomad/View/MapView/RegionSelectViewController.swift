@@ -48,6 +48,7 @@ class RegionSelectViewController: UIViewController {
     private let confirmBtn: UIButton = {
         let btn = UIButton()
         btn.setTitle("확인", for: .normal)
+        btn.titleLabel?.asFont(targetString: "확인", font: .preferredFont(forTextStyle: .body, weight: .bold))
         btn.backgroundColor = CustomColor.nomadBlue
         btn.setTitleColor(.white, for: .normal)
         btn.layer.cornerRadius = 12

@@ -29,6 +29,7 @@ class RegionCollectionViewCell: UICollectionViewCell {
     lazy var regionBtn: UILabel = {
         let btn = UILabel()
         btn.text = "지역명"
+        btn.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 20
         btn.backgroundColor = .white

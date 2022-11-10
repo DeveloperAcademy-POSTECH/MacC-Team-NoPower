@@ -99,24 +99,25 @@ class MapViewController: UIViewController {
     
 
     
-    // 지역명 표기 및 지역 변경
-    lazy var regionTitle: UILabel = {
-        let title = UILabel()
-        title.text = selectedRegion?.name ?? "지역 선택"
-        title.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        return title
-    }()
+    // 지역명 표기 및 지역 변경 버튼
     
-    var regionChangeBtn: UIButton = {
-        let btn = UIButton()
+    private let regionChangeBtn: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.titleAlignment = .leading
+        configuration.imagePlacement = .trailing
+
+        var btn = UIButton(configuration: configuration)
+        btn.setTitle("지역 선택 ", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
         btn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        btn.changesSelectionAsPrimaryAction = true
         btn.tintColor = CustomColor.nomadBlue
         btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
         return btn
     }()
     
     @objc private func presentRegionSelector() {
+        self.dismiss(animated: false)
+
         let sheet = RegionSelectViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
@@ -132,12 +133,12 @@ class MapViewController: UIViewController {
     }
     
     lazy var upperStack: UIStackView = {
-        let topLeftTitle = UIStackView(arrangedSubviews: [regionTitle, regionChangeBtn])
+        let topLeftTitle = UIStackView(arrangedSubviews: [regionChangeBtn])
         topLeftTitle.axis = .horizontal
         topLeftTitle.alignment = .center
         topLeftTitle.spacing = 10
         topLeftTitle.distribution = .fillProportionally
-        topLeftTitle.anchor(width: 100)
+        topLeftTitle.anchor(width: 120)
         topLeftTitle.translatesAutoresizingMaskIntoConstraints = false
 
         let topRightBtn = UIStackView(arrangedSubviews: [profileBtn, divider, settingBtn])

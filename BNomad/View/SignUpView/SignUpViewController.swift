@@ -28,12 +28,17 @@ class SignUpViewController: UIViewController {
         return button
     }()
 
-    private let requestItem = ["닉네임", "직업", "상태"]
+    private let requestItem = ["닉네임", "직업", "상태", "멋진 사진"]
+    private lazy var requestSentence = ["\(requestItem[0])을 알려주세요!", "\(requestItem[1])을 알려주세요!", "\(requestItem[2])를 알려주세요!", "\(requestItem[3])을 올려주세요!"]
     private var index = 0
     private let nicknameLimit = 20
     private let occupationLimit = 40
-    private let statusLimit = 50
-        
+    private let statusLimit = 150
+    private let introPlaceholder = "자기소개를 작성해주세요!"
+    
+    private var keyboardHeight: CGFloat = 0
+    private var moveValue: CGFloat = 0
+
     lazy var requestLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
@@ -69,8 +74,17 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    lazy var dot4View: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        view.backgroundColor = CustomColor.nomadGray2
+        view.layer.cornerRadius = 2.5
+        view.contentMode = .scaleAspectFit
+
+        return view
+    }()
+    
     lazy var dotsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [dot1View, dot2View, dot3View])
+        let stackView = UIStackView(arrangedSubviews: [dot1View, dot2View, dot3View, dot4View])
         stackView.axis = .horizontal
         stackView.spacing = 8.0
         stackView.alignment = .fill
@@ -80,6 +94,7 @@ class SignUpViewController: UIViewController {
         dot1View.anchor(width: 5, height: 5)
         dot2View.anchor(width: 5, height: 5)
         dot3View.anchor(width: 5, height: 5)
+        dot4View.anchor(width: 5, height: 5)
 
         return stackView
     }()
@@ -153,6 +168,25 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
+    private lazy var introductionField: UITextView = {
+        let textView = UITextView()
+        textView.text = introPlaceholder
+        textView.textColor = .tertiaryLabel
+        textView.font = .preferredFont(forTextStyle: .footnote)
+        textView.backgroundColor = .clear
+        
+        return textView
+    }()
+    
+    private var introRectangle: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.layer.borderWidth = 2
+        view.layer.borderColor = CustomColor.nomadGray1?.cgColor
+        
+        return view
+    }()
+    
     private lazy var statusCounterLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
@@ -162,17 +196,38 @@ class SignUpViewController: UIViewController {
         return label
     }()
     
-    private let inputConfirmButton: UIButton = {
+    private lazy var profileImageButton: UIButton = {
         let button = UIButton()
-        button.setTitle("확인", for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .semibold)
-        button.backgroundColor = CustomColor.nomadBlue
+        button.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
+        button.tintColor = CustomColor.nomadGray2
+        button.addTarget(self, action: #selector(didTapProfileImageButton), for: .touchUpInside)
+        button.layer.masksToBounds = true
         
         return button
     }()
     
-    private var keyboardAccView: UIView = {
-        return UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 56.0))
+    private let plusView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(systemName: "plus.circle.fill")
+        view.tintColor = CustomColor.nomadBlue
+        
+        return view
+    }()
+    
+    private var inputConfirmButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("다음", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .semibold)
+        button.backgroundColor = CustomColor.nomadBlue
+        button.layer.cornerRadius = 8
+        
+        return button
+    }()
+    
+    private lazy var keyboardAccView: UIView = {
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.width, height: 58))
+
+        return view
     }()
     
     // MARK: - LifeCycle
@@ -197,6 +252,7 @@ class SignUpViewController: UIViewController {
         nicknameField.delegate = self
         occupationField.delegate = self
         statusField.delegate = self
+        introductionField.delegate = self
         
         occupationField.isHidden = true
         occupationLineView.isHidden = true
@@ -204,11 +260,17 @@ class SignUpViewController: UIViewController {
         statusField.isHidden = true
         statusLineView.isHidden = true
         statusCounterLabel.isHidden = true
+        introRectangle.isHidden = true
+        introductionField.isHidden = true
+        profileImageButton.isHidden = true
+        plusView.isHidden = true
         
         inputConfirmButton.addTarget(self, action: #selector(didTapInputConfirmButton), for: .touchUpInside)
         
         hideKeyboardWhenTappedAround()
         configCancelButton()
+        
+        setKeyboardObserver()
     }
     
     // MARK: - Methods
@@ -311,29 +373,62 @@ class SignUpViewController: UIViewController {
             height: lineHeight
         )
         
+        view.addSubview(introRectangle)
+        introRectangle.anchor(
+            top: occupationField.bottomAnchor,
+            left: requestLabel.leftAnchor,
+            paddingTop: textFieldTopSpacing,
+            width: textFieldWidth,
+            height: 106
+        )
+        
+        view.addSubview(introductionField)
+        introductionField.inputAccessoryView = keyboardAccView
+        introductionField.anchor(
+            top: introRectangle.topAnchor,
+            left: introRectangle.leftAnchor,
+            bottom: introRectangle.bottomAnchor,
+            right: introRectangle.rightAnchor,
+            paddingTop: 4,
+            paddingLeft: 8,
+            paddingBottom: 4,
+            paddingRight: 8
+        )
+        
         view.addSubview(statusCounterLabel)
         statusCounterLabel.anchor(
-            top: statusLineView.bottomAnchor,
-            right: statusLineView.rightAnchor,
+            top: introRectangle.bottomAnchor,
+            right: introRectangle.rightAnchor,
             paddingTop: 8
         )
         
-        keyboardAccView.addSubview(inputConfirmButton)
+        let profileImageSize = viewWidth * 127/390
+        let plusImageSize = profileImageSize * 30/127
         
-        guard let inputConfirmButtonSuperview = inputConfirmButton.superview
-        else {
-            return
-        }
+        view.addSubview(profileImageButton)
+        profileImageButton.setPreferredSymbolConfiguration(.init(pointSize: profileImageSize, weight: .regular, scale: .default), forImageIn: .normal)
+        profileImageButton.layer.cornerRadius = profileImageSize / 2
+        profileImageButton.centerX(inView: view)
+        profileImageButton.anchor(
+            top: introRectangle.bottomAnchor,
+            paddingTop: 35,
+            width: profileImageSize,
+            height: profileImageSize
+        )
         
-        inputConfirmButton.anchor(
-            left: inputConfirmButtonSuperview.leftAnchor,
-            right: inputConfirmButtonSuperview.rightAnchor,
-            height: inputConfirmButtonSuperview.bounds.height
+        view.addSubview(plusView)
+        plusView.anchor(
+            bottom: profileImageButton.bottomAnchor,
+            right: profileImageButton.rightAnchor,
+            paddingBottom: 10,
+            paddingRight: 5,
+            width: plusImageSize,
+            height: plusImageSize
         )
     }
     
     func updateRequestLabel(index: Int) {
-        requestLabel.text = "노마드가 되기 위해\n\(requestItem[index])을 알려주세요!"
+        requestLabel.text = "노마드가 되기 위해\n\(requestSentence[index])"
     }
     
     func showAlert() {
@@ -344,9 +439,9 @@ class SignUpViewController: UIViewController {
         alertLabel.alpha = 1.0
         self.view.addSubview(alertLabel)
         alertLabel.anchor(
-            top: statusLineView.bottomAnchor,
-            left: statusLineView.leftAnchor,
-            paddingTop: 21
+            top: introRectangle.bottomAnchor,
+            left: introRectangle.leftAnchor,
+            paddingTop: 8
         )
 
         UIView.animate(withDuration: 1.0, delay: 1, options: .curveEaseOut, animations: {
@@ -368,11 +463,46 @@ class SignUpViewController: UIViewController {
         )
     }
     
+    func showKeyboardAcc() {
+        keyboardAccView.addSubview(inputConfirmButton)
+        guard let inputConfirmButtonSuperview = inputConfirmButton.superview else { return }
+        inputConfirmButton.anchor(
+            top: inputConfirmButtonSuperview.topAnchor,
+            left: inputConfirmButtonSuperview.leftAnchor,
+            right: inputConfirmButtonSuperview.rightAnchor,
+            paddingLeft: 20,
+            paddingRight: 20,
+            height: 48
+        )
+    }
+    
+    func showInputConfirmButton() {
+        view.addSubview(inputConfirmButton)
+        inputConfirmButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 33, paddingRight: 20, height: 48)
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
     
     // MARK: - Actions
     
+    @objc func keyboardWillShow(notification: NSNotification)  {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            keyboardHeight = keyboardRectangle.height
+        }
+    }
+    
     @objc func dismissPage() {
         self.dismiss(animated: true)
+    }
+    
+    @objc func didTapProfileImageButton() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true)
     }
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
@@ -393,14 +523,14 @@ class SignUpViewController: UIViewController {
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
             
-        } else if occupationField.isHidden == false && statusField.isHidden == true {
+        } else if occupationField.isHidden == false && introductionField.isHidden == true {
             if occupationField.text?.isEmpty == true {
                 print("직업을 입력하세요.")
             } else {
-                statusField.isHidden = false
-                statusLineView.isHidden = false
                 statusCounterLabel.isHidden = false
-                statusField.becomeFirstResponder()
+                introRectangle.isHidden = false
+                introductionField.isHidden = false
+                introductionField.becomeFirstResponder()
                 dot2View.backgroundColor = CustomColor.nomadGray2
                 dot3View.backgroundColor = CustomColor.nomadBlue
                 
@@ -409,9 +539,29 @@ class SignUpViewController: UIViewController {
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
             
+        } else if introductionField.isHidden == false && profileImageButton.isHidden == true {
+            if introductionField.text.isEmpty == true || introductionField.text == introPlaceholder {
+                print("자기소개를 입력하세요.")
+            } else {
+                profileImageButton.isHidden = false
+                plusView.isHidden = false
+                dot3View.backgroundColor = CustomColor.nomadGray2
+                dot4View.backgroundColor = CustomColor.nomadBlue
+                inputConfirmButton.setTitle("확인", for: .normal)
+                
+                index = 3
+                updateRequestLabel(index: index)
+                requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
+            }
         } else {
-            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = statusField.text {
-                if nickname.isEmpty == false && occupation.isEmpty == false && intro.isEmpty == false {
+            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
+                var isIntroDone = false
+                if intro != introPlaceholder && intro.isEmpty == false {
+                    isIntroDone = true
+                }
+                
+                if !nickname.isEmpty && !occupation.isEmpty && isIntroDone == true {
+                    print("입력완료")
                     let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                     viewModel.user = user
                     Analytics.logEvent("signUpCompleted", parameters: nil)
@@ -436,6 +586,8 @@ extension SignUpViewController: UITextFieldDelegate {
         } else {
             statusLineView.backgroundColor = CustomColor.nomadBlue
         }
+        
+        showKeyboardAcc()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -446,6 +598,7 @@ extension SignUpViewController: UITextFieldDelegate {
         } else {
             statusLineView.backgroundColor = CustomColor.nomadGray1
         }
+        showInputConfirmButton()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -458,9 +611,6 @@ extension SignUpViewController: UITextFieldDelegate {
         } else if textField == occupationField {
             occupationCounterLabel.text = "\(updateText.count) / \(occupationLimit)"
             return updateText.count < occupationLimit
-        } else if textField == statusField {
-            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
-            return updateText.count < statusLimit
         }
         
         return true
@@ -470,4 +620,68 @@ extension SignUpViewController: UITextFieldDelegate {
         didTapInputConfirmButton()
         return true
     }
+}
+
+// MARK: - UITextViewDelegate
+
+extension SignUpViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .tertiaryLabel {
+            textView.text = nil
+            textView.textColor = CustomColor.nomadBlack
+        }
+        introRectangle.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        showKeyboardAcc()
+        
+        let screenHeight = UIScreen.main.bounds.height
+        let keyboardAndAccHeight = keyboardHeight + self.keyboardAccView.frame.height
+        let keyboardAndAccY = screenHeight - keyboardAndAccHeight
+        let introY = statusCounterLabel.frame.minY + statusCounterLabel.frame.height
+        
+        if introY > keyboardAndAccY {
+            moveValue = introY - keyboardAndAccY
+            UIView.animate(withDuration: 0.2) {
+                self.view.window?.frame.origin.y -= self.moveValue
+            }
+        } else {
+            moveValue = 0
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = introPlaceholder
+            textView.textColor = .tertiaryLabel
+        }
+        introRectangle.layer.borderColor = CustomColor.nomadGray1?.cgColor
+        showInputConfirmButton()
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.window?.frame.origin.y += self.moveValue
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let updateText = currentText.replacingCharacters(in: stringRange, with: text)
+        if textView == introductionField {
+            statusCounterLabel.text = "\(updateText.count) / \(statusLimit)"
+            return updateText.count < statusLimit
+        }
+        return true
+    }
+    
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageButton.setImage(image, for: .normal)
+        }
+        dismiss(animated: true)
+    }
+    
 }

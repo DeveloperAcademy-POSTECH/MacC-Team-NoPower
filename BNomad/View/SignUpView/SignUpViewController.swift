@@ -458,6 +458,24 @@ class SignUpViewController: UIViewController {
         )
     }
     
+    func showKeyboardAcc() {
+        keyboardAccView.addSubview(inputConfirmButton)
+        guard let inputConfirmButtonSuperview = inputConfirmButton.superview else { return }
+        inputConfirmButton.anchor(
+            top: inputConfirmButtonSuperview.topAnchor,
+            left: inputConfirmButtonSuperview.leftAnchor,
+            right: inputConfirmButtonSuperview.rightAnchor,
+            paddingLeft: 20,
+            paddingRight: 20,
+            height: 48
+        )
+    }
+    
+    func showInputConfirmButton() {
+        view.addSubview(inputConfirmButton)
+        inputConfirmButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 33, paddingRight: 20, height: 48)
+    }
+    
     // MARK: - Actions
     
     @objc func dismissPage() {
@@ -526,7 +544,7 @@ class SignUpViewController: UIViewController {
                     isIntroDone = true
                 }
                 
-                if nickname.isEmpty == false && occupation.isEmpty == false && isIntroDone == true {
+                if !nickname.isEmpty && !occupation.isEmpty && isIntroDone == true {
                     print("입력완료")
                     let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                     viewModel.user = user
@@ -553,16 +571,7 @@ extension SignUpViewController: UITextFieldDelegate {
             statusLineView.backgroundColor = CustomColor.nomadBlue
         }
         
-        keyboardAccView.addSubview(inputConfirmButton)
-        guard let inputConfirmButtonSuperview = inputConfirmButton.superview else { return }
-        inputConfirmButton.anchor(
-            top: inputConfirmButtonSuperview.topAnchor,
-            left: inputConfirmButtonSuperview.leftAnchor,
-            right: inputConfirmButtonSuperview.rightAnchor,
-            paddingLeft: 20,
-            paddingRight: 20,
-            height: 48
-        )
+        showKeyboardAcc()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -573,9 +582,7 @@ extension SignUpViewController: UITextFieldDelegate {
         } else {
             statusLineView.backgroundColor = CustomColor.nomadGray1
         }
-        
-        view.addSubview(inputConfirmButton)
-        inputConfirmButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 33, paddingRight: 20, height: 48)
+        showInputConfirmButton()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -608,6 +615,7 @@ extension SignUpViewController: UITextViewDelegate {
             textView.textColor = CustomColor.nomadBlack
         }
         introRectangle.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        showKeyboardAcc()
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -616,6 +624,7 @@ extension SignUpViewController: UITextViewDelegate {
             textView.textColor = .tertiaryLabel
         }
         introRectangle.layer.borderColor = CustomColor.nomadGray1?.cgColor
+        showInputConfirmButton()
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

@@ -57,7 +57,7 @@ class FirebaseTestVC: UIViewController {
         // participateMeetUp()
         
         // // profile 이미지 업로드
-        // uploadUserProfileImage()
+        uploadUserProfileImage()
     }
     
     func fetchPlaceAll() {
@@ -221,7 +221,7 @@ class FirebaseTestVC: UIViewController {
     }
     
     func uploadUserProfileImage() {
-        guard let image = UIImage(named: "will.jpg") else {
+        guard let image = UIImage(named: "dummyProfile.jpg") else {
             print("DEBUG - fail image load")
             return
         }

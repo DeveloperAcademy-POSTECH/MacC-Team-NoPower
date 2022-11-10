@@ -171,6 +171,7 @@ class MapViewController: UIViewController {
     private let blurBackground: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .light)
         let background = UIVisualEffectView(effect: blur)
+        background.alpha = 0.7 // 기본 blur alpha 값 1.0 -> 0.7로 변경
         background.translatesAutoresizingMaskIntoConstraints = false
         return background
     }()

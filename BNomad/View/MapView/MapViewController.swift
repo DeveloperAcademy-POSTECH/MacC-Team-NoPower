@@ -74,12 +74,22 @@ class MapViewController: UIViewController {
         } else {
             
             // TODO: - 회원가입 창 띄우기 전에 모달 띄우기
-            
-            let controller = SignUpViewController()
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: true)
+            loginCheck()
         }
         map.selectedAnnotations = []
+    }
+    
+    func loginCheck() {
+        print("loginCheck")
+        let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 프로필을 보실 수 있습니다.", preferredStyle: .alert)
+        checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
+            
+            let controller = SignUpViewController() // 추후 로그인뷰로 변경
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true)
+        }))
+        present(checkOutAlert, animated: true)
     }
     
     private let divider: UIButton = {
@@ -153,6 +163,7 @@ class MapViewController: UIViewController {
     private let blurBackground: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .light)
         let background = UIVisualEffectView(effect: blur)
+        background.alpha = 0.7 // 기본 blur alpha 값 1.0 -> 0.7로 변경
         background.translatesAutoresizingMaskIntoConstraints = false
         return background
     }()

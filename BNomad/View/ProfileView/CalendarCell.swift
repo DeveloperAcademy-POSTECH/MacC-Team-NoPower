@@ -6,19 +6,35 @@
 //
 
 import UIKit
+import SwiftUI
 
 class CalendarCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    var thisCellsDate: String?
+    var thisCellsDate: String? {
+        didSet {
+            guard let thisCellsDate = thisCellsDate else {
+                return
+            }
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "us")
+            formatter.dateFormat = "yyyy-MM-dd"
+            
+            if thisCellsDate == formatter.string(from: Date()) {
+                self.todayCircleView.backgroundColor = CustomColor.nomadBlue
+                self.drawCircleBackground(opt: "today")
+            }
+        }
+    }
     var checkInHistory: [CheckIn]? {
         didSet {
             guard let checkInHistory = checkInHistory else { return }
             var checkInDates: [String] = []
             checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
             
-            if checkInDates.contains(thisCellsDate ?? "") {                    self.drawCheckinStamp()
+            if checkInDates.contains(thisCellsDate ?? "") {
+                self.drawCheckinStamp()
             }
             
         }
@@ -27,16 +43,31 @@ class CalendarCell: UICollectionViewCell {
     static let identifier = "CalendarCell"
     private lazy var dayLabel = UILabel()
     
-    private lazy var stampImage: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.isUserInteractionEnabled = true
-        iv.image = Contents.resizeImage(image: UIImage(named: "checkinStamp") ?? UIImage(), targetSize: CGSize(width: 34.0, height: 34.0))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+    private lazy var stampDot: UIView = {
+        let circleView = UIView(frame: CGRect(x: 358/16-1.5, y: 358/14+11, width: 3, height: 3))
+        circleView.layer.cornerRadius = 1.5
+        circleView.backgroundColor = UIColor(hex: "D9D9D9")
+        circleView.tag = 101
+        return circleView
     }()
-
+    
+     var todayCircleView: UIView {
+         let circleView = UIView(frame: CGRect(x: 358/16-17, y: 358/14-17, width: 34, height: 34))
+        circleView.layer.cornerRadius = 17
+        circleView.backgroundColor = CustomColor.nomadBlue
+        circleView.tag = 101
+        return circleView
+    }
+    
+    var SelectCircleView: UIView {
+        let circleView = UIView(frame: CGRect(x: 358/16-17, y: 358/14-17, width: 34, height: 34))
+       circleView.layer.cornerRadius = 17
+       circleView.backgroundColor = CustomColor.nomadGray1
+       circleView.tag = 101
+       return circleView
+   }
+    
+    
 
     
     //MARK: - init
@@ -61,7 +92,7 @@ class CalendarCell: UICollectionViewCell {
         self.addSubview(dayLabel)
         self.dayLabel.text = text
         self.dayLabel.textColor = .black
-        self.dayLabel.font = .systemFont(ofSize: 12, weight: .bold)
+        self.dayLabel.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
         
         self.dayLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -70,7 +101,11 @@ class CalendarCell: UICollectionViewCell {
         ])
     }
     
-    func setWeekendColor(){
+    func setSundayColor(){
+        self.dayLabel.textColor = CustomColor.nomadRed
+    }
+    
+    func setSaturdayColor(){
         self.dayLabel.textColor = CustomColor.nomadSkyblue
     }
     
@@ -84,19 +119,31 @@ class CalendarCell: UICollectionViewCell {
         self.layer.borderWidth = 0
         self.backgroundColor = .white
         self.dayLabel.textColor = .black
-        self.stampImage.removeFromSuperview()
+        self.stampDot.removeFromSuperview()
+        self.todayCircleView.removeFromSuperview()
     }
     
     func drawCheckinStamp() {
-        self.addSubview(stampImage)
-        self.stampImage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.stampImage.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        self.addSubview(stampDot)
     }
     
-    func setTodayCell() {
+    func setWhiteText() {
         self.dayLabel.textColor = .white
-        self.backgroundColor = CustomColor.nomadSkyblue
-        self.layer.cornerRadius = 20
     }
-
+    
+    func drawCircleBackground(opt: String) {
+        if opt == "today" {
+            self.addSubview(todayCircleView)
+        }else {
+            self.addSubview(SelectCircleView)
+        }
+    }
+    
+    func removeTodayCell() {
+        self.subviews.forEach {
+            if $0.tag == 101 {
+                $0.removeFromSuperview()
+            }
+        }
+    }
 }

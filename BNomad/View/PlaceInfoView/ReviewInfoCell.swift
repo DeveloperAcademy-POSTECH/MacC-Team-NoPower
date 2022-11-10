@@ -98,9 +98,6 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        reviewCollectionView.register(ReviewSubCell1.self, forCellWithReuseIdentifier: ReviewSubCell1.cellIdentifier)
-        reviewCollectionView.register(ReviewSubCell2.self, forCellWithReuseIdentifier: ReviewSubCell2.cellIdentifier)
-        reviewCollectionView.register(ReviewSubCell3.self, forCellWithReuseIdentifier: ReviewSubCell3.cellIdentifier)
         ViewallButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
     }
 }
@@ -112,22 +109,8 @@ extension ReviewInfoCell: UICollectionViewDataSource {
         return 1
     }
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            if indexPath.section == 0 {
                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
                return cell
-            } else if indexPath.section == 1 {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell1.cellIdentifier, for: indexPath) as? ReviewSubCell1 else { return UICollectionViewCell() }
-                return cell
-            }
-            else if indexPath.section == 2 {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell2.cellIdentifier, for: indexPath) as? ReviewSubCell2 else { return UICollectionViewCell() }
-                return cell
-            }
-            else if indexPath.section == 3 {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell3.cellIdentifier, for: indexPath) as? ReviewSubCell3 else { return UICollectionViewCell() }
-                return cell
-            }
-            
             return UICollectionViewCell()
         }
     func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -23,9 +23,6 @@
 		631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82C2906317200EEED02 /* SummaryInfoCell.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
-		63A29517291CB27C00181ECE /* ReviewSubCell1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A29516291CB27C00181ECE /* ReviewSubCell1.swift */; };
-		63A29519291CB28700181ECE /* ReviewSubCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A29518291CB28700181ECE /* ReviewSubCell2.swift */; };
-		63A2951B291CB29100181ECE /* ReviewSubCell3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2951A291CB29100181ECE /* ReviewSubCell3.swift */; };
 		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
 		7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
@@ -87,9 +84,6 @@
 		631AD82C2906317200EEED02 /* SummaryInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryInfoCell.swift; sourceTree = "<group>"; };
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
-		63A29516291CB27C00181ECE /* ReviewSubCell1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubCell1.swift; sourceTree = "<group>"; };
-		63A29518291CB28700181ECE /* ReviewSubCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubCell2.swift; sourceTree = "<group>"; };
-		63A2951A291CB29100181ECE /* ReviewSubCell3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubCell3.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
 		7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantCell.swift; sourceTree = "<group>"; };
@@ -152,9 +146,6 @@
 			isa = PBXGroup;
 			children = (
 				63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */,
-				63A29516291CB27C00181ECE /* ReviewSubCell1.swift */,
-				63A29518291CB28700181ECE /* ReviewSubCell2.swift */,
-				63A2951A291CB29100181ECE /* ReviewSubCell3.swift */,
 			);
 			path = ReviewSubCell;
 			sourceTree = "<group>";
@@ -497,7 +488,6 @@
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				E251E6DA2907E49600638C15 /* UIViewController+Extension.swift in Sources */,
 				159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */,
-				63A2951B291CB29100181ECE /* ReviewSubCell3.swift in Sources */,
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
 				7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */,
 				15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */,
@@ -507,14 +497,12 @@
 				DF561CA82918A0C40099D41D /* ReviewViewController.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
-				63A29517291CB27C00181ECE /* ReviewSubCell1.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 				E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */,
 				041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */,
-				63A29519291CB28700181ECE /* ReviewSubCell2.swift in Sources */,
 				DF561CAB2918A0DA0099D41D /* SettingViewController.swift in Sources */,
 				E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */,
 			);

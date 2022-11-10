@@ -81,7 +81,7 @@ class PlaceRequestViewController: UIViewController {
         super.viewDidLoad()
         configUI()
         navigationController?.navigationBar.prefersLargeTitles = false
-        title = "장소 제보"
+        title = "장소 제안"
     }
     
     // MARK: - Actions

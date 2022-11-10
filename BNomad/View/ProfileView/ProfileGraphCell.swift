@@ -62,7 +62,6 @@ class ProfileGraphCell: UICollectionViewCell {
         for index in 0..<7 {
             let day = UILabel()
             day.text = Contents.dateLabelMaker()[index][3]
-            day.textColor = .black
             
             let formatter = DateFormatter()
             formatter.dateFormat = "d"

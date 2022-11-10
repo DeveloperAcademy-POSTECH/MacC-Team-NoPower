@@ -173,7 +173,7 @@ class MapViewController: UIViewController {
         let btn = MKUserTrackingButton(mapView: map)
         btn.backgroundColor = .white
         btn.tintColor = CustomColor.nomadBlue
-        btn.layer.cornerRadius = 20
+        btn.layer.cornerRadius = 4
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
         btn.layer.borderWidth = 1
         return btn
@@ -192,7 +192,7 @@ class MapViewController: UIViewController {
         button.backgroundColor = .white
         button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.tintColor = CustomColor.nomadBlue
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 4
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
@@ -203,7 +203,7 @@ class MapViewController: UIViewController {
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
-            sheet.detents = [.medium()]
+            sheet.detents = [.large()]
             sheet.delegate = self
             sheet.prefersGrabberVisible = false
 //            sheet.largestUndimmedDetentIdentifier = .medium
@@ -324,7 +324,14 @@ class MapViewController: UIViewController {
             present(controller, animated: false)
         }
         
+        FirebaseManager.shared.fetchPlaceAll { place in
+            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            self.viewModel.places.append(place)
+            self.checkInBinding()
+        }
+        
         map.delegate = self
+        
         view.addSubview(map)
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
@@ -335,15 +342,9 @@ class MapViewController: UIViewController {
         upperStack.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 30, paddingLeft: 20, paddingRight: 20, height: 80)
         
         map.addSubview(compass)
-        compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
+        compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
         
         map.addOverlay(circleOverlay)
-        
-        FirebaseManager.shared.fetchPlaceAll { place in
-            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-            self.viewModel.places.append(place)
-            self.checkInBinding()
-        }
         
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)

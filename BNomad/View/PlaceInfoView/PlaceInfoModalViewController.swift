@@ -29,10 +29,10 @@ class PlaceInfoModalViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
-    let collectionView: UICollectionView = {
+    let placeInfocollectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
-        return cv
+        let placeInfocollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        return placeInfocollectionView
     }()
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
@@ -209,19 +209,19 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func configureCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = CustomColor.nomadGray3
-        collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
-        collectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
-        collectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
-        view.addSubview(collectionView)
+        placeInfocollectionView.dataSource = self
+        placeInfocollectionView.delegate = self
+        placeInfocollectionView.backgroundColor = CustomColor.nomadGray3
+        placeInfocollectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
+        placeInfocollectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
+        placeInfocollectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
+        view.addSubview(placeInfocollectionView)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        placeInfocollectionView.translatesAutoresizingMaskIntoConstraints = false
+        placeInfocollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        placeInfocollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        placeInfocollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        placeInfocollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
     func configureCheckInButton() {
@@ -268,7 +268,6 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
-            cell.place = selectedPlace
             return cell
         }
         else if indexPath.section == 2 {
@@ -309,9 +308,9 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         if indexPath.section == 0 {
             print(sectionZeroHeight)
-            return CGSize(width: viewWidth, height: 500)
+            return CGSize(width: viewWidth, height: 400)
         } else if indexPath.section == 1 {
-            return CGSize(width: viewWidth, height: 294)
+            return CGSize(width: viewWidth, height: 450)
         } else if indexPath.section == 2 {
             return CGSize(width: viewWidth, height: 375)
         } else if indexPath.section == 3 {

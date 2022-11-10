@@ -70,6 +70,7 @@ class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Actions
     
+    // TODO: 업무중 버튼 눌러서 들어왔을 때 dismiss 안됨
     @objc func dismissPage() {
         self.dismiss(animated: true)
     }
@@ -124,6 +125,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
             placeInfoViewCell.place = selectedPlace
             placeInfoViewCell.meetUpViewDelegate = self
+            placeInfoViewCell.placeInfoViewCelldelegate = self
             
             return placeInfoViewCell
         }
@@ -216,5 +218,15 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
         let newMeetUpView = NewMeetUpViewController()
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
+    }
+}
+
+// MARK: - PlaceInfoViewCellDelegate
+
+extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
+    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, viewModel: TempMeetUp) {
+        let vc = MeetUpViewController()
+        vc.setMeetUpData(meetUp: viewModel)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

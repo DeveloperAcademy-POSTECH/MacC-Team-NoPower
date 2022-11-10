@@ -13,10 +13,13 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: QuestCollectionViewCell.self)
     
+    // TODO: 실제 MeetUp으로 바꿔야함
+    var meetUpList: [TempMeetUp] = []
+    
     var isMeetUpOwner = false
     var isMeetUpGuest = false
     
-    let title: UILabel = {
+    var title: UILabel = {
         let title = UILabel()
         title.font = .preferredFont(forTextStyle: .headline)
         title.text = "맛찬들 같이 가실 분!"
@@ -48,7 +51,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         return image
     }()
     
-    let time: UILabel = {
+    var time: UILabel = {
         let time = UILabel()
         time.text = "12:00"
         time.textColor = CustomColor.nomadGray1
@@ -62,7 +65,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         return image
     }()
     
-    let location: UILabel = {
+    var location: UILabel = {
         let location = UILabel()
         location.text = "입구 앞"
         location.textColor = CustomColor.nomadGray1
@@ -70,10 +73,11 @@ class QuestCollectionViewCell: UICollectionViewCell {
     }()
     
     let currentCheckedPeople: String = "1"
+    var maxNumberOfParticipant: Int = 2
     
     lazy var checkedPeople: UILabel = {
         let label = UILabel()
-        label.text = "\(currentCheckedPeople) / 4"
+        label.text = "\(currentCheckedPeople) / \(maxNumberOfParticipant)"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         return label
@@ -179,4 +183,10 @@ class QuestCollectionViewCell: UICollectionViewCell {
         checkedPeople.anchor(bottom: self.bottomAnchor, right: peopleStack.leftAnchor, paddingBottom: 15, paddingRight: 11)
     }
     
+    func updateMeetUpCell(meetUp: TempMeetUp) {
+        self.title.text = meetUp.title
+        self.time.text = meetUp.time
+        self.location.text = meetUp.meetUpPlaceName
+        self.checkedPeople.text = "\(currentCheckedPeople) / \(meetUp.maxPeopleNum)"
+    }
 }

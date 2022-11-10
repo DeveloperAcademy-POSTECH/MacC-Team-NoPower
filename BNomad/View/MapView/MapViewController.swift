@@ -234,9 +234,11 @@ class MapViewController: UIViewController {
             user.currentPlaceUid == place.placeUid
         }
         controller.selectedPlace = tempPlace
-        controller.modalPresentationStyle = .fullScreen
+        let navigationController = UINavigationController(rootViewController: controller)
+//        controller.modalPresentationStyle = .fullScreen
+        navigationController.modalPresentationStyle = .fullScreen
         self.dismiss(animated: true) {
-            self.present(controller, animated: true)
+            self.present(navigationController, animated: true, completion: nil)
         }
     }
     

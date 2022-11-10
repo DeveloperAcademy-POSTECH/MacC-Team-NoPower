@@ -13,20 +13,32 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: QuestCollectionViewCell.self)
     
+    var isMeetUpOwner = false
+    var isMeetUpGuest = false
+    
     let title: UILabel = {
         let title = UILabel()
-        title.font = .preferredFont(forTextStyle: .headline, weight: .regular)
+        title.font = .preferredFont(forTextStyle: .headline)
         title.text = "맛찬들 같이 가실 분!"
         title.numberOfLines = 1
         return title
     }()
     
-    let participateButton: UIButton = {
-        let button = UIButton()
-        let config = UIImage.SymbolConfiguration(pointSize: 32)
-        button.setImage(UIImage(systemName: "checkmark.circle.fill", withConfiguration: config), for: .normal)
-        button.tintColor = CustomColor.nomadBlue
-        return button
+    let checkImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "checkmark.circle.fill")
+        imageView.tintColor = CustomColor.nomadBlue
+        
+        return imageView
+    }()
+    
+    let unCheckView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.borderColor = CustomColor.nomadGray2?.cgColor
+        view.layer.borderWidth = 1
+        
+        return view
     }()
     
     let timeImage: UIImageView = {
@@ -102,6 +114,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         
         shadowSetting()
         configureUI()
+        configCheckMark()
     }
     
     required init?(coder: NSCoder) {
@@ -121,13 +134,23 @@ class QuestCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = false
         self.layer.shadowRadius = 15
         self.layer.shadowOffset = CGSize(width: 3, height: 4)
-        self.layer.shadowOpacity = 0.1
+        self.layer.shadowOpacity = 0.05
+    }
+    
+    func configCheckMark() {
+        let checkSize: CGFloat = 32
+        
+        if isMeetUpOwner == true || isMeetUpGuest == true {
+            self.addSubview(checkImage)
+            checkImage.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
+        } else {
+            self.addSubview(unCheckView)
+            unCheckView.layer.cornerRadius = checkSize / 2
+            unCheckView.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
+        }
     }
     
     func configureUI() {
-        self.addSubview(participateButton)
-        participateButton.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10)
-        
         self.addSubview(title)
         title.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 16, paddingLeft: 12)
         

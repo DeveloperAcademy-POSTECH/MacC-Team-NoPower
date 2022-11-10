@@ -33,12 +33,20 @@ class PlaceInfoViewCell: UICollectionViewCell {
         return collectionview
     }()
     
-    let questLabel: UILabel = {
+    private let questLabel: UILabel = {
         let label = UILabel()
-        label.text = "퀘스트 5"
-        label.asFont(targetString: "퀘스트", font: .preferredFont(forTextStyle: .title3, weight: .semibold))
-        label.asFont(targetString: "5", font: .preferredFont(forTextStyle: .title3, weight: .semibold))
-        label.asColor(targetString: "5", color: CustomColor.nomadBlue ?? .red)
+        label.text = "퀘스트"
+        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        label.textColor = CustomColor.nomadBlack
+        return label
+    }()
+    
+    lazy var numberOfQuestLabel: UILabel = {
+        let label = UILabel()
+        label.text = "5"
+        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        label.textColor = CustomColor.nomadBlue
+        
         return label
     }()
     
@@ -47,6 +55,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .black
         button.addTarget(self, action: #selector(questAdd), for: .touchUpInside)
+        
         return button
     }()
     
@@ -56,6 +65,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         configureCollectionView()
+        configQuestLabel()
     }
     
     required init?(coder: NSCoder) {
@@ -78,13 +88,23 @@ class PlaceInfoViewCell: UICollectionViewCell {
         collectionView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         collectionView.register(QuestCollectionViewCell.self, forCellWithReuseIdentifier: QuestCollectionViewCell.identifier)
         
-        self.addSubview(questLabel)
-        questLabel.anchor(top: collectionView.topAnchor, left: collectionView.leftAnchor, paddingTop: 10, paddingLeft: 20)
+//        self.addSubview(questLabel)
+//        questLabel.anchor(top: collectionView.topAnchor, left: collectionView.leftAnchor, paddingTop: 10, paddingLeft: 20)
         
         self.addSubview(plusButton)
         plusButton.anchor(top: collectionView.topAnchor, right: collectionView.rightAnchor, paddingTop: 10, paddingRight: 20, width: 24, height: 24)
     }
     
+    func configQuestLabel() {
+        let stack = UIStackView(arrangedSubviews: [questLabel, numberOfQuestLabel])
+        stack.axis = .horizontal
+        stack.spacing = 5
+        stack.alignment = .leading
+        stack.distribution = .fill
+        
+        self.addSubview(stack)
+        stack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 10, paddingLeft: 20)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

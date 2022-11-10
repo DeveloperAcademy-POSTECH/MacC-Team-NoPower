@@ -8,12 +8,6 @@
 import Foundation
 import MapKit
 
-// TODO: - 해당 파일 제거 후 Place의 extension으로 편입시키기
-enum PlaceType: Int {
-    case coworking
-    case library
-    case cafe
-}
 
 class MKAnnotationFromPlace: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
@@ -86,11 +80,16 @@ struct Region {
     }
 }
 
-struct RegionData {
-    static var jeju1: Region = Region(name: "\(RegionName.jeju1.rawValue)", lat: 33.4974, long: 126.5164, span: 0.9)
-    static var jeju2: Region = Region(name: "\(RegionName.jeju2.rawValue)", lat: 33.2327, long: 126.3003, span: 0.5)
 
-    static var seoul: Region = Region(name: "\(RegionName.seoul.rawValue)", lat: 37.5542, long: 126.9733, span: 0.5)
+// RegionData와 하단의 RegionArray는 갯수, 순서 일치시켜서 관리
+
+struct RegionData {
+    static let jeju1: Region = Region(name: "\(RegionName.jeju1.rawValue)", lat: 33.4974, long: 126.5164, span: 0.9)
+    static let jeju2: Region = Region(name: "\(RegionName.jeju2.rawValue)", lat: 33.2327, long: 126.3003, span: 0.5)
+    static let seoul: Region = Region(name: "\(RegionName.seoul.rawValue)", lat: 37.5542, long: 126.9733, span: 0.5)
+    static let pohang: Region = Region(name: "\(RegionName.pohang.rawValue)", lat: 36.0137, long: 129.3257, span: 0.5)
+    
+    // 추후 지역 추가를 위해 남김
 //    static var gangwon: Region = Region(name: "\(RegionName.gangwon.rawValue)", lat: 0, long: 0, span: 0.1)
 //    static var jeolla: Region = Region(name: "\(RegionName.jeolla.rawValue)", lat: 0, long: 0, span: 0.1)
 //    static var gyeongsang: Region = Region(name: "\(RegionName.gyeongsang.rawValue)", lat: 0, long: 0, span: 0.1)
@@ -103,9 +102,8 @@ struct RegionData {
 //    static var incheon: Region = Region(name: "\(RegionName.incheon.rawValue)", lat: 0, long: 0, span: 0.1)
 //    static var daejeon: Region = Region(name: "\(RegionName.daejeon.rawValue)", lat: 0, long: 0, span: 0.1)
 //    static var sejong: Region = Region(name: "\(RegionName.sejong.rawValue)", lat: 0, long: 0, span: 0.1)
-    static var pohang: Region = Region(name: "\(RegionName.pohang.rawValue)", lat: 36.0137, long: 129.3257, span: 0.5)
 
+    
+    static let regionArray: [Region] = [RegionData.jeju1, RegionData.jeju2, RegionData.seoul, RegionData.pohang]
 }
 
-
-//var regions: [Region] = [RegionData.jeju, RegionData.seoul]

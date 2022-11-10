@@ -12,7 +12,7 @@ class RegionSelectViewController: UIViewController {
     // MARK: - Properties
 
     var selectedRegion: Region?
-    var regions: [Region]? = [RegionData.jeju1, RegionData.jeju2, RegionData.seoul, RegionData.pohang] // RegionData 안에 있는 요소를 한 번에 단축해서 배열에 넣는 방법은?
+    var regions: [Region]? = RegionData.regionArray
     var regionChangeDelegate: setMap?
     
     var rectangle: UIView = {
@@ -53,10 +53,6 @@ class RegionSelectViewController: UIViewController {
         btn.layer.cornerRadius = 12
         btn.clipsToBounds = true
         btn.addTarget(self, action: #selector(regionChange), for: .touchUpInside)
-//        btn.addTarget(MapViewController(), action: )
-        
-
-        btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
     

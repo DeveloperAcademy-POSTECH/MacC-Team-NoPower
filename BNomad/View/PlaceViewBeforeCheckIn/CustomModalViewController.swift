@@ -17,6 +17,8 @@ class CustomModalViewController: UIViewController {
     var delegateForFloating: UpdateFloating?
     
     var position: CLLocation?
+    
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
 
     var places: [Place]? = [] {
         didSet {
@@ -25,7 +27,7 @@ class CustomModalViewController: UIViewController {
             self.numberOfPlaces.text = "업무 공간 " + String(places.count) + "개"
         }
     }
-
+    
     var rectangle: UIView = {
         let rectangle = UIView()
         rectangle.frame = CGRect(x: 0, y: 0, width: 80, height: 5)
@@ -74,10 +76,7 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 맵 뷰에서 한 번 다 불러오는데 모달에서 또 따로 불러와야 하는지 고민 필요! (데이터를 아끼기 위해...)
-        FirebaseManager.shared.fetchPlaceAll { place in
-            self.places?.append(place)
-        }
+        places = viewModel.places
         
 //        self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
         self.view.layer.backgroundColor = CustomColor.nomadGray3?.cgColor

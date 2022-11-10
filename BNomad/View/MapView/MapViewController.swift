@@ -366,6 +366,13 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MKMapViewDelegate {
 
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        let userAnnotationView = mapView.view(for: mapView.userLocation)
+        userAnnotationView?.isUserInteractionEnabled = false
+        userAnnotationView?.canShowCallout = false
+        userAnnotationView?.isEnabled = false
+    }
+    
     // 맵 오버레이 rendering
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let overlay = MKCircleRenderer(circle: circleOverlay)

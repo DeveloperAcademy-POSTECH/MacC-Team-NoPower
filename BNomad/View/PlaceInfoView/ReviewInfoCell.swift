@@ -1,5 +1,5 @@
 //
-//  BasicInfoCell.swift
+//  ReviewInfoCell.swift
 //  BNomad
 //
 //  Created by 유재훈 on 2022/10/20.
@@ -81,13 +81,13 @@ class ReviewInfoCell: UICollectionViewCell {
         horizontalDivider1.backgroundColor = CustomColor.nomadGray2
         horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider2.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider2.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 76, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 65, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider3.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 70, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider4.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider4.anchor(top: horizontalDivider3.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider4.anchor(top: horizontalDivider3.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider5.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider5.anchor(top: horizontalDivider4.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 70, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider5.anchor(top: horizontalDivider4.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
         NSLayoutConstraint.activate([
             reviewCollectionView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
             reviewCollectionView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
@@ -98,6 +98,9 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
+        reviewCollectionView.register(ReviewSubCell1.self, forCellWithReuseIdentifier: ReviewSubCell1.cellIdentifier)
+        reviewCollectionView.register(ReviewSubCell2.self, forCellWithReuseIdentifier: ReviewSubCell2.cellIdentifier)
+        reviewCollectionView.register(ReviewSubCell3.self, forCellWithReuseIdentifier: ReviewSubCell3.cellIdentifier)
         ViewallButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
     }
 }
@@ -106,17 +109,30 @@ class ReviewInfoCell: UICollectionViewCell {
 
 extension ReviewInfoCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return 1
     }
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//             indexPath.section == 0 {
+            if indexPath.section == 0 {
                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
                return cell
-//           }
+            } else if indexPath.section == 1 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell1.cellIdentifier, for: indexPath) as? ReviewSubCell1 else { return UICollectionViewCell() }
+                return cell
+            }
+            else if indexPath.section == 2 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell2.cellIdentifier, for: indexPath) as? ReviewSubCell2 else { return UICollectionViewCell() }
+                return cell
+            }
+            else if indexPath.section == 3 {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell3.cellIdentifier, for: indexPath) as? ReviewSubCell3 else { return UICollectionViewCell() }
+                return cell
+            }
             
-//            return UICollectionViewCell()
+            return UICollectionViewCell()
         }
-//        return 4
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 4
+    }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -139,6 +155,6 @@ extension ReviewInfoCell: UICollectionViewDelegateFlowLayout {
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets (top: 5, left: 10, bottom: -5, right: 10)
+        return UIEdgeInsets (top: 5, left: 10, bottom: 0, right: 10)
     }
 }

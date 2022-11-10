@@ -102,12 +102,10 @@ class MapViewController: UIViewController {
     // 지역명 표기 및 지역 변경 버튼
     
     private let regionChangeBtn: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.titleAlignment = .leading
-        configuration.imagePlacement = .trailing
-
-        var btn = UIButton(configuration: configuration)
+        var btn = UIButton()
         btn.setTitle("지역 선택 ", for: .normal)
+        btn.semanticContentAttribute = .forceRightToLeft
+        btn.titleLabel?.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         btn.setTitleColor(.black, for: .normal)
         btn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         btn.tintColor = CustomColor.nomadBlue
@@ -133,13 +131,6 @@ class MapViewController: UIViewController {
     }
     
     lazy var upperStack: UIStackView = {
-        let topLeftTitle = UIStackView(arrangedSubviews: [regionChangeBtn])
-        topLeftTitle.axis = .horizontal
-        topLeftTitle.alignment = .center
-        topLeftTitle.spacing = 10
-        topLeftTitle.distribution = .fillProportionally
-        topLeftTitle.anchor(width: 120)
-        topLeftTitle.translatesAutoresizingMaskIntoConstraints = false
 
         let topRightBtn = UIStackView(arrangedSubviews: [profileBtn, divider, settingBtn])
         topRightBtn.axis = .horizontal
@@ -150,7 +141,7 @@ class MapViewController: UIViewController {
         topRightBtn.anchor(width: 60)
         topRightBtn.translatesAutoresizingMaskIntoConstraints = false
         
-        let upperStack = UIStackView(arrangedSubviews: [topLeftTitle, topRightBtn])
+        let upperStack = UIStackView(arrangedSubviews: [regionChangeBtn, topRightBtn])
         upperStack.axis = .horizontal
         upperStack.alignment = .fill
         upperStack.distribution = .equalSpacing

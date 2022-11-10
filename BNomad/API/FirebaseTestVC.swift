@@ -8,7 +8,7 @@
 import UIKit
 
 class FirebaseTestVC: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,24 +59,24 @@ class FirebaseTestVC: UIViewController {
         // // profile 이미지 업로드
         uploadUserProfileImage()
     }
-
+    
     func fetchPlaceAll() {
         FirebaseManager.shared.fetchPlaceAll { place in
             print(place)
         }
     }
-
+    
     func fetchUser() {
         let currentUserUid = "04FDF4B0-5975-4D9F-9424-41092F5112E2"
         FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
             print(user)
         }
     }
-
+    
     func setUser() {
         FirebaseManager.shared.setUser(user: DummyData.user1)
     }
-
+    
     func updateUser() {
         var user = DummyData.user1
         user.introduction = "hi~"
@@ -84,7 +84,7 @@ class FirebaseTestVC: UIViewController {
         
         FirebaseManager.shared.setUser(user: user)
     }
-
+    
     func fetchCheckInHistoryUser() {
         let userUid: String = "012f0180-669f-411e-91ee-dd45ee8d0cf7"
         
@@ -92,7 +92,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory)
         }
     }
-
+    
     func fetchCheckInHistoryPlace() {
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
         let date: Date? = "2022-10-23".toDate()
@@ -106,7 +106,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory)
         }
     }
-
+    
     func fetchCheckInHistoryObserve() {
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
         let date: Date? = "2022-10-23".toDate()
@@ -120,7 +120,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory[0])
         }
     }
-
+    
     func fetchCheckInHistoryAll() {
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
         
@@ -128,7 +128,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory.count)
         }
     }
-
+    
     func setCheckIn(completion: @escaping(User) -> Void) {
         var user: User = User(userUid: "01925c0c-799d-4b05-bee7-bdc68f64737b", nickname: "lance")
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
@@ -148,7 +148,7 @@ class FirebaseTestVC: UIViewController {
             completion(user)
         }
     }
-
+    
     func setCheckOut(user: User) {
         var user = user
         
@@ -174,7 +174,7 @@ class FirebaseTestVC: UIViewController {
             print(user.currentPlaceUid)
         }
     }
-
+    
     func createMeetUp() {
         let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
         let organizerUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
@@ -185,7 +185,7 @@ class FirebaseTestVC: UIViewController {
             print(meetUp)
         }
     }
-
+    
     func fetchMeetUpPlace() {
         let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
         
@@ -193,7 +193,7 @@ class FirebaseTestVC: UIViewController {
             print(meetUpHistory)
         }        
     }
-
+    
     func fetchMeetUpUidFromUser() {
         let userUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
         
@@ -201,7 +201,7 @@ class FirebaseTestVC: UIViewController {
             print(meetUpUid)
         }
     }
-
+    
     func fetchMeetUp() {
         let meetUid: String = "69F0CEAE-AD5C-4854-B6DE-1B33B8C6DBA7"
         
@@ -209,7 +209,7 @@ class FirebaseTestVC: UIViewController {
             print(meetUp)
         }
     }
-
+    
     func participateMeetUp() {
         let userUid = "0735EBD4-DF99-44B8-B290-24DFE3D69E27" // 진은좀
         let meetUpUid = "E5E9F761-F77B-423D-805C-01153522735C"
@@ -219,7 +219,7 @@ class FirebaseTestVC: UIViewController {
             print("참여 완료")
         }
     }
-
+    
     func uploadUserProfileImage() {
         guard let image = UIImage(named: "dummyProfile.jpg") else {
             print("DEBUG - fail image load")

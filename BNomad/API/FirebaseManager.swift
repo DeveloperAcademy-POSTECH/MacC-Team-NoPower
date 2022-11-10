@@ -164,7 +164,7 @@ class FirebaseManager {
         
         return checkIn
     }
-
+    
     /// (observeSingleEvent) 날짜별로 place의  checkInHistory 가져오기
     func fetchCheckInHistory(placeUid: String, date: Date = Date(), completion: @escaping([CheckIn]) -> Void) {
         let date = date.toDateString()
@@ -241,7 +241,7 @@ class FirebaseManager {
             }
         }
     }
-
+    
     // MARK: firebase - meetUpUser
     // meetUpUser
     //     userUid

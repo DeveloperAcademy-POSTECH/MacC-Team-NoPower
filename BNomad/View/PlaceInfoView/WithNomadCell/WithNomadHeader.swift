@@ -13,41 +13,40 @@ class WithNomadHeader: UICollectionViewCell {
     
     var numberOfUsers: Int = 0 {
         didSet {
-            label.text = "함께 일하고 있는 \(numberOfUsers)명의 노마더"
-            let fullText = label.text ?? ""
+            withNomadCountLabel.text = "함께 일하고 있는 \(numberOfUsers)명의 노마더"
+            let fullText = withNomadCountLabel.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
             let range = (fullText as NSString).range(of: "\(numberOfUsers)명")
             attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-            label.attributedText = attribtuedString
+            withNomadCountLabel.attributedText = attribtuedString
         }
     }
     
 
     // MARK: - Properties
     
-    lazy var label: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        label.textColor = CustomColor.nomadBlack
+    lazy var withNomadCountLabel: UILabel = {
+        let withNomadCountLabel = UILabel()
+        withNomadCountLabel.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        withNomadCountLabel.textColor = CustomColor.nomadBlack
 
-        return label
+        return withNomadCountLabel
     }()
     
     lazy var numberOfPeople: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        label.textColor = CustomColor.nomadBlue
+        let numberOfPeople = UILabel()
+        numberOfPeople.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        numberOfPeople.textColor = CustomColor.nomadBlue
         
-        return label
+        return numberOfPeople
     }()
     
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(label)
-        backgroundColor = .white
-        setui()
+        self.addSubview(withNomadCountLabel)
+        setUi()
     }
     
     required init?(coder: NSCoder) {
@@ -56,8 +55,8 @@ class WithNomadHeader: UICollectionViewCell {
     
     // MARK: - Helpers
     
-    func setui() {
-        label.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 0, paddingLeft: 20)
+    func setUi() {
+        withNomadCountLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 0, paddingLeft: 20)
     }
 }
 

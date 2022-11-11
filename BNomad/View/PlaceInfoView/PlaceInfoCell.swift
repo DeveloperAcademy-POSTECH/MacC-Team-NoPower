@@ -75,7 +75,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var questLabel: UILabel = {
         let questLabel = UILabel()
-        questLabel.text = "5개의 MeetUp"
+        questLabel.text = "5개의 밋업"
         questLabel.textColor = CustomColor.nomadBlack
         questLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
         let fullText = questLabel.text ?? ""
@@ -193,8 +193,6 @@ class PlaceInfoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
-        
         configureUI()
     }
     

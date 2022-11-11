@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ProfileViewController: UIViewController {
 
@@ -20,7 +21,8 @@ class ProfileViewController: UIViewController {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
-        iv.image = Contents.resizeImage(image: UIImage(named: "ProfileDefault") ?? UIImage(), targetSize: CGSize(width: 78.0, height: 78.0)) 
+        iv.layer.masksToBounds = true
+        iv.layer.cornerRadius = 78 / 2
         return iv
     }()
     
@@ -106,6 +108,13 @@ class ProfileViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationItem.backButtonTitle = "취소"
+        
+        guard let imageUrl =  viewModel.user?.profileImageUrl else {
+            print("DEBUG: ProfileViewController - viewModel.user?.profileImageUrl is nil")
+            return
+        }
+        let url = URL(string: imageUrl)
+        profileImageView.kf.setImage(with: url)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -184,9 +193,7 @@ class ProfileViewController: UIViewController {
     func render() {
         
         view.addSubview(profileImageView)
-        profileImageView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 120, paddingLeft: 29)
-        
-        
+        profileImageView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 120, paddingLeft: 29, width: 78, height: 78)        
         
         view.addSubview(profileCollectionView)
         profileCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,

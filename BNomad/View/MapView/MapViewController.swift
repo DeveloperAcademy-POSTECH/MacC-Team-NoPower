@@ -186,7 +186,7 @@ class MapViewController: UIViewController {
         let btn = MKUserTrackingButton(mapView: map)
         btn.backgroundColor = .white
         btn.tintColor = CustomColor.nomadBlue
-        btn.layer.cornerRadius = 20
+        btn.layer.cornerRadius = 4
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
         btn.layer.borderWidth = 1
         return btn
@@ -205,7 +205,7 @@ class MapViewController: UIViewController {
         button.backgroundColor = .white
         button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.tintColor = CustomColor.nomadBlue
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 4
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
@@ -219,7 +219,7 @@ class MapViewController: UIViewController {
             sheet.detents = [.medium()]
             sheet.delegate = self
             sheet.prefersGrabberVisible = false
-//            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
         }
@@ -266,7 +266,6 @@ class MapViewController: UIViewController {
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
          checkInFloating()
-         checkInBinding()
          map.addOverlay(circleOverlay)
      }
 
@@ -275,6 +274,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
+        checkInBinding()
         userCombine()
     }
     
@@ -339,7 +339,14 @@ class MapViewController: UIViewController {
             present(controller, animated: false)
         }
         
+        FirebaseManager.shared.fetchPlaceAll { place in
+            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            self.viewModel.places.append(place)
+            self.checkInBinding()
+        }
+        
         map.delegate = self
+        
         view.addSubview(map)
         map.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
@@ -350,8 +357,9 @@ class MapViewController: UIViewController {
         upperStack.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 30, paddingLeft: 20, paddingRight: 20, height: 80)
         
         map.addSubview(compass)
-        compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
+        compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
         
+
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
@@ -386,6 +394,7 @@ extension MapViewController: MKMapViewDelegate {
         userAnnotationView?.isEnabled = false
     }
     
+
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         for place in viewModel.places {
             if mapView.visibleMapRect.contains(MKMapRect(origin: MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)), size: MKMapSize(width: 0.2, height: 0.2))) // 맵 이동 시 정확도 검증을 위해 남겨둡니다.
@@ -442,7 +451,7 @@ extension MapViewController: MKMapViewDelegate {
             present(controller, animated: true)
         } else {
             guard let annotation = view.annotation else { return }
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 4, longitudeDelta: map.region.span.longitudeDelta / 4)), animated: true)
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 5, longitudeDelta: map.region.span.longitudeDelta / 5)), animated: true)
             print("THIS is CLUSTER")
         }
     }

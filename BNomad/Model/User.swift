@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct User {
     let userUid: String
@@ -13,8 +14,10 @@ struct User {
     var occupation: String?
     var introduction: String?
     var checkInHistory: [CheckIn]?
+    
     var profileImageUrl: String?
-
+    var profileImage: UIImage?
+        
     var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toDateString() && $0.checkOutTime == nil} }
     var currentPlaceUid: String? { currentCheckIn?.placeUid }
     var isChecked: Bool { currentPlaceUid != nil ? true : false }

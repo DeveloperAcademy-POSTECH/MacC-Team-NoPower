@@ -174,8 +174,11 @@ class PlaceInfoModalViewController: UIViewController {
                 self.delegateForFloating?.checkInFloating()
                 let controller = PlaceCheckInViewController()
                 controller.selectedPlace = selectedPlace
-                controller.modalPresentationStyle = .fullScreen
-                self.present(controller, animated: true)
+                let navigationController = UINavigationController(rootViewController: controller)
+                navigationController.modalPresentationStyle = .fullScreen
+                navigationController.navigationItem.title = selectedPlace.name
+                navigationController.navigationBar.tintColor = CustomColor.nomadBlue
+                self.present(navigationController, animated: true, completion: nil)
             }))
             present(checkInAlert, animated: true)
         } else {

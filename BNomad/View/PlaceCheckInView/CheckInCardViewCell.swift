@@ -53,16 +53,11 @@ class CheckInCardViewCell: UICollectionViewCell {
         }
     }
     
-    var selectedPlaceTitle: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline, weight: .regular)
-        return label
-    }()
-    
     private let cardRectangleView: UIView = {
         let view = UIView()
-        view.backgroundColor = CustomColor.nomadGray2
-        view.layer.masksToBounds = false
+        view.backgroundColor = CustomColor.nomad2White
+        view.layer.borderWidth = 0.5
+        view.layer.borderColor = CustomColor.nomadGray2?.cgColor
         return view
     }()
 
@@ -253,12 +248,11 @@ class CheckInCardViewCell: UICollectionViewCell {
         stack.distribution = .equalCentering
         stack.spacing = 17
         
+        self.addSubview(cardRectangleView)
+        cardRectangleView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 20)
+        
         self.addSubview(stack)
         stack.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 90, paddingLeft: 20, paddingRight: 20, height: 290)
         checkOutButton.anchor(height: 50)
-        
-        self.addSubview(selectedPlaceTitle)
-        selectedPlaceTitle.anchor(bottom: stack.topAnchor, paddingBottom: 7)
-        selectedPlaceTitle.centerX(inView: self)
     }
 }

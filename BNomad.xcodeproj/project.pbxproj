@@ -45,6 +45,9 @@
 		DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */; };
 		DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */; };
 		DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */; };
+		DFD8E94D291CD3FE006BC8BB /* PlaceRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD8E94C291CD3FE006BC8BB /* PlaceRequestViewController.swift */; };
+		DFD8E94F291CEA3C006BC8BB /* WithdrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD8E94E291CEA3C006BC8BB /* WithdrawViewController.swift */; };
+		DFD8E951291D1C48006BC8BB /* RequestTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD8E950291D1C48006BC8BB /* RequestTextField.swift */; };
 		DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747B828FD75980048E70A /* UIView+Extension.swift */; };
 		DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFE747C929000FC80048E70A /* ProfileEditViewController.swift */; };
 		E226DA6E29120A540071E289 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = E226DA6D29120A540071E289 /* FirebasePerformance */; };
@@ -114,6 +117,9 @@
 		DF9618AD28FCEFC200E21D30 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DF9618B128FCEFEA00E21D30 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		DFD8E94C291CD3FE006BC8BB /* PlaceRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceRequestViewController.swift; sourceTree = "<group>"; };
+		DFD8E94E291CEA3C006BC8BB /* WithdrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithdrawViewController.swift; sourceTree = "<group>"; };
+		DFD8E950291D1C48006BC8BB /* RequestTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestTextField.swift; sourceTree = "<group>"; };
 		DFE747B828FD75980048E70A /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		DFE747C929000FC80048E70A /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
 		E251E6D92907E49600638C15 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -202,6 +208,9 @@
 			isa = PBXGroup;
 			children = (
 				DF561CAA2918A0DA0099D41D /* SettingViewController.swift */,
+				DFD8E94C291CD3FE006BC8BB /* PlaceRequestViewController.swift */,
+				DFD8E94E291CEA3C006BC8BB /* WithdrawViewController.swift */,
+				DFD8E950291D1C48006BC8BB /* RequestTextField.swift */,
 			);
 			path = SettingView;
 			sourceTree = "<group>";
@@ -469,11 +478,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFD8E94D291CD3FE006BC8BB /* PlaceRequestViewController.swift in Sources */,
 				E27CEED12919118C00369A6E /* MeetUp.swift in Sources */,
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */,
 				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
 				F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */,
+				DFD8E94F291CEA3C006BC8BB /* WithdrawViewController.swift in Sources */,
+				DFD8E951291D1C48006BC8BB /* RequestTextField.swift in Sources */,
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
 				041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,

@@ -51,6 +51,14 @@ class ProfileViewController: UIViewController {
         return label
     }()
     
+    private let visitCardCellHeaderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "체크인 기록"
+        label.font = .preferredFont(forTextStyle: .headline, weight: .regular)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let profileCollectionView:  UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -70,7 +78,7 @@ class ProfileViewController: UIViewController {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = .white
+//        collectionView.backgroundColor = .white
         collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +89,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.backButtonTitle = ""
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
         ProfileGraphCell.addedWeek = 0
@@ -103,9 +111,8 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
-        navigationItem.backButtonTitle = "취소"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -193,6 +200,9 @@ class ProfileViewController: UIViewController {
                                      paddingTop: 220, paddingLeft: 16, paddingRight: 16,
                                      height: 600)
         
+        view.addSubview(visitCardCellHeaderLabel)
+        visitCardCellHeaderLabel.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 405, paddingLeft: 29)
+        
         
         view.addSubview(profileGraphCellHeaderLabel)
         profileGraphCellHeaderLabel.anchor(top: view.topAnchor, paddingTop: 570)
@@ -205,7 +215,7 @@ class ProfileViewController: UIViewController {
         plusWeek.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 570, paddingRight: 45)
         
         view.addSubview(profileGraphCollectionView)
-        profileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width, height: 154)
+        profileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width-35, height: 154)
     }
     
 }
@@ -243,7 +253,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
                 cell.user = viewModel.user
-                cell.backgroundColor = .white
+                cell.backgroundColor = .systemBackground
                 cell.layer.cornerRadius = 20
                 cell.delegate = self
                 return cell
@@ -253,7 +263,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 }
                 
                 cell.checkInHistoryForProfile = viewModel.user?.checkInHistory
-                cell.backgroundColor = .white
+                cell.backgroundColor = .systemBackground
                 cell.layer.cornerRadius = 20
                 return cell
             } else {
@@ -269,7 +279,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 cell.thisCellsDate = dateString
                 cell.checkInHistory = viewModel.user?.checkInHistory
                 
-                cell.backgroundColor = .white
+                cell.backgroundColor = .systemBackground
                 cell.layer.cornerRadius = 20
                 return cell
             }
@@ -287,8 +297,14 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             cell.cellDate = cellDate
             cell.checkInHistory = viewModel.user?.checkInHistory
-            cell.backgroundColor = .white
+            cell.backgroundColor = .systemBackground
             return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            moveToCalendar()
         }
     }
   

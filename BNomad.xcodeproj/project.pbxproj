@@ -20,6 +20,7 @@
 		15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */; };
 		63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */; };
 		631AD82B2906316B00EEED02 /* ReviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */; };
+		633823EE291E1D5F004977BA /* WithNomadHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633823ED291E1D5F004977BA /* WithNomadHeader.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
@@ -55,8 +56,8 @@
 		E25A675828F7E515004614B0 /* DummyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25A675728F7E515004614B0 /* DummyData.swift */; };
 		E25AD9E42912239A00F815B2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = E25AD9E32912239A00F815B2 /* FirebaseRemoteConfig */; };
 		E27CEECF2912C38900369A6E /* RCValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27CEECE2912C38900369A6E /* RCValue.swift */; };
-		E27CEED62919F57D00369A6E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E27CEED52919F57D00369A6E /* Kingfisher */; };
 		E27CEED12919118C00369A6E /* MeetUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27CEED02919118C00369A6E /* MeetUp.swift */; };
+		E27CEED62919F57D00369A6E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E27CEED52919F57D00369A6E /* Kingfisher */; };
 		E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB2592906D44200082596 /* FirebaseTestVC.swift */; };
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
@@ -86,6 +87,7 @@
 		15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoViewCell.swift; sourceTree = "<group>"; };
 		63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubCell.swift; sourceTree = "<group>"; };
 		631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewInfoCell.swift; sourceTree = "<group>"; };
+		633823ED291E1D5F004977BA /* WithNomadHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithNomadHeader.swift; sourceTree = "<group>"; };
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
@@ -152,6 +154,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		633823EC291E1D34004977BA /* WithNomadCell */ = {
+			isa = PBXGroup;
+			children = (
+				633823ED291E1D5F004977BA /* WithNomadHeader.swift */,
+			);
+			path = WithNomadCell;
+			sourceTree = "<group>";
+		};
 		63A2951C291CB2F300181ECE /* ReviewSubCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +299,7 @@
 				6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */,
 				631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */,
 				63A2951C291CB2F300181ECE /* ReviewSubCell */,
+				633823EC291E1D34004977BA /* WithNomadCell */,
 			);
 			path = PlaceInfoView;
 			sourceTree = "<group>";
@@ -488,6 +499,7 @@
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
 				DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */,
+				633823EE291E1D5F004977BA /* WithNomadHeader.swift in Sources */,
 				7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				8CC750912919F330009F9C91 /* RegionSelectViewController.swift in Sources */,

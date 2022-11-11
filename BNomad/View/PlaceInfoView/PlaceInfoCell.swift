@@ -75,7 +75,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     lazy var questLabel: UILabel = {
         let questLabel = UILabel()
-        questLabel.text = "5개의 퀘스트"
+        questLabel.text = "5개의 MeetUp"
         questLabel.textColor = CustomColor.nomadBlack
         questLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
         let fullText = questLabel.text ?? ""

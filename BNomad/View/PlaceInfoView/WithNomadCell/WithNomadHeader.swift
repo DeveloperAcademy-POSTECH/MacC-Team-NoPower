@@ -46,6 +46,7 @@ class WithNomadHeader: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(label)
+        backgroundColor = .white
         setui()
     }
     

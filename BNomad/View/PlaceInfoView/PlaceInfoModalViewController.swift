@@ -46,9 +46,7 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     private var numberOfUsers: Int = 0
-//    {
-//        checkInHistory?.count ?? 0
-//    }
+
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
@@ -58,7 +56,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
-//        button.isHidden = self.isCheckedIn ? true : false
+        
         return button
     }()
     
@@ -69,7 +67,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadGray1
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkOut), for: .touchUpInside)
-//        button.isHidden = self.isCheckedIn ? false : true
+
         return button
     }()
     
@@ -80,7 +78,6 @@ class PlaceInfoModalViewController: UIViewController {
         configureCollectionView()
         configureCheckInButton()
         setupSheet()
-//        fetchPlaceAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,13 +91,6 @@ class PlaceInfoModalViewController: UIViewController {
         delegateForClearAnnotation?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
     }
     
-//    func fetchPlaceAll() {
-//        FirebaseManager.shared.fetchPlaceAll { place in
-//            self.selectedPlace = place
-////            print(place)
-//        }
-//    }
-    
     // MARK: - Actions
     
     @objc func checkOut() {
@@ -108,8 +98,6 @@ class PlaceInfoModalViewController: UIViewController {
         let checkOutAlert = UIAlertController(title: "체크아웃", message: "체크아웃하시겠습니까?", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
-            // checkIn Uid 받아오기
-
             guard
                 var checkIn = self.viewModel.user?.currentCheckIn
             else {
@@ -159,7 +147,6 @@ class PlaceInfoModalViewController: UIViewController {
         }
     }
     
-    // 로그인 체크
     func loginCheck() {
         print("loginCheck")
         let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 체크인하실 수 있습니다.", preferredStyle: .alert)
@@ -172,7 +159,6 @@ class PlaceInfoModalViewController: UIViewController {
         present(checkOutAlert, animated: true)
     }
     
-    // 맵의 특정 장소가 500미터 반경 이내인지 체크
     func distanceChecker() {
         let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 100000000500.0, identifier: "반경 500m")
         
@@ -237,7 +223,7 @@ class PlaceInfoModalViewController: UIViewController {
     func configureCollectionView() {
         placeInfoCollectionView.dataSource = self
         placeInfoCollectionView.delegate = self
-        placeInfoCollectionView.backgroundColor = CustomColor.nomadGray3
+        placeInfoCollectionView.backgroundColor = .white
         placeInfoCollectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
         placeInfoCollectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
         placeInfoCollectionView.register(WithNomadHeader.self, forCellWithReuseIdentifier: WithNomadHeader.identifier)
@@ -348,7 +334,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 400)
         } else if indexPath.section == 1 {
-            return CGSize(width: viewWidth, height: 450)
+            return CGSize(width: viewWidth, height: 370)
         } else if indexPath.section == 2 {
             return CGSize(width: viewWidth, height: 27)
         } else if indexPath.section == 3 {

@@ -63,6 +63,8 @@
 		F6183CC328FFABEC00185A1F /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */; };
 		F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */; };
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
+		F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */; };
+		F6DFE0B9291CD87E00C808AF /* ReviewPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B8291CD87E00C808AF /* ReviewPhotoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +119,8 @@
 		F6183CBE28FFABEC00185A1F /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		F6183CC928FFC48F00185A1F /* CustomModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModalViewController.swift; sourceTree = "<group>"; };
 		F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDetailViewController.swift; sourceTree = "<group>"; };
+		F6DFE0B8291CD87E00C808AF /* ReviewPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPhotoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				DF561CA72918A0C40099D41D /* ReviewViewController.swift */,
+				F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */,
+				F6DFE0B8291CD87E00C808AF /* ReviewPhotoCell.swift */,
 			);
 			path = ReviewView;
 			sourceTree = "<group>";
@@ -459,6 +465,7 @@
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
+				F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,
@@ -474,6 +481,7 @@
 				159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */,
 				7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */,
 				15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */,
+				F6DFE0B9291CD87E00C808AF /* ReviewPhotoCell.swift in Sources */,
 				E25A675428F7E2C6004614B0 /* Place.swift in Sources */,
 				6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */,
 				E27CEECF2912C38900369A6E /* RCValue.swift in Sources */,
@@ -628,9 +636,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6C2JXP8CCK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 앱에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -661,9 +670,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6C2JXP8CCK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "당신의 위치를 저희가 쓰겠습니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 앱에 접근합니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

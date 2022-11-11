@@ -18,13 +18,13 @@
 		159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */; };
 		159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */; };
 		15B621FD2901469D00E31125 /* PlaceInfoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */; };
+		63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */; };
 		631AD82B2906316B00EEED02 /* ReviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */; };
-		631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631AD82C2906317200EEED02 /* SummaryInfoCell.swift */; };
 		6383330C2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */; };
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
-		7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */; };
 		7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */; };
+		7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
 		7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */; };
@@ -84,14 +84,14 @@
 		159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListViewCell.swift; sourceTree = "<group>"; };
 		159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListHeader.swift; sourceTree = "<group>"; };
 		15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoViewCell.swift; sourceTree = "<group>"; };
+		63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubCell.swift; sourceTree = "<group>"; };
 		631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewInfoCell.swift; sourceTree = "<group>"; };
-		631AD82C2906317200EEED02 /* SummaryInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryInfoCell.swift; sourceTree = "<group>"; };
 		6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceInfoModalViewController.swift; sourceTree = "<group>"; };
 		6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoCell.swift; sourceTree = "<group>"; };
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
-		7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMeetUpViewController.swift; sourceTree = "<group>"; };
 		7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantCell.swift; sourceTree = "<group>"; };
+		7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMeetUpViewController.swift; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9F128FE3A19003D8A95 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -152,6 +152,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63A2951C291CB2F300181ECE /* ReviewSubCell */ = {
+			isa = PBXGroup;
+			children = (
+				63159D1E291BD4A3000F41F5 /* ReviewSubCell.swift */,
+			);
+			path = ReviewSubCell;
+			sourceTree = "<group>";
+		};
 		DF288B4228F7D70F002838A4 = {
 			isa = PBXGroup;
 			children = (
@@ -280,7 +288,7 @@
 				6383330B2900CD6D005AB0C3 /* PlaceInfoModalViewController.swift */,
 				6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */,
 				631AD82A2906316B00EEED02 /* ReviewInfoCell.swift */,
-				631AD82C2906317200EEED02 /* SummaryInfoCell.swift */,
+				63A2951C291CB2F300181ECE /* ReviewSubCell */,
 			);
 			path = PlaceInfoView;
 			sourceTree = "<group>";
@@ -469,13 +477,13 @@
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
 				041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
-				631AD82D2906317200EEED02 /* SummaryInfoCell.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
+				63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */,
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,

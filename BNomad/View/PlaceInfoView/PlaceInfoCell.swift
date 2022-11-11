@@ -146,7 +146,6 @@ class PlaceInfoCell: UICollectionViewCell {
     private lazy var openOperatingTimeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: chevronDirection)?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
-//        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         button.addTarget(self, action: #selector(openOrClose), for: .touchUpInside)
         return button
@@ -224,26 +223,17 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(openOperatingTimeButton)
         self.addSubview(horizontalDivider3)
         self.addSubview(addressLabel)
-
-
-        
-        
         setAttributes()
         guard let place = place else { return }
         mappingPlaceData(place)
     }
     
     private func setAttributes() {
-        
         placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
-//        dateLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 97, paddingLeft: 18)
-//        detailedCheckinListButton.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 121, paddingLeft: 17, paddingRight: 17, height: 86)
         chekedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
         verticalDivider.anchor(top: placeNameLabel.bottomAnchor, left: chekedinViewLabel.rightAnchor, paddingTop: 11, paddingLeft: 35, width: 1, height: 15)
         questLabel.anchor(top: placeNameLabel.bottomAnchor, left: verticalDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
-//        averageTimeLabel.anchor(top: detailedCheckinListButton.topAnchor, left: detailedCheckinListButton.leftAnchor, paddingTop: 47, paddingLeft: 17)
-//        ProfileCheckedImage.anchor(top: detailedCheckinListButton.topAnchor, right: detailedCheckinListButton.rightAnchor, paddingTop: 9, paddingRight: 13)
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20, height: 1)
         callButton.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
         phoneNumberLable.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
@@ -265,7 +255,6 @@ class PlaceInfoCell: UICollectionViewCell {
         phoneNumberLable.text = place.contact
     }
     @objc func openOrClose() {
-        print("succedd")
         if self.chevronDirection == "chevron.down" {
             self.chevronDirection = "chevron.up"
             self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.up")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)

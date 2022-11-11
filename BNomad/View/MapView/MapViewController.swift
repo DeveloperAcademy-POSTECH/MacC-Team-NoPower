@@ -27,12 +27,25 @@ class MapViewController: UIViewController {
     // MARK: - Properties
 
     private let locationManager = CLLocationManager()
-    lazy var currentLocation: CLLocation? = locationManager.location
+    lazy var currentLocation: CLLocation? = locationManager.location {
+        didSet {
+            map.addOverlay(circleOverlay)
+        }
+    }
+
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
     var selectedRegion: Region?
+    
+    var visiblePlacesOnMap: [Place] = [] {
+        didSet {
+            let vc = CustomModalViewController()
+            vc.places = visiblePlacesOnMap
+//            mapViewDidChangeVisibleRegion(map)
+        }
+    }
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -210,6 +223,7 @@ class MapViewController: UIViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
         }
+        sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation
         sheet.delegateForFloating = self
         present(sheet, animated: true, completion: nil)
@@ -253,6 +267,7 @@ class MapViewController: UIViewController {
          navigationItem.backButtonTitle = ""
          checkInFloating()
          checkInBinding()
+         map.addOverlay(circleOverlay)
      }
 
     override func viewDidLoad() {
@@ -284,7 +299,7 @@ class MapViewController: UIViewController {
                 if let place = viewModel.places.first(where: { place in
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
-                    self.setMapRegion(place.latitude - 0.004, place.longitude, spanDelta: 0.01)
+                    self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
                     let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
                     self.map.selectAnnotation(annotation, animated: true)
                     let controller = PlaceInfoModalViewController()
@@ -337,8 +352,6 @@ class MapViewController: UIViewController {
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 50, paddingLeft: 20, width: 40, height: 40)
         
-        map.addOverlay(circleOverlay)
-        
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
@@ -366,6 +379,32 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MKMapViewDelegate {
 
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        let userAnnotationView = mapView.view(for: mapView.userLocation)
+        userAnnotationView?.isUserInteractionEnabled = false
+        userAnnotationView?.canShowCallout = false
+        userAnnotationView?.isEnabled = false
+    }
+    
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        for place in viewModel.places {
+            if mapView.visibleMapRect.contains(MKMapRect(origin: MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)), size: MKMapSize(width: 0.2, height: 0.2))) // 맵 이동 시 정확도 검증을 위해 남겨둡니다.
+//            if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
+            {
+                print(place, "visible")
+                if visiblePlacesOnMap.contains { $0.name == place.name } {
+                    return
+                }
+                visiblePlacesOnMap.append(place)
+            } else {
+                print(place, "invisible")
+                visiblePlacesOnMap.removeAll { $0.name == place.name }
+
+            }
+        }
+
+    }
+    
     // 맵 오버레이 rendering
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let overlay = MKCircleRenderer(circle: circleOverlay)

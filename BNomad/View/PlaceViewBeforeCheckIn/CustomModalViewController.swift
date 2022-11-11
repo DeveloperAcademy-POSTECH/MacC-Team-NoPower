@@ -76,7 +76,10 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        places = viewModel.places
+//    places: [Place] = {
+//        let placesOnMap = viewModel.places.filter(map)
+//    }
+//        viewModel.places
         
 //        self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
         self.view.layer.backgroundColor = CustomColor.nomadGray3?.cgColor

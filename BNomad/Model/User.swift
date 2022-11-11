@@ -20,13 +20,3 @@ struct User {
     var isChecked: Bool { currentPlaceUid != nil ? true : false }
     
 }
-
-extension User {
-    func toAnyObject() -> Any {
-      return [
-        "nickname": nickname,
-        "occupation": occupation,
-        "introduction": introduction
-      ]
-    }
-}

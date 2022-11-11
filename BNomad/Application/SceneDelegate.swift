@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import Kingfisher
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -25,6 +26,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if isExist {
                 FirebaseManager.shared.fetchUser(id: deviceUid) { user in
                     self.viewModel.user = user
+                    self.fetchProfileImage()
+                    
                     FirebaseManager.shared.fetchCheckInHistory(userUid: deviceUid) { checkInHistory in
                         self.viewModel.user?.checkInHistory = checkInHistory
                         print("checkIn 유무", self.viewModel.user?.isChecked)
@@ -36,6 +39,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 print("no user")
                 self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
                 self.window?.makeKeyAndVisible()
+            }
+        }
+    }
+    
+    func fetchProfileImage() {
+        if let profileImageUrl = self.viewModel.user?.profileImageUrl {
+            print("profileImageUrl", profileImageUrl)
+            guard let url = URL(string: profileImageUrl) else { return }
+            let resource = ImageResource(downloadURL: url, cacheKey: profileImageUrl)
+            
+            KingfisherManager.shared.retrieveImage(with: resource) { result in
+                switch result {
+                case .success(let value):
+                    self.viewModel.user?.profileImage = value.image
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }

@@ -47,7 +47,7 @@ class ProfileGraphCell: UICollectionViewCell {
         
         for index in 0...3 {
             let time = UILabel()
-            time.text = String(9 + index*5) //FIXME: 그래프 간격 어떻게 할건지? 현재는 데이터 로직 기준
+            time.text = String(9 + index*3) //FIXME: 그래프 간격 어떻게 할건지? 현재는 데이터 로직 기준
             time.textColor = .gray
             time.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
             time.translatesAutoresizingMaskIntoConstraints = false

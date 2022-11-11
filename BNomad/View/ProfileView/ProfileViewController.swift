@@ -29,7 +29,6 @@ class ProfileViewController: UIViewController {
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -38,7 +37,6 @@ class ProfileViewController: UIViewController {
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -47,15 +45,13 @@ class ProfileViewController: UIViewController {
         
         profileGraphCellHeaderMaker(label: label, weekAdded: 0)
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let visitCardCellHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "체크인 기록"
-        label.font = .preferredFont(forTextStyle: .headline, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
     }()
     
@@ -69,7 +65,6 @@ class ProfileViewController: UIViewController {
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         collectionView.register(ProfileGraphCell.self, forCellWithReuseIdentifier: ProfileGraphCell.identifier)
 
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -81,7 +76,6 @@ class ProfileViewController: UIViewController {
 //        collectionView.backgroundColor = .white
         collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
 
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -116,6 +110,7 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        profileGraphCollectionView.reloadData() //FIXME: 왜 리로드해야 정상표시되는지 ?? 버그픽스요망
         navigationController?.navigationBar.isHidden = false
     }
     
@@ -261,7 +256,8 @@ extension ProfileViewController: UICollectionViewDelegate {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                     return UICollectionViewCell()
                 }
-                
+                cell.layer.borderWidth = 2
+                cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
                 cell.checkInHistoryForProfile = viewModel.user?.checkInHistory
                 cell.backgroundColor = .systemBackground
                 cell.layer.cornerRadius = 20

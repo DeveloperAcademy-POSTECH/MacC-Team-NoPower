@@ -39,13 +39,7 @@ class MapViewController: UIViewController {
     
     var selectedRegion: Region?
     
-    var visiblePlacesOnMap: [Place] = [] {
-        didSet {
-            let vc = CustomModalViewController()
-            vc.places = visiblePlacesOnMap
-//            mapViewDidChangeVisibleRegion(map)
-        }
-    }
+    var visiblePlacesOnMap: [Place] = []
     
     // 맵 띄우기
     private lazy var map: MKMapView = {

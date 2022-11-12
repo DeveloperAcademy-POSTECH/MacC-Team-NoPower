@@ -359,13 +359,6 @@ class MapViewController: UIViewController {
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
         
-
-        FirebaseManager.shared.fetchPlaceAll { place in
-            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-            self.viewModel.places.append(place)
-            self.checkInBinding()
-        }
-        
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)
         
@@ -396,14 +389,12 @@ extension MapViewController: MKMapViewDelegate {
     
 
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        visiblePlacesOnMap = []
+        
         for place in viewModel.places {
-            if mapView.visibleMapRect.contains(MKMapRect(origin: MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)), size: MKMapSize(width: 0.2, height: 0.2))) // 맵 이동 시 정확도 검증을 위해 남겨둡니다.
-//            if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
+            if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
             {
                 print(place, "visible")
-                if visiblePlacesOnMap.contains { $0.name == place.name } {
-                    return
-                }
                 visiblePlacesOnMap.append(place)
             } else {
                 print(place, "invisible")

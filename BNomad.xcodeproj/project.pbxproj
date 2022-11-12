@@ -265,10 +265,10 @@
 			children = (
 				DFE747C829000FAF0048E70A /* ProfileEditView */,
 				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
+				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */,
-				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A828FFF4FB005D19CC /* CalendarCell.swift */,
 				041351A628FFF459005D19CC /* CalendarViewController.swift */,
 			);

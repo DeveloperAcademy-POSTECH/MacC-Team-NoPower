@@ -20,9 +20,11 @@ class PlaceInfoModalViewController: UIViewController {
                 let history = checkInHistory.filter { $0.checkOutTime == nil }
                 self.checkInHistory = history
             }
+            FirebaseManager.shared.fetchReviewHistory(placeUid: selectedPlace.placeUid) { reviewHistory in
+                self.reviewHistory = reviewHistory
+            }
         }
     }
-        
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
     
@@ -41,6 +43,13 @@ class PlaceInfoModalViewController: UIViewController {
         didSet {
             guard let checkInHistory = checkInHistory else { return }
             numberOfUsers = checkInHistory.count
+            placeInfoCollectionView.reloadData()
+        }
+    }
+    
+    var reviewHistory: [Review]? {
+        didSet {
+            guard let reviewHistory = reviewHistory else { return }
             placeInfoCollectionView.reloadData()
         }
     }
@@ -285,6 +294,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
+            cell.reviewHistory = reviewHistory
             return cell
         }
         else if indexPath.section == 2 {

@@ -72,10 +72,8 @@ class ReviewListViewController: UIViewController {
         collectionView.register(ReviewCell.self, forCellWithReuseIdentifier: ReviewCell.identifier)
 
     }
-    
 
 }
-
 
 // MARK: - UICollectionViewDataSource
 

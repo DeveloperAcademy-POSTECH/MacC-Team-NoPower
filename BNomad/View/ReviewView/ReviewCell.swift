@@ -19,14 +19,14 @@ class ReviewCell: UICollectionViewCell {
         view.layer.cornerRadius = 12
         view.backgroundColor = .white
         view.addSubview(divider)
+        view.addSubview(photo)
         view.addSubview(review)
         view.addSubview(openReview)
         view.addSubview(userImage)
         view.addSubview(userName)
-        view.addSubview(imageCollectionView)
         divider.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, width: view.bounds.width, height: 0.5)
-        imageCollectionView.anchor(top: divider.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 12, paddingLeft: 20, paddingRight: 0, height: 160)
-        review.anchor(top: imageCollectionView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 8, paddingLeft: 21, paddingRight: 22)
+        photo.anchor(top: divider.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 12, paddingLeft: 20, paddingRight: 20, height: 174)
+        review.anchor(top: photo.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 8, paddingLeft: 21, paddingRight: 22)
         openReview.anchor(top: review.bottomAnchor, right: view.rightAnchor, paddingTop: 6, paddingRight: 20)
         userImage.anchor(top: review.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, paddingTop: 4, paddingLeft: 21, paddingBottom: 11,  width: 20, height: 20)
         userName.centerY(inView: userImage, leftAnchor: userImage.rightAnchor, paddingLeft: 8)
@@ -38,29 +38,12 @@ class ReviewCell: UICollectionViewCell {
         rectangle.backgroundColor = UIColor(hex: "D3D3D3")
         return rectangle
     }()
-    
-    private let layout: UICollectionViewFlowLayout = {
-        let guideline = UICollectionViewFlowLayout()
-        guideline.scrollDirection = .horizontal
-        guideline.minimumLineSpacing = 5
-        guideline.minimumInteritemSpacing = 0
-        guideline.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        return guideline
-    }()
 
-    private lazy var imageCollectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        view.isScrollEnabled = true
-        view.showsHorizontalScrollIndicator = false
-        view.showsVerticalScrollIndicator = false
-//        view.scrollIndicatorInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 4)
-        view.contentInset = .zero
-        view.backgroundColor = .white
-        view.clipsToBounds = true
-        view.delegate = self
-        view.dataSource = self
-        view.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        return view
+    private var photo: UIImageView = {
+        let image = UIImage(named: "AppIcon")
+        let imageView = UIImageView(image: image)
+        imageView.layer.cornerRadius = 8
+        return imageView
     }()
     
     lazy var review: UILabel = {
@@ -126,41 +109,4 @@ class ReviewCell: UICollectionViewCell {
         contentView.addSubview(cell)
         cell.anchor(top: self.topAnchor, width: UIScreen.main.bounds.width)
     }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension ReviewCell: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { return UICollectionViewCell() }
-        return cell
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-}
-
-// MARK: - UICollectionViewDelegate
-
-//extension ReviewCell: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
-//    }
-//}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-
-extension ReviewCell: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 160, height: 160)
-    }
-    
 }

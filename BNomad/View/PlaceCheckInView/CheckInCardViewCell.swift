@@ -53,18 +53,11 @@ class CheckInCardViewCell: UICollectionViewCell {
         }
     }
     
-//    var delegate: pageDismiss?
-    
     private let cardRectangleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 12
-        view.layer.shadowRadius = 4
-        view.layer.shadowOpacity = 0.2
-        view.layer.shadowOffset = CGSize(width: 3, height: 4)
-        view.layer.shadowColor = CustomColor.nomadBlack?.cgColor
-        view.layer.masksToBounds = false
-        
+        view.backgroundColor = CustomColor.nomad2White
+        view.layer.borderWidth = 0.5
+        view.layer.borderColor = CustomColor.nomadGray2?.cgColor
         return view
     }()
 
@@ -72,36 +65,30 @@ class CheckInCardViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.image = UIImage(systemName: "person.circle.fill")
         view.tintColor = CustomColor.nomadGray2
-        
+        view.anchor(width: 80, height: 80)
         return view
     }()
     
     private lazy var userNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "김노마"
         label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
         label.textColor = CustomColor.nomadBlack
         label.numberOfLines = 1
-        
         return label
     }()
 
     private lazy var userOccupationLabel: UILabel = {
         let label = UILabel()
-        label.text = "iOS 개발자"
-        label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         label.textColor = CustomColor.nomadGray1
-        
         return label
     }()
     
     private lazy var userStatusMessage: UILabel = {
         let label = UILabel()
-        label.text = "디자인을 좋아하는 개발자입니다."
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.numberOfLines = 1
         label.textColor = CustomColor.nomadGray1
-        
         return label
     }()
     
@@ -110,7 +97,6 @@ class CheckInCardViewCell: UICollectionViewCell {
         label.text = "체크인"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadBlack
-        
         return label
     }()
     
@@ -119,7 +105,6 @@ class CheckInCardViewCell: UICollectionViewCell {
         label.text = "이용시간"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadBlack
-        
         return label
     }()
     
@@ -127,16 +112,13 @@ class CheckInCardViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .body, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
-        
         return label
     }()
     
     private let userTimeSpentLabel: UILabel = {
         let label = UILabel()
-        label.text = "3시간 40분"
         label.font = .preferredFont(forTextStyle: .body, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
-        
         return label
     }()
     
@@ -145,7 +127,6 @@ class CheckInCardViewCell: UICollectionViewCell {
         label.text = "9:00"
         label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
         label.textColor = CustomColor.nomadGray1
-        
         return label
     }()
     
@@ -154,15 +135,13 @@ class CheckInCardViewCell: UICollectionViewCell {
         label.text = "22:00"
         label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
         label.textColor = CustomColor.nomadGray1
-        
         return label
     }()
     
     private let timeBar: UIView = {
         let view = UIView()
-        view.backgroundColor = CustomColor.nomadGray2
+        view.backgroundColor = CustomColor.nomadGray1
         view.layer.cornerRadius = 4
-        
         return view
     }()
     
@@ -171,19 +150,71 @@ class CheckInCardViewCell: UICollectionViewCell {
         view.backgroundColor = CustomColor.nomadBlue
         view.tintColor = CustomColor.nomadBlue
         view.layer.cornerRadius = 4
-        
         return view
+    }()
+    
+    private lazy var userProfileStack: UIStackView = {
+        let userStatusStack = UIStackView(arrangedSubviews: [userNameLabel, userOccupationLabel])
+        userStatusStack.alignment = .leading
+        userStatusStack.axis = .vertical
+        userStatusStack.spacing = 2
+        
+        let userStack = UIStackView(arrangedSubviews: [UIView(), userStatusStack, userStatusMessage])
+        userStack.axis = .vertical
+        userStack.spacing = 9
+        userStack.alignment = .leading
+        
+        let wholeStack = UIStackView(arrangedSubviews: [profileImageView, userStack])
+        wholeStack.alignment = .leading
+        wholeStack.axis = .horizontal
+        wholeStack.spacing = 12
+        
+        return wholeStack
+    }()
+    
+    private lazy var spendingTimeStack: UIStackView = {
+        let checkInStack = UIStackView(arrangedSubviews: [checkInLabel, checkInTimeLabel])
+        checkInStack.axis = .vertical
+        checkInStack.spacing = 3
+        checkInStack.alignment = .leading
+        
+        let timeSpentStack = UIStackView(arrangedSubviews: [timeSpentLabel, userTimeSpentLabel])
+        timeSpentStack.axis = .vertical
+        timeSpentStack.spacing = 3
+        timeSpentStack.alignment = .trailing
+        
+        let spacer = UIView()
+        let wholeStack = UIStackView(arrangedSubviews: [checkInStack, spacer, timeSpentStack])
+        spacer.anchor(left: checkInTimeLabel.rightAnchor, right: userTimeSpentLabel.leftAnchor)
+        wholeStack.axis = .horizontal
+        wholeStack.distribution = .fill
+        
+        return wholeStack
+    }()
+    
+    private lazy var timeBarStack: UIStackView = {
+        let spacer = UIView()
+        let timeStack = UIStackView(arrangedSubviews: [startTimeLabel, spacer, endTimeLabel])
+        spacer.anchor(left: startTimeLabel.rightAnchor, right: endTimeLabel.leftAnchor)
+        timeStack.axis = .horizontal
+        timeStack.distribution = .fill
+        
+        timeBar.addSubview(checkInTimeBar)
+        checkInTimeBar.anchor(top: timeBar.topAnchor, left: timeBar.leftAnchor, bottom: timeBar.bottomAnchor, right: timeBar.rightAnchor, paddingLeft: 30, paddingRight: 30)
+        timeBar.anchor(height: 10)
+        let wholeStack = UIStackView(arrangedSubviews: [timeStack, timeBar])
+        wholeStack.axis = .vertical
+        
+        return wholeStack
     }()
     
     private lazy var checkOutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("체크아웃 하기", for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
-        button.backgroundColor = .white
-        button.layer.borderColor = CustomColor.nomadBlue?.cgColor
-        button.layer.borderWidth = 1
+        button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
-        button.tintColor = CustomColor.nomadBlue
+        button.tintColor = .white
         button.addTarget(self, action: #selector(checkOutTapped), for: .touchUpInside)
         return button
     }()
@@ -209,132 +240,19 @@ class CheckInCardViewCell: UICollectionViewCell {
     // MARK: - Methods
     
     func configUI() {
+        let spacer = UIView()
+        let stack = UIStackView(arrangedSubviews: [userProfileStack, spendingTimeStack, timeBarStack, checkOutButton, spacer])
+        timeBarStack.anchor(top: spendingTimeStack.bottomAnchor, paddingTop: 15)
+        spacer.anchor(height: 15)
+        stack.axis = .vertical
+        stack.distribution = .equalCentering
+        stack.spacing = 17
         
         self.addSubview(cardRectangleView)
-        cardRectangleView.anchor(
-            top: self.topAnchor,
-            left: self.leftAnchor,
-            bottom: self.bottomAnchor,
-            right: self.rightAnchor,
-            paddingTop: 5,
-            paddingLeft: 20,
-            paddingBottom: 25,
-            paddingRight: 20,
-            height: 266
-        )
+        cardRectangleView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 20)
         
-        self.addSubview(profileImageView)
-        profileImageView.anchor(
-            top: cardRectangleView.topAnchor,
-            left: cardRectangleView.leftAnchor,
-            paddingTop: 20,
-            paddingLeft: 17,
-            width: 64,
-            height: 64
-        )
-        
-        self.addSubview(userNameLabel)
-        userNameLabel.anchor(
-            top: cardRectangleView.topAnchor,
-            left: profileImageView.rightAnchor,
-            paddingTop: 28,
-            paddingLeft: 18,
-            width: 150
-            
-        )
-        
-        self.addSubview(userOccupationLabel)
-        userOccupationLabel.anchor(
-            left: userNameLabel.rightAnchor,
-            bottom: userNameLabel.bottomAnchor,
-            right: cardRectangleView.rightAnchor,
-            paddingLeft: 20,
-            paddingRight: 20
-        )
-        
-        self.addSubview(userStatusMessage)
-        userStatusMessage.anchor(
-            top: userNameLabel.bottomAnchor,
-            left: userNameLabel.leftAnchor,
-            right: self.rightAnchor,
-            paddingTop: 6,
-            paddingRight: 20
-        )
-        
-        self.addSubview(checkInLabel)
-        checkInLabel.anchor(
-            top: profileImageView.bottomAnchor,
-            left: cardRectangleView.leftAnchor,
-            paddingTop: 18,
-            paddingLeft: 22
-        )
-        
-        self.addSubview(timeSpentLabel)
-        timeSpentLabel.anchor(
-            top: checkInLabel.topAnchor,
-            left: cardRectangleView.leftAnchor,
-            paddingLeft: 197)
-        
-        self.addSubview(checkInTimeLabel)
-        checkInTimeLabel.anchor(
-            top: checkInLabel.bottomAnchor,
-            left: checkInLabel.leftAnchor,
-            paddingTop: 4
-        )
-        
-        self.addSubview(userTimeSpentLabel)
-        userTimeSpentLabel.anchor(
-            top: checkInTimeLabel.topAnchor,
-            left: timeSpentLabel.leftAnchor
-        )
-        
-        self.addSubview(startTimeLabel)
-        startTimeLabel.anchor(
-            top: checkInTimeLabel.bottomAnchor,
-            left: checkInLabel.leftAnchor,
-            paddingTop: 18,
-            width: 100
-        )
-        
-        self.addSubview(endTimeLabel)
-        endTimeLabel.anchor(
-            top: userTimeSpentLabel.bottomAnchor,
-            right: cardRectangleView.rightAnchor,
-            paddingTop: 18,
-            paddingRight: 22
-        )
-        
-        self.addSubview(timeBar)
-        timeBar.anchor(
-            top: startTimeLabel.bottomAnchor,
-            left: cardRectangleView.leftAnchor,
-            right: cardRectangleView.rightAnchor,
-            paddingTop: 4,
-            paddingLeft: 22,
-            paddingRight: 22,
-            height: 8
-        )
-        
-        self.addSubview(checkInTimeBar)
-        checkInTimeBar.anchor(
-            top: timeBar.topAnchor,
-            left: timeBar.leftAnchor,
-            bottom: timeBar.bottomAnchor,
-            right: timeBar.rightAnchor,
-            paddingLeft: 30,
-            paddingRight: 100
-        )
-        
-        self.addSubview(checkOutButton)
-        checkOutButton.anchor(
-            top: timeBar.bottomAnchor,
-            left: cardRectangleView.leftAnchor,
-            bottom: cardRectangleView.bottomAnchor,
-            right: cardRectangleView.rightAnchor,
-            paddingTop: 13,
-            paddingLeft: 22,
-            paddingBottom: 16,
-            paddingRight: 22
-        )
+        self.addSubview(stack)
+        stack.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 90, paddingLeft: 20, paddingRight: 20, height: 290)
+        checkOutButton.anchor(height: 50)
     }
 }

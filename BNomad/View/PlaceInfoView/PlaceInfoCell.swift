@@ -37,8 +37,12 @@ class PlaceInfoCell: UICollectionViewCell {
                 return
             }
             let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
-            self.chekedinViewLabel.text = "\(history.count)명 체크인"
-            self.averageTimeLabel.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: todayCheckInHistory)
+            self.chekedinViewLabel.text = "\(history.count)명의 노마더"
+            let fullText = chekedinViewLabel.text ?? ""
+            let attribtuedString = NSMutableAttributedString(string: fullText)
+            let range = (fullText as NSString).range(of: "\(history.count)명")
+            attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
+            chekedinViewLabel.attributedText = attribtuedString
         }
     }
 
@@ -51,96 +55,124 @@ class PlaceInfoCell: UICollectionViewCell {
     
     private var distanceLabel: UILabel = {
         let distanceLabel = UILabel()
-        distanceLabel.text = "1.5 km"
         distanceLabel.textColor = CustomColor.nomadGray1
         distanceLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return distanceLabel
     }()
     
-    
-    let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일"
-        return formatter
-    }()
-    
-    lazy var dateLabel: UILabel = {
-        let dateLabel = UILabel()
-        dateLabel.text = formatter.string(from: Date())
-        dateLabel.textColor = CustomColor.nomadBlack
-        dateLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
-        return dateLabel
-    }()
-    
-    var detailedCheckinListButton: UIButton = {
-        let detailedCheckinListButton = UIButton()
-        detailedCheckinListButton.backgroundColor = CustomColor.nomadGray3
-        detailedCheckinListButton.layer.cornerRadius = 12
-        return detailedCheckinListButton
-    }()
-    
     lazy var chekedinViewLabel: UILabel = {
         let chekedinViewLabel = UILabel()
-        chekedinViewLabel.text = ""
         chekedinViewLabel.textColor = CustomColor.nomadBlack
         chekedinViewLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
         return chekedinViewLabel
     }()
     
-    lazy var averageTimeLabel: UILabel = {
-        let averageTimeLabel = UILabel()
-        averageTimeLabel.text = ""
-        averageTimeLabel.textColor = CustomColor.nomadGray1
-        averageTimeLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
-        return averageTimeLabel
+    let verticalDivider: UILabel = {
+        let verticalDivider = UILabel()
+        verticalDivider.backgroundColor = CustomColor.nomadBlack
+        return verticalDivider
     }()
     
-    private let ProfileCheckedImage: UIImageView = {
-        let ProfileCheckedImage = UIImageView()
-        ProfileCheckedImage.image = UIImage(named: "ProfileChecked")
-        return ProfileCheckedImage
+    lazy var questLabel: UILabel = {
+        let questLabel = UILabel()
+        questLabel.text = "5개의 밋업"
+        questLabel.textColor = CustomColor.nomadBlack
+        questLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        let fullText = questLabel.text ?? ""
+        let attribtuedString = NSMutableAttributedString(string: fullText)
+        let range = (fullText as NSString).range(of: "5개")
+        attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
+        questLabel.attributedText = attribtuedString
+        
+        return questLabel
     }()
-
-
+    
+    lazy var checkInButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("체크인 하기", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = CustomColor.nomadBlue
+        button.layer.cornerRadius = 8
+//        button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
+//        button.isHidden = self.isCheckedIn ? true : false
+        return button
+    }()
+    
+    let horizontalDivider: UILabel = {
+        let horizontalDivider = UILabel()
+        horizontalDivider.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider
+    }()
     // 전화 연결 기능 구현하기
     // 전화 번호 바인딩 (place.contact)
-    var configCallButton: UIButton.Configuration = {
-        var configCallButton = UIButton.Configuration.filled()
-        configCallButton.image = UIImage(systemName: "phone")
-        configCallButton.imagePadding = 1
-        configCallButton.buttonSize = .mini
-        configCallButton.baseBackgroundColor = .white
-        configCallButton.baseForegroundColor = .black
-        return configCallButton
+    let callButton: UIButton = {
+        let callButton = UIButton()
+        callButton.setImage(UIImage(systemName: "phone"), for: .normal)
+        callButton.setPreferredSymbolConfiguration(.init(pointSize: 19, weight: .regular, scale: .default), forImageIn: .normal)
+        callButton.tintColor = CustomColor.nomadBlack
+        return callButton
     }()
-    
+    let phoneNumberLable: UILabel = {
+        let phoneNumberLable = UILabel()
+        phoneNumberLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
+        phoneNumberLable.textColor = CustomColor.nomadBlack
+        return phoneNumberLable
+    }()
+        
+        
+    let horizontalDivider1: UILabel = {
+        let horizontalDivider1 = UILabel()
+        horizontalDivider1.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider1
+    }()
     // 주소 복사 기능 구현
     // 주소 바인딩 (place.address)
-    var configmapButton: UIButton.Configuration = {
-        var configmapButton = UIButton.Configuration.filled()
-        configmapButton.image = UIImage(systemName: "map")
-        configmapButton.imagePadding = 1
-        configmapButton.buttonSize = .mini
-        configmapButton.baseBackgroundColor = .white
-        configmapButton.baseForegroundColor = .black
-        return configmapButton
+    let mapButton: UIButton = {
+        let mapButton = UIButton()
+        mapButton.setImage(UIImage(systemName: "map"), for: .normal)
+        mapButton.setPreferredSymbolConfiguration(.init(pointSize: 19, weight: .regular, scale: .default), forImageIn: .normal)
+        mapButton.tintColor = CustomColor.nomadBlack
+        return mapButton
     }()
-    private let dotImg : UIImageView = {
-        let dotImg = UIImageView()
-        dotImg.image = UIImage(named: "Dot")
-        return dotImg
-    }()
-    private let dotImg2 : UIImageView = {
-        let dotImg2 = UIImageView()
-        dotImg2.image = UIImage(named: "Dot")
-        return dotImg2
+    let addressLabel: UILabel = {
+        let addressLable = UILabel()
+        addressLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
+        addressLable.textColor = CustomColor.nomadBlack
+        return addressLable
     }()
     
+    private var chevronDirection: String = "chevron.down"
+    
+    private lazy var openOperatingTimeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: chevronDirection)?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.addTarget(self, action: #selector(openOrClose), for: .touchUpInside)
+        return button
+    }()
+    
+    let horizontalDivider2: UILabel = {
+        let horizontalDivider2 = UILabel()
+        horizontalDivider2.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider2
+    }()
+    let clockButton: UIButton = {
+        let clockButton = UIButton()
+        clockButton.setImage(UIImage(systemName: "clock"), for: .normal)
+        clockButton.setPreferredSymbolConfiguration(.init(pointSize: 19, weight: .regular, scale: .default), forImageIn: .normal)
+        clockButton.tintColor = CustomColor.nomadBlack
+        return clockButton
+    }()
+    let horizontalDivider3: UILabel = {
+        let horizontalDivider3 = UILabel()
+        horizontalDivider3.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider3
+    }()
     //영업시간 외에 영업끝 함수 만들기
     private var operatingStatusLabel: UILabel = {
          var operatingStatusLabel = UILabel()
         operatingStatusLabel.text = "영업중"
-        operatingStatusLabel.font = .preferredFont(forTextStyle: .body, weight: .semibold)
+        operatingStatusLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         operatingStatusLabel.textColor = CustomColor.nomadBlack
          return operatingStatusLabel
      }()
@@ -148,23 +180,19 @@ class PlaceInfoCell: UICollectionViewCell {
     // 영업시간 데이터 없음
     private var operatingTimeLabel: UILabel = {
          var operatingTimeLabel = UILabel()
-        operatingTimeLabel.text = "9 : 00 ~ 21 : 00"
-        operatingTimeLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        operatingTimeLabel.numberOfLines = 1
+        operatingTimeLabel.lineBreakMode = .byWordWrapping
+        operatingTimeLabel.text = "            9 : 00 ~ 21 : 00\n\n월 9 : 00 ~ 21 : 00          토 9 : 00 ~ 21 : 00\n화 9 : 00 ~ 21 : 00          일 9 : 00 ~ 21 : 00\n수 9 : 00 ~ 21 : 00\n목 9 : 00 ~ 21 : 00\n금 9 : 00 ~ 21 : 00"
+        operatingTimeLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         operatingTimeLabel.textColor = CustomColor.nomadBlack
+
          return operatingTimeLabel
      }()
-    
-    lazy var callButton = UIButton(configuration: self.configCallButton, primaryAction: UIAction(handler: { action in
-        print("전화로 이어주게나,,")
-    }))
-    lazy var mapButton = UIButton(configuration: self.configmapButton, primaryAction: nil)
 
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
-        
         configureUI()
     }
     
@@ -177,45 +205,63 @@ class PlaceInfoCell: UICollectionViewCell {
     private func configureUI() {
         self.addSubview(placeNameLabel)
         self.addSubview(distanceLabel)
-        self.addSubview(dateLabel)
-        self.addSubview(detailedCheckinListButton)
         self.addSubview(chekedinViewLabel)
-        self.addSubview(averageTimeLabel)
-        self.addSubview(ProfileCheckedImage)
+        self.addSubview(verticalDivider)
+        self.addSubview(questLabel)
+        self.addSubview(checkInButton)
+        self.addSubview(horizontalDivider)
         self.addSubview(callButton)
+        self.addSubview(phoneNumberLable)
+        self.addSubview(horizontalDivider1)
         self.addSubview(mapButton)
-        self.addSubview(dotImg)
-        self.addSubview(dotImg2)
+        self.addSubview(horizontalDivider2)
+        self.addSubview(clockButton)
         self.addSubview(operatingStatusLabel)
         self.addSubview(operatingTimeLabel)
-
-        
+        self.addSubview(openOperatingTimeButton)
+        self.addSubview(horizontalDivider3)
+        self.addSubview(addressLabel)
         setAttributes()
         guard let place = place else { return }
         mappingPlaceData(place)
     }
     
     private func setAttributes() {
-        
-        placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 45, paddingLeft: 18)
+        placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
-        dateLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 97, paddingLeft: 18)
-        detailedCheckinListButton.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 121, paddingLeft: 17, paddingRight: 17, height: 86)
-        chekedinViewLabel.anchor(top: detailedCheckinListButton.topAnchor, left: detailedCheckinListButton.leftAnchor, paddingTop: 22, paddingLeft: 17)
-        averageTimeLabel.anchor(top: detailedCheckinListButton.topAnchor, left: detailedCheckinListButton.leftAnchor, paddingTop: 47, paddingLeft: 17)
-        ProfileCheckedImage.anchor(top: detailedCheckinListButton.topAnchor, right: detailedCheckinListButton.rightAnchor, paddingTop: 9, paddingRight: 13)
-        callButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 20)
-        mapButton.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 230, paddingLeft: 74)
-        dotImg.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 64)
-        dotImg2.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 243, paddingLeft: 119)
-        operatingStatusLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 138)
-        operatingTimeLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 235, paddingLeft: 197)
+        chekedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
+        verticalDivider.anchor(top: placeNameLabel.bottomAnchor, left: chekedinViewLabel.rightAnchor, paddingTop: 11, paddingLeft: 35, width: 1, height: 15)
+        questLabel.anchor(top: placeNameLabel.bottomAnchor, left: verticalDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
+        horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20, height: 1)
+        callButton.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
+        phoneNumberLable.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        horizontalDivider1.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
+        mapButton.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
+        addressLabel.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
+        clockButton.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
+        operatingStatusLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        operatingTimeLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        openOperatingTimeButton.anchor(top: horizontalDivider2.bottomAnchor, right: self.rightAnchor, paddingTop: 9, paddingRight: 38)
+        horizontalDivider3.anchor(top: operatingTimeLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 20, paddingRight: 20, height: 1)
+        checkInButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
     }
     
     func mappingPlaceData(_ place: Place) {
-        
         placeNameLabel.text = place.name
-        
+        addressLabel.text = place.address
+        phoneNumberLable.text = place.contact
     }
-
+    @objc func openOrClose() {
+        if self.chevronDirection == "chevron.down" {
+            self.chevronDirection = "chevron.up"
+            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.up")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+            self.operatingTimeLabel.numberOfLines = 0
+        } else if self.chevronDirection == "chevron.up" {
+            self.chevronDirection = "chevron.down"
+            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.down")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
+            self.operatingTimeLabel.numberOfLines = 1
+        } else { return }
+    }
 }
+

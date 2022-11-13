@@ -15,37 +15,42 @@ class VisitingInfoCell: UICollectionViewCell {
     var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
-    var checkInHistoryForCalendar: [CheckIn]? {
+    var checkinHistoryForList: CheckIn? {
         didSet {
-            viewOption = "calendar"
-            cardDataList = []
-            guard let checkInHistory = checkInHistoryForCalendar else { return }
-            for checkin in checkInHistory {
-                if checkin.date == thisCellsDate {
-                    self.cardDataList.append(checkin)
-                }
-            }
+            guard let checkInHistory = checkinHistoryForList else { return }
+            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
+            nameLabel.text = place?.name
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
+
+            let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
+            self.checkinTimeLabel.text = checkinTime
             
-            if cardDataList.count != 0 {
-                cardDataList.forEach {
-                    let checkinTime = dateFormatter.string(from: $0.checkInTime)
+            let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+
+        }
+    }
+    
+    var checkInHistoryForCalendar: CheckIn? {
+        didSet {
+            guard let checkInHistory = checkInHistoryForCalendar else { return }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            
+                    let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
                     self.checkinTimeLabel.text = checkinTime
                     
-                    let stayedTime = Int(($0.checkOutTime?.timeIntervalSince($0.checkInTime) ?? 0) / 60)
+                    let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
                     self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
-                }
-            } else {
-                self.checkinTimeLabel.text = ""
-                self.stayedTimeLabel.text = ""
-            }
-            let lastCheckIn = cardDataList.last
-            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+                
+
+            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
             nameLabel.text = place?.name
         }
     }
+
     
     var checkInHistoryForProfile: [CheckIn]? {
         didSet {

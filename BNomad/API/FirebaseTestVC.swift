@@ -8,10 +8,10 @@
 import UIKit
 
 class FirebaseTestVC: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // // 모든 place 가져오기
         // fetchPlaceAll()
         
@@ -23,10 +23,10 @@ class FirebaseTestVC: UIViewController {
         
         // // user 수정하기
         // updateUser()
-
+        
         // // user의 모든 체크인 데이터 가져오기
         // fetchCheckInHistoryUser()
-
+        
         // // 특정 place의 특정 날짜 체크인 데이터 가져오기 observeSingleEvent
         // fetchCheckInHistoryPlace()
         
@@ -37,9 +37,27 @@ class FirebaseTestVC: UIViewController {
         // fetchCheckInHistoryAll()
         
         // checkin 후 checkOut
-        setCheckIn() { user in
-            self.setCheckOut(user: user)
-        }
+        // setCheckIn() { user in
+        //     self.setCheckOut(user: user)
+        // }
+        
+        // // meetUp 생성
+        // createMeetUp()
+        
+        // // place의 특정 날 meetUp 가져오기
+        // fetchMeetUpPlace()
+        
+        // // 특정 meetUpUid의 meetUp 가져오기
+        // fetchMeetUp()
+        
+        // // user의 모든 meetUpUid 가져오기
+        // fetchMeetUpUidFromUser()
+        
+        // // meetUp 참가하기
+        // participateMeetUp()
+        
+        // // profile 이미지 업로드
+        uploadUserProfileImage()
     }
     
     func fetchPlaceAll() {
@@ -49,7 +67,7 @@ class FirebaseTestVC: UIViewController {
     }
     
     func fetchUser() {
-        let currentUserUid = "01b651da-79ce-4089-85ad-966d3a0463b0"
+        let currentUserUid = "04FDF4B0-5975-4D9F-9424-41092F5112E2"
         FirebaseManager.shared.fetchUser(id: currentUserUid) { user in
             print(user)
         }
@@ -63,7 +81,7 @@ class FirebaseTestVC: UIViewController {
         var user = DummyData.user1
         user.introduction = "hi~"
         user.nickname = "liw"
-
+        
         FirebaseManager.shared.setUser(user: user)
     }
     
@@ -88,7 +106,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory)
         }
     }
-
+    
     func fetchCheckInHistoryObserve() {
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
         let date: Date? = "2022-10-23".toDate()
@@ -102,7 +120,7 @@ class FirebaseTestVC: UIViewController {
             print(checkInHistory[0])
         }
     }
-
+    
     func fetchCheckInHistoryAll() {
         let placeUid: String = "1db94005-c8bc-4a6a-a1ea-5c714b1c8bdc"
         
@@ -122,7 +140,7 @@ class FirebaseTestVC: UIViewController {
             } else {
                 user.checkInHistory?.append(checkIn)
             }
-
+            
             print("checkIn 완료")
             print(checkIn)
             print(user.isChecked)
@@ -130,10 +148,10 @@ class FirebaseTestVC: UIViewController {
             completion(user)
         }
     }
-
+    
     func setCheckOut(user: User) {
         var user = user
-
+        
         guard
             let checkIn = user.currentCheckIn,
             let checkInhistory = user.checkInHistory
@@ -141,7 +159,7 @@ class FirebaseTestVC: UIViewController {
             print("checkIn 이력이 없습니다.")
             return
         }
-
+        
         FirebaseManager.shared.setCheckOut(checkIn: checkIn) { checkIn in
             let index = checkInhistory.firstIndex { $0.checkInUid == checkIn.checkInUid }
             guard let index = index else {
@@ -149,12 +167,68 @@ class FirebaseTestVC: UIViewController {
                 return
             }
             user.checkInHistory?[index] = checkIn
-
+            
             print("checkOut 완료")
             print(checkIn)
             print(user.isChecked)
             print(user.currentPlaceUid)
         }
     }
-
+    
+    func createMeetUp() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+        let organizerUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
+        
+        let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: organizerUid, title: "국밥 먹을 사람?", meetUpPlaceName: "화장실 앞", time: Date(), maxPeopleNum: 4, description: "국최몇?")
+        
+        FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in
+            print(meetUp)
+        }
+    }
+    
+    func fetchMeetUpPlace() {
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80"
+        
+        FirebaseManager.shared.fetchMeetUpHistory(placeUid: placeUid) { meetUpHistory in
+            print(meetUpHistory)
+        }        
+    }
+    
+    func fetchMeetUpUidFromUser() {
+        let userUid = "7F57CF97-E200-4496-92C7-E7B30311D4F8"
+        
+        FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid) { meetUpUid in
+            print(meetUpUid)
+        }
+    }
+    
+    func fetchMeetUp() {
+        let meetUid: String = "69F0CEAE-AD5C-4854-B6DE-1B33B8C6DBA7"
+        
+        FirebaseManager.shared.fetchMeetUp(meetUpUid: meetUid) { meetUp in
+            print(meetUp)
+        }
+    }
+    
+    func participateMeetUp() {
+        let userUid = "0735EBD4-DF99-44B8-B290-24DFE3D69E27" // 진은좀
+        let meetUpUid = "E5E9F761-F77B-423D-805C-01153522735C"
+        let placeUid = "05c61154-45fb-4f2e-99ae-e3f4d5ed8d80" // 커뮤니티 24시
+        
+        FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+            print("참여 완료")
+        }
+    }
+    
+    func uploadUserProfileImage() {
+        guard let image = UIImage(named: "dummyProfile.jpg") else {
+            print("DEBUG - fail image load")
+            return
+        }
+        let userUid = "04FDF4B0-5975-4D9F-9424-41092F5112E2"
+        
+        FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
+            print(url)
+        }
+    }
 }

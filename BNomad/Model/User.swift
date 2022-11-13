@@ -13,6 +13,7 @@ struct User {
     var occupation: String?
     var introduction: String?
     var checkInHistory: [CheckIn]?
+    var profileImageUrl: String?
 
     var currentCheckIn: CheckIn? { checkInHistory?.first { $0.date == Date().toDateString() && $0.checkOutTime == nil} }
     var currentPlaceUid: String? { currentCheckIn?.placeUid }

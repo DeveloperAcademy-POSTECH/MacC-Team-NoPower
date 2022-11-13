@@ -35,11 +35,11 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
                     self.checkoutTime = formatter.string(from: checkin.checkOutTime ?? Date()).components(separatedBy: "-")
                     
                     //그래프의 시작/끝 픽셀 위치 잡아주는 계산
-                    let startAnchorCalculater = (((Double(checkinTime[0]) ?? 0) + (Double(checkinTime[1]) ?? 0) * Double(1.0/60.0)) - Double(9)) * Double(154.0/15.0)
-                    let endAnchorCalculater = Double(154.0) - ((((Double(checkoutTime[0]) ?? 0) + (Double(checkoutTime[1]) ?? 0) * Double(1.0/60.0)) - Double(9)) * Double(154.0/15.0))
+                    let startAnchorCalculater = (((Double(checkinTime[0]) ?? 0) + (Double(checkinTime[1]) ?? 0) * Double(1.0/60.0)) - Double(9)) * Double(154.0/9.0)
+                    let endAnchorCalculater = Double(154.0) - ((((Double(checkoutTime[0]) ?? 0) + (Double(checkoutTime[1]) ?? 0) * Double(1.0/60.0)) - Double(9)) * Double(154.0/9.0))
                     
-                    startAnchor = CGFloat(startAnchorCalculater)
-                    endAnchor = CGFloat(endAnchorCalculater)
+                    startAnchor = CGFloat(Int(startAnchorCalculater))
+                    endAnchor = CGFloat(Int(endAnchorCalculater))
                     
                     contentView.addSubview(graphRectView)
                     graphRectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: self.startAnchor, paddingBottom: self.endAnchor)

@@ -8,18 +8,20 @@
 import UIKit
 import MapKit
 
-protocol ClearSelectedAnnotation {
-    func clearAnnotation(view: MKAnnotation)
-}
 
-protocol UpdateFloating {
-    func checkInFloating()
-}
 
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
-    var selectedPlace: Place?
+    var selectedPlace: Place? {
+        didSet {
+            guard let selectedPlace = selectedPlace else { return }
+            FirebaseManager.shared.fetchCheckInHistory(placeUid: selectedPlace.placeUid) { checkInHistory in
+                let history = checkInHistory.filter { $0.checkOutTime == nil }
+                self.checkInHistory = history
+            }
+        }
+    }
         
     let locationManager = CLLocationManager()
     lazy var currentLocation = locationManager.location
@@ -29,11 +31,22 @@ class PlaceInfoModalViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
-    let collectionView: UICollectionView = {
+    let placeInfoCollectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
-        return cv
+        let placeInfoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        return placeInfoCollectionView
     }()
+    
+    var checkInHistory: [CheckIn]? {
+        didSet {
+            guard let checkInHistory = checkInHistory else { return }
+            numberOfUsers = checkInHistory.count
+            placeInfoCollectionView.reloadData()
+        }
+    }
+    
+    private var numberOfUsers: Int = 0
+
 
     // TODO: - checkIn, checkOut 버튼 하나로 통일 후 user.isChecked 기반으로 버튼 상태 변경
     lazy var checkInButton: UIButton = {
@@ -43,7 +56,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
-//        button.isHidden = self.isCheckedIn ? true : false
+        
         return button
     }()
     
@@ -54,7 +67,7 @@ class PlaceInfoModalViewController: UIViewController {
         button.backgroundColor = CustomColor.nomadGray1
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(checkOut), for: .touchUpInside)
-//        button.isHidden = self.isCheckedIn ? false : true
+
         return button
     }()
     
@@ -65,7 +78,6 @@ class PlaceInfoModalViewController: UIViewController {
         configureCollectionView()
         configureCheckInButton()
         setupSheet()
-//        fetchPlaceAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,13 +91,6 @@ class PlaceInfoModalViewController: UIViewController {
         delegateForClearAnnotation?.clearAnnotation(view: MKAnnotationFromPlace.convertPlaceToAnnotation(selectedPlace))
     }
     
-//    func fetchPlaceAll() {
-//        FirebaseManager.shared.fetchPlaceAll { place in
-//            self.selectedPlace = place
-////            print(place)
-//        }
-//    }
-    
     // MARK: - Actions
     
     @objc func checkOut() {
@@ -93,8 +98,6 @@ class PlaceInfoModalViewController: UIViewController {
         let checkOutAlert = UIAlertController(title: "체크아웃", message: "체크아웃하시겠습니까?", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
-            // checkIn Uid 받아오기
-
             guard
                 var checkIn = self.viewModel.user?.currentCheckIn
             else {
@@ -138,17 +141,26 @@ class PlaceInfoModalViewController: UIViewController {
     @objc func checkIn() {
         print("CHECK IN")        
         if !viewModel.isLogIn {
-            let signUpViewController = SignUpViewController()
-            signUpViewController.modalPresentationStyle = .fullScreen
-            present(signUpViewController, animated: true)
+            loginCheck()
         } else {
             distanceChecker()
         }
     }
     
-    // 맵의 특정 장소가 500미터 반경 이내인지 체크
+    func loginCheck() {
+        print("loginCheck")
+        let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 체크인하실 수 있습니다.", preferredStyle: .alert)
+        checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
+            let controller = SignUpViewController() // 추후 로그인뷰로 변경
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true)
+        }))
+        present(checkOutAlert, animated: true)
+    }
+    
     func distanceChecker() {
-        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 100000000500.0, identifier: "반경 500m")
+        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 1000, identifier: "반경 500m")
         
 
               // TODO: - 하드 코딩된 부분 변경 -> "노마드 제주에 체크인 하시겠습니까?" ---- 완료
@@ -180,8 +192,11 @@ class PlaceInfoModalViewController: UIViewController {
                 self.delegateForFloating?.checkInFloating()
                 let controller = PlaceCheckInViewController()
                 controller.selectedPlace = selectedPlace
-                controller.modalPresentationStyle = .fullScreen
-                self.present(controller, animated: true)
+                let navigationController = UINavigationController(rootViewController: controller)
+                navigationController.modalPresentationStyle = .fullScreen
+                navigationController.navigationItem.title = selectedPlace.name
+                navigationController.navigationBar.tintColor = CustomColor.nomadBlue
+                self.present(navigationController, animated: true, completion: nil)
             }))
             present(checkInAlert, animated: true)
         } else {
@@ -209,19 +224,15 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func configureCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = CustomColor.nomadGray3
-        collectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
-        collectionView.register(BasicInfoCell.self, forCellWithReuseIdentifier: BasicInfoCell.cellIdentifier)
-        collectionView.register(SummaryInfoCell.self, forCellWithReuseIdentifier: SummaryInfoCell.cellIdentifier)
-        view.addSubview(collectionView)
-        
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        placeInfoCollectionView.dataSource = self
+        placeInfoCollectionView.delegate = self
+        placeInfoCollectionView.backgroundColor = .white
+        placeInfoCollectionView.register(PlaceInfoCell.self, forCellWithReuseIdentifier: PlaceInfoCell.cellIdentifier)
+        placeInfoCollectionView.register(ReviewInfoCell.self, forCellWithReuseIdentifier: ReviewInfoCell.cellIdentifier)
+        placeInfoCollectionView.register(WithNomadHeader.self, forCellWithReuseIdentifier: WithNomadHeader.identifier)
+        placeInfoCollectionView.register(CheckedProfileListViewCell.self, forCellWithReuseIdentifier: CheckedProfileListViewCell.identifier)
+        view.addSubview(placeInfoCollectionView)
+        placeInfoCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     func configureCheckInButton() {
@@ -256,23 +267,39 @@ class PlaceInfoModalViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 
 extension PlaceInfoModalViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 3 {
+            return self.checkInHistory?.count ?? 0
+        }
         return 1
     }
-    //enum 공부
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoCell.cellIdentifier, for: indexPath) as? PlaceInfoCell else { return UICollectionViewCell() }
             cell.position = currentLocation
             cell.place = selectedPlace
+            
             return cell
-        } else if indexPath.section == 1 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BasicInfoCell.cellIdentifier, for: indexPath) as? BasicInfoCell else { return UICollectionViewCell() }
-            cell.place = selectedPlace
+        }
+        else if indexPath.section == 1 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
             return cell
         }
         else if indexPath.section == 2 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SummaryInfoCell.cellIdentifier, for: indexPath) as? SummaryInfoCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WithNomadHeader.identifier, for: indexPath) as? WithNomadHeader else { return UICollectionViewCell() }
+            cell.numberOfUsers = numberOfUsers
+           
+            return cell
+        }
+        else if indexPath.section == 3 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
+            
+            guard let checkIn = checkInHistory else { return UICollectionViewCell() }
+            let userUids = checkIn.compactMap {$0.userUid}
+            cell.userUid = userUids[indexPath.row]
+            
             return cell
         }
         
@@ -280,7 +307,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 4
     }
 }
 
@@ -296,20 +323,35 @@ extension PlaceInfoModalViewController: UICollectionViewDelegate {
 
 extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width) / 1, height: (view.frame.width) / 1)
-    }
-    //셀 간격
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        guard let flow = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize()
+        }
+        
+        let viewWidth = view.bounds.width
+        let sectionZeroCardHeight: CGFloat = 266
+        let sectionZeroBottomPadding: CGFloat = 25
+        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
+        
+        if indexPath.section == 0 {
+            return CGSize(width: viewWidth, height: 400)
+        } else if indexPath.section == 1 {
+            return CGSize(width: viewWidth, height: 370)
+        } else if indexPath.section == 2 {
+            return CGSize(width: viewWidth, height: 27)
+        } else if indexPath.section == 3 {
+            flow.sectionInset.top = 13
+            
+            return CGSize(width: 349, height: 68)
+        } else {
+            return CGSize(width: viewWidth, height: 0)
+        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-        
-    }
     // 셀 크기 마진
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets (top: 0, left: 10, bottom: 8, right: 10)
+        return UIEdgeInsets (top: 0, left: 10, bottom: 0, right: 10)
     }
+    
 }

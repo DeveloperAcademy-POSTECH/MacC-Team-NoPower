@@ -11,7 +11,8 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    // var user: User
+    static let identifier = "CheckedProfileListViewCell"
+    
     var userUid: String? {
         didSet {
             guard let userUid = userUid else { return }
@@ -30,11 +31,9 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         }
     }
     
-    static let identifier = "CheckedProfileListViewCell"
-    
     private let userProfileImg: UIImageView = {
         let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(systemName: "person.crop.circle.fill")
+        userProfileImg.image = UIImage(systemName: "person.circle.fill")
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
         return userProfileImg
@@ -42,14 +41,14 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title3, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let occupationLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -57,7 +56,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     
     private let noteLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -67,6 +66,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        shadowSetting()
     }
     
     required init?(coder: NSCoder) {
@@ -74,21 +74,28 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     }
     
     func render() {
-        // 프로필 이미지
         self.addSubview(userProfileImg)
-        userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 20, width: 56, height: 56)
+        userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
         
-        // 사용자 이름
-        self.addSubview(usernameLabel)
-        usernameLabel.anchor(left: userProfileImg.rightAnchor, bottom: userProfileImg.centerYAnchor, right: self.rightAnchor, paddingLeft: 24, paddingBottom: 2, paddingRight: 100)
+        let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
+        nameJobStack.axis = .horizontal
+        nameJobStack.distribution = .fill
+        nameJobStack.alignment = .firstBaseline
+        nameJobStack.spacing = 10
+        self.addSubview(nameJobStack)
+        nameJobStack.anchor(top: self.topAnchor, left: userProfileImg.rightAnchor, right: self.rightAnchor, paddingTop: 14, paddingLeft: 10, paddingRight: 20, height: 20)
         
-        // 직업
-        self.addSubview(occupationLabel)
-        occupationLabel.anchor(left: usernameLabel.rightAnchor, bottom: userProfileImg.centerYAnchor, right: self.rightAnchor, paddingLeft: 10, paddingBottom: 2, paddingRight: 20)
-        
-        // 상태 메세지
         self.addSubview(noteLabel)
-        noteLabel.anchor(top: userProfileImg.centerYAnchor, left: usernameLabel.leftAnchor, right: self.rightAnchor, paddingTop: 2, paddingRight: 20)
+        noteLabel.anchor(top: userProfileImg.centerYAnchor, left: nameJobStack.leftAnchor, right: self.rightAnchor, paddingTop: 5, paddingRight: 20)
+    }
+    
+    func shadowSetting() {
+        self.backgroundColor = .systemBackground
+        self.layer.cornerRadius = 12
+        self.layer.masksToBounds = false
+        self.layer.shadowRadius = 15
+        self.layer.shadowOffset = CGSize(width: 3, height: 4)
+        self.layer.shadowOpacity = 0.05
     }
 }

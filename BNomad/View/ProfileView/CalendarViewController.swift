@@ -15,16 +15,29 @@ class CalendarViewController: UIViewController {
     static var checkInHistory: [CheckIn]?
     
     var monthAddedMemory: Int = 0
+    var calendarToggle: Bool = true
     private var selectedCell: Int? = Contents.todayDate()["day"]
     let calendarDateFormatter = CalendarDateFormatter()
+    var cardDataList: [CheckIn] = []
     
+    private let visitCardListView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor(hex: "F5F5F5")
+        collectionView.isScrollEnabled = true
+        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
     
-    private let CalendarCollectionView: UICollectionView = {
+    private let calendarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         collectionView.layer.cornerRadius = 20
         collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
         
@@ -32,7 +45,7 @@ class CalendarViewController: UIViewController {
         return collectionView
     }()
     
-    private let VisitInfoView: UICollectionView = {
+    private let visitInfoView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -94,9 +107,12 @@ class CalendarViewController: UIViewController {
             label.text = $0
             label.font = .preferredFont(forTextStyle: .footnote, weight: .semibold)
             label.textColor = .black
-            if $0 == "일" || $0 == "토" {
+            if $0 == "일" {
+                label.textColor = CustomColor.nomadRed
+            } else if $0 == "토" {
                 label.textColor = CustomColor.nomadSkyblue
             }
+            
             label.textAlignment = .center
             stack.addArrangedSubview(label)
         }
@@ -121,22 +137,34 @@ class CalendarViewController: UIViewController {
         return button
     }()
     
+    private let toggleButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .red
+        button.frame = CGRect(origin: .zero, size: CGSize(width: 50, height: 20))
+        return button
+    }()
+    
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         selectedCell = (Contents.todayDate()["day"] ?? 0)+calendarDateFormatter.getStartingDayOfWeek(addedMonth: 0)-1 // 오늘로 셀렉티드셀 초기화
         
-        CalendarCollectionView.dataSource = self
-        CalendarCollectionView.delegate = self
+        calendarCollectionView.dataSource = self
+        calendarCollectionView.delegate = self
         
-        VisitInfoView.dataSource = self
-        VisitInfoView.delegate = self
+        visitInfoView.dataSource = self
+        visitInfoView.delegate = self
+        
+        visitCardListView.dataSource = self
+        visitCardListView.delegate = self
         
         plusMonthButton.addTarget(self, action: #selector(plusMonthTapButton), for: .touchUpInside)
         minusMonthButton.addTarget(self, action: #selector(minusMonthTapButton), for: .touchUpInside)
+        toggleButton.addTarget(self, action: #selector(toggleTapButton), for: .touchUpInside)
         
         configureUI()
         render()
@@ -153,7 +181,7 @@ class CalendarViewController: UIViewController {
         selectedCell = nil
         
         calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
-        CalendarCollectionView.reloadData()
+        calendarCollectionView.reloadData()
         
     }
     
@@ -164,8 +192,27 @@ class CalendarViewController: UIViewController {
         selectedCell = nil
 
         calendarDateFormatter.updateCurrentMonthDays(addedMonth: monthAddedMemory)
-        CalendarCollectionView.reloadData()
+        calendarCollectionView.reloadData()
         
+    }
+    
+    @objc func toggleTapButton() {
+        calendarToggle.toggle()
+        if calendarToggle {
+            render()
+            visitCardListView.removeFromSuperview()
+        } else {
+            calendarCollectionView.removeFromSuperview()
+            calendarCollectionMonthHeader.removeFromSuperview()
+            visitInfoView.removeFromSuperview()
+            dayOfWeekStackView.removeFromSuperview()
+            minusMonthButton.removeFromSuperview()
+            plusMonthButton.removeFromSuperview()
+            
+            view.addSubview(visitCardListView)
+            visitCardListView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+                                     paddingTop: 105, paddingLeft: 14, paddingRight: 14, height: 600)
+        }
     }
     
     // MARK: - Helpers
@@ -176,8 +223,8 @@ class CalendarViewController: UIViewController {
     
     func render() {
         
-        view.addSubview(CalendarCollectionView)
-        CalendarCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+        view.addSubview(calendarCollectionView)
+        calendarCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
                                       paddingTop: 105, paddingLeft: 14, paddingRight: 14,
                                       height: 388)
         
@@ -186,11 +233,11 @@ class CalendarViewController: UIViewController {
 //        calendarCollectionYearHeader.centerX(inView: view)
         
         view.addSubview(calendarCollectionMonthHeader)
-        calendarCollectionMonthHeader.anchor(top: CalendarCollectionView.topAnchor, paddingTop: 10)
+        calendarCollectionMonthHeader.anchor(top: calendarCollectionView.topAnchor, paddingTop: 10)
         calendarCollectionMonthHeader.centerX(inView: view)
         
-        view.addSubview(VisitInfoView)
-        VisitInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+        view.addSubview(visitInfoView)
+        visitInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
                                 paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
         
 //        view.addSubview(VisitInfoHeader)
@@ -202,9 +249,12 @@ class CalendarViewController: UIViewController {
         dayOfWeekStackView.centerX(inView: view)
         
         view.addSubview(minusMonthButton)
-        minusMonthButton.anchor(top: CalendarCollectionView.topAnchor, left: dayOfWeekStackView.leftAnchor, paddingTop: 15)
+        minusMonthButton.anchor(top: calendarCollectionView.topAnchor, left: dayOfWeekStackView.leftAnchor, paddingTop: 15)
         view.addSubview(plusMonthButton)
-        plusMonthButton.anchor(top: CalendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15)
+        plusMonthButton.anchor(top: calendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15)
+        
+        view.addSubview(toggleButton)
+        toggleButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 100, paddingRight: 50)
         
     }
     
@@ -217,11 +267,14 @@ extension CalendarViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == CalendarCollectionView {
+        if collectionView == calendarCollectionView {
             return self.calendarDateFormatter.days.count
+        } else if collectionView == visitInfoView {
+            return cardDataList.count //TODO: 반응형 수정 필요
         } else {
-            return 1 //TODO: 반응형 수정 필요
+            return CalendarViewController.checkInHistory?.count ?? 0
         }
     }
     
@@ -233,32 +286,21 @@ extension CalendarViewController: UICollectionViewDelegate {
     
     //draw cells
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == CalendarCollectionView {
+        if collectionView == calendarCollectionView {
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CalendarCell.identifier , for: indexPath) as? CalendarCell else {
                 return UICollectionViewCell()
             }
-            cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
             //셀 설정 초기화
             cell.setNormalCell()
+            cell.removeTodayCell()
             
-            //오늘 및 주말 텍스트 색 설정
-            let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
-            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && monthAddedMemory == 0 {
-                cell.setTodayCell()
-            } else if indexPath.item%7 == 0 || indexPath.item%7 == 6 {
-                cell.setWeekendColor()
-            }
-            
-            //선택한 셀 테두리 설정
             if indexPath.item == selectedCell {
-                cell.setSelectedCell()
+                cell.drawCircleBackground(opt: "select")
             }
             
             //체크인한 날짜 도장 설정
-            //FIXME: 이번달 말고도 가능하게 해야됨 버그있음, 뷰컨에서 언래핑해야 수정가능
-            //TODO: 컬렉션뷰 안에 로직이 너무 많아서인지 반응이 느림 ㅜㅜ
             if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
                 let year = "2022"
                 let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
@@ -268,10 +310,26 @@ extension CalendarViewController: UICollectionViewDelegate {
                 cell.checkInHistory = CalendarViewController.checkInHistory //체크인 all data inject (: Checkin)
                 
             }
+            cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
+            
+            //오늘 및 주말 텍스트 색 설정
+            let startDay = calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)
+            if indexPath.item - startDay + 1 == Contents.todayDate()["day"] && monthAddedMemory == 0 {
+                cell.setWhiteText()
+            } else if indexPath.item%7 == 0 {
+                cell.setSundayColor()
+            } else if indexPath.item%7 == 6 {
+                cell.setSaturdayColor()
+            }
+            
+            //선택한 셀 흰글씨 설정
+            if indexPath.item == selectedCell {
+                cell.setWhiteText()
+            }
             
             return cell
             
-        } else {
+        } else if collectionView == visitInfoView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
                 return UICollectionViewCell()
             }
@@ -281,14 +339,26 @@ extension CalendarViewController: UICollectionViewDelegate {
             let day = String(format: "%02d", (selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
             let dateString = year+"-"+month+"-"+day
             
-            cell.backgroundColor = .white
+            cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20
             
             cell.thisCellsDate = dateString
-            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory
-            
+//            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory
+            cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
             return cell
             
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.backgroundColor = .systemBackground
+            cell.layer.cornerRadius = 20
+            
+            let checkinHistoryCount = CalendarViewController.checkInHistory?.count
+            cell.checkinHistoryForList = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.item-1]
+            
+            return cell
         }
     }
     
@@ -296,8 +366,21 @@ extension CalendarViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
-            CalendarCollectionView.reloadData()
-            VisitInfoView.reloadData()
+            let year = String(Contents.todayDate()["year"] ?? 0)
+            let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
+            let day = String(format: "%02d", (selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
+            let dateString = year+"-"+month+"-"+day
+            cardDataList = []
+            guard let checkInHistory = CalendarViewController.checkInHistory else { return }
+            for checkin in checkInHistory {
+                if checkin.date == dateString {
+                    cardDataList.append(checkin)
+                }
+            }
+            
+            
+            calendarCollectionView.reloadData()
+            visitInfoView.reloadData()
         }
     }
     
@@ -307,10 +390,10 @@ extension CalendarViewController: UICollectionViewDelegate {
 extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-        if collectionView == CalendarCollectionView {
+        if collectionView == calendarCollectionView {
             return CGSize(width: 358/8, height: 358/7)
         } else {
-            return CGSize(width: VisitInfoView.frame.width, height: 119)
+            return CGSize(width: visitInfoView.frame.width, height: 119)
         }
         
     }
@@ -322,13 +405,16 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
     
     //cell 종간 간격
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if collectionView == visitCardListView {
+            return CGFloat(20)
+        }
         return CGFloat(0)
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        if collectionView == CalendarCollectionView {
+        if collectionView == calendarCollectionView {
             return UIEdgeInsets(top: 75, left: 358/14, bottom: 0, right: 358/14)
         } else {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)

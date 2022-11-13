@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController {
         
     static var weekAddedMemory: Int = 0
     
+    var userFromListUid: String?
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -73,7 +75,6 @@ class ProfileViewController: UIViewController {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-//        collectionView.backgroundColor = .white
         collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
 
         return collectionView
@@ -105,7 +106,6 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
     }
     
@@ -117,9 +117,31 @@ class ProfileViewController: UIViewController {
     // MARK: - Actions
     
     @objc func moveToCalendar() {
-        CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
-        navigationController?.pushViewController(CalendarViewController(), animated: true)
+//        if userFromListUid == viewModel.user?.userUid || FirebaseAuth와 지금 viewModel.user가 같은 uid인지 체크 {
+            CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
+            navigationController?.pushViewController(CalendarViewController(), animated: true)
+//        } else {
+//            print("다른 사람의 캘린더뷰는 보지 못합니다")
+//        }
     }
+    
+    @objc func plusWeekTapButton() {
+        ProfileGraphCell.editWeek(edit: 1)
+        profileCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
+        
+        ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
+    }
+    
+    @objc func minusWeekTapButton() {
+        ProfileGraphCell.editWeek(edit: -1)
+        profileCollectionView.reloadData()
+        profileGraphCollectionView.reloadData()
+        
+        ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
+    }
+    
+    // MARK: - Helpers
 
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
         let size = image.size
@@ -159,25 +181,6 @@ class ProfileViewController: UIViewController {
         
         label.text = sundayDate+" ~ "+saturdayDate
     }
-        
-        
-    @objc func plusWeekTapButton() {
-        ProfileGraphCell.editWeek(edit: 1)
-        profileCollectionView.reloadData()
-        profileGraphCollectionView.reloadData()
-        
-        ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
-    }
-    
-    @objc func minusWeekTapButton() {
-        ProfileGraphCell.editWeek(edit: -1)
-        profileCollectionView.reloadData()
-        profileGraphCollectionView.reloadData()
-        
-        ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
-    }
-    
-    // MARK: - Helpers
     
     func configureUI() {
         view.backgroundColor = UIColor(hex: "F5F5F5")
@@ -222,14 +225,14 @@ extension ProfileViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if collectionView == profileCollectionView {
             return 3
-        }else {
+        } else {
             return 1
         }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == profileCollectionView {
             return 1
-        }else {
+        } else {
             return 7
         }
     }
@@ -279,7 +282,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 cell.layer.cornerRadius = 20
                 return cell
             }
-        }else {
+        } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCollectionCell.identifier , for: indexPath) as? ProfileGraphCollectionCell else {
                 return UICollectionViewCell()
             }
@@ -353,11 +356,10 @@ extension ProfileViewController: MovePage {
     }
 }
 
-
+// MARK: - EditNow
 extension ProfileViewController: EditNow {
     func editNow() {
         profileCollectionView.reloadData()
     }
-    
     
 }

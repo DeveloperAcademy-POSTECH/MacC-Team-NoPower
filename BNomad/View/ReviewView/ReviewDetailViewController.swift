@@ -17,7 +17,7 @@ class ReviewDetailViewController: UIViewController {
         button.layer.cornerRadius = 15
         button.tintColor = UIColor(hex: "3C3C43")?.withAlphaComponent(0.6)
         button.backgroundColor = UIColor(hex: "F2F2F7")
-//        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
+        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
         return button
     }()
     
@@ -113,6 +113,26 @@ class ReviewDetailViewController: UIViewController {
         return button
     }()
     
+    private lazy var checkButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("확인", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline, weight: .regular)
+        button.titleLabel?.textColor = .white
+        button.layer.cornerRadius = 8
+        button.backgroundColor = CustomColor.nomadBlue
+        button.addTarget(self, action: #selector(saveReview), for: .touchUpInside)
+        return button
+    }()
+    
+    // MARK: - LifeCycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+    }
+    
+    // MARK: - Actions
+    
     @objc func removePhoto() {
         let actionsheet =  UIAlertController(title: "사진을 지우시겠습니까?", message: nil, preferredStyle: .alert)
         let no = UIAlertAction(title: "취소", style: .cancel) { action in
@@ -142,6 +162,17 @@ class ReviewDetailViewController: UIViewController {
         present(actionsheet, animated: true, completion: nil)
     }
     
+    @objc func saveReview() {
+        // TODO: alert이후에 저장을 하거나, 바로 저장을 하거나 선택해야함
+        self.dismiss(animated: true)
+    }
+    
+    @objc func dismissPage() {
+        self.dismiss(animated: true)
+    }
+    
+    // MARK: - Helpers
+    
     func showCamera() {
         let camera = UIImagePickerController()
         camera.sourceType = .camera
@@ -158,17 +189,6 @@ class ReviewDetailViewController: UIViewController {
         album.delegate = self
         present(album, animated: true, completion: nil)
     }
-
-    private lazy var checkButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("확인", for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .headline, weight: .regular)
-        button.titleLabel?.textColor = .white
-        button.layer.cornerRadius = 8
-        button.backgroundColor = CustomColor.nomadBlue
-//        button.addTarget(self, action: #selector(), for: .touchUpInside)
-        return button
-    }()
     
     private func configureUI() {
         view.backgroundColor = .white
@@ -190,12 +210,6 @@ class ReviewDetailViewController: UIViewController {
         checkButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 33, paddingRight: 20, height: 46)
     }
 
-    // MARK: - LifeCycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureUI()
-    }
 
 }
 

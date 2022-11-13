@@ -8,7 +8,6 @@
 import UIKit
 import MapKit
 
-
 // TODO: - 하드코딩된 부분 전부 변경 필요. Place 객체 받아서.
 class CustomCollectionViewCell: UICollectionViewCell {
 

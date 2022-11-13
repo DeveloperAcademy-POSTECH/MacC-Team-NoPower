@@ -303,11 +303,12 @@ class NewMeetUpViewController: UIViewController {
     }
     
     @objc func didTapDoneCreatingMeetUp() {
-        // TODO: 내용 저장
+        // TODO: 내용 저장 & self.dismiss 후 어디로 갈것인지? CheckInView? MeetUpView?
+        self.dismiss(animated: true)
     }
     
     @objc func didTapCancelCreatingMeetUp() {
-        // TODO: dismiss 동작
+        self.dismiss(animated: true)
     }
     
     // MARK: - Helpers

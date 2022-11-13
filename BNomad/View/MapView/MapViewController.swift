@@ -245,9 +245,11 @@ class MapViewController: UIViewController {
             user.currentPlaceUid == place.placeUid
         }
         controller.selectedPlace = tempPlace
-        controller.modalPresentationStyle = .fullScreen
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
         self.dismiss(animated: true) {
-            self.present(controller, animated: true)
+            self.present(navigationController, animated: true, completion: nil)
         }
     }
     

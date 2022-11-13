@@ -44,8 +44,6 @@ class ReviewInfoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
-        
         configureUI()
     }
     required init?(coder: NSCoder) {

@@ -25,7 +25,6 @@ class PlaceCheckInViewController: UIViewController {
     
     var checkInHistory: [CheckIn]? {
         didSet {
-            placeTitleLabel.text =  selectedPlace?.name
             guard let checkInHistory = checkInHistory else { return }
             collectionView.reloadData()
         }
@@ -36,36 +35,18 @@ class PlaceCheckInViewController: UIViewController {
         checkInHistory?.count ?? 0
     }
     
-    private lazy var placeTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = " "
-        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        label.tintColor = CustomColor.nomadBlack
-        
-        return label
-    }()
-    
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
-    lazy var cancelButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.layer.cornerRadius = 30 / 2
-        button.tintColor = .white
-        button.backgroundColor = .lightGray
-        button.layer.opacity = 0.5
-        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
-        return button
-    }()
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         placeCheckInView()
-        configureCancelButton()
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
+        
+        navigationItem.title = selectedPlace?.name
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissPage))
     }
     
     // MARK: - Actions
@@ -77,10 +58,6 @@ class PlaceCheckInViewController: UIViewController {
     // MARK: - Helpers
     
     func placeCheckInView() {
-
-        view.addSubview(placeTitleLabel)
-        placeTitleLabel.centerX(inView: view)
-        placeTitleLabel.anchor(top: view.topAnchor, paddingTop: 58)
         
         view.addSubview(collectionView)
         collectionView.contentInsetAdjustmentBehavior = .never
@@ -92,11 +69,6 @@ class PlaceCheckInViewController: UIViewController {
         self.collectionView.register(CheckedProfileListHeader.self, forCellWithReuseIdentifier: CheckedProfileListHeader.identifier)
         
         collectionView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
-    }
-    
-    func configureCancelButton() {
-        view.addSubview(cancelButton)
-        cancelButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 50, paddingRight: 20, width: 30, height: 30)
     }
 }
 
@@ -117,12 +89,13 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             checkInCardViewCell.checkOutDelegate = self
             checkInCardViewCell.user = viewModel.user
             checkInCardViewCell.checkIn = viewModel.user?.currentCheckIn
-            checkInCardViewCell.selectedPlaceTitle.text = selectedPlace?.name
             return checkInCardViewCell
         }
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
             placeInfoViewCell.place = selectedPlace
+            placeInfoViewCell.meetUpViewDelegate = self
+            placeInfoViewCell.placeInfoViewCelldelegate = self
             
             return placeInfoViewCell
         }
@@ -205,5 +178,25 @@ extension PlaceCheckInViewController: CheckOutAlert {
             self.checkOut()
         }))
         present(alert, animated: true)
+    }
+}
+
+// MARK: - newMeetUpViewShowable
+
+extension PlaceCheckInViewController: NewMeetUpViewShowable {
+    func didTapNewMeetUpButton() {
+        let newMeetUpView = NewMeetUpViewController()
+        let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
+        present(navBarOnModal, animated: true, completion: nil)
+    }
+}
+
+// MARK: - PlaceInfoViewCellDelegate
+
+extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
+    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, viewModel: TempMeetUp) {
+        let vc = MeetUpViewController()
+        vc.setMeetUpData(meetUp: viewModel)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

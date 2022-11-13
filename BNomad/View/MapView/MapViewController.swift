@@ -27,12 +27,19 @@ class MapViewController: UIViewController {
     // MARK: - Properties
 
     private let locationManager = CLLocationManager()
-    lazy var currentLocation: CLLocation? = locationManager.location
+    lazy var currentLocation: CLLocation? = locationManager.location {
+        didSet {
+            map.addOverlay(circleOverlay)
+        }
+    }
+
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
     var selectedRegion: Region?
+    
+    var visiblePlacesOnMap: [Place] = []
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -210,6 +217,7 @@ class MapViewController: UIViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
         }
+        sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation
         sheet.delegateForFloating = self
         present(sheet, animated: true, completion: nil)
@@ -237,9 +245,11 @@ class MapViewController: UIViewController {
             user.currentPlaceUid == place.placeUid
         }
         controller.selectedPlace = tempPlace
-        controller.modalPresentationStyle = .fullScreen
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
         self.dismiss(animated: true) {
-            self.present(controller, animated: true)
+            self.present(navigationController, animated: true, completion: nil)
         }
     }
     
@@ -252,6 +262,7 @@ class MapViewController: UIViewController {
          navigationController?.navigationBar.isHidden = true
          navigationItem.backButtonTitle = ""
          checkInFloating()
+         map.addOverlay(circleOverlay)
      }
 
     override func viewDidLoad() {
@@ -284,7 +295,7 @@ class MapViewController: UIViewController {
                 if let place = viewModel.places.first(where: { place in
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
-                    self.setMapRegion(place.latitude - 0.004, place.longitude, spanDelta: 0.01)
+                    self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
                     let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
                     self.map.selectAnnotation(annotation, animated: true)
                     let controller = PlaceInfoModalViewController()
@@ -344,8 +355,6 @@ class MapViewController: UIViewController {
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
         
-        map.addOverlay(circleOverlay)
-        
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)
         
@@ -372,6 +381,24 @@ extension MapViewController: MKMapViewDelegate {
         userAnnotationView?.isUserInteractionEnabled = false
         userAnnotationView?.canShowCallout = false
         userAnnotationView?.isEnabled = false
+    }
+    
+
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        visiblePlacesOnMap = []
+        
+        for place in viewModel.places {
+            if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
+            {
+                print(place, "visible")
+                visiblePlacesOnMap.append(place)
+            } else {
+                print(place, "invisible")
+                visiblePlacesOnMap.removeAll { $0.name == place.name }
+
+            }
+        }
+
     }
     
     // 맵 오버레이 rendering

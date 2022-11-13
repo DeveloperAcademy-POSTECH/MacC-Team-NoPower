@@ -440,4 +440,19 @@ class FirebaseManager {
             }
         }
     }
+    
+    /// 장소 제안 업로드
+    func suggestPlace(placeName: String, placeAddress: String, recommendReason: String?, recommenderContactNumber: String?) {
+        let dateTime: String = Date().toDateTimeString()
+        ref.child("service/suggestPlace/\(dateTime)").updateChildValues(["placeName" : placeName,
+                                                          "placeAddress" : placeAddress,
+                                                          "recommendReason" : recommendReason,
+                                                          "recommenderContactNumber" : recommenderContactNumber]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("DEBUG \(error).")
+            }
+        }
+    }
+    
 }

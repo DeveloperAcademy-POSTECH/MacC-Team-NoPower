@@ -429,6 +429,18 @@ class FirebaseManager {
         }
     }
 
+    /// 회원 탈퇴 사유 업로드
+    func uploadUserWithdrawalReason(userUid: String, reason: String, completion: @escaping() -> Void) {
+        ref.child("service/WithdrawalReason/\(userUid)").updateChildValues(["withdrawalReason" : reason]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("DEBUG \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
+    
     /// 장소 제안 업로드
     func suggestPlace(placeName: String, placeAddress: String, recommendReason: String?, recommenderContactNumber: String?) {
         let dateTime: String = Date().toDateTimeString()

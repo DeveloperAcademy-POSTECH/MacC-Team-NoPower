@@ -109,17 +109,8 @@ class ReviewInfoCell: UICollectionViewCell {
 
 extension ReviewInfoCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return reviewHistory?.count ?? 0
     }
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let reviewHistory = reviewHistory {
-            return reviewHistory.count
-        } else {
-            return 0
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
         cell.review = reviewHistory?[indexPath.row]

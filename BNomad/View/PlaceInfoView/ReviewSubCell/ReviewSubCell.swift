@@ -29,7 +29,7 @@ class ReviewSubCell: UICollectionViewCell {
             if let reviewImageUrl = review.imageUrl {
                 reviewImageView.kf.setImage(with: URL(string: reviewImageUrl))
             } else {
-                reviewImageView.image =  UIImage(named: "ReviewPhoto")
+                reviewImageView.image = UIImage()
             }
             
             reviewTextLabel.text = review.content

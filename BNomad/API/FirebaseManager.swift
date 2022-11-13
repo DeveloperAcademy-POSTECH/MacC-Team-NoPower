@@ -417,11 +417,8 @@ class FirebaseManager {
                     print("DEBUG \(error.localizedDescription)")
                     return
                 }
-                
-                guard let downloadURL = url else {
-                    print("DEBUG - url fail")
-                    return
-                }
+                guard let downloadURL = url else { return }
+                self.ref.child("user/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
                 completion(downloadURL.absoluteString)
             }
         }

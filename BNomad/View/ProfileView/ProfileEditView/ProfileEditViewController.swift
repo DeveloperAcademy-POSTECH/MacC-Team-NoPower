@@ -23,11 +23,7 @@ class ProfileEditViewController: UIViewController {
     private lazy var profileImageButton: UIButton = {
         let button = UIButton(type: .custom)
 
-        if let imageUrl =  viewModel.user?.profileImageUrl {
-            let url = URL(string: imageUrl)
-            button.kf.setImage(with: url, for: .normal )
-        }
-        
+        button.setImage(self.viewModel.user?.profileImage ?? UIImage(named: "othersProfile"), for: .normal)
         button.addTarget(self, action: #selector(profileImageChange), for: .touchUpInside)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 78 / 2
@@ -226,20 +222,24 @@ class ProfileEditViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { action in
             guard let userUid = self.viewModel.user?.userUid else { return }
             guard let nickname = self.nickNameTextField.text else { return }
-            let image = self.profileImageButton.image(for: .normal) ?? UIImage()
-            FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
-                self.viewModel.user?.profileImageUrl = url
+            
+            self.navigationController?.popViewController(animated: true)
+            
+            if let image = self.profileImageButton.image(for: .normal) {
+                self.viewModel.user?.profileImage = image
+                FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
+                    self.viewModel.user?.profileImageUrl = url
+                    let user = User(userUid: userUid, nickname: nickname, occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text, profileImageUrl: self.viewModel.user?.profileImageUrl)
+                    FirebaseManager.shared.setUser(user: user)
+                }
+            } else {
                 let user = User(userUid: userUid, nickname: nickname, occupation: self.occupationTextField.text, introduction: self.descriprionTextView.text, profileImageUrl: self.viewModel.user?.profileImageUrl)
                 FirebaseManager.shared.setUser(user: user)
-                
-                self.viewModel.user?.nickname = nickname
-                self.viewModel.user?.occupation = self.occupationTextField.text
-                self.viewModel.user?.introduction = self.descriprionTextView.text
-                
-                self.delegate?.editNow()
-                self.navigationController?.popViewController(animated: true)
             }
-            
+            self.viewModel.user?.nickname = nickname
+            self.viewModel.user?.occupation = self.occupationTextField.text
+            self.viewModel.user?.introduction = self.descriprionTextView.text
+            self.delegate?.editNow()
         }))
         present(alert, animated: true)
     }

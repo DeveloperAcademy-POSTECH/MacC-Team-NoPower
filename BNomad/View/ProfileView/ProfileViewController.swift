@@ -19,6 +19,11 @@ class ProfileViewController: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
+        if viewModel.user?.profileImage == nil {
+            if let profileImageUrl = viewModel.user?.profileImageUrl {
+                iv.kf.setImage(with: URL(string: profileImageUrl))
+            }
+        }
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.masksToBounds = true
@@ -110,13 +115,7 @@ class ProfileViewController: UIViewController {
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationItem.backButtonTitle = "취소"
-        
-        guard let imageUrl =  viewModel.user?.profileImageUrl else {
-            print("DEBUG: ProfileViewController - viewModel.user?.profileImageUrl is nil")
-            return
-        }
-        let url = URL(string: imageUrl)
-        profileImageView.kf.setImage(with: url)
+        profileImageView.image = viewModel.user?.profileImage ?? UIImage(named: "othersProfile")
     }
     
     override func viewDidAppear(_ animated: Bool) {

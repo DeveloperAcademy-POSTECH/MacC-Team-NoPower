@@ -366,7 +366,7 @@ extension CalendarViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
-            let year = "2022"
+            let year = String(Contents.todayDate()["year"] ?? 0)
             let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
             let day = String(format: "%02d", (selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
             let dateString = year+"-"+month+"-"+day
@@ -382,10 +382,6 @@ extension CalendarViewController: UICollectionViewDelegate {
             calendarCollectionView.reloadData()
             visitInfoView.reloadData()
         }
-    }
-    
-    func check(completion: @escaping([CheckIn]) -> ()) {
-        
     }
     
 }

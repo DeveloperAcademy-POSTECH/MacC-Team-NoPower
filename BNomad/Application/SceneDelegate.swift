@@ -11,7 +11,7 @@ import Firebase
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-//    lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         _ = RCValue.shared
@@ -20,26 +20,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = ReviewListViewController()
-        window?.makeKeyAndVisible()
-
-//        FirebaseManager.shared.checkUserExist(userUid : deviceUid) { isExist in
-//            if isExist {
-//                FirebaseManager.shared.fetchUser(id: deviceUid) { user in
-//                    self.viewModel.user = user
-//                    FirebaseManager.shared.fetchCheckInHistory(userUid: deviceUid) { checkInHistory in
-//                        self.viewModel.user?.checkInHistory = checkInHistory
-//                        print("checkIn 유무", self.viewModel.user?.isChecked)
-//                        self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
-//                        self.window?.makeKeyAndVisible()
-//                    }
-//                }
-//            } else {
-//                print("no user")
-//                self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
-//                self.window?.makeKeyAndVisible()
-//            }
-//        }
+        
+        FirebaseManager.shared.checkUserExist(userUid : deviceUid) { isExist in
+            if isExist {
+                FirebaseManager.shared.fetchUser(id: deviceUid) { user in
+                    self.viewModel.user = user
+                    FirebaseManager.shared.fetchCheckInHistory(userUid: deviceUid) { checkInHistory in
+                        self.viewModel.user?.checkInHistory = checkInHistory
+                        print("checkIn 유무", self.viewModel.user?.isChecked)
+                        self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                        self.window?.makeKeyAndVisible()
+                    }
+                }
+            } else {
+                print("no user")
+                self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                self.window?.makeKeyAndVisible()
+            }
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

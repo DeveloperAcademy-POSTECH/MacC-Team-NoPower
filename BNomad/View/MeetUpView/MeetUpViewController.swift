@@ -11,7 +11,9 @@ class MeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
-    private let meetUpTitleLabel: UILabel = {
+    var meetUp: TempMeetUp?
+    
+    private var meetUpTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "점심에 맛찬들 같이 가실 분"
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
@@ -47,7 +49,7 @@ class MeetUpViewController: UIViewController {
         return label
     }()
     
-    private let locationLabel: UILabel = {
+    private var locationLabel: UILabel = {
         let label = UILabel()
         label.text = "코워킹스페이스 입구"
         label.font = .preferredFont(forTextStyle: .headline)
@@ -56,7 +58,7 @@ class MeetUpViewController: UIViewController {
         return label
     }()
     
-    private let timeLabel: UILabel = {
+    private var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "12시 30분"
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
@@ -83,7 +85,7 @@ class MeetUpViewController: UIViewController {
         return stack
     }()
     
-    private let contentLabel: UILabel = {
+    private var contentLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.text = "내용내용 맛있는 삼겹살 먹고싶은데 맛찬들 혼자가긴 좀 어쩌구저쩌구"
@@ -92,7 +94,7 @@ class MeetUpViewController: UIViewController {
         return label
     }()
     
-    private let participants: UILabel = {
+    private var participants: UILabel = {
         let label = UILabel()
         label.text = "참여 예정 노마더 ( 5 / 10 )"
         label.font = .preferredFont(forTextStyle: .subheadline)
@@ -177,6 +179,14 @@ class MeetUpViewController: UIViewController {
         
         view.addSubview(joinButton)
         joinButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 60, paddingRight: 20, height: 48)
+    }
+    
+    func setMeetUpData(meetUp: TempMeetUp) {
+        meetUpTitleLabel.text = meetUp.title
+        locationLabel.text = meetUp.meetUpPlaceName
+        timeLabel.text = meetUp.time
+        contentLabel.text = meetUp.description
+        participants.text = "참여 예정 노마더 ( 1 / \(meetUp.maxPeopleNum) )"
     }
 }
 

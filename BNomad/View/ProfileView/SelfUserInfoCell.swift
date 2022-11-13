@@ -54,6 +54,14 @@ class SelfUserInfoCell: UICollectionViewCell {
         return label
     }()
     
+    private let dividerLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColor.nomadGray1
+        view.layer.masksToBounds = false
+
+        return view
+    }()
+    
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0 //TODO: 행간 늘이기
@@ -67,6 +75,7 @@ class SelfUserInfoCell: UICollectionViewCell {
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
+        
         super.init(frame: frame)
         render()
     }
@@ -93,6 +102,9 @@ class SelfUserInfoCell: UICollectionViewCell {
         
         contentView.addSubview(jobLabel)
         jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 60, paddingLeft: 20, paddingRight: 20)
+        
+        contentView.addSubview(dividerLine)
+        dividerLine.anchor(top: jobLabel.bottomAnchor, left: contentView.leftAnchor, bottom: jobLabel.bottomAnchor, right: contentView.rightAnchor, paddingTop: 17, paddingLeft: 10, paddingBottom: -18, paddingRight: 10, width: 340, height: 1)
         
         contentView.addSubview(statusLabel)
         statusLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 110, paddingLeft: 20, paddingRight: 20)

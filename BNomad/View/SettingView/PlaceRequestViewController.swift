@@ -88,6 +88,9 @@ class PlaceRequestViewController: UIViewController {
     
     @objc func sendRequest() {
         // TODO: 장소 제안 보내는 로직, 상호명과 주소가 nil값이 아님을 체크해주어야 한다.
+        guard let placeName = placeTextField.text else { return }
+        guard let placeAddress = placeAddressTextField.text else { return }
+        FirebaseManager.shared.suggestPlace(placeName: placeName, placeAddress: placeAddress, recommendReason: recommendTextView.text, recommenderContactNumber: recommendContactTextField.text)
         navigationController?.popViewController(animated: true)
     }
     

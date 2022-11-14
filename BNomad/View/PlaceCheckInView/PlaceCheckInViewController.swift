@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol ReviewPage {
+    func reviewPageShow()
+}
+
 class PlaceCheckInViewController: UIViewController {
     
     // MARK: - Mock Data
+    
+    var delegate: ReviewPage?
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
@@ -151,6 +157,13 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 3 {
+            let controller = ProfileViewController()
+            controller.userFromListUid = checkInHistory?[indexPath.row].userUid
+            navigationController?.pushViewController(controller, animated: true)
+        }
+    }
 }
 
 // MARK: - pageDismiss
@@ -164,11 +177,13 @@ extension PlaceCheckInViewController {
             guard let index = index else { return }
             self.viewModel.user?.checkInHistory?[index] = checkIn
             self.dismiss(animated: true)
+            
+            self.delegate?.reviewPageShow()
         }
     }
 }
 
-// MARK: - checkOutAlert
+// MARK: - CheckOutAlert
 
 extension PlaceCheckInViewController: CheckOutAlert {
     func checkOutAlert(place: Place) {
@@ -181,7 +196,7 @@ extension PlaceCheckInViewController: CheckOutAlert {
     }
 }
 
-// MARK: - newMeetUpViewShowable
+// MARK: - NewMeetUpViewShowable
 
 extension PlaceCheckInViewController: NewMeetUpViewShowable {
     func didTapNewMeetUpButton() {

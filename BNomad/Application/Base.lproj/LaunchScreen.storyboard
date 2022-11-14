@@ -17,11 +17,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BNOMADLGO" translatesAutoresizingMaskIntoConstraints="NO" id="hrf-nB-g2h">
-                                <rect key="frame" x="98.666666666666686" y="412" width="193" height="33"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nomadlaunch" translatesAutoresizingMaskIntoConstraints="NO" id="hrf-nB-g2h">
+                                <rect key="frame" x="107.66666666666669" y="377" width="175" height="103"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="33" id="B0V-GM-TCe"/>
-                                    <constraint firstAttribute="width" constant="193" id="fpL-la-28n"/>
+                                    <constraint firstAttribute="height" constant="103" id="B0V-GM-TCe"/>
+                                    <constraint firstAttribute="width" constant="175" id="fpL-la-28n"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -39,7 +39,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BNOMADLGO" width="196" height="33"/>
+        <image name="nomadlaunch" width="175" height="103"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -76,12 +76,6 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//    places: [Place] = {
-//        let placesOnMap = viewModel.places.filter(map)
-//    }
-//        viewModel.places
-        
-//        self.view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
         self.view.layer.backgroundColor = CustomColor.nomadGray3?.cgColor
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.layer.shadowColor = UIColor.black.cgColor
@@ -123,6 +117,10 @@ extension CustomModalViewController: UICollectionViewDataSource {
         places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         cell.place = places[indexPath.item]
         cell.position = position
+        if places[indexPath.item].placeUid == viewModel.user?.currentPlaceUid {
+            cell.cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
+            cell.cell.layer.borderWidth = 1
+        }
         return cell
     }
     
@@ -159,6 +157,7 @@ extension CustomModalViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+// MARK: - UpdateFloating
 
 extension CustomModalViewController: UpdateFloating {
     func checkInFloating() {

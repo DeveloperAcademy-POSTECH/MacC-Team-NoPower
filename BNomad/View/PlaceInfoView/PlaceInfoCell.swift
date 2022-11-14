@@ -7,11 +7,19 @@
 
 import UIKit
 import MapKit
+import Combine
+
+protocol CheckInOut {
+    func checkInTapped()
+    func checkOutTapped()
+}
 
 class PlaceInfoCell: UICollectionViewCell {
     static let cellIdentifier = "PlaceInfoCell"
     
     // MARK: - Properties
+    var delegate: CheckInOut?
+    var viewModel = CombineViewModel.shared
     
     //current 데이터 없어서 우선 더미로 출력
     var position: CLLocation?
@@ -27,6 +35,7 @@ class PlaceInfoCell: UICollectionViewCell {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory
             }
+            self.userCheck()
         }
     }
     
@@ -93,9 +102,31 @@ class PlaceInfoCell: UICollectionViewCell {
         button.tintColor = .white
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
-//        button.addTarget(self, action: #selector(checkIn), for: .touchUpInside)
-//        button.isHidden = self.isCheckedIn ? true : false
+        button.addTarget(self, action: #selector(checkInTapped), for: .touchUpInside)
         return button
+    }()
+    
+    lazy var checkOutButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("체크아웃 하기", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = CustomColor.nomadBlue
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(checkOutTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private let alreadyCheckIn: UIView = {
+        let alreadyView = UIView()
+        let label = UILabel()
+        label.text = "다른 곳에 체크인 되어 있습니다."
+        label.textColor = .white
+        alreadyView.addSubview(label)
+        label.centerX(inView: alreadyView)
+        label.centerY(inView: alreadyView)
+        alreadyView.backgroundColor = CustomColor.nomadGray1
+        alreadyView.layer.cornerRadius = 8
+        return alreadyView
     }()
     
     let horizontalDivider: UILabel = {
@@ -118,7 +149,6 @@ class PlaceInfoCell: UICollectionViewCell {
         phoneNumberLable.textColor = CustomColor.nomadBlack
         return phoneNumberLable
     }()
-        
         
     let horizontalDivider1: UILabel = {
         let horizontalDivider1 = UILabel()
@@ -188,16 +218,51 @@ class PlaceInfoCell: UICollectionViewCell {
 
          return operatingTimeLabel
      }()
+    
+    var store = Set<AnyCancellable>()
 
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
+        userCheck()
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func userCheck() {
+        viewModel.$user
+            .sink { user in
+                guard let user = user else { return }
+                if user.isChecked && self.place?.placeUid == user.currentCheckIn?.placeUid {
+                    self.checkInButton.isHidden = true
+                    self.checkOutButton.isHidden = false
+                    self.alreadyCheckIn.isHidden = true
+                } else if user.isChecked && self.place?.placeUid != user.currentCheckIn?.placeUid {
+                    self.checkInButton.isHidden = true
+                    self.checkOutButton.isHidden = true
+                    self.alreadyCheckIn.isHidden = false
+                } else {
+                    self.checkInButton.isHidden = false
+                    self.checkOutButton.isHidden = true
+                    self.alreadyCheckIn.isHidden = true
+                }
+            }
+            .store(in: &store)
+    }
+    
+    // MARK: - Actions
+    
+    @objc func checkInTapped() {
+        delegate?.checkInTapped()
+    }
+    
+    @objc func checkOutTapped() {
+        delegate?.checkOutTapped()
     }
     
     // MARK: - Helpers
@@ -209,6 +274,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(verticalDivider)
         self.addSubview(questLabel)
         self.addSubview(checkInButton)
+        self.addSubview(checkOutButton)
         self.addSubview(horizontalDivider)
         self.addSubview(callButton)
         self.addSubview(phoneNumberLable)
@@ -221,6 +287,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(openOperatingTimeButton)
         self.addSubview(horizontalDivider3)
         self.addSubview(addressLabel)
+        self.addSubview(alreadyCheckIn)
         setAttributes()
         guard let place = place else { return }
         mappingPlaceData(place)
@@ -245,6 +312,8 @@ class PlaceInfoCell: UICollectionViewCell {
         openOperatingTimeButton.anchor(top: horizontalDivider2.bottomAnchor, right: self.rightAnchor, paddingTop: 9, paddingRight: 38)
         horizontalDivider3.anchor(top: operatingTimeLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 20, paddingRight: 20, height: 1)
         checkInButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
+        checkOutButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
+        alreadyCheckIn.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
     }
     
     func mappingPlaceData(_ place: Place) {

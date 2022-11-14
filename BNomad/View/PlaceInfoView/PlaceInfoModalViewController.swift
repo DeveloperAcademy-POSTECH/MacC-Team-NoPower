@@ -95,6 +95,7 @@ class PlaceInfoModalViewController: UIViewController {
                     self.delegateForFloating?.checkInFloating()
                     let controller = PlaceCheckInViewController()
                     controller.selectedPlace = selectedPlace
+                    controller.delegate = self
                     let navigationController = UINavigationController(rootViewController: controller)
                     navigationController.modalPresentationStyle = .fullScreen
                     navigationController.navigationItem.title = selectedPlace.name
@@ -291,5 +292,16 @@ extension PlaceInfoModalViewController: CheckInOut {
     
     func checkOutTapped() {
         checkOut()
+    }
+}
+
+// MARK: - ReviewPage
+
+extension PlaceInfoModalViewController: ReviewPage {
+    func reviewPageShow() {
+        self.dismiss(animated: false)
+        let controller = ReviewDetailViewController()
+        controller.sheetPresentationController?.detents = [.large()]
+        self.present(controller, animated: true)
     }
 }

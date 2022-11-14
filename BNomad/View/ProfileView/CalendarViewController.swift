@@ -16,7 +16,7 @@ class CalendarViewController: UIViewController {
     
     var monthAddedMemory: Int = 0
     var calendarToggle: Bool = true
-    private var selectedCell: Int? = Contents.todayDate()["day"]
+    private lazy var selectedCell: Int? = nil
     let calendarDateFormatter = CalendarDateFormatter()
     var cardDataList: [CheckIn] = []
     
@@ -28,7 +28,6 @@ class CalendarViewController: UIViewController {
         collectionView.isScrollEnabled = true
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -41,7 +40,6 @@ class CalendarViewController: UIViewController {
         collectionView.layer.cornerRadius = 20
         collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -53,14 +51,12 @@ class CalendarViewController: UIViewController {
         collectionView.backgroundColor = UIColor(hex: "F5F5F5")
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
     private let VisitInfoHeader: UILabel = {
         let content = Contents.todayDate()
         let day = String(content["month"] ?? 0) + "월 " + String(content["day"] ?? 0) + "일"
-        
         
         let label = UILabel()
         label.text = day
@@ -75,7 +71,6 @@ class CalendarViewController: UIViewController {
         formatter.dateFormat = "yyyy"
         let year = formatter.string(from:Date())
         
-        
         let label = UILabel()
         label.text = year
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
@@ -88,7 +83,6 @@ class CalendarViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "M월"
         let month = formatter.string(from:Date())
-        
         
         let label = UILabel()
         label.text = month
@@ -124,7 +118,6 @@ class CalendarViewController: UIViewController {
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -133,14 +126,6 @@ class CalendarViewController: UIViewController {
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let toggleButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .red
-        button.frame = CGRect(origin: .zero, size: CGSize(width: 50, height: 20))
         return button
     }()
     
@@ -149,6 +134,8 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(toggleTapButton))
         
         
         selectedCell = (Contents.todayDate()["day"] ?? 0)+calendarDateFormatter.getStartingDayOfWeek(addedMonth: 0)-1 // 오늘로 셀렉티드셀 초기화
@@ -164,7 +151,6 @@ class CalendarViewController: UIViewController {
         
         plusMonthButton.addTarget(self, action: #selector(plusMonthTapButton), for: .touchUpInside)
         minusMonthButton.addTarget(self, action: #selector(minusMonthTapButton), for: .touchUpInside)
-        toggleButton.addTarget(self, action: #selector(toggleTapButton), for: .touchUpInside)
         
         configureUI()
         render()
@@ -199,9 +185,13 @@ class CalendarViewController: UIViewController {
     @objc func toggleTapButton() {
         calendarToggle.toggle()
         if calendarToggle {
+            navigationItem.rightBarButtonItem?.tintColor = CustomColor.nomadBlue
+
             render()
             visitCardListView.removeFromSuperview()
         } else {
+            navigationItem.rightBarButtonItem?.tintColor = CustomColor.nomadGray1
+            
             calendarCollectionView.removeFromSuperview()
             calendarCollectionMonthHeader.removeFromSuperview()
             visitInfoView.removeFromSuperview()
@@ -210,8 +200,8 @@ class CalendarViewController: UIViewController {
             plusMonthButton.removeFromSuperview()
             
             view.addSubview(visitCardListView)
-            visitCardListView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                     paddingTop: 105, paddingLeft: 14, paddingRight: 14, height: 600)
+            visitCardListView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor,
+                                     paddingTop: 100, paddingLeft: 14, paddingRight: 14)
         }
     }
     
@@ -236,13 +226,6 @@ class CalendarViewController: UIViewController {
         calendarCollectionMonthHeader.anchor(top: calendarCollectionView.topAnchor, paddingTop: 10)
         calendarCollectionMonthHeader.centerX(inView: view)
         
-        view.addSubview(visitInfoView)
-        visitInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
-        
-//        view.addSubview(VisitInfoHeader)
-//        VisitInfoHeader.anchor(top: CalendarCollectionView.bottomAnchor, paddingTop: 21)
-//        VisitInfoHeader.centerX(inView: view)
         
         view.addSubview(dayOfWeekStackView)
         dayOfWeekStackView.anchor(top: calendarCollectionMonthHeader.bottomAnchor, paddingTop: 15, width: 358-358/7)
@@ -253,8 +236,14 @@ class CalendarViewController: UIViewController {
         view.addSubview(plusMonthButton)
         plusMonthButton.anchor(top: calendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15)
         
-        view.addSubview(toggleButton)
-        toggleButton.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 100, paddingRight: 50)
+        
+        view.addSubview(visitInfoView)
+        visitInfoView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+                                paddingTop: 557, paddingLeft: 14, paddingRight: 14, height: 256)
+        
+//        view.addSubview(VisitInfoHeader)
+//        VisitInfoHeader.anchor(top: CalendarCollectionView.bottomAnchor, paddingTop: 21)
+//        VisitInfoHeader.centerX(inView: view)
         
     }
     
@@ -272,7 +261,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         if collectionView == calendarCollectionView {
             return self.calendarDateFormatter.days.count
         } else if collectionView == visitInfoView {
-            return cardDataList.count //TODO: 반응형 수정 필요
+            return cardDataList.count
         } else {
             return CalendarViewController.checkInHistory?.count ?? 0
         }
@@ -306,10 +295,12 @@ extension CalendarViewController: UICollectionViewDelegate {
                 let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
                 let day = String(format: "%02d", indexPath.item - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
                 let thisCellsDate = year+"-"+month+"-"+day
+                
                 cell.thisCellsDate = thisCellsDate //클릭한 날자 inject (: String)
                 cell.checkInHistory = CalendarViewController.checkInHistory //체크인 all data inject (: Checkin)
                 
             }
+            
             cell.configureLabel(text: self.calendarDateFormatter.days[indexPath.item])
             
             //오늘 및 주말 텍스트 색 설정
@@ -334,16 +325,9 @@ extension CalendarViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
-            let year = "2022"
-            let month = String(format: "%02d", (Contents.todayDate()["month"] ?? 0)+monthAddedMemory)
-            let day = String(format: "%02d", (selectedCell ?? 0) - calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory)+1)
-            let dateString = year+"-"+month+"-"+day
-            
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20
             
-            cell.thisCellsDate = dateString
-//            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory
             cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
             return cell
             
@@ -364,6 +348,7 @@ extension CalendarViewController: UICollectionViewDelegate {
     
 //    cell click action
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView != calendarCollectionView { return }
         if indexPath.item >= calendarDateFormatter.getStartingDayOfWeek(addedMonth: monthAddedMemory) {
             selectedCell = indexPath.item
             let year = String(Contents.todayDate()["year"] ?? 0)
@@ -377,7 +362,6 @@ extension CalendarViewController: UICollectionViewDelegate {
                     cardDataList.append(checkin)
                 }
             }
-            
             
             calendarCollectionView.reloadData()
             visitInfoView.reloadData()

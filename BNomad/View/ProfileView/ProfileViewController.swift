@@ -93,6 +93,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.backButtonTitle = ""
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+        
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
         ProfileGraphCell.addedWeek = 0
         ProfileGraphCell.editWeek(edit: 0)
@@ -114,7 +116,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
-        navigationItem.backButtonTitle = "취소"
+        navigationItem.backButtonTitle = ""
         profileImageView.image = viewModel.user?.profileImage ?? UIImage(named: "othersProfile")
     }
     

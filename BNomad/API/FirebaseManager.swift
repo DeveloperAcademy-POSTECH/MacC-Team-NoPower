@@ -99,7 +99,12 @@ class FirebaseManager {
 
     /// 새로운 user 추가 & user 정보 업데이트
     func setUser(user: User) {
-        self.ref.child("users").child(user.userUid).setValue(user.toAnyObject())
+        self.ref.child("users").child(user.userUid).updateChildValues([
+            "nickname": user.nickname,
+            "occupation": user.occupation as Any,
+            "introduction": user.introduction as Any,
+            "profileImageUrl": user.profileImageUrl as Any
+        ])
     }
     
 
@@ -278,12 +283,12 @@ class FirebaseManager {
         let currentPeopleUids = [meetUp.organizerUid: true]
         
         let meetUpUser = ["placeUid": meetUp.placeUid, "time": meetUp.time.toDateTimeString(),
-                          "title": meetUp.title, "description": meetUp.description,
+                          "title": meetUp.title, "description": meetUp.description as Any,
                           "maxPeopleNum": meetUp.maxPeopleNum, "currentPeopleUids": currentPeopleUids,
                           "meetUpPlaceName": meetUp.meetUpPlaceName, "organizerUid": meetUp.organizerUid] as [String : Any]
         
         let meetUpPlace = ["time": meetUp.time.toDateTimeString(), "title": meetUp.title,
-                           "description": meetUp.description, "maxPeopleNum": meetUp.maxPeopleNum,
+                           "description": meetUp.description as Any, "maxPeopleNum": meetUp.maxPeopleNum,
                            "currentPeopleUids": currentPeopleUids, "meetUpPlaceName": meetUp.meetUpPlaceName,
                            "organizerUid": meetUp.organizerUid] as [String : Any]
         
@@ -396,7 +401,7 @@ class FirebaseManager {
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()
         let imageRef = storageRef.child("userProfileImage/\(userUid)")
-        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+        guard let imageData = image.jpegData(compressionQuality: 0.1) else {
             print("DEBUG - fail compression")
             return
         }
@@ -412,18 +417,8 @@ class FirebaseManager {
                     print("DEBUG \(error.localizedDescription)")
                     return
                 }
-                
-                guard let downloadURL = url else {
-                    print("DEBUG - url fail")
-                    return
-                }
-                
-                self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString]) {
-                    (error: Error?, ref: DatabaseReference) in
-                    if let error: Error = error {
-                        print("DEBUG \(error).")
-                    }
-                }
+                guard let downloadURL = url else { return }
+                self.ref.child("user/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
                 completion(downloadURL.absoluteString)
             }
         }
@@ -454,5 +449,77 @@ class FirebaseManager {
             }
         }
     }
-    
+
+    // MARK: Firebase - Review
+    // firebase
+    //    review
+    //        placeUid
+    //            reviewUid
+    //                userUid
+    //                createTime
+    //                content
+    //                imageUrls
+
+    /// placeUid의 모든 review 가져오기
+    func fetchReviewHistory(placeUid: String, completion: @escaping([Review]) -> Void) {
+        var reviewHistory: [Review] = []
+        
+        ref.child("review/\(placeUid)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let reviewDict = snapshot.value as? [String: Any] else { return }
+                guard let userUid = reviewDict["userUid"] as? String else { return }
+                guard let createTime = reviewDict["createTime"] as? String else { return }
+                guard let time = createTime.toDateTime() else { return }
+                guard let content = reviewDict["content"] as? String else { return }
+
+                let imageUrl = reviewDict["imageUrl"] as? String
+
+                let review = Review(placeUid: placeUid, userUid: userUid, reviewUid: snapshot.key, createTime: time, content: content, imageUrl: imageUrl)
+                reviewHistory.append(review)
+            }
+            completion(reviewHistory)
+        })
+    } 
+
+    /// 리뷰 사진 업로드
+    func uploadReviewImages(reviewUid: String, placeUid: String, image: UIImage?, completion: @escaping(String) -> Void) {
+        guard let image = image else { return }
+        
+        let storageRef = Storage.storage().reference().child("reviewImage/\(reviewUid)")
+        if let uploadData = image.jpegData(compressionQuality: 0.1) {
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    if let url = url {
+                        self.ref.updateChildValues(["review/\(placeUid)/\(reviewUid)/imageUrl" : url.absoluteString])
+                        completion(url.absoluteString)
+                    }
+                })
+            })
+        }        
+    }
+
+    /// 리뷰 작성하기
+    func writeReview(review: Review, image: UIImage?, completion: @escaping() -> Void) {
+        let createTime = review.createTime.toDateTimeString()
+
+        uploadReviewImages(reviewUid: review.reviewUid, placeUid: review.placeUid, image: image) { url in
+        }
+        ref.updateChildValues(["review/\(review.placeUid)/\(review.reviewUid)" : ["userUid" : review.userUid,
+                                                                                "createTime" : createTime,
+                                                                                "content" : review.content]]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("review could not be saved: \(error).")
+            }
+        }
+    }
 }

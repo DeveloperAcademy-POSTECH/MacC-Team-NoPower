@@ -11,6 +11,13 @@ class ReviewInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
 
+    var reviewHistory: [Review]? {
+        didSet {
+            guard let reviewHistory = reviewHistory else { return }
+            reviewCollectionView.reloadData()
+        }
+    }
+    
     static let cellIdentifier = "ReviewInfoCell"
     let reviewInfoTitleLabel = UILabel()
     let reviewCountLabel = UILabel()
@@ -102,23 +109,15 @@ class ReviewInfoCell: UICollectionViewCell {
 
 extension ReviewInfoCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return reviewHistory?.count ?? 0
     }
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-               guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
-               return cell
-            return UICollectionViewCell()
-        }
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
+        cell.review = reviewHistory?[indexPath.row]
         cell.backgroundColor = UIColor.white
         return cell
     }
+}
 
 
 // MARK: - UICollectionViewDelegate

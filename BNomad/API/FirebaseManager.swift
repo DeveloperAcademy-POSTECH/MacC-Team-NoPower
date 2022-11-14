@@ -418,7 +418,7 @@ class FirebaseManager {
                     return
                 }
                 guard let downloadURL = url else { return }
-                self.ref.child("user/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
+                self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
                 completion(downloadURL.absoluteString)
             }
         }

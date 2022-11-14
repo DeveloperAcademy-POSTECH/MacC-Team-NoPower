@@ -90,6 +90,12 @@ class PlaceRequestViewController: UIViewController {
         // TODO: 장소 제안 보내는 로직, 상호명과 주소가 nil값이 아님을 체크해주어야 한다.
         guard let placeName = placeTextField.text else { return }
         guard let placeAddress = placeAddressTextField.text else { return }
+        if placeName == "" || placeAddress == "" {
+            let alert = UIAlertController(title: "장소 제출 오류", message: "상호명 혹은 주소란에 빈칸이 있습니다.", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "확인", style: .cancel)
+            alert.addAction(cancel)
+            present(alert, animated: true)
+        }
         FirebaseManager.shared.suggestPlace(placeName: placeName, placeAddress: placeAddress, recommendReason: recommendTextView.text, recommenderContactNumber: recommendContactTextField.text)
         navigationController?.popViewController(animated: true)
     }

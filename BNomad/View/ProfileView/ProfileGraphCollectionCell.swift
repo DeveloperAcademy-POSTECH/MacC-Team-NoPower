@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 // TODO: 하드 코딩된 부분 제거
 class ProfileGraphCollectionCell: UICollectionViewCell {
     
@@ -46,7 +45,7 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
 
                     
                     break
-                }else {
+                } else {
                     graphRectView.removeFromSuperview()
                 }
                 

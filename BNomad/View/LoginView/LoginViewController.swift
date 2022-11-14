@@ -108,11 +108,16 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             print("#3 email: \(String(describing: email))")
             
             // TODO: 추후 이 modal을 내리고 SignUpViewController를 띄우기 위함
-            // self.dismiss(animated: true)
+             self.dismiss(animated: true)
             
-            let signUpViewController = SignUpViewController()
-            signUpViewController.modalPresentationStyle = .fullScreen
-            present(signUpViewController, animated: true)
+//            if userIdentifier가 저장되어 있지 않다면 {
+                let signUpViewController = SignUpViewController()
+                signUpViewController.modalPresentationStyle = .fullScreen
+                present(signUpViewController, animated: true)
+//            } else {
+//                원래 하려던 동작으로 연결하거나 return 만 해줘도 될듯
+//            }
+            
         }
     }
     

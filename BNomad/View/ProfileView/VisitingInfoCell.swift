@@ -10,6 +10,7 @@ import UIKit
 class VisitingInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
     var thisCellsDate: String?
     var cardDataList: [CheckIn] = []
     var viewOption: String = ""

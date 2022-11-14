@@ -117,14 +117,14 @@ class MeetUpViewController: UIViewController {
         return collectionView
     }()
     
-    private let joinButton: UIButton = {
+    private lazy var joinButton: UIButton = {
         let button = UIButton()
         button.setTitle("참여하기", for: .normal)
         button.titleLabel?.font = .preferredFont(forTextStyle: .body)
         button.backgroundColor = CustomColor.nomadBlue
         button.tintColor = .white
         button.layer.cornerRadius = 8
-        
+        button.addTarget(self, action: #selector(joinMeetUp), for: .touchUpInside)
         return button
     }()
     
@@ -142,8 +142,22 @@ class MeetUpViewController: UIViewController {
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
     }
     
+    // MARK: - Actions
+    
     @objc func editMeetUpContent() {
         // TODO: 편집뷰로 이동
+    }
+    
+    @objc func joinMeetUp() {
+        let alert = UIAlertController(title: "\(meetUpTitleLabel.text ?? "")에 참여 하시겠습니까?", message: "MeetUp에 참여합니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let join = UIAlertAction(title: "확인", style: .default, handler: { action in
+            // TODO: 참여하는 액션을 추가해야함
+            self.navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(cancel)
+        alert.addAction(join)
+        self.present(alert, animated: true)
     }
     
     // MARK: - Helpers

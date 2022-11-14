@@ -10,10 +10,6 @@ import MapKit
 import CoreLocation
 import Combine
 
-protocol ClearSelectedAnnotation {
-    func clearAnnotation(view: MKAnnotation)
-}
-
 protocol UpdateFloating {
     func checkInFloating()
 }
@@ -70,22 +66,6 @@ class MapViewController: UIViewController {
         return btn
     }()
     
-    // TODO: - 회원가입, 로그인 화면 모두 넣어 연결하기
-    @objc func moveToProfile() {
-        self.dismiss(animated: false)
-        /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
-        /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
-        /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
-        if viewModel.isLogIn {
-            navigationController?.pushViewController(ProfileViewController(), animated: true)
-        } else {
-            
-            // TODO: - 회원가입 창 띄우기 전에 모달 띄우기
-            loginCheck()
-        }
-        map.selectedAnnotations = []
-    }
-    
     func loginCheck() {
         print("loginCheck")
         let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 프로필을 보실 수 있습니다.", preferredStyle: .alert)
@@ -107,14 +87,13 @@ class MapViewController: UIViewController {
         return divider
     }()
     
-    private let settingBtn: UIButton = {
+    private lazy var settingBtn: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "gearshape")?.withRenderingMode(.automatic), for: .normal)
         btn.anchor(width: 22, height: 22)
+        btn.addTarget(self, action: #selector(goToSetting), for: .touchUpInside)
         return btn
     }()
-    
-
     
     // 지역명 표기 및 지역 변경 버튼
     
@@ -129,23 +108,6 @@ class MapViewController: UIViewController {
         btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
         return btn
     }()
-    
-    @objc private func presentRegionSelector() {
-        self.dismiss(animated: false)
-
-        let sheet = RegionSelectViewController()
-        sheet.modalPresentationStyle = .pageSheet
-        if let sheet = sheet.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.delegate = self
-            sheet.prefersGrabberVisible = false
-//            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 12
-        }
-        sheet.regionChangeDelegate = self
-        present(sheet, animated: true, completion: nil)
-    }
     
     lazy var upperStack: UIStackView = {
 
@@ -205,23 +167,6 @@ class MapViewController: UIViewController {
         button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
         return button
     }()
-
-    @objc private func presentPlaceViewModal() {
-        let sheet = CustomModalViewController()
-        sheet.modalPresentationStyle = .pageSheet
-        if let sheet = sheet.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.delegate = self
-            sheet.prefersGrabberVisible = false
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.preferredCornerRadius = 12
-        }
-        sheet.places = visiblePlacesOnMap
-        sheet.position = currentLocation
-        sheet.delegateForFloating = self
-        present(sheet, animated: true, completion: nil)
-    }
     
     lazy var checkInNow: UIButton = {
         let button = UIButton()
@@ -244,6 +189,7 @@ class MapViewController: UIViewController {
         let tempPlace = self.viewModel.places.first { place in
             user.currentPlaceUid == place.placeUid
         }
+        controller.delegate = self
         controller.selectedPlace = tempPlace
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .fullScreen
@@ -276,6 +222,60 @@ class MapViewController: UIViewController {
     
     // MARK: - Actions
     
+    @objc private func presentRegionSelector() {
+        self.dismiss(animated: false)
+
+        let sheet = RegionSelectViewController()
+        sheet.modalPresentationStyle = .pageSheet
+        if let sheet = sheet.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.delegate = self
+            sheet.prefersGrabberVisible = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 12
+        }
+        sheet.regionChangeDelegate = self
+        present(sheet, animated: true, completion: nil)
+    }
+    
+    @objc private func presentPlaceViewModal() {
+        let sheet = CustomModalViewController()
+        sheet.modalPresentationStyle = .pageSheet
+        if let sheet = sheet.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.delegate = self
+            sheet.prefersGrabberVisible = false
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 12
+        }
+        sheet.places = visiblePlacesOnMap
+        sheet.position = currentLocation
+        sheet.delegateForFloating = self
+        present(sheet, animated: true, completion: nil)
+    }
+    
+    // TODO: - 회원가입, 로그인 화면 모두 넣어 연결하기
+    @objc func moveToProfile() {
+        self.dismiss(animated: false)
+        /// 케이스 1 신규 유저 : 프로필 버튼 클릭 -> 로그인 화면 -> 가입 화면 -> 가입 후 로그인 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
+        /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
+        if viewModel.isLogIn {
+            navigationController?.pushViewController(ProfileViewController(), animated: true)
+        } else {
+            
+            // TODO: - 회원가입 창 띄우기 전에 모달 띄우기
+            loginCheck()
+        }
+        map.selectedAnnotations = []
+    }
+    
+    @objc func goToSetting() {
+        self.dismiss(animated: false)
+        navigationController?.pushViewController(SettingViewController(), animated: true)
+    }
+    
     // MARK: - Helpers
     
     // 위치 권한 받아서 현재 위치 확인
@@ -300,7 +300,6 @@ class MapViewController: UIViewController {
                     self.map.selectAnnotation(annotation, animated: true)
                     let controller = PlaceInfoModalViewController()
                     controller.selectedPlace = place
-                    controller.delegateForClearAnnotation = self
                     controller.delegateForFloating = self
                     controller.presentationController?.delegate = self
                     present(controller, animated: true)
@@ -434,7 +433,6 @@ extension MapViewController: MKMapViewDelegate {
             }
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
-            controller.delegateForClearAnnotation = self
             present(controller, animated: true)
         } else {
             guard let annotation = view.annotation else { return }
@@ -448,23 +446,6 @@ extension MapViewController: MKMapViewDelegate {
         self.dismiss(animated: true)
     }
     
-}
-
-// MARK: - ClearSelectedAnnotation
-
-extension MapViewController: ClearSelectedAnnotation {
-    func clearAnnotation(view: MKAnnotation) {
-//        if view.isEqual(map.selectedAnnotations.first) {
-//            return
-//        }
-//        let tempAnnotations = map.selectedAnnotations
-//        map.selectedAnnotations = []
-//        for annotation in tempAnnotations {
-//            if !annotation.isEqual(view) {
-//                map.selectedAnnotations.append(annotation)
-//            }
-//        }
-    }
 }
 
 // MARK: - UpdateFloating
@@ -501,8 +482,21 @@ extension MapViewController: CLLocationManagerDelegate {
 }
 
 // MARK: - MapRegionChange
+
 extension MapViewController: setMap {
     func setMapRegion(_ latitude: Double, _ longitude: Double, spanDelta: Double) {
         map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: MKCoordinateSpan(latitudeDelta: spanDelta, longitudeDelta: spanDelta)), animated: true)
+    }
+}
+
+// MARK: - ReviewPage
+
+extension MapViewController: ReviewPage {
+    func reviewPageShow() {
+        // TODO: PlaceInfoModalViweController가 띄워져 있으면 Review 모달이 안뜨는 오류가 있음
+        self.dismiss(animated: true)
+        let controller = ReviewDetailViewController()
+        controller.sheetPresentationController?.detents = [.large()]
+        self.present(controller, animated: true)
     }
 }

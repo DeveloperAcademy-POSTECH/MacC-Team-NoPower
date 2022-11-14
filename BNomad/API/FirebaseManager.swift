@@ -454,5 +454,77 @@ class FirebaseManager {
             }
         }
     }
-    
+
+    // MARK: Firebase - Review
+    // firebase
+    //    review
+    //        placeUid
+    //            reviewUid
+    //                userUid
+    //                createTime
+    //                content
+    //                imageUrls
+
+    /// placeUid의 모든 review 가져오기
+    func fetchReviewHistory(placeUid: String, completion: @escaping([Review]) -> Void) {
+        var reviewHistory: [Review] = []
+        
+        ref.child("review/\(placeUid)").observeSingleEvent(of: .value, with: { snapshots in
+            for child in snapshots.children {
+                guard let snapshot = child as? DataSnapshot else { return }
+                guard let reviewDict = snapshot.value as? [String: Any] else { return }
+                guard let userUid = reviewDict["userUid"] as? String else { return }
+                guard let createTime = reviewDict["createTime"] as? String else { return }
+                guard let time = createTime.toDateTime() else { return }
+                guard let content = reviewDict["content"] as? String else { return }
+
+                let imageUrl = reviewDict["imageUrl"] as? String
+
+                let review = Review(placeUid: placeUid, userUid: userUid, reviewUid: snapshot.key, createTime: time, content: content, imageUrl: imageUrl)
+                reviewHistory.append(review)
+            }
+            completion(reviewHistory)
+        })
+    } 
+
+    /// 리뷰 사진 업로드
+    func uploadReviewImages(reviewUid: String, placeUid: String, image: UIImage?, completion: @escaping(String) -> Void) {
+        guard let image = image else { return }
+        
+        let storageRef = Storage.storage().reference().child("reviewImage/\(reviewUid)")
+        if let uploadData = image.jpegData(compressionQuality: 0.1) {
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    if let url = url {
+                        self.ref.updateChildValues(["review/\(placeUid)/\(reviewUid)/imageUrl" : url.absoluteString])
+                        completion(url.absoluteString)
+                    }
+                })
+            })
+        }        
+    }
+
+    /// 리뷰 작성하기
+    func writeReview(review: Review, image: UIImage?, completion: @escaping() -> Void) {
+        let createTime = review.createTime.toDateTimeString()
+
+        uploadReviewImages(reviewUid: review.reviewUid, placeUid: review.placeUid, image: image) { url in
+        }
+        ref.updateChildValues(["review/\(review.placeUid)/\(review.reviewUid)" : ["userUid" : review.userUid,
+                                                                                "createTime" : createTime,
+                                                                                "content" : review.content]]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("review could not be saved: \(error).")
+            }
+        }
+    }
 }

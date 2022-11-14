@@ -209,9 +209,9 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
 // MARK: - PlaceInfoViewCellDelegate
 
 extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
-    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, viewModel: TempMeetUp) {
+    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUp: MeetUp) {
         let vc = MeetUpViewController()
-        vc.setMeetUpData(meetUp: viewModel)
+        vc.meetUp = meetUp
         navigationController?.pushViewController(vc, animated: true)
     }
 }

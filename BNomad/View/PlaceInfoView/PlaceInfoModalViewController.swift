@@ -214,6 +214,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
         else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
             cell.reviewHistory = reviewHistory
+            cell.delegate = self
             return cell
         }
         else if indexPath.section == 2 {
@@ -303,5 +304,14 @@ extension PlaceInfoModalViewController: ReviewPage {
         let controller = ReviewDetailViewController()
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
+    }
+}
+
+// MARK: - ShowReviewListView
+
+extension PlaceInfoModalViewController: ShowReviewListView {
+    func didTapShowReviewListView() {
+        let ReviewListView = ReviewListViewController()
+        self.present(ReviewListView, animated: true, completion: nil)
     }
 }

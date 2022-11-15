@@ -12,16 +12,26 @@ class VisitCardCollectionViewController: UIViewController {
     
     // MARK: - Properties
     
-    static var checkInHistory: [CheckIn]?
-    
+    static var checkInHistory: [CheckIn]? {
+        didSet {
+//            guard let checkinHistory = checkInHistory else { return }
+//            for index in 0..<checkinHistory.count-1 {
+//                if checkinHistory[index].date != checkinHistory[index+1].date {
+//
+//                }
+//            }
+        }
+    }
     
     private let visitCardListView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor(hex: "F5F5F5")
+        collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.isScrollEnabled = true
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(VisitCardHeaderCollectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: VisitCardHeaderCollectionView.identifier)
+        collectionView.alwaysBounceVertical = true
         
         return collectionView
     }()
@@ -40,21 +50,19 @@ class VisitCardCollectionViewController: UIViewController {
     
     }
     
-    
     // MARK: - Actions
     
     
     // MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = UIColor(hex: "F5F5F5")
+        view.backgroundColor = CustomColor.nomad2White
     }
     
     func render() {
         
         view.addSubview(visitCardListView)
-        visitCardListView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor,
-                                 paddingTop: 100, paddingLeft: 14, paddingRight: 14)
+        visitCardListView.frame = view.bounds
         
     }
     
@@ -65,11 +73,11 @@ class VisitCardCollectionViewController: UIViewController {
 extension VisitCardCollectionViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return VisitCardCollectionViewController.checkInHistory?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return VisitCardCollectionViewController.checkInHistory?.count ?? 0
+        return 1
     }
     
 }
@@ -88,11 +96,20 @@ extension VisitCardCollectionViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = VisitCardCollectionViewController.checkInHistory?.count
-            cell.checkinHistoryForList = VisitCardCollectionViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.item-1]
+            cell.checkinHistoryForList = VisitCardCollectionViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
             
             return cell
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: VisitCardHeaderCollectionView.identifier, for: indexPath) as? VisitCardHeaderCollectionView else {
+                    return UICollectionViewCell()
+                }
+        header.configure(with: VisitCardCollectionViewController.checkInHistory?[indexPath.section].date ?? "")
+                return header
+            
+        }
     
 }
 
@@ -116,8 +133,12 @@ extension VisitCardCollectionViewController: UICollectionViewDelegateFlowLayout 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+            return CGSize(width: view.frame.size.width, height: 30)
+        }
     
 }

@@ -18,6 +18,7 @@ class ProfileViewController: UIViewController {
     
     var userFromListUid: String?
     
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -69,7 +70,7 @@ class ProfileViewController: UIViewController {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = UIColor(hex: "F5F5F5")
+        collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.register(SelfUserInfoCell.self, forCellWithReuseIdentifier: SelfUserInfoCell.identifier)
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         collectionView.register(ProfileGraphCell.self, forCellWithReuseIdentifier: ProfileGraphCell.identifier)
@@ -199,7 +200,7 @@ class ProfileViewController: UIViewController {
     }
     
     func configureUI() {
-        view.backgroundColor = UIColor(hex: "F5F5F5")
+        view.backgroundColor = CustomColor.nomad2White
     }
     
     func render() {

@@ -78,16 +78,6 @@ class ProfileViewController: UIViewController {
         return collectionView
     }()
     
-    private let profileGraphCollectionView:  UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isScrollEnabled = false
-        collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
-
-        return collectionView
-    }()
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -104,9 +94,6 @@ class ProfileViewController: UIViewController {
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
         
-        profileGraphCollectionView.dataSource = self
-        profileGraphCollectionView.delegate = self
-        
         plusWeek.addTarget(self, action: #selector(plusWeekTapButton), for: .touchUpInside)
         minusWeek.addTarget(self, action: #selector(minusWeekTapButton), for: .touchUpInside)
         
@@ -122,7 +109,6 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        profileGraphCollectionView.reloadData() //FIXME: 왜 리로드해야 정상표시되는지 ?? 버그픽스요망
         navigationController?.navigationBar.isHidden = false
     }
     
@@ -145,7 +131,6 @@ class ProfileViewController: UIViewController {
     @objc func plusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: 1)
         profileCollectionView.reloadData()
-        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
     }
@@ -153,7 +138,6 @@ class ProfileViewController: UIViewController {
     @objc func minusWeekTapButton() {
         ProfileGraphCell.editWeek(edit: -1)
         profileCollectionView.reloadData()
-        profileGraphCollectionView.reloadData()
         
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
     }
@@ -226,9 +210,6 @@ class ProfileViewController: UIViewController {
         
         view.addSubview(plusWeek)
         plusWeek.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 570, paddingRight: 45)
-        
-        view.addSubview(profileGraphCollectionView)
-        profileGraphCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 615, paddingLeft: 58, width: 345/390*view.frame.width-35, height: 154)
     }
     
 }
@@ -238,18 +219,10 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if collectionView == profileCollectionView {
             return 3
-        } else {
-            return 1
-        }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == profileCollectionView {
             return 1
-        } else {
-            return 7
-        }
     }
     
 }
@@ -259,7 +232,6 @@ extension ProfileViewController: UICollectionViewDataSource {
 extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == profileCollectionView {
             
             if indexPath.section == 0 {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelfUserInfoCell.identifier , for: indexPath) as? SelfUserInfoCell else {
@@ -297,23 +269,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 cell.layer.cornerRadius = 20
                 return cell
             }
-        } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCollectionCell.identifier , for: indexPath) as? ProfileGraphCollectionCell else {
-                return UICollectionViewCell()
-            }
-            
-            let weekCalculator = ProfileViewController.weekAddedMemory * 7
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            
-            let dayCalculator = (86400 * (1-Contents.todayOfTheWeek + weekCalculator + indexPath.item))
-            let cellDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(dayCalculator)))
-            
-            cell.cellDate = cellDate
-            cell.checkInHistory = viewModel.user?.checkInHistory
-            cell.backgroundColor = .systemBackground
-            return cell
-        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -329,7 +285,6 @@ extension ProfileViewController: UICollectionViewDelegate {
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-        if collectionView == profileCollectionView {
             if indexPath.section == 0 {
                 return CGSize(width: profileCollectionView.frame.width, height: 166)
             } else if indexPath.section == 1 {
@@ -337,27 +292,12 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
             } else {
                 return CGSize(width: profileCollectionView.frame.width, height: 190)
             }
-        }else {
-            return CGSize(width: 27, height: 154)
-        }
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            if collectionView == profileCollectionView {
                return UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
-            }else {
-                return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            }
         }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if collectionView == profileCollectionView {
-            return CGFloat(0)
-        }else {
-            return CGFloat(profileCollectionView.frame.width - 55 - 27*7)/6
-        }
-    }
 }
 
 // MARK: - MovePage

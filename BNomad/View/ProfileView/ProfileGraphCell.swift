@@ -125,6 +125,8 @@ class ProfileGraphCell: UICollectionViewCell {
     
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension ProfileGraphCell: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -135,6 +137,8 @@ extension ProfileGraphCell: UICollectionViewDataSource {
     }
     
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension ProfileGraphCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -156,6 +160,8 @@ extension ProfileGraphCell: UICollectionViewDelegate {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension ProfileGraphCell: UICollectionViewDelegateFlowLayout {
     

@@ -31,11 +31,15 @@ class MapViewController: UIViewController {
 
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
     
+    private var currentAnnotation: MKAnnotation?
+    
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
     var selectedRegion: Region?
     
     var visiblePlacesOnMap: [Place] = []
+    var allAnnotation: [MKAnnotation] = []
+    var visitedAnnotation: [MKAnnotation] = []
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -182,7 +186,6 @@ class MapViewController: UIViewController {
     
     var store = Set<AnyCancellable>()
     
-    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
     @objc func goBackToCheckInView() {
         let controller = PlaceCheckInViewController()
         guard let user = viewModel.user else { return print("USER ERR") }
@@ -199,7 +202,12 @@ class MapViewController: UIViewController {
         }
     }
     
-    private var currentAnnotation: MKAnnotation?
+    private let visitedPlaceToggle: UISwitch = {
+        let toggle = UISwitch()
+        toggle.preferredStyle = .sliding
+        toggle.addTarget(self, action: #selector(visitedPlacesSwitch), for: .valueChanged)
+        return toggle
+    }()
     
     // MARK: - LifeCycle
     
@@ -338,6 +346,7 @@ class MapViewController: UIViewController {
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
             self.checkInBinding()
+            self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
         }
         
         map.delegate = self
@@ -354,11 +363,43 @@ class MapViewController: UIViewController {
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
         
+        map.addSubview(visitedPlaceToggle)
+        visitedPlaceToggle.anchor(top: map.topAnchor, right: map.rightAnchor, paddingTop: 110, paddingRight: 30, width: 30, height: 20)
+        
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)
         
         map.addSubview(userTrackingBtn)
         userTrackingBtn.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 70, paddingRight: 15, width: 40, height: 40)
+    }
+    
+    func visitedPlacesMapping() {
+        self.visitedAnnotation.removeAll()
+        
+        for place in viewModel.places {
+            guard let user = self.viewModel.user else { return }
+            guard let history = user.checkInHistory else { return }
+            
+            if history.contains(where: { checkIn in
+                checkIn.placeUid == place.placeUid
+            }) {
+                self.visitedAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            }
+        }
+    }
+    
+    @objc func visitedPlacesSwitch(sender: UISwitch) {
+        print("remove")
+        map.removeAnnotations(map.annotations)
+
+        if sender.isOn {
+            visitedPlacesMapping()
+            map.addAnnotations(visitedAnnotation)
+            print(visitedAnnotation)
+        } else {
+            map.addAnnotations(allAnnotation)
+            print(allAnnotation)
+        }
     }
     
     func userCombine() {
@@ -382,22 +423,17 @@ extension MapViewController: MKMapViewDelegate {
         userAnnotationView?.isEnabled = false
     }
     
-
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         visiblePlacesOnMap = []
         
         for place in viewModel.places {
             if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
             {
-                print(place, "visible")
                 visiblePlacesOnMap.append(place)
             } else {
-                print(place, "invisible")
                 visiblePlacesOnMap.removeAll { $0.name == place.name }
-
             }
         }
-
     }
     
     // 맵 오버레이 rendering

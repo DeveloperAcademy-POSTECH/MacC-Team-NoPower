@@ -161,13 +161,6 @@ class SignUpViewController: UIViewController {
         return textfield
     }()
     
-    private var statusLineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = CustomColor.nomadGray1
-        
-        return view
-    }()
-    
     private lazy var introductionField: UITextView = {
         let textView = UITextView()
         textView.text = introPlaceholder
@@ -258,7 +251,6 @@ class SignUpViewController: UIViewController {
         occupationLineView.isHidden = true
         occupationCounterLabel.isHidden = true
         statusField.isHidden = true
-        statusLineView.isHidden = true
         statusCounterLabel.isHidden = true
         introRectangle.isHidden = true
         introductionField.isHidden = true
@@ -286,6 +278,7 @@ class SignUpViewController: UIViewController {
     
     func configUI() {
         let viewWidth = view.bounds.width
+        let viewHeight = view.bounds.height
         let contentInset: CGFloat = 24
         let textFieldWidth: CGFloat = viewWidth - (contentInset * 2)
         let textFieldTopSpacing: CGFloat = 45
@@ -362,17 +355,7 @@ class SignUpViewController: UIViewController {
             paddingLeft: 0,
             width: textFieldWidth
         )
-        
-        view.addSubview(statusLineView)
-        statusLineView.anchor(
-            top: statusField.bottomAnchor,
-            left: requestLabel.leftAnchor,
-            paddingTop: textFieldLineSpacing,
-            paddingLeft: 0,
-            width: textFieldWidth,
-            height: lineHeight
-        )
-        
+
         view.addSubview(introRectangle)
         introRectangle.anchor(
             top: occupationField.bottomAnchor,
@@ -402,16 +385,17 @@ class SignUpViewController: UIViewController {
             paddingTop: 8
         )
         
-        let profileImageSize = viewWidth * 127/390
-        let plusImageSize = profileImageSize * 30/127
+        let profileImageSize = viewWidth * 150/390
+        let plusImageSize = profileImageSize * 36/127
+        let profileImagePaddingTop = viewHeight * 140/844
         
         view.addSubview(profileImageButton)
         profileImageButton.setPreferredSymbolConfiguration(.init(pointSize: profileImageSize, weight: .regular, scale: .default), forImageIn: .normal)
         profileImageButton.layer.cornerRadius = profileImageSize / 2
         profileImageButton.centerX(inView: view)
         profileImageButton.anchor(
-            top: introRectangle.bottomAnchor,
-            paddingTop: 35,
+            top: requestLabel.bottomAnchor,
+            paddingTop: profileImagePaddingTop,
             width: profileImageSize,
             height: profileImageSize
         )
@@ -431,10 +415,10 @@ class SignUpViewController: UIViewController {
         requestLabel.text = "노마드가 되기 위해\n\(requestSentence[index])"
     }
     
-    func showAlert() {
+    func showAlert(message: String) {
         let alertLabel = UILabel()
         alertLabel.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        alertLabel.text = "빈칸없이 입력해주세요!"
+        alertLabel.text = message
         alertLabel.textColor = .red
         alertLabel.alpha = 1.0
         self.view.addSubview(alertLabel)
@@ -507,9 +491,15 @@ class SignUpViewController: UIViewController {
     
     // TODO: - 입력된 user 정보 기반을 user 생성 & firebase에 user 정보 업데이트
     @objc func didTapInputConfirmButton() {
-        if occupationField.isHidden == true {
+        
+        // 닉네임 입력 중일 때
+        if occupationField.isHidden == true && profileImageButton.isHidden == true {
+            
+            // 닉네임 빈칸
             if nicknameField.text?.isEmpty == true {
-                print("닉네임을 입력하세요.")
+                showAlert(message: "닉네임을 입력해주세요!")
+                
+            // 닉네임 빈칸 아님 -> 직업칸 보여줌
             } else {
                 occupationField.isHidden = false
                 occupationLineView.isHidden = false
@@ -523,9 +513,14 @@ class SignUpViewController: UIViewController {
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
             
+        // 직업 입력 중일 때
         } else if occupationField.isHidden == false && introductionField.isHidden == true {
+            
+            // 직업칸 빈칸
             if occupationField.text?.isEmpty == true {
-                print("직업을 입력하세요.")
+                showAlert(message: "직업을 입력해주세요!")
+                
+            // 직업칸 빈칸 아님 -> 자기소개칸 보여줌
             } else {
                 statusCounterLabel.isHidden = false
                 introRectangle.isHidden = false
@@ -538,38 +533,50 @@ class SignUpViewController: UIViewController {
                 updateRequestLabel(index: index)
                 requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
             }
-            
+        
+        // 자기소개 입력 중일 때
         } else if introductionField.isHidden == false && profileImageButton.isHidden == true {
-            if introductionField.text.isEmpty == true || introductionField.text == introPlaceholder {
-                print("자기소개를 입력하세요.")
-            } else {
-                profileImageButton.isHidden = false
-                plusView.isHidden = false
-                dot3View.backgroundColor = CustomColor.nomadGray2
-                dot4View.backgroundColor = CustomColor.nomadBlue
-                inputConfirmButton.setTitle("확인", for: .normal)
-                
-                index = 3
-                updateRequestLabel(index: index)
-                requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
-            }
-        } else {
             if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
                 var isIntroDone = false
                 if intro != introPlaceholder && intro.isEmpty == false {
                     isIntroDone = true
                 }
                 
+                // 닉네임, 직업, 자기소개 모두 입력된 경우 -> 프로필사진 업로드화면으로 넘어감
                 if !nickname.isEmpty && !occupation.isEmpty && isIntroDone == true {
-                    print("입력완료")
-                    let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
-                    viewModel.user = user
-                    Analytics.logEvent("signUpCompleted", parameters: nil)
-                    self.dismiss(animated: true) // 마지막 확인 버튼 클릭 후 dismiss 안됨
+                    nicknameField.isHidden = true
+                    nicknameLineView.isHidden = true
+                    nicknameCounterLabel.isHidden = true
+                    occupationField.isHidden = true
+                    occupationLineView.isHidden = true
+                    occupationCounterLabel.isHidden = true
+                    statusCounterLabel.isHidden = true
+                    introRectangle.isHidden = true
+                    introductionField.isHidden = true
+                    
+                    profileImageButton.isHidden = false
+                    plusView.isHidden = false
+                    dot3View.backgroundColor = CustomColor.nomadGray2
+                    dot4View.backgroundColor = CustomColor.nomadBlue
+                    inputConfirmButton.setTitle("확인", for: .normal)
+                    index = 3
+                    updateRequestLabel(index: index)
+                    requestLabel.asColor(targetString: requestItem[index], color: CustomColor.nomadBlue ?? .label)
+                    view.endEditing(true)
+                
+                // 닉네임, 직업, 자기소개 중 빈칸 있는 경우 -> 경고 메시지
                 } else {
-                    showAlert()
-                    print("빈칸있음")
+                    showAlert(message: "빈칸없이 입력해주세요!")
                 }
+            }
+        
+        // 사진 업로드 화면일 때 -> 드디어 저장(사진 업로드 여부 체크 X)
+        } else if profileImageButton.isHidden == false {
+            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
+                let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
+                viewModel.user = user
+                Analytics.logEvent("signUpCompleted", parameters: nil)
+                self.dismiss(animated: true) // 마지막 확인 버튼 클릭 후 dismiss 안됨
             }
         }
     }
@@ -583,8 +590,6 @@ extension SignUpViewController: UITextFieldDelegate {
             nicknameLineView.backgroundColor = CustomColor.nomadBlue
         } else if textField == occupationField {
             occupationLineView.backgroundColor = CustomColor.nomadBlue
-        } else {
-            statusLineView.backgroundColor = CustomColor.nomadBlue
         }
         
         showKeyboardAcc()
@@ -595,8 +600,6 @@ extension SignUpViewController: UITextFieldDelegate {
             nicknameLineView.backgroundColor = CustomColor.nomadGray1
         } else if textField == occupationField {
             occupationLineView.backgroundColor = CustomColor.nomadGray1
-        } else {
-            statusLineView.backgroundColor = CustomColor.nomadGray1
         }
         showInputConfirmButton()
     }

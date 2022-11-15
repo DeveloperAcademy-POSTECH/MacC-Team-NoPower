@@ -93,6 +93,8 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.backButtonTitle = ""
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+        
         ProfileViewController.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileViewController.weekAddedMemory)
         ProfileGraphCell.addedWeek = 0
         ProfileGraphCell.editWeek(edit: 0)
@@ -114,7 +116,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
-        navigationItem.backButtonTitle = "취소"
+        navigationItem.backButtonTitle = ""
         profileImageView.image = viewModel.user?.profileImage ?? UIImage(named: "othersProfile")
     }
     
@@ -127,11 +129,16 @@ class ProfileViewController: UIViewController {
     
     @objc func moveToCalendar() {
 //        if userFromListUid == viewModel.user?.userUid || FirebaseAuth와 지금 viewModel.user가 같은 uid인지 체크 {
-            CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
+        CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
             navigationController?.pushViewController(CalendarViewController(), animated: true)
 //        } else {
 //            print("다른 사람의 캘린더뷰는 보지 못합니다")
 //        }
+    }
+    
+    @objc func moveToVisitCollection() {
+        VisitCardCollectionViewController.checkInHistory = viewModel.user?.checkInHistory
+            navigationController?.pushViewController(VisitCardCollectionViewController(), animated: true)
     }
     
     @objc func plusWeekTapButton() {
@@ -310,7 +317,7 @@ extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            moveToCalendar()
+            moveToVisitCollection()
         }
     }
   

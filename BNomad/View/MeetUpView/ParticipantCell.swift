@@ -47,6 +47,8 @@ class ParticipantCell: UICollectionViewCell {
     private let profileImageView: UIImageView = {
         let image = UIImageView()
         image.tintColor = CustomColor.nomadGray1
+        image.clipsToBounds = true
+        
         return image
     }()
     
@@ -76,18 +78,16 @@ class ParticipantCell: UICollectionViewCell {
         crownView.anchor(top: self.topAnchor, width: 22, height: 18)
         crownView.centerX(inView: self)
         
+        let screenWidth = UIScreen.main.bounds.width
+        let profileImageSize = screenWidth * 58/390
+        
         self.addSubview(profileImageView)
-        profileImageView.anchor(top: crownView.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 7, paddingRight: 7)
-        profileImageView.heightAnchor.constraint(equalTo: self.profileImageView.widthAnchor, multiplier: 1.0/1.0).isActive = true
+        profileImageView.anchor(top: crownView.bottomAnchor, paddingTop: 8, width: profileImageSize, height: profileImageSize)
+        profileImageView.centerX(inView: self)
+        profileImageView.layer.cornerRadius = profileImageSize / 2
         
         self.addSubview(nicknameLabel)
         nicknameLabel.anchor(top: profileImageView.bottomAnchor, paddingTop: 14)
         nicknameLabel.centerX(inView: self)
-        
-//        if isOrganizer == true {
-//            crownView.isHidden = false
-//        } else {
-//            crownView.isHidden = true
-//        }
     }
 }

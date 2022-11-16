@@ -14,6 +14,8 @@
 		041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A628FFF459005D19CC /* CalendarViewController.swift */; };
 		041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A828FFF4FB005D19CC /* CalendarCell.swift */; };
 		041351AD29081D16005D19CC /* ProfileGraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */; };
+		04CC781D29231A02005F3079 /* VisitCardHeaderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */; };
+		04D095A82922165900F1AB3A /* VisitCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */; };
 		159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */; };
 		159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */; };
 		159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */; };
@@ -37,6 +39,7 @@
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5828F7D710002838A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5728F7D710002838A4 /* Assets.xcassets */; };
 		DF288B5B28F7D710002838A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */; };
+		DF404CC729229293002C987E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = DF404CC629229293002C987E /* FirebaseAuth */; };
 		DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA42918A0B40099D41D /* MeetUpViewController.swift */; };
 		DF561CA82918A0C40099D41D /* ReviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CA72918A0C40099D41D /* ReviewListViewController.swift */; };
 		DF561CAB2918A0DA0099D41D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF561CAA2918A0DA0099D41D /* SettingViewController.swift */; };
@@ -67,7 +70,6 @@
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
 		E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23328FE75F7005C0D77 /* String+Extension.swift */; };
-		F6183CAF28FFA74000185A1F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CAE28FFA74000185A1F /* FirebaseAuth */; };
 		F6183CB128FFA74000185A1F /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB028FFA74000185A1F /* FirebaseDatabase */; };
 		F6183CB328FFA74000185A1F /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB228FFA74000185A1F /* FirebaseDatabaseSwift */; };
 		F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB428FFA74000185A1F /* FirebaseStorage */; };
@@ -88,6 +90,8 @@
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		041351A828FFF4FB005D19CC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCollectionCell.swift; sourceTree = "<group>"; };
+		04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitCardHeaderCollectionView.swift; sourceTree = "<group>"; };
+		04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitCardCollectionViewController.swift; sourceTree = "<group>"; };
 		159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceCheckInViewController.swift; sourceTree = "<group>"; };
 		159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListViewCell.swift; sourceTree = "<group>"; };
 		159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListHeader.swift; sourceTree = "<group>"; };
@@ -157,10 +161,10 @@
 				F6183CB328FFA74000185A1F /* FirebaseDatabaseSwift in Frameworks */,
 				F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */,
 				E27CEED62919F57D00369A6E /* Kingfisher in Frameworks */,
+				DF404CC729229293002C987E /* FirebaseAuth in Frameworks */,
 				F6183CB928FFA83F00185A1F /* FirebaseAnalytics in Frameworks */,
 				F6183CB128FFA74000185A1F /* FirebaseDatabase in Frameworks */,
 				F6183CB728FFA83800185A1F /* FirebaseFirestore in Frameworks */,
-				F6183CAF28FFA74000185A1F /* FirebaseAuth in Frameworks */,
 				E25AD9E42912239A00F815B2 /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,12 +289,14 @@
 			children = (
 				DFE747C829000FAF0048E70A /* ProfileEditView */,
 				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
-				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */,
+				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A828FFF4FB005D19CC /* CalendarCell.swift */,
 				041351A628FFF459005D19CC /* CalendarViewController.swift */,
+				04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */,
+				04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -432,7 +438,6 @@
 			);
 			name = BNomad;
 			packageProductDependencies = (
-				F6183CAE28FFA74000185A1F /* FirebaseAuth */,
 				F6183CB028FFA74000185A1F /* FirebaseDatabase */,
 				F6183CB228FFA74000185A1F /* FirebaseDatabaseSwift */,
 				F6183CB428FFA74000185A1F /* FirebaseStorage */,
@@ -441,6 +446,7 @@
 				E226DA6D29120A540071E289 /* FirebasePerformance */,
 				E25AD9E32912239A00F815B2 /* FirebaseRemoteConfig */,
 				E27CEED52919F57D00369A6E /* Kingfisher */,
+				DF404CC629229293002C987E /* FirebaseAuth */,
 			);
 			productName = BNomad;
 			productReference = DF288B4B28F7D70F002838A4 /* BNomad.app */;
@@ -524,6 +530,7 @@
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
 				DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */,
+				04D095A82922165900F1AB3A /* VisitCardCollectionViewController.swift in Sources */,
 				633823EE291E1D5F004977BA /* WithNomadHeader.swift in Sources */,
 				7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
@@ -555,6 +562,7 @@
 				F6DFE0B329194CB400C808AF /* ReviewCell.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
+				04CC781D29231A02005F3079 /* VisitCardHeaderCollectionView.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 				E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */,
@@ -703,9 +711,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = DF85MB57QP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
@@ -724,6 +734,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nopower.b.nomad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = BnomadProvisioningProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -737,9 +748,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = DF85MB57QP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
@@ -758,6 +771,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nopower.b.nomad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = BnomadProvisioningProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -807,6 +821,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DF404CC629229293002C987E /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		E226DA6D29120A540071E289 /* FirebasePerformance */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -821,11 +840,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E27CEED42919F57D00369A6E /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		F6183CAE28FFA74000185A1F /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F6183CAD28FFA74000185A1F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
 		};
 		F6183CB028FFA74000185A1F /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;

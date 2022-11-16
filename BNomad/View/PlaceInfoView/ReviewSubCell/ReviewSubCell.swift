@@ -45,11 +45,15 @@ class ReviewSubCell: UICollectionViewCell {
     
     var reviewImageView: UIImageView = {
         let reviewImageView = UIImageView()
+        reviewImageView.layer.cornerRadius = 5
+        reviewImageView.clipsToBounds = true
         return reviewImageView
     }()
     
     var profileImageView: UIImageView = {
-        let profileImageView = UIImageView()        
+        let profileImageView = UIImageView()
+        profileImageView.layer.cornerRadius = 10
+        profileImageView.clipsToBounds = true
         return profileImageView
     }()
     

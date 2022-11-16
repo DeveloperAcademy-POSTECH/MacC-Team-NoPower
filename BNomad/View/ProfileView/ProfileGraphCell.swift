@@ -14,33 +14,14 @@ class ProfileGraphCell: UICollectionViewCell {
     lazy var viewModel = CombineViewModel.shared
 
     var thisCellsDate: String?
-    var checkInHistory: [CheckIn]? {
-        didSet {
-            guard let checkInHistory = checkInHistory else { return
-                
-            }
-            var checkInDates: [String] = []
-            checkInDates = checkInHistory.compactMap { $0.date } //data에서 체크인한 날자만 맵핑
-            
-            if checkInDates.contains(thisCellsDate ?? "") {
-            }
-            
-        }
-    }
+    var checkInHistory: [CheckIn]?
     
     static let identifier = "ProfileGraphCell"
-    static var addedWeek: Int = 0
-    
-    private lazy var nameLabel: UILabel = {
-        let label = UILabel()
-
-        let lastCheckIn = self.viewModel.user?.checkInHistory?.last
-        let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-        label.text = place?.name
-        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    static var addedWeek: Int = 0 {
+        didSet {
+            profileGraphCollectionView.reloadData()
+        }
+    }
     
     private let timeLabel: [UILabel] = {
         var label:[UILabel] = []
@@ -76,10 +57,24 @@ class ProfileGraphCell: UICollectionViewCell {
         return label
     }()
     
+    private static let profileGraphCollectionView:  UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.isScrollEnabled = false
+        collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
+        
+        return collectionView
+    }()
+    
     // MARK: - LifeCycle
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+            
+            ProfileGraphCell.profileGraphCollectionView.dataSource = self
+            ProfileGraphCell.profileGraphCollectionView.delegate = self
+            
             render()
         }
         
@@ -109,6 +104,9 @@ class ProfileGraphCell: UICollectionViewCell {
         contentView.addSubview(dayStack)
         dayStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 166, paddingLeft: 45)
 
+        contentView.addSubview(ProfileGraphCell.profileGraphCollectionView)
+        ProfileGraphCell.profileGraphCollectionView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 10, paddingLeft: 42, width: contentView.frame.width, height: 154)
+        
     }
     
     static func editWeek(edit: Int) { //TODO: 로직 단순화 필요
@@ -122,5 +120,52 @@ class ProfileGraphCell: UICollectionViewCell {
                 dayLabel[index].textColor = .black
             }
         }
+        
+    }
+    
+}
+
+extension ProfileGraphCell: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 7
+    }
+    
+}
+
+extension ProfileGraphCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCollectionCell.identifier , for: indexPath) as? ProfileGraphCollectionCell else {
+            return UICollectionViewCell()
+        }
+        
+        let weekCalculator = ProfileGraphCell.addedWeek * 7
+        print(weekCalculator)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        let dayCalculator = (86400 * (1-Contents.todayOfTheWeek + weekCalculator + indexPath.item))
+        let cellDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(dayCalculator)))
+        
+        cell.cellDate = cellDate
+        cell.checkInHistory = checkInHistory
+        cell.backgroundColor = .systemBackground
+        return cell
+    }
+}
+
+extension ProfileGraphCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
+            return CGSize(width: 27, height: 154)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+            return (CGFloat(contentView.frame.width)-55-27*7)/6
+        
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 import Kingfisher
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -16,30 +17,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         _ = RCValue.shared
-        let deviceUid = UIDevice.current.identifierForVendor?.uuidString
-        guard let deviceUid = deviceUid else { return }
         
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        FirebaseManager.shared.checkUserExist(userUid : deviceUid) { isExist in
-            if isExist {
-                FirebaseManager.shared.fetchUser(id: deviceUid) { user in
-                    self.viewModel.user = user
-                    self.fetchProfileImage()
-                    
-                    FirebaseManager.shared.fetchCheckInHistory(userUid: deviceUid) { checkInHistory in
-                        self.viewModel.user?.checkInHistory = checkInHistory
-                        print("checkIn 유무", self.viewModel.user?.isChecked)
-                        self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
-                        self.window?.makeKeyAndVisible()
+        let current = Auth.auth().currentUser
+        if current != nil {
+            guard let uid = current?.uid else { return }
+            FirebaseManager.shared.checkUserExist(userUid : uid) { isExist in
+                if isExist {
+                    FirebaseManager.shared.fetchUser(id: uid) { user in
+                        self.viewModel.user = user
+                        self.fetchProfileImage()
+                        
+                        FirebaseManager.shared.fetchCheckInHistory(userUid: uid) { checkInHistory in
+                            self.viewModel.user?.checkInHistory = checkInHistory
+                            print("checkIn 유무", self.viewModel.user?.isChecked)
+                            self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                            self.window?.makeKeyAndVisible()
+                        }
                     }
+                } else {
+                    print("no user")
+                    self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                    self.window?.makeKeyAndVisible()
                 }
-            } else {
-                print("no user")
-                self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
-                self.window?.makeKeyAndVisible()
             }
+        } else {
+            self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+            self.window?.makeKeyAndVisible()
         }
     }
     

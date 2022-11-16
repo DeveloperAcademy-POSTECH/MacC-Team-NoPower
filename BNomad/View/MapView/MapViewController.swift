@@ -72,8 +72,10 @@ class MapViewController: UIViewController {
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
             
-            let controller = SignUpViewController() // 추후 로그인뷰로 변경
-            controller.modalPresentationStyle = .fullScreen
+            let controller = LoginViewController() // 추후 로그인뷰로 변경
+            controller.delegate = self
+//            controller.modalPresentationStyle = .fullScreen
+            controller.sheetPresentationController?.detents = [.medium()]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -164,7 +166,7 @@ class MapViewController: UIViewController {
         button.layer.cornerRadius = 4
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
+        button.addTarget(self, action: #selector(presentPlaceListModal), for: .touchUpInside)
         return button
     }()
     
@@ -238,7 +240,7 @@ class MapViewController: UIViewController {
         present(sheet, animated: true, completion: nil)
     }
     
-    @objc private func presentPlaceViewModal() {
+    @objc private func presentPlaceListModal() {
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
@@ -296,13 +298,13 @@ class MapViewController: UIViewController {
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
                     self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
-                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
-                    self.map.selectAnnotation(annotation, animated: true)
-                    let controller = PlaceInfoModalViewController()
-                    controller.selectedPlace = place
-                    controller.delegateForFloating = self
-                    controller.presentationController?.delegate = self
-                    present(controller, animated: true)
+//                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
+//                    self.map.selectAnnotation(annotation, animated: true)
+//                    let controller = PlaceInfoModalViewController()
+//                    controller.selectedPlace = place
+//                    controller.delegateForFloating = self
+//                    controller.presentationController?.delegate = self
+//                    present(controller, animated: true)
                 }
                 
                 print("체크인 상태로 맵 세팅 끝")
@@ -328,11 +330,11 @@ class MapViewController: UIViewController {
     
     // 맵 UI 그리기
     func configueMapUI() {
-        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
-            let controller = SignUpViewController()
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: false)
-        }
+//        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
+//            let controller = SignUpViewController()
+//            controller.modalPresentationStyle = .fullScreen
+//            present(controller, animated: false)
+//        }
         
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
@@ -389,10 +391,10 @@ extension MapViewController: MKMapViewDelegate {
         for place in viewModel.places {
             if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
             {
-                print(place, "visible")
+//                print(place, "visible")
                 visiblePlacesOnMap.append(place)
             } else {
-                print(place, "invisible")
+//                print(place, "invisible")
                 visiblePlacesOnMap.removeAll { $0.name == place.name }
 
             }
@@ -425,7 +427,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.003 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
             let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
@@ -498,5 +500,16 @@ extension MapViewController: ReviewPage {
         let controller = ReviewDetailViewController()
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
+    }
+}
+
+// MARK: - LogInToSignUp
+
+extension MapViewController: LogInToSignUp {
+    func logInToSignUp(userIdentifier: String) {
+        let signUpViewController = SignUpViewController()
+        signUpViewController.modalPresentationStyle = .fullScreen
+        signUpViewController.userIdentifier = userIdentifier
+        self.present(signUpViewController, animated: true)
     }
 }

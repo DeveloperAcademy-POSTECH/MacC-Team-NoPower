@@ -576,7 +576,12 @@ class SignUpViewController: UIViewController {
                 let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                 viewModel.user = user
                 Analytics.logEvent("signUpCompleted", parameters: nil)
-                self.dismiss(animated: true) // 마지막 확인 버튼 클릭 후 dismiss 안됨
+                
+                let completedAlert = UIAlertController(title: "회원가입 완료", message: "회원가입이 완료되었습니다.", preferredStyle: .alert)
+                completedAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
+                    self.dismiss(animated: true)
+                }))
+                present(completedAlert, animated: true)
             }
         }
     }

@@ -11,15 +11,30 @@ class MeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
-    var meetUp: TempMeetUp?
+    let viewModel = CombineViewModel.shared
+    
+    var meetUpViewModel: MeetUpViewModel? {
+        didSet {
+            guard let meetUp = meetUpViewModel?.meetUp else { return }
+            organizerUid = meetUp.organizerUid
+            currentPeopleUids = meetUp.currentPeopleUids
+            meetUpTitleLabel.text = meetUp.title
+            locationLabel.text = meetUp.meetUpPlaceName
+            timeLabel.text = meetUp.time.toTimeString()
+            contentLabel.text = meetUp.description
+            participants.text = "참여 예정 노마더 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
+            participantCollectionView.reloadData()
+        }
+    }
+    
+    var organizerUid: String?
+    var currentPeopleUids: [String]?
     
     private var meetUpTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "점심에 맛찬들 같이 가실 분"
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         label.textColor = CustomColor.nomadBlack
         label.numberOfLines = 1
-        
         return label
     }()
     
@@ -51,7 +66,6 @@ class MeetUpViewController: UIViewController {
     
     private var locationLabel: UILabel = {
         let label = UILabel()
-        label.text = "코워킹스페이스 입구"
         label.font = .preferredFont(forTextStyle: .headline)
         label.textColor = CustomColor.nomadBlack
         
@@ -60,7 +74,6 @@ class MeetUpViewController: UIViewController {
     
     private var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "12시 30분"
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
         
@@ -88,7 +101,6 @@ class MeetUpViewController: UIViewController {
     private var contentLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = "내용내용 맛있는 삼겹살 먹고싶은데 맛찬들 혼자가긴 좀 어쩌구저쩌구"
         label.font = .preferredFont(forTextStyle: .body)
         
         return label
@@ -96,7 +108,6 @@ class MeetUpViewController: UIViewController {
     
     private var participants: UILabel = {
         let label = UILabel()
-        label.text = "참여 예정 노마더 ( 5 / 10 )"
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.textColor = CustomColor.nomadGray1
         
@@ -152,7 +163,15 @@ class MeetUpViewController: UIViewController {
         let alert = UIAlertController(title: "\(meetUpTitleLabel.text ?? "")에 참여 하시겠습니까?", message: "MeetUp에 참여합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let join = UIAlertAction(title: "확인", style: .default, handler: { action in
-            // TODO: 참여하는 액션을 추가해야함
+            // TODO: 인원수 유효성 검사 필요
+            guard
+                let userUid = self.viewModel.user?.userUid,
+                let meetUpUid = self.meetUpViewModel?.meetUp?.meetUpUid,
+                let placeUid = self.meetUpViewModel?.meetUp?.placeUid
+            else { return }
+            FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+                self.meetUpViewModel?.meetUp?.currentPeopleUids?.append(userUid)
+            }
             self.navigationController?.popToRootViewController(animated: true)
         })
         alert.addAction(cancel)
@@ -195,20 +214,13 @@ class MeetUpViewController: UIViewController {
         joinButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 20, paddingBottom: 60, paddingRight: 20, height: 48)
     }
     
-    func setMeetUpData(meetUp: TempMeetUp) {
-        meetUpTitleLabel.text = meetUp.title
-        locationLabel.text = meetUp.meetUpPlaceName
-        timeLabel.text = meetUp.time
-        contentLabel.text = meetUp.description
-        participants.text = "참여 예정 노마더 ( 1 / \(meetUp.maxPeopleNum) )"
-    }
 }
 
 // MARK: - UICollectionViewDataSource
 
 extension MeetUpViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return meetUpViewModel?.meetUp?.currentPeopleUids?.count ?? 0
     }
 }
 
@@ -220,6 +232,8 @@ extension MeetUpViewController: UICollectionViewDelegate {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ParticipantCell.identifier, for: indexPath) as? ParticipantCell else {
             return UICollectionViewCell()
         }
+        cell.organizerUid = organizerUid
+        cell.userUid = currentPeopleUids?[indexPath.row]
         cell.backgroundColor = .white
         
         return cell

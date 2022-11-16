@@ -306,10 +306,9 @@ class FirebaseManager {
 
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
-        let date = date.toDateString()
-        var meetUpHistory: [MeetUp] = []
-        
-        ref.child("meetUpPlace/\(placeUid)/\(date)").observeSingleEvent(of: .value, with: { snapshots in
+        let date = date.toDateString()        
+        ref.child("meetUpPlace/\(placeUid)/\(date)").observe(.value, with: { snapshots in
+            var meetUpHistory: [MeetUp] = []
             for child in snapshots.children {
                 guard let snapshot = child as? DataSnapshot else { return }
                 guard let meetUpDict = snapshot.value as? [String: Any] else { return }
@@ -418,7 +417,7 @@ class FirebaseManager {
                     return
                 }
                 guard let downloadURL = url else { return }
-                self.ref.child("user/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
+                self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
                 completion(downloadURL.absoluteString)
             }
         }

@@ -63,12 +63,12 @@ class PlaceInfoCell: UICollectionViewCell {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
             
-            self.questLabel.text = "\(reviewHistory.count)개의 밋업"
-            let fullText = questLabel.text ?? ""
+            self.meetUplabel.text = "\(reviewHistory.count)개의 밋업"
+            let fullText = meetUplabel.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
             let range = (fullText as NSString).range(of: "\(reviewHistory.count)개")
             attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-            questLabel.attributedText = attribtuedString
+            meetUplabel.attributedText = attribtuedString
         }
     }
     
@@ -102,17 +102,17 @@ class PlaceInfoCell: UICollectionViewCell {
         return dotDivider
     }()
     
-    lazy var questLabel: UILabel = {
-        let questLabel = UILabel()
-        questLabel.textColor = CustomColor.nomadBlack
-        questLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
-        let fullText = questLabel.text ?? ""
+    lazy var meetUplabel: UILabel = {
+        let meetUplabel = UILabel()
+        meetUplabel.textColor = CustomColor.nomadBlack
+        meetUplabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        let fullText = meetUplabel.text ?? ""
         let attribtuedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "5개")
         attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-        questLabel.attributedText = attribtuedString
+        meetUplabel.attributedText = attribtuedString
         
-        return questLabel
+        return meetUplabel
     }()
     
     lazy var checkInButton: UIButton = {
@@ -278,7 +278,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(distanceLabel)
         self.addSubview(checkedinViewLabel)
         self.addSubview(dotDivider)
-        self.addSubview(questLabel)
+        self.addSubview(meetUplabel)
         self.addSubview(checkInButton)
         self.addSubview(checkOutButton)
         self.addSubview(horizontalDivider)
@@ -302,7 +302,7 @@ class PlaceInfoCell: UICollectionViewCell {
         distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
         checkedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
         dotDivider.anchor(top: placeNameLabel.bottomAnchor, left: checkedinViewLabel.rightAnchor, paddingTop: 15, paddingLeft: 35, width: 6, height: 6)
-        questLabel.anchor(top: placeNameLabel.bottomAnchor, left: dotDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
+        meetUplabel.anchor(top: placeNameLabel.bottomAnchor, left: dotDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20, height: 1)
         callButton.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
         phoneNumberLable.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)

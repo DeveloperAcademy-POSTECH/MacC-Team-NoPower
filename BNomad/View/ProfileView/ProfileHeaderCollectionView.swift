@@ -18,7 +18,7 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     
     private let visitCardCellHeaderLabel: UILabel = {
         let label = UILabel()
-        label.text = "체크인 기록"
+        label.text = "최근 방문한 장소"
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
     }()
@@ -88,7 +88,7 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         profileGraphCellHeaderLabel.removeFromSuperview()
         
         addSubview(visitCardCellHeaderLabel)
-        visitCardCellHeaderLabel.anchor(left: self.leftAnchor, paddingLeft: 30)
+        visitCardCellHeaderLabel.anchor(left: self.leftAnchor, paddingLeft: 20)
         visitCardCellHeaderLabel.centerY(inView: self)
     }
     
@@ -100,11 +100,11 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         profileGraphCellHeaderLabel.centerY(inView: self)
         
         addSubview(minusWeek)
-        minusWeek.anchor(left: self.leftAnchor, paddingLeft: 45)
+        minusWeek.anchor(left: self.leftAnchor, paddingLeft: 20)
         minusWeek.centerY(inView: self)
         
         addSubview(plusWeek)
-        plusWeek.anchor(right: self.rightAnchor, paddingRight: 45)
+        plusWeek.anchor(right: self.rightAnchor, paddingRight: 20)
         plusWeek.centerY(inView: self)
     }
     

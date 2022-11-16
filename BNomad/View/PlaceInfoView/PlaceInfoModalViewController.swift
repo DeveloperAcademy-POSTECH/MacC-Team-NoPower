@@ -249,6 +249,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
         else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
             cell.reviewHistory = reviewHistory
+            cell.delegate = self
             return cell
         }
         else if indexPath.section == 2 {
@@ -297,7 +298,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
         
         if indexPath.section == 0 {
-            return CGSize(width: viewWidth, height: 400)
+            return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 370)
         } else if indexPath.section == 2 {
@@ -341,3 +342,11 @@ extension PlaceInfoModalViewController: ReviewPage {
     }
 }
 
+// MARK: - ShowReviewListView
+
+extension PlaceInfoModalViewController: ShowReviewListView {
+    func didTapShowReviewListView() {
+        let ReviewListView = ReviewListViewController()
+        self.present(ReviewListView, animated: true, completion: nil)
+    }
+}

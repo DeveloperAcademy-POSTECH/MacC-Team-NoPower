@@ -7,12 +7,15 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     
     // MARK: - Properties
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
+    var userIdentifier: String = ""
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
@@ -276,10 +279,7 @@ class SignUpViewController: UIViewController {
     // MARK: - Methods
     
     func setUser(nickname: String, occupation: String, intro: String) -> User? {
-        let deviceUid = UIDevice.current.identifierForVendor?.uuidString
-        guard let userUid = deviceUid else { return nil}
-        
-        let user = User(userUid: userUid, nickname: nickname, occupation: occupation, introduction: intro)
+        let user = User(userUid: userIdentifier, nickname: nickname, occupation: occupation, introduction: intro)
         FirebaseManager.shared.setUser(user: user)
         return user
     }

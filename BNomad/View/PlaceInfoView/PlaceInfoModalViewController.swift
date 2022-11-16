@@ -208,8 +208,9 @@ class PlaceInfoModalViewController: UIViewController {
         let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 체크인하실 수 있습니다.", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
-            let controller = SignUpViewController() // 추후 로그인뷰로 변경
-            controller.modalPresentationStyle = .fullScreen
+            let controller = LoginViewController()
+            controller.delegate = self
+            controller.sheetPresentationController?.detents = [.medium()]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -342,8 +343,16 @@ extension PlaceInfoModalViewController: ReviewPage {
     }
 }
 
-// MARK: - ShowReviewListView
+extension PlaceInfoModalViewController: LogInToSignUp {
+    func logInToSignUp(userIdentifier: String) {
+        let signUpViewController = SignUpViewController()
+        signUpViewController.modalPresentationStyle = .fullScreen
+        signUpViewController.userIdentifier = userIdentifier
+        self.present(signUpViewController, animated: true)
+    }
+}
 
+// MARK: - ShowReviewListView
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()

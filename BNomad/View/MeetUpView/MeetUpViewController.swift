@@ -156,7 +156,11 @@ class MeetUpViewController: UIViewController {
     // MARK: - Actions
     
     @objc func editMeetUpContent() {
-        // TODO: 편집뷰로 이동
+        let controller = NewMeetUpViewController()
+        controller.isNewMeetUp = false
+        controller.meetUpViewModel = meetUpViewModel
+        self.navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     @objc func joinMeetUp() {

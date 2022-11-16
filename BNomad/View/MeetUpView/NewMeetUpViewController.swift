@@ -11,8 +11,27 @@ class NewMeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
+    let viewModel = CombineViewModel.shared
+    
+    var meetUpViewModel: MeetUpViewModel? {
+        didSet {
+            if isNewMeetUp == false {
+                guard let meetUp = meetUpViewModel?.meetUp else { return }
+                subjectField.text = meetUp.title
+                timeField.text = meetUp.time.toTimeString()
+                timePicker.date = meetUp.time
+                locationField.text = meetUp.meetUpPlaceName
+                counter = meetUp.maxPeopleNum
+                contentField.text = meetUp.description
+                contentField.textColor = CustomColor.nomadBlack
+            }
+        }
+    }
+    
     var placeUid : String?
     var userUid : String?
+    
+    var isNewMeetUp: Bool?
     
     private enum Value {
         static let cornerRadius: CGFloat = 12.0
@@ -263,10 +282,12 @@ class NewMeetUpViewController: UIViewController {
         
         configUI()
         
-        navigationItem.title = "새로운 모임 생성"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneCreatingMeetUp))
-                 navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelCreatingMeetUp))
+        if isNewMeetUp == true {
+            configNewMeetUp()
+        } else {
+            configEditMeetUp()
+        }
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         
         subjectField.delegate = self
         locationField.delegate = self
@@ -306,8 +327,6 @@ class NewMeetUpViewController: UIViewController {
     }
     
     @objc func didTapDoneCreatingMeetUp() {
-        // TODO: 내용 저장 & self.dismiss 후 어디로 갈것인지? CheckInView? MeetUpView?
-        
         if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
             let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
             FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
@@ -319,7 +338,22 @@ class NewMeetUpViewController: UIViewController {
         self.dismiss(animated: true)
     }
     
+    @objc func didTapDoneEditingMeetUp() {
+         // TODO: 편집 변경사항 저장 & PlaceCheckInView로 가기
+     }
+    
     // MARK: - Helpers
+    
+    func configNewMeetUp() {
+        navigationItem.title = "새로운 모임 생성"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelCreatingMeetUp))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneCreatingMeetUp))
+    }
+
+    func configEditMeetUp() {
+        navigationItem.title = "밋업 편집"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneEditingMeetUp))
+    }
     
     func configUI() {
         

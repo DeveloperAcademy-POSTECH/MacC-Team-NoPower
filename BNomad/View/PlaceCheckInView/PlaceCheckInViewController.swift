@@ -219,6 +219,7 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
         let newMeetUpView = NewMeetUpViewController()
         newMeetUpView.placeUid = selectedPlace?.placeUid
         newMeetUpView.userUid = viewModel.user?.userUid
+        newMeetUpView.isNewMeetUp = true
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
     }

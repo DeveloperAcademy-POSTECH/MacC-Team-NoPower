@@ -237,19 +237,25 @@ class PlaceInfoCell: UICollectionViewCell {
     func userCheck() {
         viewModel.$user
             .sink { user in
-                guard let user = user else { return }
-                if user.isChecked && self.place?.placeUid == user.currentCheckIn?.placeUid {
-                    self.checkInButton.isHidden = true
-                    self.checkOutButton.isHidden = false
-                    self.alreadyCheckIn.isHidden = true
-                } else if user.isChecked && self.place?.placeUid != user.currentCheckIn?.placeUid {
-                    self.checkInButton.isHidden = true
-                    self.checkOutButton.isHidden = true
-                    self.alreadyCheckIn.isHidden = false
-                } else {
+                if user == nil {
                     self.checkInButton.isHidden = false
                     self.checkOutButton.isHidden = true
                     self.alreadyCheckIn.isHidden = true
+                } else {
+                    guard let user = user else { return }
+                    if user.isChecked && self.place?.placeUid == user.currentCheckIn?.placeUid {
+                        self.checkInButton.isHidden = true
+                        self.checkOutButton.isHidden = false
+                        self.alreadyCheckIn.isHidden = true
+                    } else if user.isChecked && self.place?.placeUid != user.currentCheckIn?.placeUid {
+                        self.checkInButton.isHidden = true
+                        self.checkOutButton.isHidden = true
+                        self.alreadyCheckIn.isHidden = false
+                    } else {
+                        self.checkInButton.isHidden = false
+                        self.checkOutButton.isHidden = true
+                        self.alreadyCheckIn.isHidden = true
+                    }
                 }
             }
             .store(in: &store)

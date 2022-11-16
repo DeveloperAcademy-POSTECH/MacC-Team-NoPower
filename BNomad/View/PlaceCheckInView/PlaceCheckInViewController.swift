@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol ReviewPage {
     func reviewPageShow()
@@ -21,14 +22,28 @@ class PlaceCheckInViewController: UIViewController {
     
     var selectedPlace: Place? {
         didSet {
-            guard let selectedPlace = selectedPlace else { return }
-            FirebaseManager.shared.fetchCheckInHistory(placeUid: selectedPlace.placeUid) { checkInHistory in
+            guard let place = selectedPlace else { return }
+            FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 let history = checkInHistory.filter { $0.checkOutTime == nil }
                 self.checkInHistory = history
+            }
+            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpHistory in
+                self.meetUpViewModels = []
+                print("meetUpViewModels", self.meetUpViewModels)
+                meetUpHistory.forEach { meetUp in
+                    print("meetUpViewModels", meetUp)
+                    let meetUpViewModel = MeetUpViewModel()
+                    meetUpViewModel.meetUp = meetUp
+                    self.meetUpViewModels?.append(meetUpViewModel)
+                }
+                print("meetUpViewModels", self.meetUpViewModels)
+                self.collectionView.reloadData()
             }
         }
     }
     
+    var meetUpViewModels: [MeetUpViewModel]?
+
     var checkInHistory: [CheckIn]? {
         didSet {
             guard let checkInHistory = checkInHistory else { return }
@@ -99,6 +114,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 1 {
             guard let placeInfoViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PlaceInfoViewCell.identifier, for: indexPath) as? PlaceInfoViewCell else { return UICollectionViewCell() }
+            placeInfoViewCell.meetUpViewModels = meetUpViewModels
             placeInfoViewCell.place = selectedPlace
             placeInfoViewCell.meetUpViewDelegate = self
             placeInfoViewCell.placeInfoViewCelldelegate = self
@@ -201,6 +217,8 @@ extension PlaceCheckInViewController: CheckOutAlert {
 extension PlaceCheckInViewController: NewMeetUpViewShowable {
     func didTapNewMeetUpButton() {
         let newMeetUpView = NewMeetUpViewController()
+        newMeetUpView.placeUid = selectedPlace?.placeUid
+        newMeetUpView.userUid = viewModel.user?.userUid
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
     }
@@ -209,9 +227,9 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
 // MARK: - PlaceInfoViewCellDelegate
 
 extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
-    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, viewModel: TempMeetUp) {
+    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUpViewModel: MeetUpViewModel) {
         let vc = MeetUpViewController()
-        vc.setMeetUpData(meetUp: viewModel)
+        vc.meetUpViewModel = meetUpViewModel
         navigationController?.pushViewController(vc, animated: true)
     }
 }

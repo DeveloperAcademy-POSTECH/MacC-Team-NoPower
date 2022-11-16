@@ -72,8 +72,10 @@ class MapViewController: UIViewController {
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
             
-            let controller = SignUpViewController() // 추후 로그인뷰로 변경
-            controller.modalPresentationStyle = .fullScreen
+            let controller = LoginViewController() // 추후 로그인뷰로 변경
+            controller.delegate = self
+//            controller.modalPresentationStyle = .fullScreen
+            controller.sheetPresentationController?.detents = [.medium()]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -328,11 +330,11 @@ class MapViewController: UIViewController {
     
     // 맵 UI 그리기
     func configueMapUI() {
-        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
-            let controller = SignUpViewController()
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: false)
-        }
+//        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
+//            let controller = SignUpViewController()
+//            controller.modalPresentationStyle = .fullScreen
+//            present(controller, animated: false)
+//        }
         
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
@@ -389,10 +391,10 @@ extension MapViewController: MKMapViewDelegate {
         for place in viewModel.places {
             if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
             {
-                print(place, "visible")
+//                print(place, "visible")
                 visiblePlacesOnMap.append(place)
             } else {
-                print(place, "invisible")
+//                print(place, "invisible")
                 visiblePlacesOnMap.removeAll { $0.name == place.name }
 
             }
@@ -498,5 +500,16 @@ extension MapViewController: ReviewPage {
         let controller = ReviewDetailViewController()
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
+    }
+}
+
+// MARK: - LogInToSignUp
+
+extension MapViewController: LogInToSignUp {
+    func logInToSignUp(userIdentifier: String) {
+        let signUpViewController = SignUpViewController()
+        signUpViewController.modalPresentationStyle = .fullScreen
+        signUpViewController.userIdentifier = userIdentifier
+        self.present(signUpViewController, animated: true)
     }
 }

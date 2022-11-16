@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class WithdrawViewController: UIViewController {
 
@@ -14,6 +15,7 @@ class WithdrawViewController: UIViewController {
     enum Size {
         static let paddingNormal: CGFloat = 20
     }
+    var viewModel = CombineViewModel.shared
     
     private let withdrawLabel: UILabel = {
         let label = UILabel()
@@ -59,7 +61,17 @@ class WithdrawViewController: UIViewController {
         let alert = UIAlertController(title: "탈퇴하기", message: "탈퇴하시겠습니까?", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let withdrawConfirm = UIAlertAction(title: "탈퇴", style: .destructive) { action in
-            // TODO: 유저를 지우는 액션이 들어가 있어야 합니다.
+            if Auth.auth().currentUser != nil {
+                Auth.auth().currentUser?.delete()
+                do {
+                    try Auth.auth().signOut()
+                } catch {
+                    print("signOut 에러")
+                }
+                self.viewModel.user = nil
+            } else {
+                // 로그인되지 않았는데 탈퇴 버튼을 누를경우의 액션
+            }
             print("탈퇴합니다")
             self.navigationController?.popToRootViewController(animated: true)
         }

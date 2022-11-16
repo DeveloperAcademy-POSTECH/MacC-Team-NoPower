@@ -572,9 +572,18 @@ class SignUpViewController: UIViewController {
         
         // 사진 업로드 화면일 때 -> 드디어 저장(사진 업로드 여부 체크 X)
         } else if profileImageButton.isHidden == false {
-            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text {
+            if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text, let image = profileImageButton.image(for: .normal) {
+            
                 let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                 viewModel.user = user
+                guard let userUid = viewModel.user?.userUid else { return }
+                
+                FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
+                    self.viewModel.user?.profileImageUrl = url
+                    let user = User(userUid: userUid, nickname: nickname, profileImageUrl: self.viewModel.user?.profileImageUrl)
+                    FirebaseManager.shared.setUser(user: user)
+                }
+                
                 Analytics.logEvent("signUpCompleted", parameters: nil)
                 
                 let completedAlert = UIAlertController(title: "회원가입 완료", message: "회원가입이 완료되었습니다.", preferredStyle: .alert)

@@ -16,15 +16,13 @@ class SignUpViewController: UIViewController {
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.layer.cornerRadius = 30 / 2
-        button.tintColor = .white
-        button.backgroundColor = .lightGray
-        button.layer.opacity = 0.5
-        button.addTarget(self, action: #selector(dismissPage), for: .touchUpInside)
-        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) { 
-            button.isHidden = true 
-        }
+        button.setTitle("취소", for: .normal)
+        button.setTitleColor(CustomColor.nomadGray1, for: .normal)
+        button.addTarget(self, action: #selector(didTapCancelButon), for: .touchUpInside)
+// A/B 테스트 시 사용예정
+//        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) {
+//            button.isHidden = true
+//        }
         return button
     }()
 
@@ -438,12 +436,9 @@ class SignUpViewController: UIViewController {
     func configCancelButton() {
         view.addSubview(cancelButton)
         cancelButton.anchor(
-            top: view.topAnchor,
+            bottom: requestLabel.topAnchor,
             right: view.rightAnchor,
-            paddingTop: 50,
-            paddingRight: 20,
-            width: 30,
-            height: 30
+            paddingRight: 20
         )
     }
     
@@ -478,8 +473,13 @@ class SignUpViewController: UIViewController {
         }
     }
     
-    @objc func dismissPage() {
-        self.dismiss(animated: true)
+    @objc func didTapCancelButon() {
+        let cancelAlert = UIAlertController(title: "취소하시겠습니까?", message: "취소하면 작성한 내용이 저장되지 않습니다.", preferredStyle: .alert)
+        cancelAlert.addAction(UIAlertAction(title: "작성 취소", style: .default, handler: { action in
+            self.dismiss(animated: true)
+        }))
+        cancelAlert.addAction(UIAlertAction(title: "계속 작성", style: .cancel))
+        present(cancelAlert, animated: true)
     }
     
     @objc func didTapProfileImageButton() {

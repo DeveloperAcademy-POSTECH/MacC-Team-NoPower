@@ -166,7 +166,7 @@ class MapViewController: UIViewController {
         button.layer.cornerRadius = 4
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
+        button.addTarget(self, action: #selector(presentPlaceListModal), for: .touchUpInside)
         return button
     }()
     
@@ -240,7 +240,7 @@ class MapViewController: UIViewController {
         present(sheet, animated: true, completion: nil)
     }
     
-    @objc private func presentPlaceViewModal() {
+    @objc private func presentPlaceListModal() {
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
@@ -298,13 +298,13 @@ class MapViewController: UIViewController {
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
                     self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
-                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
-                    self.map.selectAnnotation(annotation, animated: true)
-                    let controller = PlaceInfoModalViewController()
-                    controller.selectedPlace = place
-                    controller.delegateForFloating = self
-                    controller.presentationController?.delegate = self
-                    present(controller, animated: true)
+//                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
+//                    self.map.selectAnnotation(annotation, animated: true)
+//                    let controller = PlaceInfoModalViewController()
+//                    controller.selectedPlace = place
+//                    controller.delegateForFloating = self
+//                    controller.presentationController?.delegate = self
+//                    present(controller, animated: true)
                 }
                 
                 print("체크인 상태로 맵 세팅 끝")
@@ -427,7 +427,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.003 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
             let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in

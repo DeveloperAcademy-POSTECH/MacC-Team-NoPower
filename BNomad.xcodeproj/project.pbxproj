@@ -14,6 +14,8 @@
 		041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A628FFF459005D19CC /* CalendarViewController.swift */; };
 		041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A828FFF4FB005D19CC /* CalendarCell.swift */; };
 		041351AD29081D16005D19CC /* ProfileGraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */; };
+		04CC781D29231A02005F3079 /* VisitCardHeaderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */; };
+		04D095A82922165900F1AB3A /* VisitCardCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */; };
 		159F831428FF711D00DBF98B /* PlaceCheckInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */; };
 		159F831828FF79B700DBF98B /* CheckedProfileListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */; };
 		159F831C28FFC2FD00DBF98B /* CheckedProfileListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */; };
@@ -87,6 +89,8 @@
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		041351A828FFF4FB005D19CC /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCollectionCell.swift; sourceTree = "<group>"; };
+		04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitCardHeaderCollectionView.swift; sourceTree = "<group>"; };
+		04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitCardCollectionViewController.swift; sourceTree = "<group>"; };
 		159F831328FF711D00DBF98B /* PlaceCheckInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceCheckInViewController.swift; sourceTree = "<group>"; };
 		159F831728FF79B700DBF98B /* CheckedProfileListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListViewCell.swift; sourceTree = "<group>"; };
 		159F831B28FFC2FD00DBF98B /* CheckedProfileListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedProfileListHeader.swift; sourceTree = "<group>"; };
@@ -283,12 +287,14 @@
 			children = (
 				DFE747C829000FAF0048E70A /* ProfileEditView */,
 				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
-				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */,
+				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A828FFF4FB005D19CC /* CalendarCell.swift */,
 				041351A628FFF459005D19CC /* CalendarViewController.swift */,
+				04CC781C29231A02005F3079 /* VisitCardHeaderCollectionView.swift */,
+				04D095A72922165900F1AB3A /* VisitCardCollectionViewController.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -520,6 +526,7 @@
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
 				DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */,
+				04D095A82922165900F1AB3A /* VisitCardCollectionViewController.swift in Sources */,
 				633823EE291E1D5F004977BA /* WithNomadHeader.swift in Sources */,
 				7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */,
 				DF9618AE28FCEFC200E21D30 /* SignUpViewController.swift in Sources */,
@@ -551,6 +558,7 @@
 				F6DFE0B329194CB400C808AF /* ReviewCell.swift in Sources */,
 				DF9618B028FCEFCB00E21D30 /* ProfileViewController.swift in Sources */,
 				DFE747CA29000FC80048E70A /* ProfileEditViewController.swift in Sources */,
+				04CC781D29231A02005F3079 /* VisitCardHeaderCollectionView.swift in Sources */,
 				DF9618A628FCEF6A00E21D30 /* MapViewController.swift in Sources */,
 				DF9618AC28FCEFB600E21D30 /* LoginViewController.swift in Sources */,
 				E251E6DC2907F07E00638C15 /* CombineViewModel.swift in Sources */,

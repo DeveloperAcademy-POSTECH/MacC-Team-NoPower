@@ -163,7 +163,15 @@ class MeetUpViewController: UIViewController {
         let alert = UIAlertController(title: "\(meetUpTitleLabel.text ?? "")에 참여 하시겠습니까?", message: "MeetUp에 참여합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let join = UIAlertAction(title: "확인", style: .default, handler: { action in
-            // TODO: 참여하는 액션을 추가해야함
+            // TODO: 인원수 유효성 검사 필요
+            guard
+                let userUid = self.viewModel.user?.userUid,
+                let meetUpUid = self.meetUpViewModel?.meetUp?.meetUpUid,
+                let placeUid = self.meetUpViewModel?.meetUp?.placeUid
+            else { return }
+            FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+                self.meetUpViewModel?.meetUp?.currentPeopleUids?.append(userUid)
+            }
             self.navigationController?.popToRootViewController(animated: true)
         })
         alert.addAction(cancel)

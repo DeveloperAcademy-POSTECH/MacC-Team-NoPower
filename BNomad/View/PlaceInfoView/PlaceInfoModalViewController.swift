@@ -53,6 +53,7 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     private var numberOfUsers: Int = 0
+
     
     // MARK: - Lifecycle
     

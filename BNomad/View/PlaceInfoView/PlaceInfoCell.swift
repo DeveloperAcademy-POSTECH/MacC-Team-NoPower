@@ -35,9 +35,14 @@ class PlaceInfoCell: UICollectionViewCell {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory
             }
+            FirebaseManager.shared.fetchReviewHistory(placeUid: place.placeUid) { reviewHistory in
+                self.reviewHistory = reviewHistory
+            }
+            
             self.userCheck()
         }
     }
+    
     
     var todayCheckInHistory: [CheckIn]? {
         didSet {
@@ -46,14 +51,27 @@ class PlaceInfoCell: UICollectionViewCell {
                 return
             }
             let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
-            self.chekedinViewLabel.text = "\(history.count)명의 노마더"
-            let fullText = chekedinViewLabel.text ?? ""
+            self.checkedinViewLabel.text = "\(history.count)명의 노마더"
+            let fullText = checkedinViewLabel.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
             let range = (fullText as NSString).range(of: "\(history.count)명")
             attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-            chekedinViewLabel.attributedText = attribtuedString
+            checkedinViewLabel.attributedText = attribtuedString
         }
     }
+    var reviewHistory: [Review]? {
+        didSet {
+            guard let reviewHistory = reviewHistory else { return }
+            
+            self.questLabel.text = "\(reviewHistory.count)개의 밋업"
+            let fullText = questLabel.text ?? ""
+            let attribtuedString = NSMutableAttributedString(string: fullText)
+            let range = (fullText as NSString).range(of: "\(reviewHistory.count)개")
+            attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
+            questLabel.attributedText = attribtuedString
+        }
+    }
+    
 
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
@@ -69,22 +87,23 @@ class PlaceInfoCell: UICollectionViewCell {
         return distanceLabel
     }()
     
-    lazy var chekedinViewLabel: UILabel = {
-        let chekedinViewLabel = UILabel()
-        chekedinViewLabel.textColor = CustomColor.nomadBlack
-        chekedinViewLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
-        return chekedinViewLabel
+    lazy var checkedinViewLabel: UILabel = {
+        let UILabel = UILabel()
+        UILabel.textColor = CustomColor.nomadBlack
+        UILabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        return UILabel
     }()
     
-    let verticalDivider: UILabel = {
-        let verticalDivider = UILabel()
-        verticalDivider.backgroundColor = CustomColor.nomadBlack
-        return verticalDivider
+    let dotDivider: UIView = {
+        let dotDivider = UIView()
+        dotDivider.backgroundColor = CustomColor.nomadGray1
+        dotDivider.layer.cornerRadius = 6
+        
+        return dotDivider
     }()
     
     lazy var questLabel: UILabel = {
         let questLabel = UILabel()
-        questLabel.text = "5개의 밋업"
         questLabel.textColor = CustomColor.nomadBlack
         questLabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
         let fullText = questLabel.text ?? ""
@@ -134,8 +153,7 @@ class PlaceInfoCell: UICollectionViewCell {
         horizontalDivider.backgroundColor = CustomColor.nomadGray2
         return horizontalDivider
     }()
-    // 전화 연결 기능 구현하기
-    // 전화 번호 바인딩 (place.contact)
+
     let callButton: UIButton = {
         let callButton = UIButton()
         callButton.setImage(UIImage(systemName: "phone"), for: .normal)
@@ -171,16 +189,6 @@ class PlaceInfoCell: UICollectionViewCell {
         return addressLable
     }()
     
-//    private var chevronDirection: String = "chevron.down"
-    
-//    private lazy var openOperatingTimeButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(UIImage(systemName: chevronDirection)?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
-//        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
-//        button.addTarget(self, action: #selector(openOrClose), for: .touchUpInside)
-//        return button
-//    }()
-    
     let horizontalDivider2: UILabel = {
         let horizontalDivider2 = UILabel()
         horizontalDivider2.backgroundColor = CustomColor.nomadGray2
@@ -198,14 +206,6 @@ class PlaceInfoCell: UICollectionViewCell {
         horizontalDivider3.backgroundColor = CustomColor.nomadGray2
         return horizontalDivider3
     }()
-    //영업시간 외에 영업끝 함수 만들기
-//    private var operatingStatusLabel: UILabel = {
-//         var operatingStatusLabel = UILabel()
-//        operatingStatusLabel.text = "영업중"
-//        operatingStatusLabel.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
-//        operatingStatusLabel.textColor = CustomColor.nomadBlack
-//         return operatingStatusLabel
-//     }()
     
     // 영업시간 데이터 없음
     private var operatingTimeLabel: UILabel = {
@@ -270,8 +270,8 @@ class PlaceInfoCell: UICollectionViewCell {
     private func configureUI() {
         self.addSubview(placeNameLabel)
         self.addSubview(distanceLabel)
-        self.addSubview(chekedinViewLabel)
-        self.addSubview(verticalDivider)
+        self.addSubview(checkedinViewLabel)
+        self.addSubview(dotDivider)
         self.addSubview(questLabel)
         self.addSubview(checkInButton)
         self.addSubview(checkOutButton)
@@ -282,9 +282,7 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(mapButton)
         self.addSubview(horizontalDivider2)
         self.addSubview(clockButton)
-//        self.addSubview(operatingStatusLabel)
         self.addSubview(operatingTimeLabel)
-//        self.addSubview(openOperatingTimeButton)
         self.addSubview(horizontalDivider3)
         self.addSubview(addressLabel)
         self.addSubview(alreadyCheckIn)
@@ -296,9 +294,9 @@ class PlaceInfoCell: UICollectionViewCell {
     private func setAttributes() {
         placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
-        chekedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
-        verticalDivider.anchor(top: placeNameLabel.bottomAnchor, left: chekedinViewLabel.rightAnchor, paddingTop: 11, paddingLeft: 35, width: 1, height: 15)
-        questLabel.anchor(top: placeNameLabel.bottomAnchor, left: verticalDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
+        checkedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
+        dotDivider.anchor(top: placeNameLabel.bottomAnchor, left: checkedinViewLabel.rightAnchor, paddingTop: 15, paddingLeft: 35, width: 6, height: 6)
+        questLabel.anchor(top: placeNameLabel.bottomAnchor, left: dotDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20, height: 1)
         callButton.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
         phoneNumberLable.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
@@ -307,9 +305,7 @@ class PlaceInfoCell: UICollectionViewCell {
         addressLabel.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
         horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
         clockButton.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
-//        operatingStatusLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
         operatingTimeLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
-//        openOperatingTimeButton.anchor(top: horizontalDivider2.bottomAnchor, right: self.rightAnchor, paddingTop: 9, paddingRight: 38)
         horizontalDivider3.anchor(top: operatingTimeLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 20, paddingRight: 20, height: 1)
         checkInButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
         checkOutButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
@@ -321,16 +317,5 @@ class PlaceInfoCell: UICollectionViewCell {
         addressLabel.text = place.address
         phoneNumberLable.text = place.contact
     }
-//    @objc func openOrClose() {
-//        if self.chevronDirection == "chevron.down" {
-//            self.chevronDirection = "chevron.up"
-//            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.up")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
-//            self.operatingTimeLabel.numberOfLines = 0
-//        } else if self.chevronDirection == "chevron.up" {
-//            self.chevronDirection = "chevron.down"
-//            self.openOperatingTimeButton.setImage(UIImage(systemName: "chevron.down")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
-//            self.operatingTimeLabel.numberOfLines = 1
-//        } else { return }
-//    }
 }
 

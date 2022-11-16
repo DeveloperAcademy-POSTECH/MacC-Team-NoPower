@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04054C9B2923B3D20030C80F /* ProfileHeaderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */; };
 		0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */; };
 		041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A028FF7E72005D19CC /* VisitingInfoCell.swift */; };
 		041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A228FF7E98005D19CC /* ProfileGraphCell.swift */; };
@@ -82,6 +83,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionView.swift; sourceTree = "<group>"; };
 		0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUserInfoCell.swift; sourceTree = "<group>"; };
 		041351A028FF7E72005D19CC /* VisitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitingInfoCell.swift; sourceTree = "<group>"; };
 		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */,
+				04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */,
 				DF9618AF28FCEFCB00E21D30 /* ProfileViewController.swift */,
 				041351A828FFF4FB005D19CC /* CalendarCell.swift */,
 				041351A628FFF459005D19CC /* CalendarViewController.swift */,
@@ -521,6 +524,7 @@
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
+				04054C9B2923B3D20030C80F /* ProfileHeaderCollectionView.swift in Sources */,
 				63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */,
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
@@ -706,10 +710,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DF85MB57QP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
@@ -727,7 +731,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nopower.b.nomad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = BnomadProvisioningProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

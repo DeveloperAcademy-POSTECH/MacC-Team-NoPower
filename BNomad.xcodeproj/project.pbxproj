@@ -63,6 +63,7 @@
 		E27CEED62919F57D00369A6E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E27CEED52919F57D00369A6E /* Kingfisher */; };
 		E2ADB25A2906D44200082596 /* FirebaseTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2ADB2592906D44200082596 /* FirebaseTestVC.swift */; };
 		E2BCE4CC291C975500C6283F /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BCE4CB291C975500C6283F /* Review.swift */; };
+		E2BCE4D629246DF400C6283F /* MeetUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BCE4D529246DF400C6283F /* MeetUpViewModel.swift */; };
 		E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B22F28FE7542005C0D77 /* CheckIn.swift */; };
 		E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23128FE757D005C0D77 /* Date+Extension.swift */; };
 		E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B23328FE75F7005C0D77 /* String+Extension.swift */; };
@@ -77,7 +78,6 @@
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
 		F6DFE0B329194CB400C808AF /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B229194CB400C808AF /* ReviewCell.swift */; };
 		F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +137,7 @@
 		E27CEED02919118C00369A6E /* MeetUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetUp.swift; sourceTree = "<group>"; };
 		E2ADB2592906D44200082596 /* FirebaseTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTestVC.swift; sourceTree = "<group>"; };
 		E2BCE4CB291C975500C6283F /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		E2BCE4D529246DF400C6283F /* MeetUpViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetUpViewModel.swift; sourceTree = "<group>"; };
 		E2E6B22F28FE7542005C0D77 /* CheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIn.swift; sourceTree = "<group>"; };
 		E2E6B23128FE757D005C0D77 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		E2E6B23328FE75F7005C0D77 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -386,6 +387,7 @@
 				DF288B5928F7D710002838A4 /* LaunchScreen.storyboard */,
 				DF288B5C28F7D710002838A4 /* Info.plist */,
 				F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */,
+				E2BCE4D529246DF400C6283F /* MeetUpViewModel.swift */,
 				E251E6DB2907F07E00638C15 /* CombineViewModel.swift */,
 			);
 			path = Application;
@@ -511,6 +513,7 @@
 				041351A928FFF4FB005D19CC /* CalendarCell.swift in Sources */,
 				0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */,
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
+				E2BCE4D629246DF400C6283F /* MeetUpViewModel.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,

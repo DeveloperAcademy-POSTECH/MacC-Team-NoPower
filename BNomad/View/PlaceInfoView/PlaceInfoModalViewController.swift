@@ -341,3 +341,12 @@ extension PlaceInfoModalViewController: ReviewPage {
         self.present(controller, animated: true)
     }
 }
+
+// MARK: - ShowReviewListView
+
+extension PlaceInfoModalViewController: ShowReviewListView {
+    func didTapShowReviewListView() {
+        let ReviewListView = ReviewListViewController()
+        self.present(ReviewListView, animated: true, completion: nil)
+    }
+}

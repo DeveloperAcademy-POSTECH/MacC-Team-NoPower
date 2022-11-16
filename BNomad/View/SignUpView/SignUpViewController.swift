@@ -576,11 +576,9 @@ class SignUpViewController: UIViewController {
             
                 let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
                 viewModel.user = user
-                guard let userUid = viewModel.user?.userUid else { return }
-                
-                FirebaseManager.shared.uploadUserProfileImage(userUid: userUid, image: image) { url in
+                FirebaseManager.shared.uploadUserProfileImage(userUid: userIdentifier, image: image) { url in
                     self.viewModel.user?.profileImageUrl = url
-                    let user = User(userUid: userUid, nickname: nickname, profileImageUrl: self.viewModel.user?.profileImageUrl)
+                    let user = User(userUid: self.userIdentifier, nickname: nickname, profileImageUrl: self.viewModel.user?.profileImageUrl)
                     FirebaseManager.shared.setUser(user: user)
                 }
                 

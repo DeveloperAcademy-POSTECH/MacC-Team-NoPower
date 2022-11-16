@@ -24,7 +24,7 @@ class CalendarViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor(hex: "F5F5F5")
+        collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.isScrollEnabled = true
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         
@@ -48,7 +48,7 @@ class CalendarViewController: UIViewController {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = UIColor(hex: "F5F5F5")
+        collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
         
         return collectionView
@@ -208,7 +208,7 @@ class CalendarViewController: UIViewController {
     // MARK: - Helpers
     
     func configureUI() {
-        view.backgroundColor = UIColor(hex: "F5F5F5")
+        view.backgroundColor = CustomColor.nomad2White
     }
     
     func render() {

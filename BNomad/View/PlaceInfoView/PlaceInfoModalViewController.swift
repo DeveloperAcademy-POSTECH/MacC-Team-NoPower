@@ -54,6 +54,11 @@ class PlaceInfoModalViewController: UIViewController {
     
     private var numberOfUsers: Int = 0
     
+    var checkInAlert: UIAlertController = {
+        let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)
+        return alert
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -63,6 +68,14 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     // MARK: - Helpers
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        // 키보드 업데이트 시 원하는 기능
+        if textField.hasText {
+            checkInAlert.actions[1].isEnabled = true
+        } else {
+            checkInAlert.actions[1].isEnabled = false
+        }
+    }
     
     func checkIn() {
         print("CHECK IN")
@@ -72,8 +85,14 @@ class PlaceInfoModalViewController: UIViewController {
             if distanceChecker() {
                 guard let selectedPlace = selectedPlace else { return }
 
-                let checkInAlert = UIAlertController(title: "체크인 하시겠습니까?", message: "\(selectedPlace.name)에 체크인합니다.", preferredStyle: .alert)
-
+                let checkInAlert = checkInAlert
+                checkInAlert.message = "\(selectedPlace.name)에 체크인합니다."
+                
+                checkInAlert.addTextField() { textField in
+                    textField.placeholder = "오늘의 목표를 입력해주세요"
+                    textField.addTarget(self, action: #selector(self.textFieldDidChange), for: .editingChanged)
+                }
+                
                 checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
                 
                 checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
@@ -81,33 +100,49 @@ class PlaceInfoModalViewController: UIViewController {
                     // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
                     // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
                     
-                    guard let userUid = self.viewModel.user?.userUid else { return }
-                    
-                    let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
-                    FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
-                        if self.viewModel.user?.checkInHistory == nil {
-                            self.viewModel.user?.checkInHistory = [checkIn]
-                        } else {
-                            self.viewModel.user?.checkInHistory?.append(checkIn)
-                        }
-                        self.delegateForFloating?.checkInFloating()
-                    }
+                    self.checkInFirebase()
                     self.delegateForFloating?.checkInFloating()
-                    let controller = PlaceCheckInViewController()
-                    controller.selectedPlace = selectedPlace
-                    controller.delegate = self
-                    let navigationController = UINavigationController(rootViewController: controller)
-                    navigationController.modalPresentationStyle = .fullScreen
-                    navigationController.navigationItem.title = selectedPlace.name
-                    navigationController.navigationBar.tintColor = CustomColor.nomadBlue
-                    self.present(navigationController, animated: true, completion: nil)
+                    self.presentPlaceCheckInView()
+                    
+                    print(checkInAlert.textFields?[0].text) //추후 체크인 메시지 모델로 연결
                 }))
+                
+                checkInAlert.actions[1].isEnabled = false
+
                 present(checkInAlert, animated: true)
             } else {
                 let distanceAlert = UIAlertController(title: "체크인 불가", message: "해당 장소에 500미터 이내로 접근하시면 체크인이 가능합니다.", preferredStyle: .alert)
                 distanceAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
                 present(distanceAlert, animated: true)
             }
+        }
+    }
+    
+    func presentPlaceCheckInView() {
+        guard let selectedPlace = selectedPlace else { return }
+
+        let controller = PlaceCheckInViewController()
+        controller.selectedPlace = selectedPlace
+        controller.delegate = self
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationItem.title = selectedPlace.name
+        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
+        self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    func checkInFirebase() {
+        guard let selectedPlace = selectedPlace else { return }
+        guard let userUid = self.viewModel.user?.userUid else { return }
+
+        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+        FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
+            if self.viewModel.user?.checkInHistory == nil {
+                self.viewModel.user?.checkInHistory = [checkIn]
+            } else {
+                self.viewModel.user?.checkInHistory?.append(checkIn)
+            }
+            self.delegateForFloating?.checkInFloating()
         }
     }
     
@@ -173,8 +208,9 @@ class PlaceInfoModalViewController: UIViewController {
         let checkOutAlert = UIAlertController(title: "로그인하시겠습니까?", message: "로그인하시면 체크인하실 수 있습니다.", preferredStyle: .alert)
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
-            let controller = SignUpViewController() // 추후 로그인뷰로 변경
-            controller.modalPresentationStyle = .fullScreen
+            let controller = LoginViewController()
+            controller.delegate = self
+            controller.sheetPresentationController?.detents = [.medium()]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -214,6 +250,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
         else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewInfoCell.cellIdentifier, for: indexPath) as? ReviewInfoCell else { return UICollectionViewCell() }
             cell.reviewHistory = reviewHistory
+            cell.delegate = self
             return cell
         }
         else if indexPath.section == 2 {
@@ -262,7 +299,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
         
         if indexPath.section == 0 {
-            return CGSize(width: viewWidth, height: 400)
+            return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 370)
         } else if indexPath.section == 2 {
@@ -303,5 +340,22 @@ extension PlaceInfoModalViewController: ReviewPage {
         let controller = ReviewDetailViewController()
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
+    }
+}
+
+extension PlaceInfoModalViewController: LogInToSignUp {
+    func logInToSignUp(userIdentifier: String) {
+        let signUpViewController = SignUpViewController()
+        signUpViewController.modalPresentationStyle = .fullScreen
+        signUpViewController.userIdentifier = userIdentifier
+        self.present(signUpViewController, animated: true)
+    }
+}
+
+// MARK: - ShowReviewListView
+extension PlaceInfoModalViewController: ShowReviewListView {
+    func didTapShowReviewListView() {
+        let ReviewListView = ReviewListViewController()
+        self.present(ReviewListView, animated: true, completion: nil)
     }
 }

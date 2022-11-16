@@ -7,25 +7,65 @@
 
 import UIKit
 
+protocol ShowReviewListView {
+    func didTapShowReviewListView()
+}
+
 class ReviewInfoCell: UICollectionViewCell {
     
     // MARK: - Properties
-
+    var delegate: ShowReviewListView?
+    
     var reviewHistory: [Review]? {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
             reviewCollectionView.reloadData()
+            self.reviewCountLabel.text = "\(reviewHistory.count)"
+            
         }
     }
+
     
     static let cellIdentifier = "ReviewInfoCell"
-    let reviewInfoTitleLabel = UILabel()
-    let reviewCountLabel = UILabel()
-    let horizontalDivider1 = UILabel()
-    let horizontalDivider2 = UILabel()
-    let horizontalDivider3 = UILabel()
-    let horizontalDivider4 = UILabel()
-    let horizontalDivider5 = UILabel()
+    let reviewInfoTitleLabel: UILabel = {
+        let reviewInfoTitleLabel = UILabel()
+        reviewInfoTitleLabel.text = "방문자 리뷰"
+        reviewInfoTitleLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
+        reviewInfoTitleLabel.textColor = CustomColor.nomadBlack
+        return reviewInfoTitleLabel
+    }()
+    let reviewCountLabel: UILabel = {
+        let reviewCountLabel = UILabel()
+        reviewCountLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
+        reviewCountLabel.textColor = CustomColor.nomadBlue
+        return reviewCountLabel
+    }()
+    let horizontalDivider1: UILabel = {
+        let horizontalDivider1 = UILabel()
+        horizontalDivider1.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider1
+    }()
+    
+    let horizontalDivider2: UILabel = {
+        let horizontalDivider2 = UILabel()
+        horizontalDivider2.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider2
+    }()
+    let horizontalDivider3: UILabel = {
+        let horizontalDivider3 = UILabel()
+        horizontalDivider3.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider3
+    }()
+    let horizontalDivider4: UILabel = {
+        let horizontalDivider4 = UILabel()
+        horizontalDivider4.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider4
+    }()
+    let horizontalDivider5: UILabel = {
+        let horizontalDivider5 = UILabel()
+        horizontalDivider5.backgroundColor = CustomColor.nomadGray2
+        return horizontalDivider5
+    }()
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -43,8 +83,7 @@ class ReviewInfoCell: UICollectionViewCell {
         let config = UIImage.SymbolConfiguration(pointSize: 13)
         viewAllButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
         viewAllButton.tintColor = CustomColor.nomadGray1
-        
-        
+        viewAllButton.addTarget(self, action: #selector(ShowReviewListView), for: .touchUpInside)
         return viewAllButton
     }()
     // MARK: - Lifecycle
@@ -56,6 +95,13 @@ class ReviewInfoCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Actions
+    
+    @objc func ShowReviewListView() {
+        delegate?.didTapShowReviewListView()
+    }
+
     
     // MARK: - Helpers
     
@@ -73,24 +119,13 @@ class ReviewInfoCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-        reviewInfoTitleLabel.text = "방문자 리뷰"
-        reviewInfoTitleLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
-        reviewInfoTitleLabel.textColor = CustomColor.nomadBlack
         reviewInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
-        reviewCountLabel.text = "213"
-        reviewCountLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
-        reviewCountLabel.textColor = CustomColor.nomadBlue
         reviewCountLabel.anchor(top: self.topAnchor, left: reviewInfoTitleLabel.rightAnchor, paddingTop: 19, paddingLeft: 3)
-        horizontalDivider1.backgroundColor = CustomColor.nomadGray2
         horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider2.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 65, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider3.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider4.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider4.anchor(top: horizontalDivider3.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider5.backgroundColor = CustomColor.nomadGray2
-        horizontalDivider5.anchor(top: horizontalDivider4.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 64, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider4.anchor(top: horizontalDivider3.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider5.anchor(top: horizontalDivider4.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
         NSLayoutConstraint.activate([
             reviewCollectionView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
             reviewCollectionView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
@@ -101,7 +136,7 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        viewAllButton.centerX(inView: contentView, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
+        viewAllButton.centerX(inView: self, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
     }
 }
 

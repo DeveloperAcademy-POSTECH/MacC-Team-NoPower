@@ -11,6 +11,9 @@ class NewMeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
+    var placeUid : String?
+    var userUid : String?
+    
     private enum Value {
         static let cornerRadius: CGFloat = 12.0
         static let paddingLeftRight: CGFloat = 20.0
@@ -304,6 +307,11 @@ class NewMeetUpViewController: UIViewController {
     
     @objc func didTapDoneCreatingMeetUp() {
         // TODO: 내용 저장 & self.dismiss 후 어디로 갈것인지? CheckInView? MeetUpView?
+        
+        if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
+            let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
+            FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
+        }
         self.dismiss(animated: true)
     }
     

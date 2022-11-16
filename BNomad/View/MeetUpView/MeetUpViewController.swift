@@ -13,9 +13,9 @@ class MeetUpViewController: UIViewController {
     
     let viewModel = CombineViewModel.shared
     
-    var meetUp: MeetUp? {
+    var meetUpViewModel: MeetUpViewModel? {
         didSet {
-            guard let meetUp = meetUp else { return }
+            guard let meetUp = meetUpViewModel?.meetUp else { return }
             organizerUid = meetUp.organizerUid
             currentPeopleUids = meetUp.currentPeopleUids
             meetUpTitleLabel.text = meetUp.title
@@ -212,7 +212,7 @@ class MeetUpViewController: UIViewController {
 
 extension MeetUpViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return meetUp?.currentPeopleUids?.count ?? 0
+        return meetUpViewModel?.meetUp?.currentPeopleUids?.count ?? 0
     }
 }
 

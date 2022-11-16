@@ -16,9 +16,9 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     let viewModel = CombineViewModel.shared
     
-    var meetUp: MeetUp? {
+    var meetUpViewModel: MeetUpViewModel? {
         didSet {
-            guard let meetUp = meetUp else { return }
+            guard let meetUp = meetUpViewModel?.meetUp else { return }
             title.text = meetUp.title
             time.text = meetUp.time.toTimeString()
             location.text = meetUp.meetUpPlaceName
@@ -34,7 +34,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
                 }
                 return image
             }
-            
+
             guard let userUid = viewModel.user?.userUid else { return }
             isParticipated = meetUp.currentPeopleUids?.contains(userUid)
         }

@@ -12,7 +12,7 @@ protocol NewMeetUpViewShowable {
 }
 
 protocol PlaceInfoViewCellDelegate: AnyObject {
-    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUp: MeetUp)
+    func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUpViewModel: MeetUpViewModel)
 }
 
 class PlaceInfoViewCell: UICollectionViewCell {
@@ -23,20 +23,15 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     var place: Place? {
         didSet {
-            guard let place = place else { return }
-            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid, date: "2022-11-14".toDate() ?? Date()) { meetUpHistory in
-                self.meetUpList = meetUpHistory
-            }
         }
     }
     
     weak var placeInfoViewCelldelegate: PlaceInfoViewCellDelegate?
     
-    var meetUpList: [MeetUp]? {
+    var meetUpViewModels: [MeetUpViewModel]? {
         didSet {
-            guard let meetUpList = meetUpList else { return }
-            numberOfQuestLabel.text = "\(meetUpList.count)"
-            collectionView.reloadData()
+            guard let meetUpViewModels = meetUpViewModels else { return }
+            self.collectionView.reloadData()
         }
     }
     
@@ -129,8 +124,8 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let meetUp = meetUpList?[indexPath.item] else { return }
-        placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUp: meetUp)
+        guard (meetUpViewModels?[indexPath.item]) != nil else { return }
+        placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: (meetUpViewModels?[indexPath.item])!)
     }
 }
 
@@ -138,13 +133,13 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
 
 extension PlaceInfoViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return meetUpList?.count ?? 0
+        return meetUpViewModels?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: QuestCollectionViewCell.identifier, for: indexPath) as? QuestCollectionViewCell else { return UICollectionViewCell() }
-        cell.meetUp = self.meetUpList?[indexPath.item]
+        cell.meetUpViewModel = self.meetUpViewModels?[indexPath.item]
         return cell
     }
-    
+
 }

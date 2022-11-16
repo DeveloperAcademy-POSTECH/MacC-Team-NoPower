@@ -201,6 +201,8 @@ extension PlaceCheckInViewController: CheckOutAlert {
 extension PlaceCheckInViewController: NewMeetUpViewShowable {
     func didTapNewMeetUpButton() {
         let newMeetUpView = NewMeetUpViewController()
+        newMeetUpView.placeUid = selectedPlace?.placeUid
+        newMeetUpView.userUid = viewModel.user?.userUid
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
     }

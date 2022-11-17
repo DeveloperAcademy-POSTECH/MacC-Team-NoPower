@@ -16,16 +16,20 @@ class ProfileViewController: UIViewController {
     
     static var weekAddedMemory: Int = 0
     
-    var userFromListUid: String?
+    var isMyProfile: Bool?
+    
+    var nomad: User? {
+        didSet {
+            guard let profileImageUrl = nomad?.profileImageUrl else { return }
+            profileImageView.kf.setImage(with: URL(string: profileImageUrl))
+            self.profileCollectionView.reloadData()
+            
+        }
+    }
     
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        if viewModel.user?.profileImage == nil {
-            if let profileImageUrl = viewModel.user?.profileImageUrl {
-                iv.kf.setImage(with: URL(string: profileImageUrl))
-            }
-        }
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.masksToBounds = true
@@ -65,6 +69,7 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
+//        setProfileImage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,7 +78,7 @@ class ProfileViewController: UIViewController {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.isHidden = false
 
-        profileImageView.image = viewModel.user?.profileImage ?? UIImage(named: "othersProfile")
+        profileImageView.image = nomad?.profileImage ?? UIImage(named: "othersProfile")
     }
     
     
@@ -81,7 +86,7 @@ class ProfileViewController: UIViewController {
     
     @objc func moveToCalendar() {
         //        if userFromListUid == viewModel.user?.userUid || FirebaseAuth와 지금 viewModel.user가 같은 uid인지 체크 {
-        CalendarViewController.checkInHistory = viewModel.user?.checkInHistory
+        CalendarViewController.checkInHistory = nomad?.checkInHistory
         navigationController?.pushViewController(CalendarViewController(), animated: true)
         //        } else {
         //            print("다른 사람의 캘린더뷰는 보지 못합니다")
@@ -89,7 +94,7 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func moveToVisitCollection() {
-        VisitCardCollectionViewController.checkInHistory = viewModel.user?.checkInHistory
+        VisitCardCollectionViewController.checkInHistory = nomad?.checkInHistory
         navigationController?.pushViewController(VisitCardCollectionViewController(), animated: true)
     }
     
@@ -110,6 +115,20 @@ class ProfileViewController: UIViewController {
                                      height: 600)
         
     }
+    
+//    func setProfileImage() {
+//        if isMyProfile == true {
+//            guard let user = viewModel.user else { return }
+//            if user.profileImage == nil {
+//                guard let profileImageUrl = user.profileImageUrl else { return }
+//                profileImageView.kf.setImage(with: URL(string: profileImageUrl))
+//            }
+//        } else {
+//            guard let nomad = nomad else { return }
+//            guard let profileImageUrl = nomad.profileImageUrl else { return }
+//            profileImageView.kf.setImage(with: URL(string: profileImageUrl))
+//        }
+//    }
     
 }
 
@@ -137,7 +156,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SelfUserInfoCell.identifier , for: indexPath) as? SelfUserInfoCell else {
                 return UICollectionViewCell()
             }
-            cell.user = viewModel.user
+            cell.user = nomad
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20
             cell.delegate = self
@@ -149,7 +168,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             }
             cell.layer.borderWidth = 2
             cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
-            cell.checkInHistoryForProfile = viewModel.user?.checkInHistory
+            cell.checkInHistoryForProfile = nomad?.checkInHistory
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20
             return cell
@@ -158,7 +177,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
-            cell.checkInHistory = viewModel.user?.checkInHistory
+            cell.checkInHistory = nomad?.checkInHistory
             
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20

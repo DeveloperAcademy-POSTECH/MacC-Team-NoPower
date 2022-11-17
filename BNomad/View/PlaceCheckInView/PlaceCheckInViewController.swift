@@ -20,6 +20,8 @@ class PlaceCheckInViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
+    var selectedUser: User?
+    
     var selectedPlace: Place? {
         didSet {
             guard let place = selectedPlace else { return }
@@ -176,7 +178,11 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 {
             let controller = ProfileViewController()
-            controller.userFromListUid = checkInHistory?[indexPath.row].userUid
+            guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
+            FirebaseManager.shared.fetchUser(id: nomadUid) { user in
+                controller.nomad = user
+            }
+            controller.isMyProfile = false
             navigationController?.pushViewController(controller, animated: true)
         }
     }

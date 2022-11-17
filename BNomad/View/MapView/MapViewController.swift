@@ -313,7 +313,10 @@ class MapViewController: UIViewController {
         /// 케이스 2 기존 유저 : 프로필 버튼 클릭 -> (비로그인 상태) -> 로그인 화면 -> 로그인 완료 -> 프로필 뷰
         /// 케이스 3 기존 유저 : 프로필 버튼 클릭 -> (로그인 상태) -> 프로필 뷰
         if viewModel.isLogIn {
-            navigationController?.pushViewController(ProfileViewController(), animated: true)
+            let controller = ProfileViewController()
+            controller.isMyProfile = true
+            controller.nomad = viewModel.user
+            navigationController?.pushViewController(controller, animated: true)
         } else {
             
             // TODO: - 회원가입 창 띄우기 전에 모달 띄우기

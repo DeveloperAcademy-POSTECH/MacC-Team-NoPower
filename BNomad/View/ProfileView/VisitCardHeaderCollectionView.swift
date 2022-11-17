@@ -39,11 +39,9 @@ class VisitCardHeaderCollectionView: UICollectionReusableView {
     
     
     private func setUI() {
-//        backgroundColor = .systemPink
         addSubview(VisitInfoHeader)
         VisitInfoHeader.anchor(left: self.leftAnchor, paddingLeft: 20)
         VisitInfoHeader.centerY(inView: self)
-
     }
     
     func configure(with date: String) {

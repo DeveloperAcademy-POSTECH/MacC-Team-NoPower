@@ -13,7 +13,6 @@ class ProfileGraphCell: UICollectionViewCell {
     // MARK: - Properties
     lazy var viewModel = CombineViewModel.shared
 
-    var thisCellsDate: String?
     var checkInHistory: [CheckIn]?
     
     static let identifier = "ProfileGraphCell"
@@ -109,7 +108,7 @@ class ProfileGraphCell: UICollectionViewCell {
         
     }
     
-    static func editWeek(edit: Int) { //TODO: 로직 단순화 필요
+    static func editWeek(edit: Int) { //TODO: 로직 그래프컬렉션셀 안으로 이동 리펙터링 필요
         addedWeek = addedWeek + edit
         let formatter = DateFormatter()
         formatter.dateFormat = "d"
@@ -125,6 +124,8 @@ class ProfileGraphCell: UICollectionViewCell {
     
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension ProfileGraphCell: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -136,6 +137,8 @@ extension ProfileGraphCell: UICollectionViewDataSource {
     
 }
 
+// MARK: - UICollectionViewDelegate
+
 extension ProfileGraphCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileGraphCollectionCell.identifier , for: indexPath) as? ProfileGraphCollectionCell else {
@@ -143,7 +146,6 @@ extension ProfileGraphCell: UICollectionViewDelegate {
         }
         
         let weekCalculator = ProfileGraphCell.addedWeek * 7
-        print(weekCalculator)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
@@ -156,6 +158,8 @@ extension ProfileGraphCell: UICollectionViewDelegate {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension ProfileGraphCell: UICollectionViewDelegateFlowLayout {
     

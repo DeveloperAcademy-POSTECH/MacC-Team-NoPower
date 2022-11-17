@@ -23,14 +23,13 @@ class CustomModalViewController: UIViewController {
     var places: [Place]? = [] {
         didSet {
             collectionView.reloadData()
-            guard var places = places else { return }
-            self.numberOfPlaces.text = "업무 공간 " + String(places.count) + "개"
+            guard let places = places else { return }
+            self.numberOfPlaces.text = "노마드스팟 " + String(places.count) + "개"
         }
     }
     
     var rectangle: UIView = {
         let rectangle = UIView()
-        rectangle.frame = CGRect(x: 0, y: 0, width: 80, height: 5)
         rectangle.layer.cornerRadius = 3
         rectangle.translatesAutoresizingMaskIntoConstraints = false
         rectangle.backgroundColor = .systemGray2
@@ -53,7 +52,7 @@ class CustomModalViewController: UIViewController {
     private let layout: UICollectionViewFlowLayout = {
         let guideline = UICollectionViewFlowLayout()
         guideline.scrollDirection = .vertical
-        guideline.minimumLineSpacing = 9
+        guideline.minimumLineSpacing = 12
         guideline.minimumInteritemSpacing = 0
         return guideline
     }()
@@ -65,7 +64,7 @@ class CustomModalViewController: UIViewController {
         view.showsVerticalScrollIndicator = true
         view.scrollIndicatorInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 4)
         view.contentInset = .zero
-        view.layer.backgroundColor = UIColor(red: 0.967, green: 0.967, blue: 0.967, alpha: 1).cgColor
+        view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -76,7 +75,7 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.layer.backgroundColor = CustomColor.nomadGray3?.cgColor
+        self.view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.layer.shadowColor = UIColor.black.cgColor
         self.view.layer.shadowOffset = .init(width: 0, height: -2)
@@ -87,12 +86,11 @@ class CustomModalViewController: UIViewController {
         self.view.addSubview(numberOfPlaces)
         self.view.addSubview(collectionView)
         
-    
         rectangle.anchor(top: view.topAnchor, paddingTop: 15, width: 80, height: 5)
         rectangle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        numberOfPlaces.anchor(top: rectangle.topAnchor, paddingTop: 18)
+        numberOfPlaces.anchor(top: rectangle.topAnchor, paddingTop: 20)
         numberOfPlaces.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 33, paddingLeft: 0, paddingRight: 0)
+        collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingRight: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
@@ -152,7 +150,10 @@ extension CustomModalViewController: UICollectionViewDelegate {
 extension CustomModalViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.bounds.width, height: 86)
+        let screenWidth = UIScreen.main.bounds.width
+        let cellHeight = screenWidth * 80/390
+        
+        return CGSize(width: view.bounds.width, height: cellHeight)
     }
     
 }

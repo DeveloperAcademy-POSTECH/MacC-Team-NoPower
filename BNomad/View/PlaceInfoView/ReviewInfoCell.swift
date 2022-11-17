@@ -20,52 +20,50 @@ class ReviewInfoCell: UICollectionViewCell {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
             reviewCollectionView.reloadData()
-            self.reviewCountLabel.text = "\(reviewHistory.count)"
-            
+            self.reviewInfoTitleLabel.text = "방문자 리뷰 \(reviewHistory.count)"
+            let fullText = reviewInfoTitleLabel.text ?? ""
+            let attribtuedString = NSMutableAttributedString(string: fullText)
+            let range = (fullText as NSString).range(of: "\(reviewHistory.count)")
+            attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
+            reviewInfoTitleLabel.attributedText = attribtuedString
         }
     }
-
     
     static let cellIdentifier = "ReviewInfoCell"
     let reviewInfoTitleLabel: UILabel = {
         let reviewInfoTitleLabel = UILabel()
-        reviewInfoTitleLabel.text = "방문자 리뷰"
         reviewInfoTitleLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
         reviewInfoTitleLabel.textColor = CustomColor.nomadBlack
         return reviewInfoTitleLabel
     }()
-    let reviewCountLabel: UILabel = {
-        let reviewCountLabel = UILabel()
-        reviewCountLabel.font = UIFont.preferredFont(forTextStyle: .title3, weight: .semibold)
-        reviewCountLabel.textColor = CustomColor.nomadBlue
-        return reviewCountLabel
-    }()
+
     let horizontalDivider1: UILabel = {
         let horizontalDivider1 = UILabel()
-        horizontalDivider1.backgroundColor = CustomColor.nomadGray2
+        horizontalDivider1.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider1
     }()
     
     let horizontalDivider2: UILabel = {
         let horizontalDivider2 = UILabel()
-        horizontalDivider2.backgroundColor = CustomColor.nomadGray2
+        horizontalDivider2.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider2
     }()
     let horizontalDivider3: UILabel = {
         let horizontalDivider3 = UILabel()
-        horizontalDivider3.backgroundColor = CustomColor.nomadGray2
+        horizontalDivider3.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider3
     }()
     let horizontalDivider4: UILabel = {
         let horizontalDivider4 = UILabel()
-        horizontalDivider4.backgroundColor = CustomColor.nomadGray2
+        horizontalDivider4.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider4
     }()
     let horizontalDivider5: UILabel = {
         let horizontalDivider5 = UILabel()
-        horizontalDivider5.backgroundColor = CustomColor.nomadGray2
+        horizontalDivider5.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider5
     }()
+    
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -74,6 +72,7 @@ class ReviewInfoCell: UICollectionViewCell {
 
         return reviewCollectionView
     }()
+    
     let viewAllButton: UIButton = {
         let viewAllButton = UIButton()
         viewAllButton.setTitle("모든 리뷰 보기 ", for: .normal)
@@ -107,7 +106,6 @@ class ReviewInfoCell: UICollectionViewCell {
     
     private func configureUI() {
         self.addSubview(reviewInfoTitleLabel)
-        self.addSubview(reviewCountLabel)
         self.addSubview(reviewCollectionView)
         self.addSubview(horizontalDivider1)
         self.addSubview(horizontalDivider2)
@@ -120,7 +118,6 @@ class ReviewInfoCell: UICollectionViewCell {
     
     private func setAttributes() {
         reviewInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
-        reviewCountLabel.anchor(top: self.topAnchor, left: reviewInfoTitleLabel.rightAnchor, paddingTop: 19, paddingLeft: 3)
         horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
         horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)

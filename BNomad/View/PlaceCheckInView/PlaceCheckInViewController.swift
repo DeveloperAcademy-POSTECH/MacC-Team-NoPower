@@ -46,12 +46,7 @@ class PlaceCheckInViewController: UIViewController {
     
     var meetUpViewModels: [MeetUpViewModel]?
 
-    var checkInHistory: [CheckIn]? {
-        didSet {
-            guard let checkInHistory = checkInHistory else { return }
-            collectionView.reloadData()
-        }
-    }
+    var checkInHistory: [CheckIn]?
 
     // MARK: - Properties
     private var numberOfUsers: Int {

@@ -197,11 +197,8 @@ class MeetUpViewController: UIViewController {
                 let placeUid = self.meetUpViewModel?.meetUp?.placeUid,
                 let peopleUid = self.meetUpViewModel?.meetUp?.currentPeopleUids
             else { return }
-            FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
-                if let index = peopleUid.firstIndex(of: userUid) {
-                    self.meetUpViewModel?.meetUp?.currentPeopleUids?.remove(at: index)
-                }
-            }
+            FirebaseManager.shared.cancelMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) { }
+            
             self.navigationController?.popToRootViewController(animated: true)
         })
         alert.addAction(cancel)

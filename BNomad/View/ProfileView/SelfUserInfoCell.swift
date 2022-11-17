@@ -95,19 +95,19 @@ class SelfUserInfoCell: UICollectionViewCell {
     func render() {
 
         contentView.addSubview(nameLabel)
-        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20)
+        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 40, paddingLeft: 20)
         
         contentView.addSubview(editingButton)
-        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 18, paddingRight: 12, width: 55, height: 13)
+        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 33, paddingRight: 12, width: 55, height: 13)
         
         contentView.addSubview(jobLabel)
-        jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 60, paddingLeft: 20, paddingRight: 20)
+        jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 75, paddingLeft: 20, paddingRight: 20)
         
         contentView.addSubview(dividerLine)
-        dividerLine.anchor(top: jobLabel.bottomAnchor, left: contentView.leftAnchor, bottom: jobLabel.bottomAnchor, right: contentView.rightAnchor, paddingTop: 17, paddingLeft: 10, paddingBottom: -18, paddingRight: 10, width: 340, height: 1)
+        dividerLine.anchor(top: jobLabel.bottomAnchor, left: contentView.leftAnchor, bottom: jobLabel.bottomAnchor, right: contentView.rightAnchor, paddingTop: 33, paddingLeft: 10, paddingBottom: -18, paddingRight: 10, width: 340, height: 1)
         
         contentView.addSubview(statusLabel)
-        statusLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 110, paddingLeft: 20, paddingRight: 20)
+        statusLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 125, paddingLeft: 20, paddingRight: 20)
         
     }
 

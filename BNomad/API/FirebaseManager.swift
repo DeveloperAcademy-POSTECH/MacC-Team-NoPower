@@ -483,7 +483,7 @@ class FirebaseManager {
 
     /// 리뷰 사진 업로드
     func uploadReviewImages(reviewUid: String, placeUid: String, image: UIImage?, completion: @escaping(String) -> Void) {
-        guard let image = image else { return }
+        guard let image = image else { return completion("no image") }
         
         let storageRef = Storage.storage().reference().child("reviewImage/\(reviewUid)")
         if let uploadData = image.jpegData(compressionQuality: 0.1) {
@@ -511,6 +511,7 @@ class FirebaseManager {
         let createTime = review.createTime.toDateTimeString()
 
         uploadReviewImages(reviewUid: review.reviewUid, placeUid: review.placeUid, image: image) { url in
+            completion()
         }
         ref.updateChildValues(["review/\(review.placeUid)/\(review.reviewUid)" : ["userUid" : review.userUid,
                                                                                 "createTime" : createTime,

@@ -494,10 +494,11 @@ extension MapViewController: setMap {
 // MARK: - ReviewPage
 
 extension MapViewController: ReviewPage {
-    func reviewPageShow() {
+    func reviewPageShow(place: Place) {
         // TODO: PlaceInfoModalViweController가 띄워져 있으면 Review 모달이 안뜨는 오류가 있음
         self.dismiss(animated: true)
         let controller = ReviewDetailViewController()
+        controller.place = place
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
     }

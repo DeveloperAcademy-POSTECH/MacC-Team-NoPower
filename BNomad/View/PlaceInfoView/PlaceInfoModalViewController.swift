@@ -336,9 +336,10 @@ extension PlaceInfoModalViewController: CheckInOut {
 // MARK: - ReviewPage
 
 extension PlaceInfoModalViewController: ReviewPage {
-    func reviewPageShow() {
+    func reviewPageShow(place: Place) {
         self.dismiss(animated: false)
         let controller = ReviewDetailViewController()
+        controller.place = place
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
     }

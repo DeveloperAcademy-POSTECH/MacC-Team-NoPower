@@ -179,9 +179,8 @@ class ReviewDetailViewController: UIViewController {
         let alert = UIAlertController(title: "리뷰 작성 완료하시겠습니까?", message: "리뷰를 작성을 완료합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let save = UIAlertAction(title: "확인", style: .default) { action in
+            self.dismiss(animated: true)
             FirebaseManager.shared.writeReview(review: Review(placeUid: placeUid, userUid: user.uid , reviewUid: UUID().uuidString, createTime: Date(), content: self.reviewTextView.text), image: image == UIImage() ? nil : image) {
-                print("REVIEW SAVE Done")
-                self.dismiss(animated: true)
             }
         }
         alert.addAction(cancel)

@@ -7,18 +7,12 @@
 
 import UIKit
 
-//protocol ReloadDelegate {
-//    func reloadView()
-//}
-
 class ReviewCell: UICollectionViewCell {
     
     static let identifier = "ReviewCell"
 
     // MARK: - Properties
-    
-//    var delegate: ReloadDelegate?
-    
+        
     lazy var cell: UIView = {
         let view = UIView()
         view.clipsToBounds = true
@@ -27,13 +21,11 @@ class ReviewCell: UICollectionViewCell {
         view.addSubview(review)
         view.addSubview(userImage)
         view.addSubview(userName)
-//        view.addSubview(openReview)
 
         divider.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, height: 0.5)
         review.anchor(top: divider.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 12, paddingLeft: 21, paddingRight: 22)
         userImage.anchor(top: review.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, paddingTop: 4, paddingLeft: 21, paddingBottom: 11,  width: 20, height: 20)
         userName.centerY(inView: userImage, leftAnchor: userImage.rightAnchor, paddingLeft: 8)
-//        openReview.anchor(top: review.bottomAnchor, right: view.rightAnchor, paddingTop: 6, paddingRight: 20)
 
         return view
     }()
@@ -62,25 +54,6 @@ class ReviewCell: UICollectionViewCell {
         text.textAlignment = .left
         return text
     }()
-    
-//    private lazy var openReview: UIButton = {
-//        let button = UIButton()
-//        button.setTitle("더보기 ", for: .normal)
-//        button.setImage(UIImage(systemName: "chevron.down")?.withTintColor(CustomColor.nomadGray1 ?? .blue, renderingMode: .alwaysOriginal), for: .normal)
-//        button.titleLabel?.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
-//        button.setTitleColor(CustomColor.nomadGray1, for: .normal)
-//        button.semanticContentAttribute = .forceRightToLeft
-//        button.addTarget(self, action: #selector(openOrClose), for: .touchUpInside)
-//        return button
-//    }()
-
-//    @objc func openOrClose() {
-//        ReviewListViewController.checked = true
-//        delegate?.reloadView()
-//        self.openReview.setImage(UIImage(systemName: ""), for: .normal)
-//        self.openReview.setTitle(nil, for: .normal)
-//        self.review.numberOfLines = 0
-//    }
 
     private var userImage: UIImageView = {
         let image = UIImage(named: "AppIcon")

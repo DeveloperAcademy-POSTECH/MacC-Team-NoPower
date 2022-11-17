@@ -108,21 +108,15 @@ class ReviewInfoCell: UICollectionViewCell {
         self.addSubview(reviewInfoTitleLabel)
         self.addSubview(reviewCollectionView)
         self.addSubview(horizontalDivider1)
-        self.addSubview(horizontalDivider2)
-        self.addSubview(horizontalDivider3)
-        self.addSubview(horizontalDivider4)
-        self.addSubview(horizontalDivider5)
         self.addSubview(viewAllButton)
         setAttributes()
+        
     }
     
     private func setAttributes() {
         reviewInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
-        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider3.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider4.anchor(top: horizontalDivider3.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
-        horizontalDivider5.anchor(top: horizontalDivider4.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 69, paddingLeft: 19, paddingRight: 19, height: 1)
+        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, paddingTop: 8, width: 360, height: 1)
+        horizontalDivider1.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         NSLayoutConstraint.activate([
             reviewCollectionView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
             reviewCollectionView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
@@ -133,7 +127,7 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        viewAllButton.centerX(inView: self, topAnchor: horizontalDivider5.bottomAnchor, paddingTop: 8)
+        viewAllButton.centerX(inView: self, topAnchor: horizontalDivider1.bottomAnchor, paddingTop: 300)
     }
 }
 
@@ -141,7 +135,14 @@ class ReviewInfoCell: UICollectionViewCell {
 
 extension ReviewInfoCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return reviewHistory?.count ?? 0
+        var count: Int = 0
+        guard let reviewHistory = reviewHistory else { return 4 }
+        if reviewHistory.count > 4 {
+            count = 4
+        } else {
+            count = reviewHistory.count
+        }
+        return count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewSubCell.cellIdentifier, for: indexPath) as? ReviewSubCell else { return UICollectionViewCell() }
@@ -149,6 +150,7 @@ extension ReviewInfoCell: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.white
         return cell
     }
+    
 }
 
 
@@ -165,6 +167,6 @@ extension ReviewInfoCell: UICollectionViewDelegateFlowLayout {
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets (top: 5, left: 10, bottom: 0, right: 10)
+        return UIEdgeInsets (top: 10, left: 10, bottom: 10, right: 10)
     }
 }

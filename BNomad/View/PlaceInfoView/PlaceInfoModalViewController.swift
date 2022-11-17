@@ -302,9 +302,9 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
-            return CGSize(width: viewWidth, height: 370)
+            return CGSize(width: viewWidth, height: 400)
         } else if indexPath.section == 2 {
-            return CGSize(width: viewWidth, height: 27)
+            return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
             
@@ -358,5 +358,6 @@ extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
         self.present(ReviewListView, animated: true, completion: nil)
+        print("눌리는중이니?")
     }
 }

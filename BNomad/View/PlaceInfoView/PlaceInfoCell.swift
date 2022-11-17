@@ -71,8 +71,28 @@ class PlaceInfoCell: UICollectionViewCell {
             meetUplabel.attributedText = attribtuedString
         }
     }
-    
+    lazy var headerStack: UIStackView = {
+        
+        let placeDistanceStack = UIStackView(arrangedSubviews: [placeNameLabel, distanceLabel])
+        placeDistanceStack.axis = .horizontal
+        placeDistanceStack.alignment = .bottom
+        placeDistanceStack.spacing = 10
+        placeDistanceStack.distribution = .fillProportionally
+       
+        let nomadMeetUpStack = UIStackView(arrangedSubviews: [checkedinViewLabel, dotDivider, meetUplabel])
+        nomadMeetUpStack.axis = .horizontal
+        nomadMeetUpStack.alignment = .center
+        nomadMeetUpStack.spacing = 8
+        nomadMeetUpStack.distribution = .fillProportionally
+        
+        let headerStack = UIStackView(arrangedSubviews: [placeDistanceStack, nomadMeetUpStack])
+        headerStack.axis = .vertical
+        headerStack.alignment = .top
+        headerStack.spacing = 5
 
+        return headerStack
+    }()
+    
     lazy var placeNameLabel: UILabel = {
         let placeNameLabel = UILabel()
         placeNameLabel.textColor = CustomColor.nomadBlack
@@ -96,8 +116,9 @@ class PlaceInfoCell: UICollectionViewCell {
     
     let dotDivider: UIView = {
         let dotDivider = UIView()
-        dotDivider.backgroundColor = CustomColor.nomadGray1
+        dotDivider.backgroundColor = CustomColor.nomad2Separator
         dotDivider.layer.cornerRadius = 6
+        dotDivider.anchor(width: 6, height: 6)
         
         return dotDivider
     }()
@@ -148,12 +169,36 @@ class PlaceInfoCell: UICollectionViewCell {
         return alreadyView
     }()
     
-    let horizontalDivider: UILabel = {
-        let horizontalDivider = UILabel()
-        horizontalDivider.backgroundColor = CustomColor.nomadGray2
-        return horizontalDivider
+    lazy var bodyStack : UIStackView = {
+        
+        let callStack = UIStackView(arrangedSubviews: [callButton, phoneNumberLabel])
+        callStack.axis = .horizontal
+        callStack.alignment = .leading
+        callStack.spacing = 13
+        callStack.distribution = .equalSpacing
+        
+        let mapStack = UIStackView(arrangedSubviews: [mapButton, addressLabel])
+        mapStack.axis = .horizontal
+        mapStack.alignment = .leading
+        mapStack.spacing = 13
+        mapStack.distribution = .equalSpacing
+        
+        let clockStack = UIStackView(arrangedSubviews: [clockButton, operatingTimeLabel])
+        clockStack.axis = .horizontal
+        clockStack.alignment = .leading
+        clockStack.spacing = 13
+        clockStack.distribution = .equalSpacing
+        
+        let bodyStack = UIStackView(arrangedSubviews: [callStack, mapStack, clockStack])
+        bodyStack.axis = .vertical
+        bodyStack.alignment = .leading
+        bodyStack.spacing = 15
+        bodyStack.distribution = .fillProportionally
+        
+        return bodyStack
+        
     }()
-
+    
     let callButton: UIButton = {
         let callButton = UIButton()
         callButton.setImage(UIImage(systemName: "phone"), for: .normal)
@@ -161,20 +206,19 @@ class PlaceInfoCell: UICollectionViewCell {
         callButton.tintColor = CustomColor.nomadBlack
         return callButton
     }()
-    let phoneNumberLable: UILabel = {
-        let phoneNumberLable = UILabel()
-        phoneNumberLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
-        phoneNumberLable.textColor = CustomColor.nomadBlack
-        return phoneNumberLable
+    let phoneNumberLabel: UILabel = {
+        let phoneNumberLabel = UILabel()
+        phoneNumberLabel.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
+        phoneNumberLabel.textColor = CustomColor.nomadBlack
+        return phoneNumberLabel
     }()
         
-    let horizontalDivider1: UILabel = {
-        let horizontalDivider1 = UILabel()
-        horizontalDivider1.backgroundColor = CustomColor.nomadGray2
-        return horizontalDivider1
+    let horizontalDivider: UILabel = {
+        let horizontalDivider = UILabel()
+        horizontalDivider.backgroundColor = CustomColor.nomad2Separator
+        return horizontalDivider
     }()
-    // 주소 복사 기능 구현
-    // 주소 바인딩 (place.address)
+    
     let mapButton: UIButton = {
         let mapButton = UIButton()
         mapButton.setImage(UIImage(systemName: "map"), for: .normal)
@@ -189,10 +233,10 @@ class PlaceInfoCell: UICollectionViewCell {
         return addressLable
     }()
     
-    let horizontalDivider2: UILabel = {
-        let horizontalDivider2 = UILabel()
-        horizontalDivider2.backgroundColor = CustomColor.nomadGray2
-        return horizontalDivider2
+    let horizontalDivider1: UILabel = {
+        let horizontalDivider1 = UILabel()
+        horizontalDivider1.backgroundColor = CustomColor.nomad2Separator
+        return horizontalDivider1
     }()
     let clockButton: UIButton = {
         let clockButton = UIButton()
@@ -200,11 +244,6 @@ class PlaceInfoCell: UICollectionViewCell {
         clockButton.setPreferredSymbolConfiguration(.init(pointSize: 19, weight: .regular, scale: .default), forImageIn: .normal)
         clockButton.tintColor = CustomColor.nomadBlack
         return clockButton
-    }()
-    let horizontalDivider3: UILabel = {
-        let horizontalDivider3 = UILabel()
-        horizontalDivider3.backgroundColor = CustomColor.nomadGray2
-        return horizontalDivider3
     }()
     
     // 영업시간 데이터 없음
@@ -274,23 +313,12 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Helpers
     
     private func configureUI() {
-        self.addSubview(placeNameLabel)
-        self.addSubview(distanceLabel)
-        self.addSubview(checkedinViewLabel)
-        self.addSubview(dotDivider)
-        self.addSubview(meetUplabel)
+        self.addSubview(headerStack)
         self.addSubview(checkInButton)
         self.addSubview(checkOutButton)
+        self.addSubview(bodyStack)
         self.addSubview(horizontalDivider)
-        self.addSubview(callButton)
-        self.addSubview(phoneNumberLable)
         self.addSubview(horizontalDivider1)
-        self.addSubview(mapButton)
-        self.addSubview(horizontalDivider2)
-        self.addSubview(clockButton)
-        self.addSubview(operatingTimeLabel)
-        self.addSubview(horizontalDivider3)
-        self.addSubview(addressLabel)
         self.addSubview(alreadyCheckIn)
         setAttributes()
         guard let place = place else { return }
@@ -298,21 +326,10 @@ class PlaceInfoCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-        placeNameLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
-        distanceLabel.anchor(top: self.topAnchor, left: placeNameLabel.rightAnchor, paddingTop: 56, paddingLeft: 14)
-        checkedinViewLabel.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 19)
-        dotDivider.anchor(top: placeNameLabel.bottomAnchor, left: checkedinViewLabel.rightAnchor, paddingTop: 15, paddingLeft: 35, width: 6, height: 6)
-        meetUplabel.anchor(top: placeNameLabel.bottomAnchor, left: dotDivider.rightAnchor, paddingTop: 8, paddingLeft: 35)
-        horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20, height: 1)
-        callButton.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
-        phoneNumberLable.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
+        headerStack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
+        bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, paddingTop: 23, paddingLeft: 27)
+        horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)
         horizontalDivider1.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
-        mapButton.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
-        addressLabel.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
-        horizontalDivider2.anchor(top: horizontalDivider1.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
-        clockButton.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 27)
-        operatingTimeLabel.anchor(top: horizontalDivider2.bottomAnchor, left: self.leftAnchor, paddingTop: 9, paddingLeft: 60)
-        horizontalDivider3.anchor(top: operatingTimeLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 20, paddingRight: 20, height: 1)
         checkInButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
         checkOutButton.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
         alreadyCheckIn.anchor(top: placeNameLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 38, paddingLeft: 20, paddingRight: 20, height: 48)
@@ -321,7 +338,7 @@ class PlaceInfoCell: UICollectionViewCell {
     func mappingPlaceData(_ place: Place) {
         placeNameLabel.text = place.name
         addressLabel.text = place.address
-        phoneNumberLable.text = place.contact
+        phoneNumberLabel.text = place.contact
     }
 }
 

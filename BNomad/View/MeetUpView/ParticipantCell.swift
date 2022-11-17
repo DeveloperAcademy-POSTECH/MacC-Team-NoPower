@@ -83,11 +83,5 @@ class ParticipantCell: UICollectionViewCell {
         self.addSubview(nicknameLabel)
         nicknameLabel.anchor(top: profileImageView.bottomAnchor, paddingTop: 14)
         nicknameLabel.centerX(inView: self)
-        
-//        if isOrganizer == true {
-//            crownView.isHidden = false
-//        } else {
-//            crownView.isHidden = true
-//        }
     }
 }

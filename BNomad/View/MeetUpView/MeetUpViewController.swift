@@ -145,11 +145,11 @@ class MeetUpViewController: UIViewController {
         super.viewDidLoad()
     
         configUI()
+        configEditButton()
         
         participantCollectionView.dataSource = self
         participantCollectionView.delegate = self
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
     }
     
@@ -184,6 +184,14 @@ class MeetUpViewController: UIViewController {
     }
     
     // MARK: - Helpers
+    
+    func configEditButton() {
+        guard let userUid = viewModel.user?.userUid else { return }
+        guard let organizerUid = meetUpViewModel?.meetUp?.organizerUid else { return }
+        if userUid == organizerUid {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
+        }
+    }
     
     func configUI() {
         
@@ -236,10 +244,19 @@ extension MeetUpViewController: UICollectionViewDelegate {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ParticipantCell.identifier, for: indexPath) as? ParticipantCell else {
             return UICollectionViewCell()
         }
-        cell.organizerUid = organizerUid
-        cell.userUid = currentPeopleUids?[indexPath.row]
-        cell.backgroundColor = .white
         
+        var people: [String] = []
+        if let originalPeople = meetUpViewModel?.meetUp?.currentPeopleUids, let organizerUid = organizerUid {
+            people = originalPeople
+            if let index = people.firstIndex(of: organizerUid) {
+                people.remove(at: index)
+                people.insert(organizerUid, at: 0)
+            }
+        }
+        cell.organizerUid = organizerUid
+        cell.userUid = people[indexPath.row]
+        cell.backgroundColor = .white
+
         return cell
     }
 }

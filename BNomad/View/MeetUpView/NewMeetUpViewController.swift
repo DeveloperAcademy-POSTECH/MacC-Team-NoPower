@@ -297,6 +297,7 @@ class NewMeetUpViewController: UIViewController {
     
     // MARK: - Actions
     
+    // TODO: 현재시간 이전으로는 설정 못하도록 해야함(피커에서 막기 vs. 저장할때 안되게)
     @objc func didTimePickerValueChange() {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -340,6 +341,17 @@ class NewMeetUpViewController: UIViewController {
     
     @objc func didTapDoneEditingMeetUp() {
          // TODO: 편집 변경사항 저장 & PlaceCheckInView로 가기
+        let alert = UIAlertController(title: "편집을 완료하시겠습니까?", message: "밋업 편집을 완료합니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let done = UIAlertAction(title: "확인", style: .default, handler: { action in
+
+            
+            self.navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(cancel)
+        alert.addAction(done)
+        self.present(alert, animated: true)
+        
      }
     
     // MARK: - Helpers

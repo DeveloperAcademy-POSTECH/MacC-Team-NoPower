@@ -342,8 +342,8 @@ class FirebaseManager {
         
         ref.child("meetUpUser/\(userUid)").observeSingleEvent(of: .value, with: { snapshots in
             for child in snapshots.children {
-                guard let snapshot = child as? DataSnapshot else { return }
-                guard let meetUpUid = snapshot.key as? String else { return }
+                guard let snapshot = child as? DataSnapshot else { return completion("noMeetUp") }
+                guard let meetUpUid = snapshot.key as? String else { return completion("noMeetUp") }
                 completion(meetUpUid)
             }
         })
@@ -536,5 +536,13 @@ class FirebaseManager {
                 print("review could not be saved: \(error).")
             }
         }
+    }
+    
+    /// meetUpUid로 placeUid 가져오기
+    func getPlaceUidWithMeetUpId(meetUpUid: String, completion: @escaping(String) -> Void) {
+        ref.child("meetUp/\(meetUpUid)/placeUid").observeSingleEvent(of: .value, with: { snapshot in
+            guard let placeUid = snapshot.value as? String else { return }
+            completion(placeUid)
+        })
     }
 }

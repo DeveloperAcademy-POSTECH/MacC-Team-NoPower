@@ -343,9 +343,16 @@ class NewMeetUpViewController: UIViewController {
          // TODO: 편집 변경사항 저장 & PlaceCheckInView로 가기
         let alert = UIAlertController(title: "편집을 완료하시겠습니까?", message: "밋업 편집을 완료합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
-        let done = UIAlertAction(title: "확인", style: .default, handler: { action in
-
-            
+        let done = UIAlertAction(title: "확인", style: .default, handler: { [self] action in
+            guard var meetUp = meetUpViewModel?.meetUp else { return }
+            if let title = subjectField.text, let meetUpPlaceName = locationField.text {
+                meetUp.title = title
+                meetUp.description = contentField.text
+                meetUp.meetUpPlaceName = meetUpPlaceName
+                meetUp.time = timePicker.date
+                meetUp.maxPeopleNum = counter
+                FirebaseManager.shared.editMeetUp(meetUp: meetUp) { MeetUp in }
+            }
             self.navigationController?.popToRootViewController(animated: true)
         })
         alert.addAction(cancel)

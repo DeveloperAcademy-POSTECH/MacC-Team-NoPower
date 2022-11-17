@@ -42,7 +42,7 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
                     
                     contentView.addSubview(graphRectView)
                     graphRectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: self.startAnchor, paddingBottom: self.endAnchor)
-
+                    
                     
                     break
                 } else {
@@ -55,12 +55,13 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
     
     
     private let graphRectView: UIView = {
-             let view = UIView()
+        let view = UIView()
         view.backgroundColor = CustomColor.nomadSkyblue
-             view.layer.masksToBounds = false
-
-             return view
-         }()
+        view.layer.masksToBounds = false
+        view.layer.cornerRadius = 2
+        
+        return view
+    }()
     
     
     
@@ -81,10 +82,8 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
     // MARK: - Helpers
     
     func render() {
-        contentView.addSubview(graphRectView)
-        graphRectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingTop: self.startAnchor, paddingBottom: self.endAnchor)
         
     }
-
+    
 }
 

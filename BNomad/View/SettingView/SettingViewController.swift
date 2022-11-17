@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingViewController: UIViewController {
 
@@ -16,6 +17,8 @@ class SettingViewController: UIViewController {
         static let withdrawUser = "회원 탈퇴"
         static let logout = "로그아웃"
     }
+    
+    var viewModel = CombineViewModel.shared
     
     private let settingTable: UITableView = {
         let table = UITableView()
@@ -77,8 +80,19 @@ extension SettingViewController: UITableViewDelegate {
             let alert = UIAlertController(title: listTitle.logout, message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             let logout = UIAlertAction(title: "확인", style: .destructive) { action in
-                // TODO: 로그아웃 액션
-                self.navigationController?.popToRootViewController(animated: true)
+                if Auth.auth().currentUser != nil {
+                    do {
+                        // 체크인 되어 있는 사람이 탈퇴하려할때, 어떻게 해주고 탈퇴시켜야 하나..?!
+                        try Auth.auth().signOut()
+                        self.viewModel.user = nil
+                        self.navigationController?.popToRootViewController(animated: true)
+                    } catch {
+                        print("No current User now")
+                    }
+                } else {
+                    print("로그아웃할 유저가 없습니다.")
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
             }
             alert.addAction(cancel)
             alert.addAction(logout)

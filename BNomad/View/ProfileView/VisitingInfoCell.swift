@@ -56,7 +56,10 @@ class VisitingInfoCell: UICollectionViewCell {
     var checkInHistoryForProfile: [CheckIn]? {
         didSet {
             viewOption = "profile"
-            guard let lastCheckIn = checkInHistoryForProfile?.last else {return}
+            guard let lastCheckIn = checkInHistoryForProfile?.last else {
+                nameLabel.text = "최근 방문한 장소가 없습니다"
+                return
+            }
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
@@ -75,11 +78,7 @@ class VisitingInfoCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         
-        if viewOption == "calendar" {
-            let lastCheckIn = self.viewModel.user?.checkInHistory?.first {$0.date == thisCellsDate ?? ""}
-            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-            label.text = place?.name
-        }else {
+        if viewOption != "calendar" {
             let lastCheckIn = self.viewModel.user?.checkInHistory?.last
             let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
             label.text = place?.name

@@ -7,9 +7,9 @@
 
 import UIKit
 
-protocol ReloadDelegate {
-    func reloadView()
-}
+//protocol ReloadDelegate {
+//    func reloadView()
+//}
 
 class ReviewCell: UICollectionViewCell {
     
@@ -17,7 +17,7 @@ class ReviewCell: UICollectionViewCell {
 
     // MARK: - Properties
     
-    var delegate: ReloadDelegate?
+//    var delegate: ReloadDelegate?
     
     lazy var cell: UIView = {
         let view = UIView()

@@ -195,7 +195,6 @@ class MeetUpViewController: UIViewController {
                 let userUid = self.viewModel.user?.userUid,
                 let meetUpUid = self.meetUpViewModel?.meetUp?.meetUpUid,
                 let placeUid = self.meetUpViewModel?.meetUp?.placeUid,
-                let peopleUid = self.meetUpViewModel?.meetUp?.currentPeopleUids
             else { return }
             FirebaseManager.shared.cancelMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) { }
             

@@ -127,7 +127,8 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-        viewAllButton.centerX(inView: self, topAnchor: horizontalDivider1.bottomAnchor, paddingTop: 300)
+        viewAllButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        viewAllButton.anchor(bottom: self.bottomAnchor, paddingBottom: 30)
     }
 }
 

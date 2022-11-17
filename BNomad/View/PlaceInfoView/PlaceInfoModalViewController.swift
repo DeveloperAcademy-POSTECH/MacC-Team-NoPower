@@ -236,7 +236,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
         if section == 3 {
             return self.checkInHistory?.count ?? 0
         } else if section == 1 {
-            return self.reviewHistory?.count ?? 0
+            return self.reviewHistory?.count == 0 ? 0 : 1
         }
         return 1
     }

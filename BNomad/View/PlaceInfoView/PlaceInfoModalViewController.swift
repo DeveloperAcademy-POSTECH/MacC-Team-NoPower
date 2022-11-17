@@ -53,6 +53,7 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     private var numberOfUsers: Int = 0
+
     
     var checkInAlert: UIAlertController = {
         let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)

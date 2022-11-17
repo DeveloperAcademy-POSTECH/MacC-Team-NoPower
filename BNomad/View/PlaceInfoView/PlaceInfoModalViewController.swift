@@ -369,6 +369,5 @@ extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
         self.present(ReviewListView, animated: true, completion: nil)
-        print("눌리는중이니?")
     }
 }

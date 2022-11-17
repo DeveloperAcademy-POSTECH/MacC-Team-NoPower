@@ -117,7 +117,7 @@ class PlaceInfoCell: UICollectionViewCell {
     let dotDivider: UIView = {
         let dotDivider = UIView()
         dotDivider.backgroundColor = CustomColor.nomad2Separator
-        dotDivider.layer.cornerRadius = 6
+        dotDivider.layer.cornerRadius = 3
         dotDivider.anchor(width: 6, height: 6)
         
         return dotDivider

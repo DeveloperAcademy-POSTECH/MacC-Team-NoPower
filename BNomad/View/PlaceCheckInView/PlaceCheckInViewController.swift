@@ -180,6 +180,13 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             navigationController?.pushViewController(controller, animated: true)
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if section == 3 {
+            return CGSize(width: view.frame.size.width, height: 70)
+        }
+        return CGSize()
+    }
 }
 
 // MARK: - pageDismiss

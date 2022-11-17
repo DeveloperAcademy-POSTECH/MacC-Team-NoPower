@@ -41,6 +41,8 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         let userProfileImg = UIImageView()
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
+        userProfileImg.clipsToBounds = true
+        userProfileImg.contentMode = .scaleAspectFill
         return userProfileImg
     }()
     
@@ -82,6 +84,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         self.addSubview(userProfileImg)
         userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
+        userProfileImg.layer.cornerRadius = 50/2
         
         let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
         nameJobStack.axis = .horizontal

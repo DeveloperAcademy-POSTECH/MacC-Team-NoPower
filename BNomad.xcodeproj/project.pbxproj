@@ -77,7 +77,6 @@
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
 		F6DFE0B329194CB400C808AF /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B229194CB400C808AF /* ReviewCell.swift */; };
 		F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -699,10 +698,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DF85MB57QP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
@@ -720,7 +719,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nopower.b.nomad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = BnomadProvisioningProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -733,10 +732,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BNomad/BNomad.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DF85MB57QP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BNomad/Application/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 앱에 접근합니다";
@@ -754,7 +753,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nopower.b.nomad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = BnomadProvisioningProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

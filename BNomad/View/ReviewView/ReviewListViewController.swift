@@ -10,7 +10,15 @@ import UIKit
 class ReviewListViewController: UIViewController {
     
     // MARK: - Properties
+    
+//    static var checked: Bool = false
 
+    var dummyText: [String] = ["한줄 소개 입니다. 오늘 막거리 고 하나요. 어제는 집콕하며 여유를 즐겼는데~~ 오늘은 밖에서 뷰를 그리려니 심심합니다. 뭐가 난이도가 있다는 걸까요? 결국은 알아내는 사람이더라고요. WILL ZZANGZZANG 읏추 너무 춥습니다. 알쏭달쏭한 겨울입니다. 텍스트 길이제한이 없어서 아무말이나 적을 수 있답니다. 그래도 맥시멈을 설정해야할까요? 그렇게 많은 리뷰를 남길 것 같진 않은데.. 뭐 일단 해보죠!! 해봅시다 <3", "한줄 소개 입니다. 오늘 막거리 고 하나요. 어제는 집콕하며 여유를 즐겼는데~~ 오늘은 밖에서 뷰를 그리려니 심심합니다. 뭐가 난이도가 있다는 걸까요? 결국은 알아내는 사람이더라고요. WI를 남길 것 같진 않은데.. 뭐 일단 해보죠!! 해봅시다 <3", "한줄 소개 입니다.", "한줄 소개 입니다. 오너무 춥습니다. 알쏭달쏭한 겨울입니다. 텍스트 길이제한이 없어서 아무말이나 적을 수 있답니다. 그래도 맥시멈을 설정해야할까요? 그렇게 많은 리뷰를 남길 것 같진 않은데.. 뭐 일단 해보죠!! 해봅시다 <3", "화이팅!"]
+    
+    var dummyPhoto: [String?] = ["AppIcon", nil, "AppIcon", nil, "AppIcon"]
+    
+//    var indexPathList: [Int] = [0, 0, 0, 0, 0]
+    
     private var placeName: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
@@ -56,6 +64,8 @@ class ReviewListViewController: UIViewController {
         return view
     }()
     
+    var location: Int = 0
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -79,11 +89,19 @@ class ReviewListViewController: UIViewController {
 
 extension ReviewListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return dummyText.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.identifier, for: indexPath) as? ReviewCell else { return UICollectionViewCell() }
+//        cell.delegate = self
+        cell.review.text = dummyText[indexPath.item]
+        if let imageString = dummyPhoto[indexPath.item] {
+            cell.photo.image = UIImage(named: imageString)
+            cell.addSubview(cell.photo)
+            cell.photo.anchor(top: cell.divider.bottomAnchor, left: cell.leftAnchor, right: cell.rightAnchor, paddingTop: 12, paddingLeft: 20, paddingRight: 20, height: 174)
+            cell.review.anchor(top: cell.photo.bottomAnchor, left: cell.leftAnchor, right: cell.rightAnchor, paddingTop: 8, paddingLeft: 21, paddingRight: 22)
+        }
         return cell
     }
     
@@ -97,7 +115,21 @@ extension ReviewListViewController: UICollectionViewDataSource {
 
 extension ReviewListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.identifier, for: indexPath) as? ReviewCell else { return CGSize(width: 350, height: 150) }
-        return CGSize(width: view.bounds.width, height: 350)
+
+        var height: Double = 0.5 + 12 + 174 + 8 + 0 + 4 + 20 + 11
+
+        if let imageString = dummyPhoto[indexPath.item] {
+            height = 0.5 + 12 + 174 + 8 + dummyText[indexPath.item].dynamicHeight() + 4 + 20 + 11
+        } else {
+            height = 0.5 + 12 + dummyText[indexPath.item].dynamicHeight() + 4 + 20 + 11
+        }
+
+        return CGSize(width: view.bounds.width, height: height)
     }
 }
+
+//extension ReviewListViewController: ReloadDelegate {
+//    func reloadView() {
+//        collectionView.reloadData()
+//    }
+//}

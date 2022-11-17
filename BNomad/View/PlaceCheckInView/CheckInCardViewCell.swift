@@ -31,6 +31,11 @@ class CheckInCardViewCell: UICollectionViewCell {
             userNameLabel.text = user?.nickname
             userOccupationLabel.text = user?.occupation
             userStatusMessage.text = user?.introduction
+            if let profileImageUrl = user?.profileImageUrl {
+                self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
+            } else {
+                self.profileImageView.image = UIImage(systemName: "person.circle.fill")
+            }
         }
     }
     

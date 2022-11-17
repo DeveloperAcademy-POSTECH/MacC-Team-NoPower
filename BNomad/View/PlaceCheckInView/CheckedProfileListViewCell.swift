@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CheckedProfileListViewCell: UICollectionViewCell {
     
@@ -28,12 +29,16 @@ class CheckedProfileListViewCell: UICollectionViewCell {
             usernameLabel.text = user.nickname
             occupationLabel.text = user.occupation
             noteLabel.text = user.introduction
+            if let profileImageUrl = user.profileImageUrl {
+                self.userProfileImg.kf.setImage(with: URL(string: profileImageUrl))
+            } else {
+                self.userProfileImg.image = UIImage(systemName: "person.circle.fill")
+            }
         }
     }
     
     private let userProfileImg: UIImageView = {
         let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(systemName: "person.circle.fill")
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
         return userProfileImg

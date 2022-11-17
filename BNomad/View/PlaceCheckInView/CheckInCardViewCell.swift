@@ -21,11 +21,21 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     var viewModel = CombineViewModel.shared
     
+    private enum Value {
+        static let paddingLeftRight: CGFloat = 20.0
+        static let dayInMinutes: CGFloat = 1440.0
+    }
+    
     var user: User? {
         didSet {
             userNameLabel.text = user?.nickname
             userOccupationLabel.text = user?.occupation
             userStatusMessage.text = user?.introduction
+            if let profileImageUrl = user?.profileImageUrl {
+                self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
+            } else {
+                self.profileImageView.image = UIImage(systemName: "person.circle.fill")
+            }
         }
     }
     
@@ -45,11 +55,24 @@ class CheckInCardViewCell: UICollectionViewCell {
             let hour = Int(timeInterval / 3600)
             let minute = Int(timeInterval / 60) % 60
             userTimeSpentLabel.text = String(hour) + "시간" + String(minute) + "분"
+
+            // 프로그래스바
+            var midnight: Date {
+                let cal = Calendar(identifier: .gregorian)
+                guard let checkInTime = checkIn?.checkInTime else { return Date() }
+                return cal.startOfDay(for: checkInTime)
+            }
+            guard let startTime = startTime else { return }
+            let checkInTimeInterval = startTime.timeIntervalSince(midnight)
+            let checkInTimeInMinutes = checkInTimeInterval / 60
+            let timeSpentInMinutes = timeInterval / 60
+
+            let timeBarWidth = self.bounds.width - (Value.paddingLeftRight * 2)
+            let checkInTimeBarPaddingLeft = timeBarWidth * checkInTimeInMinutes / Value.dayInMinutes
+            let checkInTimeBarPaddingRight = timeBarWidth * (1 - (checkInTimeInMinutes + timeSpentInMinutes) / Value.dayInMinutes )
             
-            // 이용시간 상태바
-            // MARK: 상태바가 표현할 정보 논의 후,
-            // 운영시간 대비 이용시간 비율에 맞게 표시해야함
-            
+            timeBar.addSubview(checkInTimeBar)
+            checkInTimeBar.anchor(top: timeBar.topAnchor, left: timeBar.leftAnchor, bottom: timeBar.bottomAnchor, right: timeBar.rightAnchor, paddingLeft: checkInTimeBarPaddingLeft, paddingRight: checkInTimeBarPaddingRight)
         }
     }
     
@@ -124,23 +147,23 @@ class CheckInCardViewCell: UICollectionViewCell {
     
     private let startTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "9:00"
-        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
+        label.text = "00:00"
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         return label
     }()
     
     private let endTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "22:00"
-        label.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
+        label.text = "24:00"
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         return label
     }()
     
     private let timeBar: UIView = {
         let view = UIView()
-        view.backgroundColor = CustomColor.nomadGray1
+        view.backgroundColor = CustomColor.nomadGray2
         view.layer.cornerRadius = 4
         return view
     }()
@@ -148,7 +171,6 @@ class CheckInCardViewCell: UICollectionViewCell {
     private let checkInTimeBar: UIView = {
         let view = UIView()
         view.backgroundColor = CustomColor.nomadBlue
-        view.tintColor = CustomColor.nomadBlue
         view.layer.cornerRadius = 4
         return view
     }()
@@ -199,11 +221,10 @@ class CheckInCardViewCell: UICollectionViewCell {
         timeStack.axis = .horizontal
         timeStack.distribution = .fill
         
-        timeBar.addSubview(checkInTimeBar)
-        checkInTimeBar.anchor(top: timeBar.topAnchor, left: timeBar.leftAnchor, bottom: timeBar.bottomAnchor, right: timeBar.rightAnchor, paddingLeft: 30, paddingRight: 30)
-        timeBar.anchor(height: 10)
+        timeBar.anchor(height: 8)
         let wholeStack = UIStackView(arrangedSubviews: [timeStack, timeBar])
         wholeStack.axis = .vertical
+        wholeStack.spacing = 4
         
         return wholeStack
     }()
@@ -252,7 +273,7 @@ class CheckInCardViewCell: UICollectionViewCell {
         cardRectangleView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 20)
         
         self.addSubview(stack)
-        stack.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 90, paddingLeft: 20, paddingRight: 20, height: 290)
+        stack.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 90, paddingLeft: Value.paddingLeftRight, paddingRight: Value.paddingLeftRight, height: 290)
         checkOutButton.anchor(height: 50)
     }
 }

@@ -31,11 +31,18 @@ class MapViewController: UIViewController {
 
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
     
+    private var currentAnnotation: MKAnnotation?
+    
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    var store = Set<AnyCancellable>()
     
     var selectedRegion: Region?
-    
     var visiblePlacesOnMap: [Place] = []
+    var allAnnotation: [MKAnnotation] = []
+    var visitedAnnotation: [MKAnnotation] = []
+    var newAnnotation: [MKAnnotation] = []
+    
+    fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.5)
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -72,8 +79,10 @@ class MapViewController: UIViewController {
         checkOutAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
         checkOutAlert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { action in
             
-            let controller = SignUpViewController() // 추후 로그인뷰로 변경
-            controller.modalPresentationStyle = .fullScreen
+            let controller = LoginViewController() // 추후 로그인뷰로 변경
+            controller.delegate = self
+//            controller.modalPresentationStyle = .fullScreen
+            controller.sheetPresentationController?.detents = [.medium()]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -97,15 +106,14 @@ class MapViewController: UIViewController {
     
     // 지역명 표기 및 지역 변경 버튼
     
-    private let regionChangeBtn: UIButton = {
+    private let appTitle: UIButton = {
         var btn = UIButton()
-        btn.setTitle("지역 선택 ", for: .normal)
+        btn.setTitle("B.nomad ", for: .normal)
         btn.semanticContentAttribute = .forceRightToLeft
         btn.titleLabel?.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         btn.setTitleColor(.black, for: .normal)
-        btn.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         btn.tintColor = CustomColor.nomadBlue
-        btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
+//        btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside) // 앱 네임을 눌렀을 때 pop-up이나 credit, contact 정보 뜨도록?
         return btn
     }()
     
@@ -118,13 +126,11 @@ class MapViewController: UIViewController {
         topRightBtn.tintColor = CustomColor.nomadBlue
         topRightBtn.distribution = .fillProportionally
         topRightBtn.anchor(width: 60)
-        topRightBtn.translatesAutoresizingMaskIntoConstraints = false
         
-        let upperStack = UIStackView(arrangedSubviews: [regionChangeBtn, topRightBtn])
+        let upperStack = UIStackView(arrangedSubviews: [appTitle, topRightBtn])
         upperStack.axis = .horizontal
         upperStack.alignment = .fill
         upperStack.distribution = .equalSpacing
-        upperStack.translatesAutoresizingMaskIntoConstraints = false
         return upperStack
     }()
     
@@ -137,16 +143,7 @@ class MapViewController: UIViewController {
         return background
     }()
     
-    // TODO: - 장소 모달 뷰 보다가 현재 위치로 이동 시 보던 장소 모달 dismiss 필요
-    lazy var userTrackingBtn: MKUserTrackingButton = {
-        let btn = MKUserTrackingButton(mapView: map)
-        btn.backgroundColor = .white
-        btn.tintColor = CustomColor.nomadBlue
-        btn.layer.cornerRadius = 4
-        btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
-        btn.layer.borderWidth = 1
-        return btn
-    }()
+
     
     // 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
     // TODO: - 실시간으로 위치 이동 시 Circle도 따라가 계속 그려져야 함
@@ -158,13 +155,13 @@ class MapViewController: UIViewController {
     
     lazy var listViewButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .white
+        button.backgroundColor = mapBtnBackgroundColor
         button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.tintColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 4
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(presentPlaceViewModal), for: .touchUpInside)
+        button.addTarget(self, action: #selector(presentPlaceListModal), for: .touchUpInside)
         return button
     }()
     
@@ -180,9 +177,6 @@ class MapViewController: UIViewController {
         return button
     }()
     
-    var store = Set<AnyCancellable>()
-    
-    // TODO: - 업무중 버튼 클릭 시 체크인 화면으로 돌아가야 하는데 오류 발생
     @objc func goBackToCheckInView() {
         let controller = PlaceCheckInViewController()
         guard let user = viewModel.user else { return print("USER ERR") }
@@ -199,7 +193,64 @@ class MapViewController: UIViewController {
         }
     }
     
-    private var currentAnnotation: MKAnnotation?
+    private lazy var visitedPlaceMenu: UIButton = {
+        
+        let allPlaceAction = UIAction(title: "모든 스팟", handler: { _ in
+            self.map.removeAnnotations(self.map.annotations)
+            self.map.addAnnotations(self.allAnnotation)
+        })
+        
+        let visitedPlaceAction = UIAction(title: "방문한 스팟", handler: { _ in
+            self.map.removeAnnotations(self.map.annotations)
+            self.visitedPlacesMapping()
+            self.map.addAnnotations(self.visitedAnnotation)
+        })
+        
+        let newPlaceAction = UIAction(title: "새로운 스팟", handler: { _ in
+            self.map.removeAnnotations(self.map.annotations)
+            self.visitedPlacesMapping()
+            self.map.addAnnotations(self.newAnnotation)
+        })
+        
+        allPlaceAction.state = .on // 기본적으로는 '모든 스팟'에 체크되어 있음
+        
+        let menu = UIMenu(title: "노마드 스팟 골라보기", options: .singleSelection, children: [allPlaceAction, visitedPlaceAction, newPlaceAction])
+        
+        let btn = UIButton()
+        btn.showsMenuAsPrimaryAction = true
+        btn.menu = menu
+        btn.backgroundColor = mapBtnBackgroundColor
+        btn.setImage(UIImage(systemName: "square.on.square"), for: .normal)
+        btn.tintColor = CustomColor.nomadBlue
+        btn.layer.cornerRadius = 4
+        btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        btn.layer.borderWidth = 1
+        return btn
+    }()
+    
+    lazy var regionSelectBtn: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = mapBtnBackgroundColor
+        btn.setImage(UIImage(systemName: "map"), for: .normal)
+        btn.tintColor = CustomColor.nomadBlue
+        btn.layer.cornerRadius = 4
+        btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        btn.layer.borderWidth = 1
+        btn.anchor(width: 40, height: 40)
+        btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy var userTrackingBtn: MKUserTrackingButton = {
+        let btn = MKUserTrackingButton(mapView: map)
+        btn.backgroundColor = mapBtnBackgroundColor
+        btn.tintColor = CustomColor.nomadBlue
+        btn.layer.cornerRadius = 4
+        btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        btn.layer.borderWidth = 1
+        btn.anchor(width: 40, height: 40)
+        return btn
+    }()
     
     // MARK: - LifeCycle
     
@@ -238,7 +289,7 @@ class MapViewController: UIViewController {
         present(sheet, animated: true, completion: nil)
     }
     
-    @objc private func presentPlaceViewModal() {
+    @objc private func presentPlaceListModal() {
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
@@ -276,6 +327,25 @@ class MapViewController: UIViewController {
         navigationController?.pushViewController(SettingViewController(), animated: true)
     }
     
+    // 방문했던/안했던 장소 분리하여 배열에 추가
+    func visitedPlacesMapping() {
+        self.visitedAnnotation.removeAll()
+        self.newAnnotation.removeAll()
+        
+        for place in viewModel.places {
+            guard let user = self.viewModel.user else { return }
+            guard let history = user.checkInHistory else { return }
+            
+            if history.contains(where: { checkIn in
+                checkIn.placeUid == place.placeUid
+            }) {
+                self.visitedAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            } else {
+                self.newAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            }
+        }
+    }
+    
     // MARK: - Helpers
     
     // 위치 권한 받아서 현재 위치 확인
@@ -296,13 +366,13 @@ class MapViewController: UIViewController {
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
                     self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
-                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
-                    self.map.selectAnnotation(annotation, animated: true)
-                    let controller = PlaceInfoModalViewController()
-                    controller.selectedPlace = place
-                    controller.delegateForFloating = self
-                    controller.presentationController?.delegate = self
-                    present(controller, animated: true)
+//                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
+//                    self.map.selectAnnotation(annotation, animated: true)
+//                    let controller = PlaceInfoModalViewController()
+//                    controller.selectedPlace = place
+//                    controller.delegateForFloating = self
+//                    controller.presentationController?.delegate = self
+//                    present(controller, animated: true)
                 }
                 
                 print("체크인 상태로 맵 세팅 끝")
@@ -328,16 +398,17 @@ class MapViewController: UIViewController {
     
     // 맵 UI 그리기
     func configueMapUI() {
-        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
-            let controller = SignUpViewController()
-            controller.modalPresentationStyle = .fullScreen
-            present(controller, animated: false)
-        }
+//        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
+//            let controller = SignUpViewController()
+//            controller.modalPresentationStyle = .fullScreen
+//            present(controller, animated: false)
+//        }
         
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
             self.checkInBinding()
+            self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
         }
         
         map.delegate = self
@@ -353,12 +424,18 @@ class MapViewController: UIViewController {
         
         map.addSubview(compass)
         compass.anchor(top: map.topAnchor, left: map.leftAnchor, paddingTop: 110, paddingLeft: 15, width: 40, height: 40)
-        
+
+        map.addSubview(visitedPlaceMenu)
+        visitedPlaceMenu.anchor(left: map.leftAnchor, bottom: map.bottomAnchor, paddingLeft: 15, paddingBottom: 115, width: 40, height: 40)
+       
         map.addSubview(listViewButton)
         listViewButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 15, paddingBottom: 70, width: 40, height: 40)
         
+        map.addSubview(regionSelectBtn)
+        regionSelectBtn.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 115, paddingRight: 15, width: 40, height: 85)
+        
         map.addSubview(userTrackingBtn)
-        userTrackingBtn.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 70, paddingRight: 15, width: 40, height: 40)
+        userTrackingBtn.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 70, paddingRight: 15, width: 40, height: 85)
     }
     
     func userCombine() {
@@ -382,22 +459,17 @@ extension MapViewController: MKMapViewDelegate {
         userAnnotationView?.isEnabled = false
     }
     
-
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         visiblePlacesOnMap = []
         
         for place in viewModel.places {
             if mapView.visibleMapRect.contains(MKMapPoint(CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)))
             {
-                print(place, "visible")
                 visiblePlacesOnMap.append(place)
             } else {
-                print(place, "invisible")
                 visiblePlacesOnMap.removeAll { $0.name == place.name }
-
             }
         }
-
     }
     
     // 맵 오버레이 rendering
@@ -425,7 +497,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
-            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.003 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
+            map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
             let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
@@ -498,5 +570,16 @@ extension MapViewController: ReviewPage {
         let controller = ReviewDetailViewController()
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
+    }
+}
+
+// MARK: - LogInToSignUp
+
+extension MapViewController: LogInToSignUp {
+    func logInToSignUp(userIdentifier: String) {
+        let signUpViewController = SignUpViewController()
+        signUpViewController.modalPresentationStyle = .fullScreen
+        signUpViewController.userIdentifier = userIdentifier
+        self.present(signUpViewController, animated: true)
     }
 }

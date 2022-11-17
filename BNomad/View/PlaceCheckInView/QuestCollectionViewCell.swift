@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class QuestCollectionViewCell: UICollectionViewCell {
     
@@ -13,16 +14,36 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: QuestCollectionViewCell.self)
     
-    // TODO: 실제 MeetUp으로 바꿔야함
-    var meetUpList: [TempMeetUp] = []
+    let viewModel = CombineViewModel.shared
     
-    var isMeetUpOwner = false
-    var isMeetUpGuest = false
+    var meetUpViewModel: MeetUpViewModel? {
+        didSet {
+            guard let meetUp = meetUpViewModel?.meetUp else { return }
+            title.text = meetUp.title
+            time.text = meetUp.time.toTimeString()
+            location.text = meetUp.meetUpPlaceName
+            checkedPeople.text = "\(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum)"
+            
+            let organizer = meetUp.organizerUid
+            FirebaseManager.shared.fetchUser(id: organizer) { user in
+                guard let organizerImageUrl = user.profileImageUrl else { return }
+                self.organizerImage.kf.setImage(with: URL(string: organizerImageUrl))
+            }
+
+            guard let userUid = viewModel.user?.userUid else { return }
+            isParticipated = meetUp.currentPeopleUids?.contains(userUid)
+        }
+    }
+    
+    var isParticipated: Bool? {
+        didSet {
+            configCheckMark()
+        }
+    }
     
     var title: UILabel = {
         let title = UILabel()
         title.font = .preferredFont(forTextStyle: .headline)
-        title.text = "맛찬들 같이 가실 분!"
         title.numberOfLines = 1
         return title
     }()
@@ -53,7 +74,6 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     var time: UILabel = {
         let time = UILabel()
-        time.text = "12:00"
         time.textColor = CustomColor.nomadGray1
         return time
     }()
@@ -67,49 +87,25 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     var location: UILabel = {
         let location = UILabel()
-        location.text = "입구 앞"
         location.textColor = CustomColor.nomadGray1
         return location
     }()
     
-    let currentCheckedPeople: String = "1"
-    var maxNumberOfParticipant: Int = 2
-    
-    lazy var checkedPeople: UILabel = {
+    var checkedPeople: UILabel = {
         let label = UILabel()
-        label.text = "\(currentCheckedPeople) / \(maxNumberOfParticipant)"
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.textColor = CustomColor.nomadGray1
         return label
     }()
     
-    let checkedImage1: UIImageView = {
+    var organizerImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "person.crop.circle.fill")
-        image.anchor(width: 32, height: 32)
         image.tintColor = CustomColor.nomadGray1
+        image.clipsToBounds = true
+        
         return image
     }()
-    let checkedImage2: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(systemName: "person.crop.circle.fill")
-        image.anchor(width: 32, height: 32)
-        return image
-    }()
-    let checkedImage3: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(systemName: "person.crop.circle.fill")
-        image.anchor(width: 32, height: 32)
-        return image
-    }()
-    let checkedImage4: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(systemName: "person.crop.circle.fill")
-        image.anchor(width: 32, height: 32)
-        return image
-    }()
-    
-    lazy var checkedInPeople: [UIImageView] = [checkedImage1, checkedImage2, checkedImage3, checkedImage4]
     
     // MARK: - LifeCycle
     
@@ -119,6 +115,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         shadowSetting()
         configureUI()
         configCheckMark()
+        configurePeopleUI()
     }
     
     required init?(coder: NSCoder) {
@@ -142,15 +139,10 @@ class QuestCollectionViewCell: UICollectionViewCell {
     }
     
     func configCheckMark() {
-        let checkSize: CGFloat = 32
-        
-        if isMeetUpOwner == true || isMeetUpGuest == true {
-            self.addSubview(checkImage)
-            checkImage.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
+        if isParticipated == true {
+            checkImage.isHidden = false
         } else {
-            self.addSubview(unCheckView)
-            unCheckView.layer.cornerRadius = checkSize / 2
-            unCheckView.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
+            checkImage.isHidden = true
         }
     }
     
@@ -172,21 +164,25 @@ class QuestCollectionViewCell: UICollectionViewCell {
         self.addSubview(locationStack)
         locationStack.anchor(top: timeStack.bottomAnchor, left: self.leftAnchor, paddingTop: 7, paddingLeft: 14)
         
-        let peopleStack = UIStackView(arrangedSubviews: checkedInPeople)
-        peopleStack.axis = .horizontal
-        peopleStack.spacing = -10
+        let checkSize: CGFloat = 32
+
+        self.addSubview(unCheckView)
+        unCheckView.layer.cornerRadius = checkSize / 2
+        unCheckView.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
         
-        self.addSubview(peopleStack)
-        peopleStack.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14)
-        
-        self.addSubview(checkedPeople)
-        checkedPeople.anchor(bottom: self.bottomAnchor, right: peopleStack.leftAnchor, paddingBottom: 15, paddingRight: 11)
+        self.addSubview(checkImage)
+        checkImage.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
     }
     
-    func updateMeetUpCell(meetUp: TempMeetUp) {
-        self.title.text = meetUp.title
-        self.time.text = meetUp.time
-        self.location.text = meetUp.meetUpPlaceName
-        self.checkedPeople.text = "\(currentCheckedPeople) / \(meetUp.maxPeopleNum)"
+    func configurePeopleUI() {
+        let screenWidth = UIScreen.main.bounds.width
+        let organizerImageSize = screenWidth * 36/390
+        
+        self.addSubview(organizerImage)
+        organizerImage.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14, width: organizerImageSize, height: organizerImageSize)
+        organizerImage.layer.cornerRadius = organizerImageSize / 2
+        
+        self.addSubview(checkedPeople)
+        checkedPeople.anchor(bottom: self.bottomAnchor, right: organizerImage.leftAnchor, paddingBottom: 15, paddingRight: 11)
     }
 }

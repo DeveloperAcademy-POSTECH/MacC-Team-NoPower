@@ -306,10 +306,9 @@ class FirebaseManager {
 
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
-        let date = date.toDateString()
-        var meetUpHistory: [MeetUp] = []
-        
-        ref.child("meetUpPlace/\(placeUid)/\(date)").observeSingleEvent(of: .value, with: { snapshots in
+        let date = date.toDateString()        
+        ref.child("meetUpPlace/\(placeUid)/\(date)").observe(.value, with: { snapshots in
+            var meetUpHistory: [MeetUp] = []
             for child in snapshots.children {
                 guard let snapshot = child as? DataSnapshot else { return }
                 guard let meetUpDict = snapshot.value as? [String: Any] else { return }
@@ -397,6 +396,22 @@ class FirebaseManager {
         }
     }
 
+    /// meetUp 취소하기
+    func cancelMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : nil,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp cancle could not be completed: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
+
     /// profile 이미지 업로드
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()
@@ -418,7 +433,7 @@ class FirebaseManager {
                     return
                 }
                 guard let downloadURL = url else { return }
-                self.ref.child("user/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
+                self.ref.child("users/\(userUid)").updateChildValues(["profileImageUrl" : downloadURL.absoluteString])
                 completion(downloadURL.absoluteString)
             }
         }

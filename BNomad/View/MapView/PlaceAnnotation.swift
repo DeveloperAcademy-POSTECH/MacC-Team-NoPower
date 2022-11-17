@@ -26,7 +26,7 @@ class CoworkingAnnotationView: PlaceAnnotationView {
     override func prepareForDisplay() {
         super.prepareForDisplay()
         displayPriority = .defaultHigh
-        markerTintColor = .systemPink
+        markerTintColor = CustomColor.nomadBlue
         glyphImage = UIImage(systemName: "laptopcomputer")
     }
 }

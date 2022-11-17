@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol ReviewPage {
-    func reviewPageShow()
+    func reviewPageShow(place: Place)
 }
 
 class PlaceCheckInViewController: UIViewController {
@@ -193,8 +193,8 @@ extension PlaceCheckInViewController {
             guard let index = index else { return }
             self.viewModel.user?.checkInHistory?[index] = checkIn
             self.dismiss(animated: true)
-            
-            self.delegate?.reviewPageShow()
+            guard let selectedPlace = self.selectedPlace else { return }
+            self.delegate?.reviewPageShow(place: selectedPlace)
         }
     }
 }

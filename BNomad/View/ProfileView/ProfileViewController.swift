@@ -69,7 +69,6 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
-//        setProfileImage()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,23 +112,7 @@ class ProfileViewController: UIViewController {
         profileCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
                                      paddingTop: 220, paddingLeft: 16, paddingRight: 16,
                                      height: 600)
-        
     }
-    
-//    func setProfileImage() {
-//        if isMyProfile == true {
-//            guard let user = viewModel.user else { return }
-//            if user.profileImage == nil {
-//                guard let profileImageUrl = user.profileImageUrl else { return }
-//                profileImageView.kf.setImage(with: URL(string: profileImageUrl))
-//            }
-//        } else {
-//            guard let nomad = nomad else { return }
-//            guard let profileImageUrl = nomad.profileImageUrl else { return }
-//            profileImageView.kf.setImage(with: URL(string: profileImageUrl))
-//        }
-//    }
-    
 }
 
 // MARK: - UICollectionViewDataSource

@@ -134,8 +134,8 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(toggleTapButton))
+                
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(toggleTapButton))
         
         
         selectedCell = (Contents.todayDate()["day"] ?? 0)+calendarDateFormatter.getStartingDayOfWeek(addedMonth: 0)-1 // 오늘로 셀렉티드셀 초기화
@@ -154,6 +154,8 @@ class CalendarViewController: UIViewController {
         
         configureUI()
         render()
+        
+        
     
     }
     
@@ -186,9 +188,9 @@ class CalendarViewController: UIViewController {
         calendarToggle.toggle()
         if calendarToggle {
             navigationItem.rightBarButtonItem?.tintColor = CustomColor.nomadBlue
-
-            render()
             visitCardListView.removeFromSuperview()
+            render()
+            
         } else {
             navigationItem.rightBarButtonItem?.tintColor = CustomColor.nomadGray1
             

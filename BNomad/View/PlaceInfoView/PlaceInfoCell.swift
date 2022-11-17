@@ -71,6 +71,7 @@ class PlaceInfoCell: UICollectionViewCell {
             meetUplabel.attributedText = attribtuedString
         }
     }
+
     lazy var headerStack: UIStackView = {
         
         let placeDistanceStack = UIStackView(arrangedSubviews: [placeNameLabel, distanceLabel])
@@ -89,6 +90,7 @@ class PlaceInfoCell: UICollectionViewCell {
         headerStack.axis = .vertical
         headerStack.alignment = .top
         headerStack.spacing = 5
+
 
         return headerStack
     }()
@@ -119,6 +121,7 @@ class PlaceInfoCell: UICollectionViewCell {
         dotDivider.backgroundColor = CustomColor.nomad2Separator
         dotDivider.layer.cornerRadius = 3
         dotDivider.anchor(width: 6, height: 6)
+
         
         return dotDivider
     }()
@@ -198,7 +201,7 @@ class PlaceInfoCell: UICollectionViewCell {
         return bodyStack
         
     }()
-    
+
     let callButton: UIButton = {
         let callButton = UIButton()
         callButton.setImage(UIImage(systemName: "phone"), for: .normal)
@@ -237,6 +240,7 @@ class PlaceInfoCell: UICollectionViewCell {
         let horizontalDivider1 = UILabel()
         horizontalDivider1.backgroundColor = CustomColor.nomad2Separator
         return horizontalDivider1
+
     }()
     let clockButton: UIButton = {
         let clockButton = UIButton()
@@ -313,6 +317,7 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Helpers
     
     private func configureUI() {
+
         self.addSubview(headerStack)
         self.addSubview(checkInButton)
         self.addSubview(checkOutButton)
@@ -326,6 +331,7 @@ class PlaceInfoCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
+
         headerStack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, paddingTop: 23, paddingLeft: 27)
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)

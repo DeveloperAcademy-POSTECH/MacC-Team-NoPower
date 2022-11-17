@@ -396,6 +396,22 @@ class FirebaseManager {
         }
     }
 
+    /// meetUp 취소하기
+    func cancelMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : nil,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp cancle could not be completed: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
+
     /// profile 이미지 업로드
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()

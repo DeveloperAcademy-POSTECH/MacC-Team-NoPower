@@ -88,7 +88,7 @@ class CustomModalViewController: UIViewController {
         
         rectangle.anchor(top: view.topAnchor, paddingTop: 15, width: 80, height: 5)
         rectangle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        numberOfPlaces.anchor(top: rectangle.topAnchor, paddingTop: 20)
+        numberOfPlaces.anchor(top: rectangle.bottomAnchor, paddingTop: 22)
         numberOfPlaces.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingRight: 0)
         collectionView.dataSource = self

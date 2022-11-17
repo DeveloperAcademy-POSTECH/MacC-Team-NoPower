@@ -44,6 +44,8 @@ class NewMeetUpViewController: UIViewController {
     private let minimumPeople = 2
     private var counter = 2
     
+    private let contentPlaceholder = "내용을 입력하세요."
+    
     private let subject: UILabel = {
         let label = UILabel()
         label.text = "제목"
@@ -266,7 +268,7 @@ class NewMeetUpViewController: UIViewController {
     
     private lazy var contentField: UITextView = {
         let textView = UITextView()
-        textView.text = "내용을 입력하세요."
+        textView.text = contentPlaceholder
         textView.textColor = .tertiaryLabel
         textView.font = .preferredFont(forTextStyle: .body)
         textView.backgroundColor = .clear
@@ -328,11 +330,15 @@ class NewMeetUpViewController: UIViewController {
     }
     
     @objc func didTapDoneCreatingMeetUp() {
-        if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
-            let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
-            FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
+        if checkIsInputFieldCompleted() == true {
+            if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
+                let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
+                FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
+            }
+            self.dismiss(animated: true)
+        } else {
+            showAlert()
         }
-        self.dismiss(animated: true)
     }
     
     @objc func didTapCancelCreatingMeetUp() {
@@ -340,28 +346,50 @@ class NewMeetUpViewController: UIViewController {
     }
     
     @objc func didTapDoneEditingMeetUp() {
-         // TODO: 편집 변경사항 저장 & PlaceCheckInView로 가기
-        let alert = UIAlertController(title: "편집을 완료하시겠습니까?", message: "밋업 편집을 완료합니다.", preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "취소", style: .cancel)
-        let done = UIAlertAction(title: "확인", style: .default, handler: { [self] action in
-            guard var meetUp = meetUpViewModel?.meetUp else { return }
-            if let title = subjectField.text, let meetUpPlaceName = locationField.text {
-                meetUp.title = title
-                meetUp.description = contentField.text
-                meetUp.meetUpPlaceName = meetUpPlaceName
-                meetUp.time = timePicker.date
-                meetUp.maxPeopleNum = counter
-                FirebaseManager.shared.editMeetUp(meetUp: meetUp) { MeetUp in }
-            }
-            self.navigationController?.popToRootViewController(animated: true)
-        })
-        alert.addAction(cancel)
-        alert.addAction(done)
-        self.present(alert, animated: true)
-        
+        if checkIsInputFieldCompleted() == true {
+            let alert = UIAlertController(title: "편집을 완료하시겠습니까?", message: "밋업 편집을 완료합니다.", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            let done = UIAlertAction(title: "확인", style: .default, handler: { [self] action in
+                guard var meetUp = meetUpViewModel?.meetUp else { return }
+                if let title = subjectField.text, let meetUpPlaceName = locationField.text {
+                    meetUp.title = title
+                    meetUp.description = contentField.text
+                    meetUp.meetUpPlaceName = meetUpPlaceName
+                    meetUp.time = timePicker.date
+                    meetUp.maxPeopleNum = counter
+                    FirebaseManager.shared.editMeetUp(meetUp: meetUp) { MeetUp in }
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            })
+            alert.addAction(cancel)
+            alert.addAction(done)
+            self.present(alert, animated: true)
+        } else {
+            showAlert()
+        }
      }
     
     // MARK: - Helpers
+    
+    func checkIsInputFieldCompleted() -> Bool {
+        var isCompleted = false
+        if let meetUpTitle = subjectField.text,
+           let meetUpPlace = locationField.text,
+           let meetUpContent = contentField.text {
+            var isContentDone = false
+            if meetUpContent != contentPlaceholder && meetUpContent.isEmpty == false {
+                isContentDone = true
+            }
+            if !meetUpTitle.isEmpty && !meetUpPlace.isEmpty && isContentDone == true {
+                isCompleted = true
+                return isCompleted
+            } else {
+                isCompleted = false
+                return isCompleted
+            }
+        }
+        return isCompleted
+    }
     
     func configNewMeetUp() {
         navigationItem.title = "새로운 모임 생성"
@@ -507,6 +535,27 @@ class NewMeetUpViewController: UIViewController {
         )
 
     }
+    
+    func showAlert() {
+        let alertLabel = UILabel()
+        alertLabel.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        alertLabel.text = "빈칸없이 입력해주세요!"
+        alertLabel.textColor = .red
+        alertLabel.alpha = 1.0
+        self.view.addSubview(alertLabel)
+        alertLabel.anchor(
+            top: contentRectangle.bottomAnchor,
+            left: contentRectangle.leftAnchor,
+            paddingTop: 8
+        )
+        alertLabel.centerX(inView: view)
+
+        UIView.animate(withDuration: 1.0, delay: 1, options: .curveEaseOut, animations: {
+            alertLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            alertLabel.removeFromSuperview()
+        })
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -542,7 +591,7 @@ extension NewMeetUpViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "내용을 입력하세요."
+            textView.text = contentPlaceholder
             textView.textColor = .tertiaryLabel
         }
     }

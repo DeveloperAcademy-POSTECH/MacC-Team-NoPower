@@ -28,7 +28,6 @@ class PlaceCheckInViewController: UIViewController {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 let history = checkInHistory.filter { $0.checkOutTime == nil }
                 self.checkInHistory = history
-                    print("meetUpViewModels", meetUp)
                 FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpHistory in
                     self.meetUpViewModels = []
                     meetUpHistory.forEach { meetUp in

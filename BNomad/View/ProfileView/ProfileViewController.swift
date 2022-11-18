@@ -18,6 +18,18 @@ class ProfileViewController: UIViewController {
     
     var userFromListUid: String?
     
+    let scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.backgroundColor = CustomColor.nomad2White
+        return scroll
+    }()
+    
+    let contentView: UIView = {
+        let ui = UIView()
+        ui.backgroundColor = CustomColor.nomad2White
+        return ui
+    }()
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -101,13 +113,25 @@ class ProfileViewController: UIViewController {
     
     func render() {
         
-        view.addSubview(profileImageView)
-        profileImageView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 120, paddingLeft: 29, width: 78, height: 78)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         
-        view.addSubview(profileCollectionView)
-        profileCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                     paddingTop: 220, paddingLeft: 16, paddingRight: 16,
-                                     height: 600)
+        scrollView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        contentView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor)
+
+        let contentViewHeight = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
+        contentViewHeight.priority = .defaultLow
+        contentViewHeight.isActive = true
+        
+        contentView.addSubview(profileCollectionView)
+        contentView.addSubview(profileImageView)
+        
+        profileImageView.anchor(top: contentView.topAnchor, paddingTop: 25, width: 120, height: 120)
+        profileImageView.centerX(inView: view)
+        
+        profileCollectionView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: view.rightAnchor,
+                                             paddingTop: 100, paddingLeft: 16, paddingRight: 16,
+                                             height: 600)
         
     }
     
@@ -204,7 +228,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         if indexPath.section == 0 {
-            return CGSize(width: profileCollectionView.frame.width, height: 166)
+            return CGSize(width: profileCollectionView.frame.width, height: 182)
         } else if indexPath.section == 1 {
             return CGSize(width: profileCollectionView.frame.width, height: 119)
         } else {

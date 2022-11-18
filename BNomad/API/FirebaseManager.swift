@@ -304,6 +304,34 @@ class FirebaseManager {
         }
     }
 
+    /// meetUp 편접
+    func editMeetUp(meetUp: MeetUp, completion: @escaping (MeetUp) -> Void) {
+        var currentPeopleUidsArray: [String: Bool] = [:]
+        if let currentPeopleUids = meetUp.currentPeopleUids {
+            currentPeopleUids.forEach { currentPeopleUidsArray[$0] = true }
+        }
+
+        let meetUpUser = ["placeUid": meetUp.placeUid, "time": meetUp.time.toDateTimeString(),
+                          "title": meetUp.title, "description": meetUp.description as Any,
+                          "maxPeopleNum": meetUp.maxPeopleNum, "currentPeopleUids": currentPeopleUidsArray,
+                          "meetUpPlaceName": meetUp.meetUpPlaceName, "organizerUid": meetUp.organizerUid] as [String : Any]
+        
+        let meetUpPlace = ["time": meetUp.time.toDateTimeString(), "title": meetUp.title,
+                           "description": meetUp.description as Any, "maxPeopleNum": meetUp.maxPeopleNum,
+                           "currentPeopleUids": currentPeopleUidsArray, "meetUpPlaceName": meetUp.meetUpPlaceName,
+                           "organizerUid": meetUp.organizerUid] as [String : Any]
+        
+        ref.updateChildValues(["meetUp/\(meetUp.meetUpUid)" : meetUpUser,
+                               "meetUpPlace/\(meetUp.placeUid)/\(meetUp.date)/\(meetUp.meetUpUid)" : meetUpPlace]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp could not be saved: \(error).")
+            } else {
+                completion(meetUp)
+            }
+        }
+    }
+
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
         let date = date.toDateString()        
@@ -499,7 +527,7 @@ class FirebaseManager {
 
     /// 리뷰 사진 업로드
     func uploadReviewImages(reviewUid: String, placeUid: String, image: UIImage?, completion: @escaping(String) -> Void) {
-        guard let image = image else { return }
+        guard let image = image else { return completion("no image") }
         
         let storageRef = Storage.storage().reference().child("reviewImage/\(reviewUid)")
         if let uploadData = image.jpegData(compressionQuality: 0.1) {
@@ -527,6 +555,7 @@ class FirebaseManager {
         let createTime = review.createTime.toDateTimeString()
 
         uploadReviewImages(reviewUid: review.reviewUid, placeUid: review.placeUid, image: image) { url in
+            completion()
         }
         ref.updateChildValues(["review/\(review.placeUid)/\(review.reviewUid)" : ["userUid" : review.userUid,
                                                                                 "createTime" : createTime,

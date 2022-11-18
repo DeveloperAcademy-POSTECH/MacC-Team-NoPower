@@ -329,6 +329,18 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - CheckInOut
 
 extension PlaceInfoModalViewController: CheckInOut {
+    func afterCheckInTapped() {
+        let controller = PlaceCheckInViewController()
+        controller.delegate = self
+        controller.selectedPlace = selectedPlace
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
+//        self.dismiss(animated: true) {
+            self.present(navigationController, animated: true, completion: nil)
+//        }
+    }
+    
     func checkInTapped() {
         checkIn()
     }

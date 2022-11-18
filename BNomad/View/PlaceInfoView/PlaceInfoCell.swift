@@ -12,6 +12,7 @@ import Combine
 protocol CheckInOut {
     func checkInTapped()
     func checkOutTapped()
+    func afterCheckInTapped()
 }
 
 class PlaceInfoCell: UICollectionViewCell {
@@ -146,29 +147,35 @@ class PlaceInfoCell: UICollectionViewCell {
         button.tintColor = .white
         button.backgroundColor = CustomColor.nomadBlue
         button.layer.cornerRadius = 8
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
         button.addTarget(self, action: #selector(checkInTapped), for: .touchUpInside)
         return button
     }()
     
-    lazy var checkOutButton: UIButton = {
+    lazy var afterCheckInButton: UIButton = {
         var button = UIButton()
-        button.setTitle("체크아웃 하기", for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = CustomColor.nomadBlue
+        button.setTitle("이곳에 체크인 중", for: .normal)
+        button.setTitleColor(CustomColor.nomadBlue, for: .normal)
+        button.tintColor = CustomColor.nomadBlue
+        button.backgroundColor = CustomColor.nomad2White
+        button.layer.borderWidth = 1
+        button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(checkOutTapped), for: .touchUpInside)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
+        button.addTarget(self, action: #selector(afterCheckInTapped), for: .touchUpInside)
         return button
     }()
     
     private let alreadyCheckIn: UIView = {
         let alreadyView = UIView()
         let label = UILabel()
-        label.text = "다른 곳에 체크인 되어 있습니다."
-        label.textColor = .white
+        label.text = "다른 노마드스팟에 체크인 중"
+        label.textColor = CustomColor.nomadGray1
+        label.font = .preferredFont(forTextStyle: .body, weight: .bold)
         alreadyView.addSubview(label)
         label.centerX(inView: alreadyView)
         label.centerY(inView: alreadyView)
-        alreadyView.backgroundColor = CustomColor.nomadGray1
+        alreadyView.backgroundColor = CustomColor.nomadGray2
         alreadyView.layer.cornerRadius = 8
         return alreadyView
     }()
@@ -283,21 +290,21 @@ class PlaceInfoCell: UICollectionViewCell {
             .sink { user in
                 if user == nil {
                     self.checkInButton.isHidden = false
-                    self.checkOutButton.isHidden = true
+                    self.afterCheckInButton.isHidden = true
                     self.alreadyCheckIn.isHidden = true
                 } else {
                     guard let user = user else { return }
                     if user.isChecked && self.place?.placeUid == user.currentCheckIn?.placeUid {
                         self.checkInButton.isHidden = true
-                        self.checkOutButton.isHidden = false
+                        self.afterCheckInButton.isHidden = false
                         self.alreadyCheckIn.isHidden = true
                     } else if user.isChecked && self.place?.placeUid != user.currentCheckIn?.placeUid {
                         self.checkInButton.isHidden = true
-                        self.checkOutButton.isHidden = true
+                        self.afterCheckInButton.isHidden = true
                         self.alreadyCheckIn.isHidden = false
                     } else {
                         self.checkInButton.isHidden = false
-                        self.checkOutButton.isHidden = true
+                        self.afterCheckInButton.isHidden = true
                         self.alreadyCheckIn.isHidden = true
                     }
                 }
@@ -315,12 +322,16 @@ class PlaceInfoCell: UICollectionViewCell {
         delegate?.checkOutTapped()
     }
     
+    @objc func afterCheckInTapped() {
+        delegate?.afterCheckInTapped()
+    }
+    
     // MARK: - Helpers
     
     private func configureUI() {
         self.addSubview(headerStack)
         self.addSubview(checkInButton)
-        self.addSubview(checkOutButton)
+        self.addSubview(afterCheckInButton)
         self.addSubview(bodyStack)
         self.addSubview(horizontalDivider)
         self.addSubview(horizontalDivider1)
@@ -336,7 +347,7 @@ class PlaceInfoCell: UICollectionViewCell {
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)
         horizontalDivider1.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
         checkInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
-        checkOutButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
+        afterCheckInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
         alreadyCheckIn.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
     }
     

@@ -79,6 +79,7 @@ extension SettingViewController: UITableViewDelegate {
             let logout = UIAlertAction(title: "확인", style: .destructive) { action in
                 // TODO: 로그아웃 액션
                 self.navigationController?.popToRootViewController(animated: true)
+                print("ge")
             }
             alert.addAction(cancel)
             alert.addAction(logout)

@@ -67,7 +67,7 @@ class ProfileViewController: UIViewController {
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.register(SelfUserInfoCell.self, forCellWithReuseIdentifier: SelfUserInfoCell.identifier)
-        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(VisitCardCell.self, forCellWithReuseIdentifier: VisitCardCell.identifier)
         collectionView.register(ProfileGraphCell.self, forCellWithReuseIdentifier: ProfileGraphCell.identifier)
         
         collectionView.register(ProfileHeaderCollectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfileHeaderCollectionView.identifier)
@@ -181,7 +181,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             return cell
             
         case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
             cell.layer.borderWidth = 2
@@ -251,12 +251,16 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 0 {
+        switch section {
+        case 0:
             return .zero
-        } else {
-            return CGSize(width: view.frame.size.width, height: 50)
+        case 1:
+            return CGSize(width: view.frame.size.width, height: 62)
+        case 2:
+            return CGSize(width: view.frame.size.width, height: 96)
+        default:
+            return .zero
         }
-        
     }
     
 }
@@ -266,16 +270,16 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 extension ProfileViewController: PlusMinusProtocol {
     func plusTap() {
         ProfileGraphCell.editWeek(edit: 1)
-//        profileCollectionView.reloadData()
-        //TODO: reloadData 삭제하니까 정장작동되는데 이유가 대체 ??
         
     }
     
     func minusTap() {
         ProfileGraphCell.editWeek(edit: -1)
 
-//        profileCollectionView.reloadData()
-
+    }
+    
+    func viewAllTap() {
+        self.moveToCalendar()
     }
 }
 

@@ -231,7 +231,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             return self.checkInHistory?.count ?? 0
         } else if section == 1 {
             return self.reviewHistory?.count == 0 ? 0 : 1
-        }
+        } 
         return 1
     }
     
@@ -291,15 +291,17 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         
         let viewWidth = view.bounds.width
-        let sectionZeroCardHeight: CGFloat = 266
-        let sectionZeroBottomPadding: CGFloat = 25
-        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
-        
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
-            return CGSize(width: viewWidth, height: 400)
-        } 
+            let maxSize = CGSize(width: viewWidth, height: 400)
+            let finalSize = CGSize(width: viewWidth, height: 100 + CGFloat((reviewHistory?.count ?? 1) * 80))
+            if finalSize.height > maxSize.height {
+                return maxSize
+            } else {
+                return finalSize
+            }
+        }
         else if indexPath.section == 2 {
             return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {

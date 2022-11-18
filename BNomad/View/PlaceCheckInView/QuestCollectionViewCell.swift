@@ -24,25 +24,14 @@ class QuestCollectionViewCell: UICollectionViewCell {
             location.text = meetUp.meetUpPlaceName
             checkedPeople.text = "\(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum)"
             
-            checkedInPeople = meetUp.currentPeopleUids?.map { userUid in
-                let image = UIImageView()
-                image.anchor(width: 32, height: 32)
-                image.tintColor = CustomColor.nomadGray1
-                FirebaseManager.shared.fetchUser(id: userUid) { user in
-                    guard let profileImageUrl = user.profileImageUrl else { return }
-                    image.kf.setImage(with: URL(string: profileImageUrl))
-                }
-                return image
+            let organizer = meetUp.organizerUid
+            FirebaseManager.shared.fetchUser(id: organizer) { user in
+                guard let organizerImageUrl = user.profileImageUrl else { return }
+                self.organizerImage.kf.setImage(with: URL(string: organizerImageUrl))
             }
 
             guard let userUid = viewModel.user?.userUid else { return }
             isParticipated = meetUp.currentPeopleUids?.contains(userUid)
-        }
-    }
-    
-    var checkedInPeople: [UIImageView]? {
-        didSet {
-            configureCheckInPeopleUI()
         }
     }
     
@@ -109,6 +98,15 @@ class QuestCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    var organizerImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(systemName: "person.crop.circle.fill")
+        image.tintColor = CustomColor.nomadGray1
+        image.clipsToBounds = true
+        
+        return image
+    }()
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -117,6 +115,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         shadowSetting()
         configureUI()
         configCheckMark()
+        configurePeopleUI()
     }
     
     required init?(coder: NSCoder) {
@@ -175,17 +174,15 @@ class QuestCollectionViewCell: UICollectionViewCell {
         checkImage.anchor(top: self.topAnchor, right: self.rightAnchor, paddingTop: 10, paddingRight: 10, width: checkSize, height: checkSize)
     }
     
-    func configureCheckInPeopleUI() {
-        guard let checkedInPeople = checkedInPeople else { return }
+    func configurePeopleUI() {
+        let screenWidth = UIScreen.main.bounds.width
+        let organizerImageSize = screenWidth * 36/390
         
-        let peopleStack = UIStackView(arrangedSubviews: checkedInPeople)
-        peopleStack.axis = .horizontal
-        peopleStack.spacing = -10
-        
-        self.addSubview(peopleStack)
-        peopleStack.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14)
+        self.addSubview(organizerImage)
+        organizerImage.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14, width: organizerImageSize, height: organizerImageSize)
+        organizerImage.layer.cornerRadius = organizerImageSize / 2
         
         self.addSubview(checkedPeople)
-        checkedPeople.anchor(bottom: self.bottomAnchor, right: peopleStack.leftAnchor, paddingBottom: 15, paddingRight: 11)
+        checkedPeople.anchor(bottom: self.bottomAnchor, right: organizerImage.leftAnchor, paddingBottom: 15, paddingRight: 11)
     }
 }

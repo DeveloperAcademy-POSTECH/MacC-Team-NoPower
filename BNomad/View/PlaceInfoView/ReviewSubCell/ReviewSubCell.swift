@@ -25,7 +25,6 @@ class ReviewSubCell: UICollectionViewCell {
                     self.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
                 }
             }
-            
             if let reviewImageUrl = review.imageUrl {
                 reviewImageView.kf.setImage(with: URL(string: reviewImageUrl))
             } else {
@@ -63,6 +62,12 @@ class ReviewSubCell: UICollectionViewCell {
         userNameLabel.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
         return userNameLabel
     }()
+    
+    let horizontalDivider1: UILabel = {
+        let horizontalDivider1 = UILabel()
+        horizontalDivider1.backgroundColor = CustomColor.nomad2Separator
+        return horizontalDivider1
+    }()
 
     
     // MARK: - Lifecycle
@@ -74,17 +79,20 @@ class ReviewSubCell: UICollectionViewCell {
         self.addSubview(reviewImageView)
         self.addSubview(profileImageView)
         self.addSubview(userNameLabel)
+        self.addSubview(horizontalDivider1)
         setAttributes()
     }
     
     private func setAttributes() {
-        reviewTextLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 11, paddingLeft: 7)
+        reviewTextLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 7)
         NSLayoutConstraint.activate([
             reviewImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
             ])
         reviewImageView.anchor(right: self.rightAnchor, paddingRight: 7, width: 60, height: 60)
-        profileImageView.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 38, paddingLeft: 7, width: 20, height: 20)
-        userNameLabel.anchor(top: self.topAnchor, left: profileImageView.rightAnchor, paddingTop: 41, paddingLeft: 8)
+        profileImageView.anchor(top: reviewTextLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 7, width: 20, height: 20)
+        userNameLabel.anchor(top: reviewTextLabel.bottomAnchor, left: profileImageView.rightAnchor, paddingTop: 10, paddingLeft: 8)
+        horizontalDivider1.anchor(top: reviewImageView.bottomAnchor, paddingTop: 4, width: 360, height: 1)
+        horizontalDivider1.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

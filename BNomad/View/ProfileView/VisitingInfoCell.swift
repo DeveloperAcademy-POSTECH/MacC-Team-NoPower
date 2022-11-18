@@ -56,7 +56,10 @@ class VisitingInfoCell: UICollectionViewCell {
     var checkInHistoryForProfile: [CheckIn]? {
         didSet {
             viewOption = "profile"
-            guard let lastCheckIn = checkInHistoryForProfile?.last else {return}
+            guard let lastCheckIn = checkInHistoryForProfile?.last else {
+                nameLabel.text = "최근 방문한 장소가 없습니다"
+                return
+            }
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"

@@ -24,6 +24,14 @@ class MeetUpViewController: UIViewController {
             contentLabel.text = meetUp.description
             participants.text = "참여 예정 노마더 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
             participantCollectionView.reloadData()
+            
+            guard let participants = currentPeopleUids else { return }
+            guard let user = viewModel.user?.userUid else { return }
+                
+            if participants.contains(user) {
+                configJoinCancelButton()
+            }
+            
         }
     }
     
@@ -183,6 +191,24 @@ class MeetUpViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
+    @objc func cancelJoinMeetUp() {
+        let alert = UIAlertController(title: "밋업 참여 취소", message: "\(meetUpTitleLabel.text ?? "") 밋업 참여를 취소합니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let cancelJoin = UIAlertAction(title: "확인", style: .default, handler: { action in
+            guard
+                let userUid = self.viewModel.user?.userUid,
+                let meetUpUid = self.meetUpViewModel?.meetUp?.meetUpUid,
+                let placeUid = self.meetUpViewModel?.meetUp?.placeUid
+            else { return }
+            FirebaseManager.shared.cancelMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) { }
+            
+            self.navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(cancel)
+        alert.addAction(cancelJoin)
+        self.present(alert, animated: true)
+    }
+    
     // MARK: - Helpers
     
     func configEditButton() {
@@ -191,6 +217,16 @@ class MeetUpViewController: UIViewController {
         if userUid == organizerUid {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
         }
+
+    func configJoinCancelButton() {
+        joinButton.setTitle("참여 취소", for: .normal)
+        joinButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        joinButton.backgroundColor = CustomColor.nomad2White
+        joinButton.layer.borderWidth = 1
+        joinButton.layer.borderColor = CustomColor.nomadBlue?.cgColor
+        joinButton.setTitleColor(CustomColor.nomadBlue, for: .normal)
+        joinButton.removeTarget(self, action: #selector(joinMeetUp), for: .touchUpInside)
+        joinButton.addTarget(self, action: #selector(cancelJoinMeetUp), for: .touchUpInside)
     }
     
     func configUI() {

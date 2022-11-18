@@ -424,6 +424,22 @@ class FirebaseManager {
         }
     }
 
+    /// meetUp 취소하기
+    func cancelMeetUp(userUid: String, meetUpUid: String, placeUid: String, completion: @escaping() -> Void) {
+        let date = Date().toDateString()
+        
+        ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : nil,
+                               "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil,
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil]) {
+            (error: Error?, ref: DatabaseReference) in
+            if let error: Error = error {
+                print("meetUp cancle could not be completed: \(error).")
+            } else {
+                completion()
+            }
+        }
+    }
+
     /// profile 이미지 업로드
     func uploadUserProfileImage(userUid: String, image: UIImage, completion: @escaping(String) -> Void) {
         let storageRef = Storage.storage().reference()
@@ -511,7 +527,7 @@ class FirebaseManager {
 
     /// 리뷰 사진 업로드
     func uploadReviewImages(reviewUid: String, placeUid: String, image: UIImage?, completion: @escaping(String) -> Void) {
-        guard let image = image else { return }
+        guard let image = image else { return completion("no image") }
         
         let storageRef = Storage.storage().reference().child("reviewImage/\(reviewUid)")
         if let uploadData = image.jpegData(compressionQuality: 0.1) {
@@ -539,6 +555,7 @@ class FirebaseManager {
         let createTime = review.createTime.toDateTimeString()
 
         uploadReviewImages(reviewUid: review.reviewUid, placeUid: review.placeUid, image: image) { url in
+            completion()
         }
         ref.updateChildValues(["review/\(review.placeUid)/\(review.reviewUid)" : ["userUid" : review.userUid,
                                                                                 "createTime" : createTime,

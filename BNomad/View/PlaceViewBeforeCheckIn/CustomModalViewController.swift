@@ -28,14 +28,6 @@ class CustomModalViewController: UIViewController {
         }
     }
     
-    var rectangle: UIView = {
-        let rectangle = UIView()
-        rectangle.layer.cornerRadius = 3
-        rectangle.translatesAutoresizingMaskIntoConstraints = false
-        rectangle.backgroundColor = .systemGray2
-        return rectangle
-    }()
-    
     lazy var numberOfPlaces: UILabel = {
         let number = UILabel()
         number.backgroundColor = .clear
@@ -81,20 +73,15 @@ class CustomModalViewController: UIViewController {
         self.view.layer.shadowOffset = .init(width: 0, height: -2)
         self.view.layer.shadowRadius = 20
         self.view.layer.shadowOpacity = 0.5
-        
-        self.view.addSubview(rectangle)
         self.view.addSubview(numberOfPlaces)
         self.view.addSubview(collectionView)
-        
-        rectangle.anchor(top: view.topAnchor, paddingTop: 15, width: 80, height: 5)
-        rectangle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        numberOfPlaces.anchor(top: rectangle.bottomAnchor, paddingTop: 22)
+
+        numberOfPlaces.anchor(top: view.topAnchor, paddingTop: 22)
         numberOfPlaces.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingRight: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
-        
     }
 }
 

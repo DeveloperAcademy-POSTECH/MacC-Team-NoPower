@@ -130,7 +130,6 @@ extension ReviewInfoCell: UICollectionViewDataSource {
         cell.backgroundColor = UIColor.white
         return cell
     }
-    
 }
 
 

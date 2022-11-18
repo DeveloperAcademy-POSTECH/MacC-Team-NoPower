@@ -331,6 +331,7 @@ class MapViewController: UIViewController {
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
         }
         sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation

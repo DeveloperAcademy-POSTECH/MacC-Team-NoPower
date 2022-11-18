@@ -176,6 +176,10 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
             FirebaseManager.shared.fetchUser(id: nomadUid) { user in
                 controller.nomad = user
+                
+                FirebaseManager.shared.fetchCheckInHistory(userUid: nomadUid) { history in
+                    controller.nomad?.checkInHistory = history
+                }
             }
             controller.isMyProfile = false
             navigationController?.pushViewController(controller, animated: true)

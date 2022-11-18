@@ -125,6 +125,14 @@ class VisitingInfoCell: UICollectionViewCell {
         return label
     }()
     
+    private let dividerLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColor.nomadGray1
+        view.layer.masksToBounds = false
+
+        return view
+    }()
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -141,21 +149,26 @@ class VisitingInfoCell: UICollectionViewCell {
     func render() {
         
         contentView.addSubview(nameLabel)
-        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 25, paddingLeft: 20, paddingRight: 20)
+        nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20)
         
         let stack = [UIStackView(arrangedSubviews: [checkinLabel, checkinTimeLabel]), UIStackView(arrangedSubviews: [stayedLabel, stayedTimeLabel])]
         stack.forEach {
             $0.axis = .vertical
             $0.spacing = 1
             $0.distribution = .fillEqually
+            $0.alignment = .center
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         contentView.addSubview(stack[0])
-        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 60, paddingLeft: 20)
+        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 68, paddingLeft: 50)
         
         contentView.addSubview(stack[1])
-        stack[1].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 60, paddingLeft: 200)
+        stack[1].anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 68, paddingRight: 50)
+        
+        contentView.addSubview(dividerLine)
+        dividerLine.anchor(top: contentView.topAnchor, paddingTop: 72, width: 1, height: 31)
+        dividerLine.centerX(inView: contentView)
         
     }
     

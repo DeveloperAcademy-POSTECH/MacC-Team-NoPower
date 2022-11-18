@@ -59,6 +59,7 @@ class PlaceInfoCell: UICollectionViewCell {
             checkedinViewLabel.attributedText = attribtuedString
         }
     }
+    
     var reviewHistory: [Review]? {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
@@ -71,7 +72,15 @@ class PlaceInfoCell: UICollectionViewCell {
             meetUplabel.attributedText = attribtuedString
         }
     }
-
+    
+    var grabber: UIView = {
+          let grabber = UIView()
+          grabber.frame = CGRect(x: 0, y: 0, width: 80, height: 5)
+          grabber.layer.cornerRadius = 3
+          grabber.backgroundColor = .systemGray2
+          return grabber
+      }()
+    
     lazy var headerStack: UIStackView = {
         
         let placeDistanceStack = UIStackView(arrangedSubviews: [placeNameLabel, distanceLabel])
@@ -317,7 +326,7 @@ class PlaceInfoCell: UICollectionViewCell {
     // MARK: - Helpers
     
     private func configureUI() {
-
+        self.addSubview(grabber)
         self.addSubview(headerStack)
         self.addSubview(checkInButton)
         self.addSubview(checkOutButton)
@@ -331,7 +340,8 @@ class PlaceInfoCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-
+        grabber.centerX(inView: self)
+        grabber.anchor(top: self.topAnchor, paddingTop: 15, width: 80, height: 5)
         headerStack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
         bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, paddingTop: 23, paddingLeft: 27)
         horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)

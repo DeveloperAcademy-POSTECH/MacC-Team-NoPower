@@ -46,6 +46,7 @@ class ReviewSubCell: UICollectionViewCell {
         let reviewImageView = UIImageView()
         reviewImageView.layer.cornerRadius = 5
         reviewImageView.clipsToBounds = true
+        reviewImageView.contentMode = .scaleAspectFill
         return reviewImageView
     }()
     
@@ -53,6 +54,7 @@ class ReviewSubCell: UICollectionViewCell {
         let profileImageView = UIImageView()
         profileImageView.layer.cornerRadius = 10
         profileImageView.clipsToBounds = true
+        profileImageView.contentMode = .scaleAspectFill
         return profileImageView
     }()
     

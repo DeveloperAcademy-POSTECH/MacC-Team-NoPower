@@ -43,27 +43,6 @@ class ReviewInfoCell: UICollectionViewCell {
         return horizontalDivider1
     }()
     
-    let horizontalDivider2: UILabel = {
-        let horizontalDivider2 = UILabel()
-        horizontalDivider2.backgroundColor = CustomColor.nomad2Separator
-        return horizontalDivider2
-    }()
-    let horizontalDivider3: UILabel = {
-        let horizontalDivider3 = UILabel()
-        horizontalDivider3.backgroundColor = CustomColor.nomad2Separator
-        return horizontalDivider3
-    }()
-    let horizontalDivider4: UILabel = {
-        let horizontalDivider4 = UILabel()
-        horizontalDivider4.backgroundColor = CustomColor.nomad2Separator
-        return horizontalDivider4
-    }()
-    let horizontalDivider5: UILabel = {
-        let horizontalDivider5 = UILabel()
-        horizontalDivider5.backgroundColor = CustomColor.nomad2Separator
-        return horizontalDivider5
-    }()
-    
     let reviewCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical

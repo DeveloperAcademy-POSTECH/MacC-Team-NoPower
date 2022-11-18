@@ -180,7 +180,7 @@ class MapViewController: UIViewController {
 //        button.clipsToBounds = true
         button.layer.cornerRadius = 25
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOpacity = 0.15
         button.layer.shadowOffset = CGSize(width: 3, height: 3)
         button.layer.shadowRadius = 5
         button.setTitleColor(CustomColor.nomadBlue, for: .normal)

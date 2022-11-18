@@ -215,6 +215,12 @@ extension PlaceCheckInViewController: CheckOutAlert {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             self.checkOut()
+            FirebaseManager.shared.fetchMeetUpUidAll(userUid: self.viewModel.user?.userUid ?? "") { meetUpUid in
+                FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetUpUid) { placeUid in
+                    FirebaseManager.shared.cancelMeetUp(userUid: self.viewModel.user?.userUid ?? "", meetUpUid: meetUpUid, placeUid: placeUid) {
+                    }
+                }
+            }
         }))
         present(alert, animated: true)
     }

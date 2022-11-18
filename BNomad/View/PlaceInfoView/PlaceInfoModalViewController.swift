@@ -11,6 +11,8 @@ import MapKit
 class PlaceInfoModalViewController: UIViewController {
     
     // MARK: - Properties
+    var reviewHistoryUid: String?
+    
     var selectedPlace: Place? {
         didSet {
             guard let selectedPlace = selectedPlace else { return }
@@ -97,15 +99,12 @@ class PlaceInfoModalViewController: UIViewController {
                 checkInAlert.addAction(UIAlertAction(title: "취소", style: .cancel))
                 
                 checkInAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
-                    // TODO: Firebase에 올리는 작업, checkInButton 색 바로 업데이트 해야함
-                    // TODO: mapView 상단 체크인하고 있다는 배너 업테이트 해주어야함
-                    // TODO: - isChecked 직접적으로 수정하지 않기 & Firebase에 체크인 정보 업데이트, FirebaseTestVC의 setCheckIn() 참고
                     
                     self.checkInFirebase()
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
                     
-                    print(checkInAlert.textFields?[0].text) //추후 체크인 메시지 모델로 연결
+                    print(checkInAlert.textFields?[0].text)
                 }))
                 
                 checkInAlert.actions[1].isEnabled = false
@@ -191,15 +190,10 @@ class PlaceInfoModalViewController: UIViewController {
 //          isModalInPresentation = true
 
         if let sheet = sheetPresentationController {
-            /// 드래그를 멈추면 그 위치에 멈추는 지점: default는 large()
             sheet.detents = [.medium(), .large()]
-            /// 초기화 드래그 위치
             sheet.selectedDetentIdentifier = .medium
-            /// sheet아래에 위치하는 ViewController를 흐려지지 않게 하는 경계값 (medium 이상부터 흐려지도록 설정)
             sheet.largestUndimmedDetentIdentifier = .medium
-            /// false는 viewController내부를 scroll하면 sheet가 움직이지 않고 내부 컨텐츠를 스크롤되도록 설정
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 12
         }
     }
@@ -236,6 +230,8 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3 {
             return self.checkInHistory?.count ?? 0
+        } else if section == 1 {
+            return self.reviewHistory?.count == 0 ? 0 : 1
         }
         return 1
     }
@@ -294,6 +290,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
             return CGSize()
         }
         
+        
         let viewWidth = view.bounds.width
         let sectionZeroCardHeight: CGFloat = 266
         let sectionZeroBottomPadding: CGFloat = 25
@@ -302,15 +299,24 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
-            return CGSize(width: viewWidth, height: 370)
-        } else if indexPath.section == 2 {
-            return CGSize(width: viewWidth, height: 27)
+            return CGSize(width: viewWidth, height: 400)
+            flow.sectionInset.top = 13
+        } 
+        else if indexPath.section == 2 {
+            return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
-            
             return CGSize(width: 349, height: 68)
         } else {
-            return CGSize(width: viewWidth, height: 0)
+            return CGSize(width: viewWidth, height: 100)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let controller = PlaceInfoModalViewController()
+            controller.reviewHistoryUid = reviewHistory?[indexPath.row].userUid
+            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -336,9 +342,10 @@ extension PlaceInfoModalViewController: CheckInOut {
 // MARK: - ReviewPage
 
 extension PlaceInfoModalViewController: ReviewPage {
-    func reviewPageShow() {
+    func reviewPageShow(place: Place) {
         self.dismiss(animated: false)
         let controller = ReviewDetailViewController()
+        controller.place = place
         controller.sheetPresentationController?.detents = [.large()]
         self.present(controller, animated: true)
     }

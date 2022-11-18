@@ -13,10 +13,10 @@ class WithNomadHeader: UICollectionViewCell {
     
     var numberOfUsers: Int = 0 {
         didSet {
-            withNomadCountLabel.text = "함께 일하고 있는 \(numberOfUsers)명의 노마더"
+            withNomadCountLabel.text = "노마드 \(numberOfUsers)"
             let fullText = withNomadCountLabel.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
-            let range = (fullText as NSString).range(of: "\(numberOfUsers)명")
+            let range = (fullText as NSString).range(of: "\(numberOfUsers)")
             attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
             withNomadCountLabel.attributedText = attribtuedString
         }

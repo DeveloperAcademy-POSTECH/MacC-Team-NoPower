@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol ReviewPage {
-    func reviewPageShow()
+    func reviewPageShow(place: Place)
 }
 
 class PlaceCheckInViewController: UIViewController {
@@ -19,6 +19,8 @@ class PlaceCheckInViewController: UIViewController {
     var delegate: ReviewPage?
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
+    
+    var selectedUser: User?
     
     var selectedPlace: Place? {
         didSet {
@@ -44,12 +46,7 @@ class PlaceCheckInViewController: UIViewController {
     
     var meetUpViewModels: [MeetUpViewModel]?
 
-    var checkInHistory: [CheckIn]? {
-        didSet {
-            guard let checkInHistory = checkInHistory else { return }
-            collectionView.reloadData()
-        }
-    }
+    var checkInHistory: [CheckIn]?
 
     // MARK: - Properties
     private var numberOfUsers: Int {
@@ -176,9 +173,20 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 {
             let controller = ProfileViewController()
-            controller.userFromListUid = checkInHistory?[indexPath.row].userUid
+            guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
+            FirebaseManager.shared.fetchUser(id: nomadUid) { user in
+                controller.nomad = user
+            }
+            controller.isMyProfile = false
             navigationController?.pushViewController(controller, animated: true)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if section == 3 {
+            return CGSize(width: view.frame.size.width, height: 70)
+        }
+        return CGSize()
     }
 }
 
@@ -193,8 +201,8 @@ extension PlaceCheckInViewController {
             guard let index = index else { return }
             self.viewModel.user?.checkInHistory?[index] = checkIn
             self.dismiss(animated: true)
-            
-            self.delegate?.reviewPageShow()
+            guard let selectedPlace = self.selectedPlace else { return }
+            self.delegate?.reviewPageShow(place: selectedPlace)
         }
     }
 }
@@ -219,6 +227,7 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
         let newMeetUpView = NewMeetUpViewController()
         newMeetUpView.placeUid = selectedPlace?.placeUid
         newMeetUpView.userUid = viewModel.user?.userUid
+        newMeetUpView.isNewMeetUp = true
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
     }

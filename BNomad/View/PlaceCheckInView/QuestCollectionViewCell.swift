@@ -103,6 +103,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         image.image = UIImage(systemName: "person.crop.circle.fill")
         image.tintColor = CustomColor.nomadGray1
         image.clipsToBounds = true
+        image.contentMode = .scaleAspectFill
         
         return image
     }()

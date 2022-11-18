@@ -21,8 +21,19 @@ class ProfileViewController: UIViewController {
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.backgroundColor = CustomColor.nomad2White
+        scroll.canCancelContentTouches = true
+        
         return scroll
     }()
+    
+    class myCollectionView: UIScrollView {
+        override func touchesShouldCancel(in view: UIView) -> Bool {
+            if view is UICollectionView {
+                return false
+            }
+            return super.touchesShouldCancel(in: view)
+        }
+    }
     
     let contentView: UIView = {
         let ui = UIView()
@@ -123,13 +134,13 @@ class ProfileViewController: UIViewController {
         contentViewHeight.priority = .defaultLow
         contentViewHeight.isActive = true
         
-        contentView.addSubview(profileCollectionView)
-        contentView.addSubview(profileImageView)
+        scrollView.addSubview(profileCollectionView)
+        scrollView.addSubview(profileImageView)
         
-        profileImageView.anchor(top: contentView.topAnchor, paddingTop: 25, width: 120, height: 120)
+        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 25, width: 120, height: 120)
         profileImageView.centerX(inView: view)
         
-        profileCollectionView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: view.rightAnchor,
+        profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,
                                              paddingTop: 100, paddingLeft: 16, paddingRight: 16,
                                              height: 600)
         

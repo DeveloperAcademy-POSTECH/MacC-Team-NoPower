@@ -53,30 +53,59 @@ class WithdrawViewController: UIViewController {
         title = "회원 탈퇴"
         navigationController?.navigationBar.prefersLargeTitles = false
         configUI()
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Actions
     
     @objc func withdraw() {
-        let alert = UIAlertController(title: "탈퇴하기", message: "탈퇴하시겠습니까?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "탈퇴하기", message: "지금까지의 체크인, 밋업 기록이 삭제됩니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let withdrawConfirm = UIAlertAction(title: "탈퇴", style: .destructive) { action in
             if Auth.auth().currentUser != nil {
                 Auth.auth().currentUser?.delete()
                 do {
                     try Auth.auth().signOut()
+                    if self.viewModel.user?.currentCheckIn == nil {
+                        self.viewModel.user = nil
+                    } else {
+                        guard let current = self.viewModel.user?.currentCheckIn else { return }
+                        let userUid = self.viewModel.user?.userUid
+                        FirebaseManager.shared.setCheckOut(checkIn: current) { checkIn in
+                            let index = self.viewModel.user?.checkInHistory?.firstIndex { $0.checkInUid == checkIn.checkInUid }
+                            guard let index = index else {
+                                print("fail index")
+                                return
+                            }
+                            self.viewModel.user?.checkInHistory?[index] = checkIn
+                            self.viewModel.user = nil
+                            FirebaseManager.shared.uploadUserWithdrawalReason(userUid: userUid ?? "", reason: self.reasonTextView.text) {
+                                FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid ?? "") { uid in
+                                    FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: uid) { placeUid in
+                                        FirebaseManager.shared.cancelMeetUp(userUid: userUid ?? "", meetUpUid: uid, placeUid: placeUid) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    self.navigationController?.popToRootViewController(animated: true)
                 } catch {
-                    print("signOut 에러")
+                    print("SignOut ERROR")
                 }
-                self.viewModel.user = nil
             } else {
-                // 로그인되지 않았는데 탈퇴 버튼을 누를경우의 액션
+                self.noUserAlert()
             }
-            print("탈퇴합니다")
-            self.navigationController?.popToRootViewController(animated: true)
         }
         alert.addAction(cancel)
         alert.addAction(withdrawConfirm)
+        self.present(alert, animated: true)
+    }
+    
+    func noUserAlert() {
+        let alert = UIAlertController(title: "탈퇴 오류", message: "로그인 되어 있지 않습니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(cancel)
         self.present(alert, animated: true)
     }
     
@@ -95,7 +124,6 @@ class WithdrawViewController: UIViewController {
         withdrawButton.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: Size.paddingNormal, paddingBottom: 50, paddingRight: Size.paddingNormal, height: 50)
         
     }
-
 }
 
 // MARK: - UITextViewDelegate

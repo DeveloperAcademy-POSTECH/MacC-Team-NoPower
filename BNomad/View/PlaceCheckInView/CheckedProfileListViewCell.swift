@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CheckedProfileListViewCell: UICollectionViewCell {
     
@@ -28,14 +29,20 @@ class CheckedProfileListViewCell: UICollectionViewCell {
             usernameLabel.text = user.nickname
             occupationLabel.text = user.occupation
             noteLabel.text = user.introduction
+            if let profileImageUrl = user.profileImageUrl {
+                self.userProfileImg.kf.setImage(with: URL(string: profileImageUrl))
+            } else {
+                self.userProfileImg.image = UIImage(systemName: "person.circle.fill")
+            }
         }
     }
     
     private let userProfileImg: UIImageView = {
         let userProfileImg = UIImageView()
-        userProfileImg.image = UIImage(systemName: "person.circle.fill")
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
+        userProfileImg.clipsToBounds = true
+        userProfileImg.contentMode = .scaleAspectFill
         return userProfileImg
     }()
     
@@ -77,6 +84,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         self.addSubview(userProfileImg)
         userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
+        userProfileImg.layer.cornerRadius = 50/2
         
         let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
         nameJobStack.axis = .horizontal

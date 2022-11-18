@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VisitingInfoCell: UICollectionViewCell {
+class VisitCardCell: UICollectionViewCell {
     
     // MARK: - Properties
     
@@ -23,10 +23,15 @@ class VisitingInfoCell: UICollectionViewCell {
             nameLabel.text = place?.name
             
             let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "M월 d일"
+            
             dateFormatter.dateFormat = "HH:mm"
+            let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
+            let checkOutTime = dateFormatter.string(from: checkInHistory.checkOutTime ?? Date())
+            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
 
             let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            self.checkinTimeLabel.text = checkinTime
+            self.checkinDateLabel.text = checkinTime
             
             let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
@@ -38,13 +43,18 @@ class VisitingInfoCell: UICollectionViewCell {
         didSet {
             guard let checkInHistory = checkInHistoryForCalendar else { return }
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
+            dateFormatter.dateFormat = "M월 d일"
             
-                    let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
-                    self.checkinTimeLabel.text = checkinTime
+            let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
+            self.checkinDateLabel.text = checkinTime
+            
+            dateFormatter.dateFormat = "HH:mm"
+            let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
+            let checkOutTime = dateFormatter.string(from: checkInHistory.checkOutTime ?? Date())
+            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
                     
-                    let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
-                    self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
                 
 
             let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
@@ -62,10 +72,15 @@ class VisitingInfoCell: UICollectionViewCell {
             }
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
+            dateFormatter.dateFormat = "M월 d일"
             
             let checkinTime = dateFormatter.string(from: lastCheckIn.checkInTime)
-            self.checkinTimeLabel.text = checkinTime
+            self.checkinDateLabel.text = checkinTime
+            
+            dateFormatter.dateFormat = "HH:mm"
+            let checkInTime = dateFormatter.string(from: lastCheckIn.checkInTime)
+            let checkOutTime = dateFormatter.string(from: lastCheckIn.checkOutTime ?? Date())
+            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
             
             let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
@@ -85,34 +100,30 @@ class VisitingInfoCell: UICollectionViewCell {
         }
         
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let checkinLabel: UILabel = {
+    private let checkinDateHeadLabel: UILabel = {
         let label = UILabel()
-        label.text = "체크인"
+        label.text = "날짜"
         label.textColor = .gray
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let stayedLabel: UILabel = {
+    private let stayedTimeHeadLabel: UILabel = {
         let label = UILabel()
         label.text = "이용시간"
         label.textColor = .gray
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let checkinTimeLabel: UILabel = {
+    private let checkinDateLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -121,7 +132,15 @@ class VisitingInfoCell: UICollectionViewCell {
         label.text = ""
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let checkInAndOutLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .gray
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return label
     }()
     
@@ -151,7 +170,10 @@ class VisitingInfoCell: UICollectionViewCell {
         contentView.addSubview(nameLabel)
         nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 16, paddingLeft: 20, paddingRight: 20)
         
-        let stack = [UIStackView(arrangedSubviews: [checkinLabel, checkinTimeLabel]), UIStackView(arrangedSubviews: [stayedLabel, stayedTimeLabel])]
+        contentView.addSubview(checkInAndOutLabel)
+        checkInAndOutLabel.anchor(top: nameLabel.bottomAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 2, paddingLeft: 20, paddingRight: 20)
+        
+        let stack = [UIStackView(arrangedSubviews: [checkinDateHeadLabel, checkinDateLabel]), UIStackView(arrangedSubviews: [stayedTimeHeadLabel, stayedTimeLabel])]
         stack.forEach {
             $0.axis = .vertical
             $0.spacing = 1

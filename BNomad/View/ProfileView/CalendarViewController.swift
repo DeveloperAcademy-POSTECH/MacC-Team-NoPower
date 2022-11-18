@@ -26,7 +26,7 @@ class CalendarViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.isScrollEnabled = true
-        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(VisitCardCell.self, forCellWithReuseIdentifier: VisitCardCell.identifier)
         
         return collectionView
     }()
@@ -49,7 +49,7 @@ class CalendarViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = CustomColor.nomad2White
-        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(VisitCardCell.self, forCellWithReuseIdentifier: VisitCardCell.identifier)
         
         return collectionView
     }()
@@ -323,7 +323,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             return cell
             
         } else if collectionView == visitInfoView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
             
@@ -334,7 +334,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             return cell
             
         } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
             

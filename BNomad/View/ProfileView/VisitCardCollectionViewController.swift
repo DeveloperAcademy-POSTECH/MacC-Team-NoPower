@@ -29,7 +29,7 @@ class VisitCardCollectionViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = CustomColor.nomad2White
         collectionView.isScrollEnabled = true
-        collectionView.register(VisitingInfoCell.self, forCellWithReuseIdentifier: VisitingInfoCell.identifier)
+        collectionView.register(VisitCardCell.self, forCellWithReuseIdentifier: VisitCardCell.identifier)
         collectionView.register(VisitCardHeaderCollectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: VisitCardHeaderCollectionView.identifier)
         collectionView.alwaysBounceVertical = true
         
@@ -88,7 +88,7 @@ extension VisitCardCollectionViewController: UICollectionViewDelegate {
     
     //draw cells
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitingInfoCell.identifier , for: indexPath) as? VisitingInfoCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
             

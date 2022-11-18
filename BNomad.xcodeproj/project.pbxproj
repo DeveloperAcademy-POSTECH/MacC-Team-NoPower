@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		04054C9B2923B3D20030C80F /* ProfileHeaderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */; };
 		0413519F28FE534D005D19CC /* SelfUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */; };
-		041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A028FF7E72005D19CC /* VisitingInfoCell.swift */; };
+		041351A128FF7E72005D19CC /* VisitCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A028FF7E72005D19CC /* VisitCardCell.swift */; };
 		041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A228FF7E98005D19CC /* ProfileGraphCell.swift */; };
 		041351A528FF8EBE005D19CC /* LiteralContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A428FF8EBE005D19CC /* LiteralContents.swift */; };
 		041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041351A628FFF459005D19CC /* CalendarViewController.swift */; };
@@ -86,7 +86,7 @@
 /* Begin PBXFileReference section */
 		04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionView.swift; sourceTree = "<group>"; };
 		0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfUserInfoCell.swift; sourceTree = "<group>"; };
-		041351A028FF7E72005D19CC /* VisitingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitingInfoCell.swift; sourceTree = "<group>"; };
+		041351A028FF7E72005D19CC /* VisitCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitCardCell.swift; sourceTree = "<group>"; };
 		041351A228FF7E98005D19CC /* ProfileGraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGraphCell.swift; sourceTree = "<group>"; };
 		041351A428FF8EBE005D19CC /* LiteralContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralContents.swift; sourceTree = "<group>"; };
 		041351A628FFF459005D19CC /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 			children = (
 				DFE747C829000FAF0048E70A /* ProfileEditView */,
 				0413519E28FE534D005D19CC /* SelfUserInfoCell.swift */,
-				041351A028FF7E72005D19CC /* VisitingInfoCell.swift */,
+				041351A028FF7E72005D19CC /* VisitCardCell.swift */,
 				041351A228FF7E98005D19CC /* ProfileGraphCell.swift */,
 				041351AC29081D16005D19CC /* ProfileGraphCollectionCell.swift */,
 				04054C9A2923B3D20030C80F /* ProfileHeaderCollectionView.swift */,
@@ -526,7 +526,7 @@
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
 				F6183CCA28FFC48F00185A1F /* CustomModalViewController.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
-				041351A128FF7E72005D19CC /* VisitingInfoCell.swift in Sources */,
+				041351A128FF7E72005D19CC /* VisitCardCell.swift in Sources */,
 				E25A675828F7E515004614B0 /* DummyData.swift in Sources */,
 				04054C9B2923B3D20030C80F /* ProfileHeaderCollectionView.swift in Sources */,
 				63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */,

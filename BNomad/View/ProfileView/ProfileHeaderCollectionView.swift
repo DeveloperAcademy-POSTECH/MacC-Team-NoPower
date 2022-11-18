@@ -23,9 +23,18 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         return label
     }()
     
+    private let viewAllButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("전체보기", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
+        button.setTitleColor(.gray, for: .normal)
+        return button
+    }()
+    
     private let plusWeek: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        button.tintColor = CustomColor.nomadBlue
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         return button
@@ -34,12 +43,20 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     private let minusWeek: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.tintColor = CustomColor.nomadBlue
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         return button
     }()
     
-    var profileGraphCellHeaderLabel: UILabel = {
+    private let profileGraphCellHeaderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "주간 통계"
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
+        return label
+    }()
+    
+    var profileGraphCellWeekLabel: UILabel = {
         let label = UILabel()
         
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
@@ -51,10 +68,11 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -ProfileHeaderCollectionView.weekAddedMemory)
+        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellWeekLabel, weekAdded: -ProfileHeaderCollectionView.weekAddedMemory)
         
         plusWeek.addTarget(self, action: #selector(plusTapButton), for: .touchUpInside)
         minusWeek.addTarget(self, action: #selector(minusTapButton), for: .touchUpInside)
+        viewAllButton.addTarget(self, action: #selector(viewAllTap), for: .touchUpInside)
         
     }
     
@@ -85,38 +103,48 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     func setVisitCardHeader() {
         minusWeek.removeFromSuperview()
         plusWeek.removeFromSuperview()
+        profileGraphCellWeekLabel.removeFromSuperview()
         profileGraphCellHeaderLabel.removeFromSuperview()
         
         addSubview(visitCardCellHeaderLabel)
-        visitCardCellHeaderLabel.anchor(left: self.leftAnchor, paddingLeft: 20)
-        visitCardCellHeaderLabel.centerY(inView: self)
+        visitCardCellHeaderLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 20)
+        
+        addSubview(viewAllButton)
+        viewAllButton.anchor(top:self.topAnchor, right: self.rightAnchor, paddingTop: 28, paddingRight: 20)
     }
     
     func setGraphHeader() {
         visitCardCellHeaderLabel.removeFromSuperview()
+        viewAllButton.removeFromSuperview()
         
         addSubview(profileGraphCellHeaderLabel)
-        profileGraphCellHeaderLabel.centerX(inView: self)
-        profileGraphCellHeaderLabel.centerY(inView: self)
+        profileGraphCellHeaderLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 20)
+        
+        
+        addSubview(profileGraphCellWeekLabel)
+        profileGraphCellWeekLabel.centerX(inView: self)
+        profileGraphCellWeekLabel.anchor(top: self.topAnchor, paddingTop: 64)
         
         addSubview(minusWeek)
-        minusWeek.anchor(left: self.leftAnchor, paddingLeft: 20)
-        minusWeek.centerY(inView: self)
+        minusWeek.anchor(top: self.topAnchor, right: profileGraphCellWeekLabel.leftAnchor, paddingTop: 64, paddingRight: 20)
         
         addSubview(plusWeek)
-        plusWeek.anchor(right: self.rightAnchor, paddingRight: 20)
-        plusWeek.centerY(inView: self)
+        plusWeek.anchor(top: self.topAnchor, left: profileGraphCellWeekLabel.rightAnchor, paddingTop: 64, paddingLeft: 20)
     }
     
     @objc func plusTapButton() {
-        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: 1)
+        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellWeekLabel, weekAdded: 1)
         delegate?.plusTap()
     }
     
     @objc func minusTapButton() {
-        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellHeaderLabel, weekAdded: -1)
+        ProfileHeaderCollectionView.profileGraphCellHeaderMaker(label: profileGraphCellWeekLabel, weekAdded: -1)
 
         delegate?.minusTap()
+    }
+    
+    @objc func viewAllTap() {
+        delegate?.viewAllTap()
     }
 }
 
@@ -125,4 +153,5 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
 protocol PlusMinusProtocol {
     func plusTap()
     func minusTap()
+    func viewAllTap()
 }

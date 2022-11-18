@@ -217,6 +217,7 @@ class MeetUpViewController: UIViewController {
         if userUid == organizerUid {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
         }
+    }
 
     func configJoinCancelButton() {
         joinButton.setTitle("참여 취소", for: .normal)

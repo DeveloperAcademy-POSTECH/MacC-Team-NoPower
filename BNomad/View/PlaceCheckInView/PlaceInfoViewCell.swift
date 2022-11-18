@@ -31,6 +31,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
     var meetUpViewModels: [MeetUpViewModel]? {
         didSet {
             guard let meetUpViewModels = meetUpViewModels else { return }
+            numberOfQuestLabel.text = "\(meetUpViewModels.count)"
             self.collectionView.reloadData()
         }
     }

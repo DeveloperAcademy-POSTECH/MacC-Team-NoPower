@@ -180,6 +180,13 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             navigationController?.pushViewController(controller, animated: true)
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if section == 3 {
+            return CGSize(width: view.frame.size.width, height: 70)
+        }
+        return CGSize()
+    }
 }
 
 // MARK: - pageDismiss
@@ -219,6 +226,7 @@ extension PlaceCheckInViewController: NewMeetUpViewShowable {
         let newMeetUpView = NewMeetUpViewController()
         newMeetUpView.placeUid = selectedPlace?.placeUid
         newMeetUpView.userUid = viewModel.user?.userUid
+        newMeetUpView.isNewMeetUp = true
         let navBarOnModal: UINavigationController = UINavigationController(rootViewController: newMeetUpView)
         present(navBarOnModal, animated: true, completion: nil)
     }

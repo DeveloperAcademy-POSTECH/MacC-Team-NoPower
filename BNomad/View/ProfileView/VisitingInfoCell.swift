@@ -27,7 +27,7 @@ class VisitingInfoCell: UICollectionViewCell {
 
             let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
             self.checkinTimeLabel.text = checkinTime
-            
+
             let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
 
@@ -39,13 +39,13 @@ class VisitingInfoCell: UICollectionViewCell {
             guard let checkInHistory = checkInHistoryForCalendar else { return }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
-            
+
                     let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
                     self.checkinTimeLabel.text = checkinTime
-                    
+
                     let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
                     self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
-                
+
 
             let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
             nameLabel.text = place?.name
@@ -61,13 +61,24 @@ class VisitingInfoCell: UICollectionViewCell {
                 return
             }
             
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn.placeUid}
+            nameLabel.text = place?.name
+            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "HH:mm"
             
             let checkinTime = dateFormatter.string(from: lastCheckIn.checkInTime)
             self.checkinTimeLabel.text = checkinTime
             
-            let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
+            var lastTime = Date()
+            if let lastCheckedOutTime = lastCheckIn.checkOutTime {
+                lastTime = lastCheckedOutTime
+                print("마지막 체크아웃 시간: \(lastCheckIn.checkOutTime)")
+                print("마지막 체크아웃 시간: \(lastTime)")
+            }
+            
+            let stayedTime = Int((lastTime.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
+            print("이용시간: \(stayedTime)")
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
             
             nameLabel.reloadInputViews()
@@ -78,11 +89,11 @@ class VisitingInfoCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         
-        if viewOption != "calendar" {
-            let lastCheckIn = self.viewModel.user?.checkInHistory?.last
-            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-            label.text = place?.name
-        }
+//        if viewOption != "calendar" {
+//            let lastCheckIn = self.nomad?.checkInHistory?.last
+//            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+//            label.text = place?.name
+//        }
         
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false

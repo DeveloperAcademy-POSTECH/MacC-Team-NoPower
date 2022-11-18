@@ -28,18 +28,16 @@ class PlaceCheckInViewController: UIViewController {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 let history = checkInHistory.filter { $0.checkOutTime == nil }
                 self.checkInHistory = history
-            }
-            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpHistory in
-                self.meetUpViewModels = []
-                print("meetUpViewModels", self.meetUpViewModels)
-                meetUpHistory.forEach { meetUp in
-                    print("meetUpViewModels", meetUp)
-                    let meetUpViewModel = MeetUpViewModel()
-                    meetUpViewModel.meetUp = meetUp
-                    self.meetUpViewModels?.append(meetUpViewModel)
+                FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpHistory in
+                    self.meetUpViewModels = []
+                    meetUpHistory.forEach { meetUp in
+                        print("meetUpViewModels", meetUp)
+                        let meetUpViewModel = MeetUpViewModel()
+                        meetUpViewModel.meetUp = meetUp
+                        self.meetUpViewModels?.append(meetUpViewModel)
+                    }
+                    self.collectionView.reloadData()
                 }
-                print("meetUpViewModels", self.meetUpViewModels)
-                self.collectionView.reloadData()
             }
         }
     }
@@ -176,6 +174,9 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
             guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
             FirebaseManager.shared.fetchUser(id: nomadUid) { user in
                 controller.nomad = user
+                FirebaseManager.shared.fetchCheckInHistory(userUid: nomadUid) { history in
+                    controller.nomad?.checkInHistory = history
+                }
             }
             controller.isMyProfile = false
             navigationController?.pushViewController(controller, animated: true)

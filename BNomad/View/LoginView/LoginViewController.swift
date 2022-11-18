@@ -134,6 +134,9 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                         if isExist {
                             FirebaseManager.shared.fetchUser(id: user.uid) { user in
                                 self.viewModel.user = user
+                                FirebaseManager.shared.fetchCheckInHistory(userUid: user.userUid) { checkInHistory in
+                                    self.viewModel.user?.checkInHistory = checkInHistory
+                                }
                             }
                             self.dismiss(animated: true)
                         } else {

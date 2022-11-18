@@ -41,8 +41,10 @@ class MapViewController: UIViewController {
     var allAnnotation: [MKAnnotation] = []
     var visitedAnnotation: [MKAnnotation] = []
     var newAnnotation: [MKAnnotation] = []
+    var checkedPlaceName: String?
+    var checkedTime: String?
     
-    fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.5)
+    fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.85)
     
     // 맵 띄우기
     private lazy var map: MKMapView = {
@@ -67,7 +69,7 @@ class MapViewController: UIViewController {
     // 기본 버튼들 (프로필, 세팅, 유저 위치)
     lazy var profileBtn: UIButton = {
         var btn = UIButton()
-        btn.setImage(UIImage(systemName: "person"), for: .normal)
+        btn.setImage(UIImage(systemName: "person.fill"), for: .normal)
         btn.anchor(width: 22, height: 22)
         btn.addTarget(self, action: #selector(moveToProfile), for: .touchUpInside)
         return btn
@@ -98,7 +100,7 @@ class MapViewController: UIViewController {
     
     private lazy var settingBtn: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(systemName: "gearshape")?.withRenderingMode(.automatic), for: .normal)
+        btn.setImage(UIImage(systemName: "gearshape.fill")?.withRenderingMode(.automatic), for: .normal)
         btn.anchor(width: 22, height: 22)
         btn.addTarget(self, action: #selector(goToSetting), for: .touchUpInside)
         return btn
@@ -112,7 +114,6 @@ class MapViewController: UIViewController {
         btn.semanticContentAttribute = .forceRightToLeft
         btn.titleLabel?.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         btn.setTitleColor(.black, for: .normal)
-        btn.tintColor = CustomColor.nomadBlue
 //        btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside) // 앱 네임을 눌렀을 때 pop-up이나 credit, contact 정보 뜨도록?
         return btn
     }()
@@ -123,7 +124,6 @@ class MapViewController: UIViewController {
         topRightBtn.axis = .horizontal
         topRightBtn.alignment = .center
         topRightBtn.spacing = 5
-        topRightBtn.tintColor = CustomColor.nomadBlue
         topRightBtn.distribution = .fillProportionally
         topRightBtn.anchor(width: 60)
         
@@ -138,11 +138,14 @@ class MapViewController: UIViewController {
     private let blurBackground: UIVisualEffectView = {
         let blur = UIBlurEffect(style: .light)
         let background = UIVisualEffectView(effect: blur)
-        background.alpha = 0.7 // 기본 blur alpha 값 1.0 -> 0.7로 변경
-        background.translatesAutoresizingMaskIntoConstraints = false
+        background.alpha = 0.6 // 기본 blur alpha 값 1.0 -> 0.6으로 변경
         return background
     }()
     
+    private let colorFilter: UIView = {
+        let view = UIView()
+        return view
+    }()
 
     
     // 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
@@ -166,16 +169,41 @@ class MapViewController: UIViewController {
     }()
     
     lazy var checkInNow: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = CustomColor.nomadBlue
-        button.tintColor = .white
-        button.clipsToBounds = true
-        button.layer.cornerRadius =  40 / 2
-        button.setTitle("업무중", for: .normal)
+        // subtitle
+        var config = UIButton.Configuration.plain()
+        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
+        config.titleAlignment = .center
+        
+        
+        let button = UIButton(configuration: config)
+        button.backgroundColor = .white.withAlphaComponent(0.85)
+//        button.clipsToBounds = true
+        button.layer.cornerRadius = 25
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOffset = CGSize(width: 3, height: 3)
+        button.layer.shadowRadius = 5
+        button.setTitleColor(CustomColor.nomadBlue, for: .normal)
+        button.tintColor = CustomColor.nomadBlue
         button.addTarget(self, action: #selector(goBackToCheckInView), for: .touchUpInside)
         button.isHidden = true
+        
         return button
+        
+
     }()
+    
+    func checkedPlaceNameBinding() {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "mappin.and.ellipse")?.withTintColor(CustomColor.nomadBlue ?? .black)
+        
+        // title
+        let fullText = NSMutableAttributedString()
+        fullText.append(NSAttributedString(attachment: imageAttachment))
+        fullText.append(NSAttributedString(string: "\(checkedPlaceName ?? "")"))
+        
+        checkInNow.setAttributedTitle(fullText, for: .normal)
+    }
     
     @objc func goBackToCheckInView() {
         let controller = PlaceCheckInViewController()
@@ -355,7 +383,6 @@ class MapViewController: UIViewController {
         locationManager.startMonitoringSignificantLocationChanges()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        
     }
     
     func checkInBinding() {
@@ -409,6 +436,7 @@ class MapViewController: UIViewController {
             self.viewModel.places.append(place)
             self.checkInBinding()
             self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+            self.userCombine()
         }
         
         map.delegate = self
@@ -418,6 +446,9 @@ class MapViewController: UIViewController {
         
         map.addSubview(blurBackground)
         blurBackground.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, height: 100)
+        
+        map.addSubview(colorFilter)
+        colorFilter.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, height: 100)
 
         map.addSubview(upperStack)
         upperStack.anchor(top: map.topAnchor, left: map.leftAnchor, right: map.rightAnchor, paddingTop: 30, paddingLeft: 20, paddingRight: 20, height: 80)
@@ -442,7 +473,13 @@ class MapViewController: UIViewController {
         viewModel.$user
             .sink { user in
                 guard let user = user else { return }
+                let checkedPlace = self.viewModel.places.first { place in
+                    place.placeUid == user.currentPlaceUid
+                }
+                self.checkedPlaceName = checkedPlace?.name
+                self.checkedTime = user.currentCheckIn?.checkInTime.toTimeString()
                 self.checkInNow.isHidden = user.isChecked ? false : true
+                self.checkedPlaceNameBinding()
             }
             .store(in: &store)
     }
@@ -525,7 +562,16 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
         map.addSubview(checkInNow)
-        checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 100, height: 40)
+        if checkInNow.isHidden == true {
+            colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
+            appTitle.setTitleColor(.black, for: .normal)
+            upperStack.tintColor = CustomColor.nomadBlue
+        } else {
+            colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
+            appTitle.setTitleColor(.white, for: .normal)
+            upperStack.tintColor = .white
+        }
+        checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 250, height: 50)
         checkInNow.centerX(inView: view)
     }
 }

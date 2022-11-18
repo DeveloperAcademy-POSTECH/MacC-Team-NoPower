@@ -97,12 +97,8 @@ extension SettingViewController: UITableViewDelegate {
                                 self.viewModel.user?.checkInHistory?[index] = checkIn
                                 self.viewModel.user = nil
                                 FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid ?? "") { uid in
-                                    if uid == "noMeetUp" {
-                                        
-                                    } else {
-                                        FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: uid) { placeUid in
-                                            FirebaseManager.shared.cancelMeetUp(userUid: userUid ?? "", meetUpUid: uid, placeUid: placeUid) {
-                                            }
+                                    FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: uid) { placeUid in
+                                        FirebaseManager.shared.cancelMeetUp(userUid: userUid ?? "", meetUpUid: uid, placeUid: placeUid) {
                                         }
                                     }
                                 }

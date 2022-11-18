@@ -106,8 +106,6 @@ class MapViewController: UIViewController {
         return btn
     }()
     
-    // 지역명 표기 및 지역 변경 버튼
-    
     private let appTitle: UIButton = {
         var btn = UIButton()
         btn.setTitle("B.nomad ", for: .normal)
@@ -169,13 +167,7 @@ class MapViewController: UIViewController {
     }()
     
     lazy var checkInNow: UIButton = {
-        // subtitle
-        var config = UIButton.Configuration.plain()
-        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
-        config.titleAlignment = .center
-        
-        
-        let button = UIButton(configuration: config)
+        let button = UIButton()
         button.backgroundColor = .white.withAlphaComponent(0.85)
 //        button.clipsToBounds = true
         button.layer.cornerRadius = 25
@@ -187,39 +179,8 @@ class MapViewController: UIViewController {
         button.tintColor = CustomColor.nomadBlue
         button.addTarget(self, action: #selector(goBackToCheckInView), for: .touchUpInside)
         button.isHidden = true
-        
         return button
-        
-
     }()
-    
-    func checkedPlaceNameBinding() {
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "mappin.and.ellipse")?.withTintColor(CustomColor.nomadBlue ?? .black)
-        
-        // title
-        let fullText = NSMutableAttributedString()
-        fullText.append(NSAttributedString(attachment: imageAttachment))
-        fullText.append(NSAttributedString(string: "\(checkedPlaceName ?? "")"))
-        
-        checkInNow.setAttributedTitle(fullText, for: .normal)
-    }
-    
-    @objc func goBackToCheckInView() {
-        let controller = PlaceCheckInViewController()
-        guard let user = viewModel.user else { return print("USER ERR") }
-        let tempPlace = self.viewModel.places.first { place in
-            user.currentPlaceUid == place.placeUid
-        }
-        controller.delegate = self
-        controller.selectedPlace = tempPlace
-        let navigationController = UINavigationController(rootViewController: controller)
-        navigationController.modalPresentationStyle = .fullScreen
-        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
-        self.dismiss(animated: true) {
-            self.present(navigationController, animated: true, completion: nil)
-        }
-    }
     
     private lazy var visitedPlaceMenu: UIButton = {
         
@@ -294,7 +255,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-        checkInBinding()
+        checkInLocationBinding()
         userCombine()
     }
     
@@ -381,6 +342,48 @@ class MapViewController: UIViewController {
         }
     }
     
+    func checkedPlaceNameBinding() {
+        guard let user = viewModel.user else { return }
+        let checkedPlace = self.viewModel.places.first { place in
+            place.placeUid == user.currentPlaceUid
+        }
+        
+        self.checkedPlaceName = checkedPlace?.name
+        self.checkedTime = user.currentCheckIn?.checkInTime.toTimeString()
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "mappin.and.ellipse")?.withTintColor(CustomColor.nomadBlue ?? .black)
+        
+        // title
+        let fullText = NSMutableAttributedString()
+        fullText.append(NSAttributedString(attachment: imageAttachment))
+        fullText.append(NSAttributedString(string: "\(checkedPlaceName ?? "")"))
+        
+        // subtitle
+        var config = UIButton.Configuration.plain()
+        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
+        config.titleAlignment = .center
+        
+        checkInNow.configuration = config
+        checkInNow.setAttributedTitle(fullText, for: .normal)
+    }
+    
+    @objc func goBackToCheckInView() {
+        let controller = PlaceCheckInViewController()
+        guard let user = viewModel.user else { return print("USER ERR") }
+        let tempPlace = self.viewModel.places.first { place in
+            user.currentPlaceUid == place.placeUid
+        }
+        controller.delegate = self
+        controller.selectedPlace = tempPlace
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.navigationBar.tintColor = CustomColor.nomadBlue
+        self.dismiss(animated: true) {
+            self.present(navigationController, animated: true, completion: nil)
+        }
+    }
+    
     // MARK: - Helpers
     
     // 위치 권한 받아서 현재 위치 확인
@@ -392,7 +395,7 @@ class MapViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     }
     
-    func checkInBinding() {
+    func checkInLocationBinding() {
         print("체크인 바인딩 -> 위치 전달")
         if let user = viewModel.user {
             if user.isChecked {
@@ -441,9 +444,9 @@ class MapViewController: UIViewController {
         FirebaseManager.shared.fetchPlaceAll { place in
             self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
             self.viewModel.places.append(place)
-            self.checkInBinding()
+            self.checkInLocationBinding()
+            self.checkedPlaceNameBinding()
             self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-            self.userCombine()
         }
         
         map.delegate = self
@@ -480,11 +483,7 @@ class MapViewController: UIViewController {
         viewModel.$user
             .sink { user in
                 guard let user = user else { return self.checkInNow.isHidden = true }
-                let checkedPlace = self.viewModel.places.first { place in
-                    place.placeUid == user.currentPlaceUid
-                }
-                self.checkedPlaceName = checkedPlace?.name
-                self.checkedTime = user.currentCheckIn?.checkInTime.toTimeString()
+                
                 self.checkInNow.isHidden = user.isChecked ? false : true
                 self.checkedPlaceNameBinding()
             }
@@ -580,6 +579,8 @@ extension MapViewController: UpdateFloating {
         }
         checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 250, height: 50)
         checkInNow.centerX(inView: view)
+        
+        checkedPlaceNameBinding()
     }
 }
 

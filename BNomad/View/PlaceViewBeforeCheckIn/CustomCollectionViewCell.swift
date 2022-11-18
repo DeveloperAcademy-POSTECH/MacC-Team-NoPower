@@ -26,6 +26,9 @@ class CustomCollectionViewCell: UICollectionViewCell {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory
             }
+            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpList in
+                self.todayMeetUpList = meetUpList
+            }
         }
     }
     
@@ -47,27 +50,27 @@ class CustomCollectionViewCell: UICollectionViewCell {
                 return
             }
             let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
-            self.numberOfCheckIn.text = "\(history.count)명 체크인"
-            self.averageTime.text = CustomCollectionViewCell.calculateAverageTime(todayCheckInHistory: self.todayCheckInHistory)
+            self.numberOfCheckIn.text = "\(history.count)명의 노마드"
+            self.numberOfCheckIn.asColor(targetString: "\(history.count)명", color: CustomColor.nomadBlue ?? .label)
+        }
+    }
+    
+    var todayMeetUpList: [MeetUp]? {
+        didSet {
+            guard let todayMeetUpList = todayMeetUpList else { return }
+            self.numberOfMeetUp.text = "\(todayMeetUpList.count)개의 밋업"
+            self.numberOfMeetUp.asColor(targetString: "\(todayMeetUpList.count)개", color: CustomColor.nomadBlue ?? .label)
         }
     }
     
     lazy var cell: UIView = {
         let view = UIView()
-        view.clipsToBounds = true
         view.layer.cornerRadius = 12
         view.backgroundColor = .white
-        view.addSubview(name)
-        view.addSubview(numberOfCheckIn)
-        view.addSubview(distance)
-        view.addSubview(averageTime)
-        view.addSubview(arrow)
-        name.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: 23, paddingLeft: 9)
-        numberOfCheckIn.anchor(top: view.topAnchor, right: view.rightAnchor, paddingTop: 26, paddingRight: 50)
-        distance.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, paddingLeft: 11, paddingBottom: 8)
-        averageTime.anchor(bottom: view.bottomAnchor, right: view.rightAnchor, paddingBottom: 8, paddingRight: 48)
-        arrow.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        arrow.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12.45).isActive = true
+        view.layer.shadowRadius = 15
+        view.layer.shadowOpacity = 0.05
+        view.layer.shadowColor = CustomColor.nomadBlack?.cgColor
+        view.layer.shadowOffset = CGSize(width: 3, height: 4)
         return view
     }()
     
@@ -75,8 +78,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.backgroundColor = .clear
         title.textColor = .black
-        title.font = .preferredFont(forTextStyle: .title2, weight: .bold)
-        title.text = "스타스타" // ???
+        title.font = .preferredFont(forTextStyle: .headline)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
@@ -85,39 +87,66 @@ class CustomCollectionViewCell: UICollectionViewCell {
     var numberOfCheckIn: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
-        title.textColor = .black
-        title.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        title.textColor = CustomColor.nomadBlack
+        title.font = .preferredFont(forTextStyle: .footnote)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
+    }()
+    
+    var numberOfMeetUp: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = CustomColor.nomadBlack
+        label.textAlignment = .center
+        
+        return label
     }()
     
     var distance: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
-        title.textColor = CustomColor.nomadGray1
-        title.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        title.text = "1.5km"
+        title.textColor = CustomColor.nomadBlack
+        title.font = .preferredFont(forTextStyle: .footnote)
         title.textAlignment = .center
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
     
-    var averageTime: UILabel = {
-        let title = UILabel()
-        title.backgroundColor = .clear
-        title.textColor = CustomColor.nomadGray1
-        title.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        title.textAlignment = .center
-        title.translatesAutoresizingMaskIntoConstraints = false
-        return title
+    private let dot1View: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColor.nomadGray1
+        view.anchor(width: 3, height: 3)
+        view.layer.cornerRadius = 3/2
+        
+        return view
     }()
     
-    let arrow: UIImageView = {
-        let image = UIImage(systemName: "chevron.right")?.withTintColor(CustomColor.nomadBlue ?? .blue, renderingMode: .alwaysOriginal)
-        let imageView = UIImageView(image: image)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private let dot2View: UIView = {
+        let view = UIView()
+        view.backgroundColor = CustomColor.nomadGray1
+        view.anchor(width: 3, height: 3)
+        view.layer.cornerRadius = 3/2
+        
+        return view
+    }()
+    
+    lazy var placeDetailStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [distance, dot1View, numberOfCheckIn, dot2View, numberOfMeetUp])
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 8
+        
+        return stack
+    }()
+    
+    lazy var cellStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [name, placeDetailStack])
+        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 8
+        
+        return stack
     }()
     
     static func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
@@ -130,40 +159,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return distance
     }
     
-    static func calculateAverageTime(todayCheckInHistory: [CheckIn]?) -> String {
-        var hour: Int
-        var minute: Int
-        var totalTime: Int = 0
-        var averageTime: Int
-        var stringTime: String
-        
-        guard let todayCheckInHistory = todayCheckInHistory else { return "fail"}
-        let filterCheckInHistory = todayCheckInHistory.filter { $0.checkOutTime != nil }
-        print("DEBUG:",filterCheckInHistory)
-        for history in filterCheckInHistory {
-            guard let checkOutTime = history.checkOutTime else { return "chekcOutt" }
-            let totalMinute = Int(floor(checkOutTime.timeIntervalSince(history.checkInTime)/60))
-            totalTime += totalMinute
-        }
-        
-        if filterCheckInHistory.count != 0 {
-            averageTime = abs(totalTime / filterCheckInHistory.count)
-            hour = averageTime / 60
-            minute = hour > 0 ? averageTime % hour : averageTime
-            if hour > 0 && minute == 0 {
-                stringTime = "평균 \(hour)시간 근무"
-            } else if hour > 0 {
-                stringTime = "평균 \(hour)시간 \(minute)분 근무"
-            } else {
-                stringTime = "평균 \(minute)분 근무"
-            }
-            print(stringTime)
-        } else {
-            return "평균 0시간"
-        }
-        return stringTime
-    }
-    
     // MARK: - LifeCycle
     
     required init?(coder aDecoder: NSCoder) {
@@ -172,14 +167,21 @@ class CustomCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpCell()
+        configUI()
     }
 
     // MARK: - Helpers
     
-    func setUpCell() {
+    func configUI() {
+        let screenWidth = UIScreen.main.bounds.width
+        let cellHeight = screenWidth * 80/390
+        
         contentView.addSubview(cell)
-        cell.anchor(top: self.topAnchor, width: 356, height: 86)
-        cell.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        cell.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingLeft: 17, paddingRight: 17, height: cellHeight)
+        
+        self.addSubview(cellStack)
+        cellStack.anchor(left: cell.leftAnchor, paddingLeft: 16)
+        cellStack.centerY(inView: cell)
     }
+
 }

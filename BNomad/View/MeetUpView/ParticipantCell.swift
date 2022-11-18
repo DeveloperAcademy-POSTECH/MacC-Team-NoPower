@@ -48,6 +48,7 @@ class ParticipantCell: UICollectionViewCell {
         let image = UIImageView()
         image.tintColor = CustomColor.nomadGray1
         image.clipsToBounds = true
+        image.contentMode = .scaleAspectFill
         
         return image
     }()

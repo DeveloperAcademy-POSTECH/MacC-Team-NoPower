@@ -186,7 +186,6 @@ extension ProfileViewController: UICollectionViewDelegate {
             }
             cell.layer.borderWidth = 2
             cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
-//            cell.nomad = nomad
             cell.checkInHistoryForProfile = nomad?.checkInHistory
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20

@@ -84,7 +84,8 @@ class MapViewController: UIViewController {
             let controller = LoginViewController() // 추후 로그인뷰로 변경
             controller.delegate = self
 //            controller.modalPresentationStyle = .fullScreen
-            controller.sheetPresentationController?.detents = [.medium()]
+            controller.sheetPresentationController?.detents = [.medium()
+            ]
             self.present(controller, animated: true)
         }))
         present(checkOutAlert, animated: true)
@@ -331,6 +332,7 @@ class MapViewController: UIViewController {
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
         }
         sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation

@@ -51,6 +51,7 @@ class PlaceInfoModalViewController: UIViewController {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
             placeInfoCollectionView.reloadData()
+            setupSheet()
         }
     }
     
@@ -67,7 +68,7 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        setupSheet()
+//        setupSheet()
     }
     
     // MARK: - Helpers
@@ -186,15 +187,13 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     private func setupSheet() {
-//        밑으로 내려도 dismiss되지 않는 옵션 값
-//          isModalInPresentation = true
-
         if let sheet = sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
         }
     }
     
@@ -300,7 +299,6 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
             return CGSize(width: viewWidth, height: 400)
-            flow.sectionInset.top = 13
         } 
         else if indexPath.section == 2 {
             return CGSize(width: viewWidth, height: 40)

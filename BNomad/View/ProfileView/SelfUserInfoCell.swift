@@ -31,6 +31,7 @@ class SelfUserInfoCell: UICollectionViewCell {
         let label = UILabel()
         label.text = DummyData.user1.nickname
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -66,6 +67,7 @@ class SelfUserInfoCell: UICollectionViewCell {
         let label = UILabel()
         label.numberOfLines = 0 //TODO: 행간 늘이기
         label.text = "안녕하세요 반가워요 윌로우에요 ios 개발 하고있어요, 디자인에도 관심이 많아서 대화 나누기 좋아해요"
+        label.textColor = .black
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
 

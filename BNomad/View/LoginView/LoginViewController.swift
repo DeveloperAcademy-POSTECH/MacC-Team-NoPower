@@ -31,7 +31,7 @@ class LoginViewController: UIViewController {
     
     private let reasonDescription: UILabel = {
         let label = UILabel()
-        label.text = "업무공간 체크인, 퀘스트 참여 등을 위해 회원가입 및 로그인을 해주세요. 추후에 프로필, 체크인에 따라 다르게 바꿀예정"
+        label.text = "업무공간 체크인, 밋업 참여 등을 위해 회원가입 및 로그인을 해주세요."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .preferredFont(forTextStyle: .body, weight: .regular)

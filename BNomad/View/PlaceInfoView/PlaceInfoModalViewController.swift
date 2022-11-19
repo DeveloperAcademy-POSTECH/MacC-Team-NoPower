@@ -51,7 +51,7 @@ class PlaceInfoModalViewController: UIViewController {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
             placeInfoCollectionView.reloadData()
-            setupSheet()
+//            setupSheet()
         }
     }
     
@@ -68,7 +68,7 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-//        setupSheet()
+        setupSheet()
     }
     
     // MARK: - Helpers
@@ -188,7 +188,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     private func setupSheet() {
         if let sheet = sheetPresentationController {
-            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+//            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+            sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true

@@ -229,9 +229,9 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Analytics.logEvent("signUpViewLoaded", parameters: [
-            AnalyticsParameterItemName: "signUpViewLoaded",
-          ])
+//        Analytics.logEvent("signUpViewLoaded", parameters: [
+//            AnalyticsParameterItemName: "signUpViewLoaded",
+//          ])
 
         configUI()
         
@@ -581,7 +581,7 @@ class SignUpViewController: UIViewController {
                     FirebaseManager.shared.setUser(user: user)
                 }
                 
-                Analytics.logEvent("signUpCompleted", parameters: nil)
+//                Analytics.logEvent("signUpCompleted", parameters: nil)
                 
                 let completedAlert = UIAlertController(title: "회원가입 완료", message: "회원가입이 완료되었습니다.", preferredStyle: .alert)
                 completedAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in

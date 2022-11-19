@@ -29,6 +29,7 @@ class WithdrawViewController: UIViewController {
         textView.backgroundColor = CustomColor.nomadGray3
         textView.delegate = self
         textView.layer.cornerRadius = 12
+        textView.backgroundColor = .systemGray6
         textView.text = "탈퇴사유를 입력하세요."
         textView.textColor = .tertiaryLabel
         textView.textContainerInset = UIEdgeInsets(top: 13, left: Size.paddingNormal, bottom: 13, right: Size.paddingNormal)
@@ -59,7 +60,7 @@ class WithdrawViewController: UIViewController {
     // MARK: - Actions
     
     @objc func withdraw() {
-        let alert = UIAlertController(title: "탈퇴하기", message: "지금까지의 체크인, 밋업 기록이 삭제됩니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "탈퇴하기", message: "유저의 모든 데이터 정보와 함께 지금까지의 체크인, 밋업 기록이 삭제됩니다. 그래도 회원탈퇴 하시겠습니까?", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let withdrawConfirm = UIAlertAction(title: "탈퇴", style: .destructive) { action in
             if Auth.auth().currentUser != nil {

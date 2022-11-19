@@ -92,7 +92,7 @@ extension VisitCardCollectionViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = VisitCardCollectionViewController.checkInHistory?.count

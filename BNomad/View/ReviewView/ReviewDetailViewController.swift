@@ -58,6 +58,7 @@ class ReviewDetailViewController: UIViewController {
         textview.scrollIndicatorInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
         textview.text = "리뷰를 입력해주세요."
         textview.textColor = CustomColor.nomadGray1
+        textview.backgroundColor = .white
         textview.delegate = self
         return textview
     }()

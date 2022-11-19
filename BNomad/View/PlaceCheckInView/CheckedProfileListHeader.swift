@@ -23,8 +23,8 @@ class CheckedProfileListHeader: UICollectionViewCell {
     
     lazy var label: UILabel = {
         let label = UILabel()
-        label.text = "노마더"
-        label.asFont(targetString: "노마더", font: .preferredFont(forTextStyle: .title3, weight: .semibold))
+        label.text = "노마드"
+        label.asFont(targetString: "노마드", font: .preferredFont(forTextStyle: .title3, weight: .semibold))
         label.font = .preferredFont(forTextStyle: .title3, weight: .bold)
         label.textColor = CustomColor.nomadBlack
         return label

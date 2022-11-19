@@ -52,7 +52,7 @@ class PlaceInfoCell: UICollectionViewCell {
                 return
             }
             let history = todayCheckInHistory.filter { $0.checkOutTime == nil }
-            self.checkedinViewLabel.text = "\(history.count)명의 노마더"
+            self.checkedinViewLabel.text = "\(history.count)명의 노마드"
             let fullText = checkedinViewLabel.text ?? ""
             let attribtuedString = NSMutableAttributedString(string: fullText)
             let range = (fullText as NSString).range(of: "\(history.count)명")

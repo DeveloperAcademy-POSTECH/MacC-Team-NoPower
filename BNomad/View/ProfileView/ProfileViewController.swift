@@ -175,7 +175,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             cell.user = nomad
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             cell.delegate = self
             return cell
@@ -187,7 +187,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             cell.layer.borderWidth = 2
             cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
             cell.checkInHistoryForProfile = nomad?.checkInHistory
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             return cell
         case 2:
@@ -197,7 +197,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             cell.checkInHistory = nomad?.checkInHistory
             
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             return cell
             

@@ -68,6 +68,7 @@ class VisitCardCell: UICollectionViewCell {
             viewOption = "profile"
             guard let lastCheckIn = checkInHistoryForProfile?.last else {
                 nameLabel.text = "최근 방문한 장소가 없습니다"
+                nameLabel.textColor = .black
                 return
             }
             
@@ -103,7 +104,7 @@ class VisitCardCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        
+        label.textColor = .black
 //        if viewOption != "calendar" {
 //            let lastCheckIn = self.nomad?.checkInHistory?.last
 //            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
@@ -133,6 +134,7 @@ class VisitCardCell: UICollectionViewCell {
     private let checkinDateLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
@@ -141,6 +143,7 @@ class VisitCardCell: UICollectionViewCell {
     private let stayedTimeLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label

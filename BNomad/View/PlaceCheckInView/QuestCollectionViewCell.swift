@@ -44,6 +44,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
     var title: UILabel = {
         let title = UILabel()
         title.font = .preferredFont(forTextStyle: .headline)
+        title.textColor = .black
         title.numberOfLines = 1
         return title
     }()
@@ -117,6 +118,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         configureUI()
         configCheckMark()
         configurePeopleUI()
+        self.backgroundColor = CustomColor.nomad2White
     }
     
     required init?(coder: NSCoder) {

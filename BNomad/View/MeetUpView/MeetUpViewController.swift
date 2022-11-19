@@ -22,7 +22,7 @@ class MeetUpViewController: UIViewController {
             locationLabel.text = meetUp.meetUpPlaceName
             timeLabel.text = meetUp.time.toTimeString()
             contentLabel.text = meetUp.description
-            participants.text = "참여 예정 노마더 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
+            participants.text = "참여 예정 노마드 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
             participantCollectionView.reloadData()
             
             guard let participants = currentPeopleUids else { return }
@@ -192,7 +192,7 @@ class MeetUpViewController: UIViewController {
     }
     
     @objc func cancelJoinMeetUp() {
-        let alert = UIAlertController(title: "밋업 참여 취소", message: "\(meetUpTitleLabel.text ?? "") 밋업 참여를 취소합니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "밋업 참여 취소", message: "\"\(meetUpTitleLabel.text ?? "")\" 밋업 참여를 취소합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let cancelJoin = UIAlertAction(title: "확인", style: .default, handler: { action in
             guard

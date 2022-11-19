@@ -77,7 +77,7 @@ extension SettingViewController: UITableViewDelegate {
             let controller = WithdrawViewController()
             navigationController?.pushViewController(controller, animated: true)
         } else if selectedTitle == listTitle.logout {
-            let alert = UIAlertController(title: listTitle.logout, message: "로그아웃하면 체크인 상태가 없어지고, 참여한 밋업도 자동으로 참여 취소됩니다.", preferredStyle: .alert)
+            let alert = UIAlertController(title: listTitle.logout, message: "로그아웃하면 체크인 상태가 사라지고, 참여한 밋업도 자동으로 참여 취소됩니다. 그래도 로그아웃 하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             let logout = UIAlertAction(title: "확인", style: .destructive) { action in
                 if Auth.auth().currentUser != nil {

@@ -68,6 +68,7 @@ class NewMeetUpViewController: UIViewController {
         textField.placeholder = "모임 제목을 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
         textField.borderStyle = .none
+        textField.textColor = .black
         textField.clearButtonMode = .whileEditing
         
         return textField
@@ -130,6 +131,7 @@ class NewMeetUpViewController: UIViewController {
         textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         textField.tintColor = .clear
         textField.borderStyle = .none
+        textField.textColor = .black
         
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -163,6 +165,7 @@ class NewMeetUpViewController: UIViewController {
         textField.placeholder = "모임 장소를 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
         textField.borderStyle = .none
+        textField.textColor = .black
         textField.clearButtonMode = .whileEditing
         
         return textField

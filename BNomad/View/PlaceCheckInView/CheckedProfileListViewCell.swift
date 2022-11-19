@@ -50,6 +50,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
         return label
     }()
     
@@ -64,6 +65,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     private let noteLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -99,7 +101,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     }
     
     func shadowSetting() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .white
         self.layer.cornerRadius = 12
         self.layer.masksToBounds = false
         self.layer.shadowRadius = 15

@@ -6,20 +6,66 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
+import Kingfisher
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    lazy var viewModel: CombineViewModel = CombineViewModel.shared
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        _ = RCValue.shared
         
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = ViewController()
-        window?.makeKeyAndVisible()
+        
+        let current = Auth.auth().currentUser
+        if current != nil {
+            guard let uid = current?.uid else { return }
+            FirebaseManager.shared.checkUserExist(userUid : uid) { isExist in
+                if isExist {
+                    FirebaseManager.shared.fetchUser(id: uid) { user in
+                        self.viewModel.user = user
+                        self.fetchProfileImage()
+                        
+                        FirebaseManager.shared.fetchCheckInHistory(userUid: uid) { checkInHistory in
+                            self.viewModel.user?.checkInHistory = checkInHistory
+                            print("checkIn 유무", self.viewModel.user?.isChecked)
+                            self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                            self.window?.makeKeyAndVisible()
+                        }
+                    }
+                } else {
+                    print("no user")
+                    self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+                    self.window?.makeKeyAndVisible()
+                }
+            }
+        } else {
+            self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
+            self.window?.makeKeyAndVisible()
+        }
     }
-
+    
+    func fetchProfileImage() {
+        if let profileImageUrl = self.viewModel.user?.profileImageUrl {
+            print("profileImageUrl", profileImageUrl)
+            guard let url = URL(string: profileImageUrl) else { return }
+            let resource = ImageResource(downloadURL: url, cacheKey: profileImageUrl)
+            
+            KingfisherManager.shared.retrieveImage(with: resource) { result in
+                switch result {
+                case .success(let value):
+                    self.viewModel.user?.profileImage = value.image
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

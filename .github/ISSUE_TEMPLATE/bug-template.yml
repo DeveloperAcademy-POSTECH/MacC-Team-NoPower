@@ -1,0 +1,28 @@
+name: Bug Template 생성
+description: 발견한 Bug를 해결하기 위한 이슈를 생성합니다.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bug를 해결하기 위한 이슈를 생성합니다.
+        
+        ---
+  - type: textarea
+    id: feat-description
+    attributes:
+      label: Bug 내용
+      description: 작업할 버그내용과 함께 해결 예정 방식을 상세히 적어주세요
+    validations:
+      required: true
+  - type: input
+    id: relatedIssueNumber
+    attributes:
+      label: 관련 이슈넘버
+      description: "해당 Bug와 관련된 이슈들을 적어주세요"
+      placeholder: "#3, #4..."
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 스크린샷 혹은 gif
+      description: "문제되는 부분의 스크린샷, UX라면 gif를 추가해주세요"
+      placeholder: "<img src='https://블라블라' width='300'>"

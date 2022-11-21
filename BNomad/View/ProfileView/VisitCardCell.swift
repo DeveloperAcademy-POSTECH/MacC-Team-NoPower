@@ -18,7 +18,15 @@ class VisitCardCell: UICollectionViewCell {
     
     var checkinHistoryForList: CheckIn? {
         didSet {
-            guard let checkInHistory = checkinHistoryForList else { return }
+            guard let checkInHistory = checkinHistoryForList else {
+                nilHistory()
+                return
+                
+            }
+            
+                rectView.removeFromSuperview()
+                nilLabel.removeFromSuperview()
+                
             let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
             nameLabel.text = place?.name
             
@@ -41,7 +49,15 @@ class VisitCardCell: UICollectionViewCell {
     
     var checkInHistoryForCalendar: CheckIn? {
         didSet {
-            guard let checkInHistory = checkInHistoryForCalendar else { return }
+            guard let checkInHistory = checkInHistoryForCalendar else {
+                nilHistory()
+                return
+                
+            }
+            
+                rectView.removeFromSuperview()
+                nilLabel.removeFromSuperview()
+            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
             
@@ -67,9 +83,13 @@ class VisitCardCell: UICollectionViewCell {
         didSet {
             viewOption = "profile"
             guard let lastCheckIn = checkInHistoryForProfile?.last else {
-                nameLabel.text = "최근 방문한 장소가 없습니다"
+                nilHistory()
                 return
+                
             }
+            
+                rectView.removeFromSuperview()
+                nilLabel.removeFromSuperview()
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
@@ -152,6 +172,21 @@ class VisitCardCell: UICollectionViewCell {
         return view
     }()
     
+    private let rectView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    private let nilLabel: UILabel = {
+        let label = UILabel()
+        label.text = "방문기록이 없습니다."
+        label.textColor = .gray
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
+        
+        return label
+    }()
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -192,6 +227,19 @@ class VisitCardCell: UICollectionViewCell {
         dividerLine.anchor(top: contentView.topAnchor, paddingTop: 72, width: 1, height: 31)
         dividerLine.centerX(inView: contentView)
         
+    }
+    
+    func nilHistory() {
+        contentView.addSubview(rectView)
+        rectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor)
+        contentView.addSubview(nilLabel)
+        nilLabel.centerX(inView: contentView)
+        nilLabel.centerY(inView: contentView)
+    }
+    
+    func eraseNilHistory() {
+            rectView.removeFromSuperview()
+            nilLabel.removeFromSuperview()
     }
     
 }

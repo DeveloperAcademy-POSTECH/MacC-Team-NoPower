@@ -139,6 +139,8 @@ class CalendarViewController: UIViewController {
         
         
         selectedCell = (Contents.todayDate()["day"] ?? 0)+calendarDateFormatter.getStartingDayOfWeek(addedMonth: 0)-1 // 오늘로 셀렉티드셀 초기화
+        let selectedPath = IndexPath(item: selectedCell ?? 0, section: 0)
+        collectionView(calendarCollectionView, didSelectItemAt: selectedPath)
         
         calendarCollectionView.dataSource = self
         calendarCollectionView.delegate = self
@@ -263,7 +265,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         if collectionView == calendarCollectionView {
             return self.calendarDateFormatter.days.count
         } else if collectionView == visitInfoView {
-            return cardDataList.count
+            return max(cardDataList.count, 1)
         } else {
             return CalendarViewController.checkInHistory?.count ?? 0
         }
@@ -329,8 +331,11 @@ extension CalendarViewController: UICollectionViewDelegate {
             
             cell.backgroundColor = .systemBackground
             cell.layer.cornerRadius = 20
-            
-            cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
+            if cardDataList.count != 0 {
+                cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
+            } else {
+                cell.checkInHistoryForCalendar = nil
+            }
             return cell
             
         } else {

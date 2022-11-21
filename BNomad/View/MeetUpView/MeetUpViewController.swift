@@ -22,7 +22,7 @@ class MeetUpViewController: UIViewController {
             locationLabel.text = meetUp.meetUpPlaceName
             timeLabel.text = meetUp.time.toTimeString()
             contentLabel.text = meetUp.description
-            participants.text = "참여 예정 노마더 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
+            participants.text = "참여 예정 노마드 ( \(meetUp.currentPeopleUids?.count ?? 0) / \(meetUp.maxPeopleNum) )"
             participantCollectionView.reloadData()
             
             guard let participants = currentPeopleUids else { return }
@@ -153,18 +153,22 @@ class MeetUpViewController: UIViewController {
         super.viewDidLoad()
     
         configUI()
+        configEditButton()
         
         participantCollectionView.dataSource = self
         participantCollectionView.delegate = self
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
     }
     
     // MARK: - Actions
     
     @objc func editMeetUpContent() {
-        // TODO: 편집뷰로 이동
+        let controller = NewMeetUpViewController()
+        controller.isNewMeetUp = false
+        controller.meetUpViewModel = meetUpViewModel
+        self.navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     @objc func joinMeetUp() {
@@ -188,7 +192,7 @@ class MeetUpViewController: UIViewController {
     }
     
     @objc func cancelJoinMeetUp() {
-        let alert = UIAlertController(title: "밋업 참여 취소", message: "\(meetUpTitleLabel.text ?? "") 밋업 참여를 취소합니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "밋업 참여 취소", message: "\"\(meetUpTitleLabel.text ?? "")\" 밋업 참여를 취소합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let cancelJoin = UIAlertAction(title: "확인", style: .default, handler: { action in
             guard
@@ -207,6 +211,14 @@ class MeetUpViewController: UIViewController {
     
     // MARK: - Helpers
     
+    func configEditButton() {
+        guard let userUid = viewModel.user?.userUid else { return }
+        guard let organizerUid = meetUpViewModel?.meetUp?.organizerUid else { return }
+        if userUid == organizerUid {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .plain, target: self, action: #selector(editMeetUpContent))
+        }
+    }
+
     func configJoinCancelButton() {
         joinButton.setTitle("참여 취소", for: .normal)
         joinButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
@@ -269,10 +281,19 @@ extension MeetUpViewController: UICollectionViewDelegate {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ParticipantCell.identifier, for: indexPath) as? ParticipantCell else {
             return UICollectionViewCell()
         }
-        cell.organizerUid = organizerUid
-        cell.userUid = currentPeopleUids?[indexPath.row]
-        cell.backgroundColor = .white
         
+        var people: [String] = []
+        if let originalPeople = meetUpViewModel?.meetUp?.currentPeopleUids, let organizerUid = organizerUid {
+            people = originalPeople
+            if let index = people.firstIndex(of: organizerUid) {
+                people.remove(at: index)
+                people.insert(organizerUid, at: 0)
+            }
+        }
+        cell.organizerUid = organizerUid
+        cell.userUid = people[indexPath.row]
+        cell.backgroundColor = .white
+
         return cell
     }
 }

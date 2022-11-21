@@ -77,20 +77,39 @@ extension SettingViewController: UITableViewDelegate {
             let controller = WithdrawViewController()
             navigationController?.pushViewController(controller, animated: true)
         } else if selectedTitle == listTitle.logout {
-            let alert = UIAlertController(title: listTitle.logout, message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
+            let alert = UIAlertController(title: listTitle.logout, message: "로그아웃하면 체크인 상태가 사라지고, 참여한 밋업도 자동으로 참여 취소됩니다. 그래도 로그아웃 하시겠습니까?", preferredStyle: .alert)
             let cancel = UIAlertAction(title: "취소", style: .cancel)
             let logout = UIAlertAction(title: "확인", style: .destructive) { action in
                 if Auth.auth().currentUser != nil {
                     do {
-                        // 체크인 되어 있는 사람이 탈퇴하려할때, 어떻게 해주고 탈퇴시켜야 하나..?!
                         try Auth.auth().signOut()
-                        self.viewModel.user = nil
+                        if self.viewModel.user?.currentCheckIn == nil {
+                            self.viewModel.user = nil
+                        } else {
+                            guard let current = self.viewModel.user?.currentCheckIn else { return }
+                            let userUid = self.viewModel.user?.userUid
+                            FirebaseManager.shared.setCheckOut(checkIn: current) { checkIn in
+                                let index = self.viewModel.user?.checkInHistory?.firstIndex { $0.checkInUid == checkIn.checkInUid }
+                                guard let index = index else {
+                                    print("fail index")
+                                    return
+                                }
+                                self.viewModel.user?.checkInHistory?[index] = checkIn
+                                self.viewModel.user = nil
+                                FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid ?? "") { uid in
+                                    FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: uid) { placeUid in
+                                        FirebaseManager.shared.cancelMeetUp(userUid: userUid ?? "", meetUpUid: uid, placeUid: placeUid) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         self.navigationController?.popToRootViewController(animated: true)
                     } catch {
                         print("No current User now")
                     }
                 } else {
-                    print("로그아웃할 유저가 없습니다.")
+                    self.noUserAlert()
                     self.navigationController?.popToRootViewController(animated: true)
                 }
             }
@@ -100,6 +119,12 @@ extension SettingViewController: UITableViewDelegate {
         }
     }
     
+    func noUserAlert() {
+        let alert = UIAlertController(title: "로그아웃 오류", message: "로그인 되어 있지 않습니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "확인", style: .default)
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
+    }
 }
 
 // MARK: - UITableViewDataSource

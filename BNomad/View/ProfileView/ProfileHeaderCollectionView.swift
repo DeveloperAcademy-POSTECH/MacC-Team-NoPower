@@ -19,6 +19,7 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     private let visitCardCellHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "최근 방문한 장소"
+        label.textColor = .black
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
     }()
@@ -35,7 +36,6 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.tintColor = CustomColor.nomadBlue
-        button.frame = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
         button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
         return button
@@ -53,6 +53,7 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     private let profileGraphCellHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "주간 통계"
+        label.textColor = .black
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
     }()
@@ -98,6 +99,7 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         let saturdayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(saturdayCalculator)))
 
         label.text = sundayDate+" ~ "+saturdayDate
+        label.textColor = .black
         
     }
     

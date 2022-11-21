@@ -12,7 +12,7 @@ final class RequestTextField: UITextField {
     init(placehold: String) {
         super.init(frame: .zero)
         
-        self.backgroundColor = CustomColor.nomadGray3
+        self.backgroundColor = .systemGray6
         self.layer.cornerRadius = 12
         self.leftView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 20, height: 50)))
         self.leftViewMode = .always

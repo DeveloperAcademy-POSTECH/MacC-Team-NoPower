@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+	<key>NSCameraUsageDescription</key>
+	<string>“B.nomad”가 카메라 앱에 접근하여, 장소 리뷰에 사진을 첨부해 등록하는 기능, 프로필 이미지 변경 기능 사용을 위해 카메라 앱에 접근하도록 허용합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>“B.nomad”가 사진 라이브러리에 접근하여, 장소 리뷰에 사진을 첨부해 등록하는 기능, 프로필 이미지 변경 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>“B.nomad”가 사용자의 위치 정보를 활용하여, 장소 체크인, 모임 생성 및 참여 기능을 사용할 수 있도록 허용합니다.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

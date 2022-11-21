@@ -41,6 +41,8 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         let userProfileImg = UIImageView()
         userProfileImg.tintColor = CustomColor.nomadGray2
         userProfileImg.translatesAutoresizingMaskIntoConstraints = false
+        userProfileImg.clipsToBounds = true
+        userProfileImg.contentMode = .scaleAspectFill
         return userProfileImg
     }()
     
@@ -48,6 +50,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .black
         return label
     }()
     
@@ -62,6 +65,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     private let noteLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -82,6 +86,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         self.addSubview(userProfileImg)
         userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
+        userProfileImg.layer.cornerRadius = 50/2
         
         let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
         nameJobStack.axis = .horizontal
@@ -96,7 +101,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     }
     
     func shadowSetting() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .white
         self.layer.cornerRadius = 12
         self.layer.masksToBounds = false
         self.layer.shadowRadius = 15

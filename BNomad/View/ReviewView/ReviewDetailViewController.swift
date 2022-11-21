@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import FirebaseAuth
 
 class ReviewDetailViewController: UIViewController {
     
@@ -21,12 +22,17 @@ class ReviewDetailViewController: UIViewController {
         return button
     }()
     
-    private let placeName: UILabel = {
+    var place: Place? {
+        didSet {
+            placeName.text = place?.name
+        }
+    }
+    
+    let placeName: UILabel = {
         let title = UILabel()
         title.backgroundColor = .clear
         title.textColor = .black
         title.font = .preferredFont(forTextStyle: .title1, weight: .bold)
-        title.text = "쌍사벅스"
         title.textAlignment = .center
         return title
     }()
@@ -52,6 +58,7 @@ class ReviewDetailViewController: UIViewController {
         textview.scrollIndicatorInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
         textview.text = "리뷰를 입력해주세요."
         textview.textColor = CustomColor.nomadGray1
+        textview.backgroundColor = .white
         textview.delegate = self
         return textview
     }()
@@ -87,7 +94,6 @@ class ReviewDetailViewController: UIViewController {
         button.tintColor = UIColor(hex: "3C3C43")?.withAlphaComponent(0.6)
         button.backgroundColor = UIColor(hex: "F5F5F5")
         button.addTarget(self, action: #selector(chooseCameraOrAlbum), for: .touchUpInside)
-//        button.anchor(width: (UIScreen.main.bounds.width-64)/3, height: (UIScreen.main.bounds.width-64)/3)
         return button
     }()
     
@@ -129,6 +135,7 @@ class ReviewDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Actions
@@ -164,7 +171,22 @@ class ReviewDetailViewController: UIViewController {
     
     @objc func saveReview() {
         // TODO: alert이후에 저장을 하거나, 바로 저장을 하거나 선택해야함
-        self.dismiss(animated: true)
+        guard let user = Auth.auth().currentUser else { return }
+        guard let placeUid = place?.placeUid else { return }
+        var image = UIImage()
+        if removePhotoCell.image != UIImage(named: "AppIcon") {
+            image = removePhotoCell.image ?? UIImage()
+        }
+        let alert = UIAlertController(title: "리뷰 작성 완료하시겠습니까?", message: "리뷰를 작성을 완료합니다.", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let save = UIAlertAction(title: "확인", style: .default) { action in
+            self.dismiss(animated: true)
+            FirebaseManager.shared.writeReview(review: Review(placeUid: placeUid, userUid: user.uid , reviewUid: UUID().uuidString, createTime: Date(), content: self.reviewTextView.text), image: image == UIImage() ? nil : image) {
+            }
+        }
+        alert.addAction(cancel)
+        alert.addAction(save)
+        self.present(alert, animated: true)
     }
     
     @objc func dismissPage() {

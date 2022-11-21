@@ -229,9 +229,9 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Analytics.logEvent("signUpViewLoaded", parameters: [
-            AnalyticsParameterItemName: "signUpViewLoaded",
-          ])
+//        Analytics.logEvent("signUpViewLoaded", parameters: [
+//            AnalyticsParameterItemName: "signUpViewLoaded",
+//          ])
 
         configUI()
         
@@ -574,15 +574,14 @@ class SignUpViewController: UIViewController {
         } else if profileImageButton.isHidden == false {
             if let nickname = nicknameField.text, let occupation = occupationField.text, let intro = introductionField.text, let image = profileImageButton.image(for: .normal) {
             
-                let user = setUser(nickname: nickname, occupation: occupation, intro: intro)
-                viewModel.user = user
-                FirebaseManager.shared.uploadUserProfileImage(userUid: userIdentifier, image: image) { url in
-                    self.viewModel.user?.profileImageUrl = url
-                    let user = User(userUid: self.userIdentifier, nickname: nickname, profileImageUrl: self.viewModel.user?.profileImageUrl)
+                FirebaseManager.shared.uploadUserProfileImage(userUid: userIdentifier, image: image) {[self] url in
+                    viewModel.user?.profileImageUrl = url
+                    let user = User(userUid: userIdentifier, nickname: nickname, occupation: occupation, introduction: intro, profileImageUrl: url)
+                    viewModel.user = user
                     FirebaseManager.shared.setUser(user: user)
                 }
                 
-                Analytics.logEvent("signUpCompleted", parameters: nil)
+//                Analytics.logEvent("signUpCompleted", parameters: nil)
                 
                 let completedAlert = UIAlertController(title: "회원가입 완료", message: "회원가입이 완료되었습니다.", preferredStyle: .alert)
                 completedAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in

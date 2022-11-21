@@ -53,6 +53,7 @@ class PlaceRequestViewController: UIViewController {
         textView.textColor = .tertiaryLabel
         textView.text = "추천 사유를 입력하세요."
         textView.delegate = self
+        textView.backgroundColor = .systemGray6
         return textView
     }()
     
@@ -82,6 +83,7 @@ class PlaceRequestViewController: UIViewController {
         configUI()
         navigationController?.navigationBar.prefersLargeTitles = false
         title = "장소 제안"
+        hideKeyboardWhenTappedAround()
     }
     
     // MARK: - Actions

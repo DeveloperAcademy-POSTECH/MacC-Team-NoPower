@@ -11,8 +11,27 @@ class NewMeetUpViewController: UIViewController {
 
     // MARK: - Properties
     
+    let viewModel = CombineViewModel.shared
+    
+    var meetUpViewModel: MeetUpViewModel? {
+        didSet {
+            if isNewMeetUp == false {
+                guard let meetUp = meetUpViewModel?.meetUp else { return }
+                subjectField.text = meetUp.title
+                timeField.text = meetUp.time.toTimeString()
+                timePicker.date = meetUp.time
+                locationField.text = meetUp.meetUpPlaceName
+                counter = meetUp.maxPeopleNum
+                contentField.text = meetUp.description
+                contentField.textColor = CustomColor.nomadBlack
+            }
+        }
+    }
+    
     var placeUid : String?
     var userUid : String?
+    
+    var isNewMeetUp: Bool?
     
     private enum Value {
         static let cornerRadius: CGFloat = 12.0
@@ -24,6 +43,8 @@ class NewMeetUpViewController: UIViewController {
     
     private let minimumPeople = 2
     private var counter = 2
+    
+    private let contentPlaceholder = "내용을 입력하세요."
     
     private let subject: UILabel = {
         let label = UILabel()
@@ -47,6 +68,7 @@ class NewMeetUpViewController: UIViewController {
         textField.placeholder = "모임 제목을 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
         textField.borderStyle = .none
+        textField.textColor = .black
         textField.clearButtonMode = .whileEditing
         
         return textField
@@ -109,6 +131,7 @@ class NewMeetUpViewController: UIViewController {
         textField.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         textField.tintColor = .clear
         textField.borderStyle = .none
+        textField.textColor = .black
         
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -142,6 +165,7 @@ class NewMeetUpViewController: UIViewController {
         textField.placeholder = "모임 장소를 입력하세요."
         textField.font = .preferredFont(forTextStyle: .body)
         textField.borderStyle = .none
+        textField.textColor = .black
         textField.clearButtonMode = .whileEditing
         
         return textField
@@ -247,7 +271,7 @@ class NewMeetUpViewController: UIViewController {
     
     private lazy var contentField: UITextView = {
         let textView = UITextView()
-        textView.text = "내용을 입력하세요."
+        textView.text = contentPlaceholder
         textView.textColor = .tertiaryLabel
         textView.font = .preferredFont(forTextStyle: .body)
         textView.backgroundColor = .clear
@@ -263,10 +287,12 @@ class NewMeetUpViewController: UIViewController {
         
         configUI()
         
-        navigationItem.title = "새로운 모임 생성"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneCreatingMeetUp))
-                 navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelCreatingMeetUp))
+        if isNewMeetUp == true {
+            configNewMeetUp()
+        } else {
+            configEditMeetUp()
+        }
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         
         subjectField.delegate = self
         locationField.delegate = self
@@ -276,6 +302,7 @@ class NewMeetUpViewController: UIViewController {
     
     // MARK: - Actions
     
+    // TODO: 현재시간 이전으로는 설정 못하도록 해야함(피커에서 막기 vs. 저장할때 안되게)
     @objc func didTimePickerValueChange() {
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -306,20 +333,77 @@ class NewMeetUpViewController: UIViewController {
     }
     
     @objc func didTapDoneCreatingMeetUp() {
-        // TODO: 내용 저장 & self.dismiss 후 어디로 갈것인지? CheckInView? MeetUpView?
-        
-        if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
-            let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
-            FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
+        if checkIsInputFieldCompleted() == true {
+            if let placeUid = placeUid, let userUid = userUid, let title = subjectField.text, let meetUpPlaceName = locationField.text, let description = contentField.text {
+                let meetUp = MeetUp(meetUpUid: UUID().uuidString, placeUid: placeUid, organizerUid: userUid, title: title, meetUpPlaceName: meetUpPlaceName, time: timePicker.date, maxPeopleNum: counter, description: description)
+                FirebaseManager.shared.createMeetUp(meetUp: meetUp) { meetUp in }
+            }
+            self.dismiss(animated: true)
+        } else {
+            showAlert()
         }
-        self.dismiss(animated: true)
     }
     
     @objc func didTapCancelCreatingMeetUp() {
         self.dismiss(animated: true)
     }
     
+    @objc func didTapDoneEditingMeetUp() {
+        if checkIsInputFieldCompleted() == true {
+            let alert = UIAlertController(title: "편집을 완료하시겠습니까?", message: "밋업 편집을 완료합니다.", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            let done = UIAlertAction(title: "확인", style: .default, handler: { [self] action in
+                guard var meetUp = meetUpViewModel?.meetUp else { return }
+                if let title = subjectField.text, let meetUpPlaceName = locationField.text {
+                    meetUp.title = title
+                    meetUp.description = contentField.text
+                    meetUp.meetUpPlaceName = meetUpPlaceName
+                    meetUp.time = timePicker.date
+                    meetUp.maxPeopleNum = counter
+                    FirebaseManager.shared.editMeetUp(meetUp: meetUp) { MeetUp in }
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            })
+            alert.addAction(cancel)
+            alert.addAction(done)
+            self.present(alert, animated: true)
+        } else {
+            showAlert()
+        }
+     }
+    
     // MARK: - Helpers
+    
+    func checkIsInputFieldCompleted() -> Bool {
+        var isCompleted = false
+        if let meetUpTitle = subjectField.text,
+           let meetUpPlace = locationField.text,
+           let meetUpContent = contentField.text {
+            var isContentDone = false
+            if meetUpContent != contentPlaceholder && meetUpContent.isEmpty == false {
+                isContentDone = true
+            }
+            if !meetUpTitle.isEmpty && !meetUpPlace.isEmpty && isContentDone == true {
+                isCompleted = true
+                return isCompleted
+            } else {
+                isCompleted = false
+                return isCompleted
+            }
+        }
+        return isCompleted
+    }
+    
+    func configNewMeetUp() {
+        navigationItem.title = "새로운 모임 생성"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelCreatingMeetUp))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneCreatingMeetUp))
+    }
+
+    func configEditMeetUp() {
+        navigationItem.title = "밋업 편집"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneEditingMeetUp))
+    }
     
     func configUI() {
         
@@ -454,6 +538,27 @@ class NewMeetUpViewController: UIViewController {
         )
 
     }
+    
+    func showAlert() {
+        let alertLabel = UILabel()
+        alertLabel.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        alertLabel.text = "빈칸없이 입력해주세요!"
+        alertLabel.textColor = .red
+        alertLabel.alpha = 1.0
+        self.view.addSubview(alertLabel)
+        alertLabel.anchor(
+            top: contentRectangle.bottomAnchor,
+            left: contentRectangle.leftAnchor,
+            paddingTop: 8
+        )
+        alertLabel.centerX(inView: view)
+
+        UIView.animate(withDuration: 1.0, delay: 1, options: .curveEaseOut, animations: {
+            alertLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            alertLabel.removeFromSuperview()
+        })
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -489,7 +594,7 @@ extension NewMeetUpViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "내용을 입력하세요."
+            textView.text = contentPlaceholder
             textView.textColor = .tertiaryLabel
         }
     }

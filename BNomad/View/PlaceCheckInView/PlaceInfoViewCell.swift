@@ -31,6 +31,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
     var meetUpViewModels: [MeetUpViewModel]? {
         didSet {
             guard let meetUpViewModels = meetUpViewModels else { return }
+            numberOfQuestLabel.text = "\(meetUpViewModels.count)"
             self.collectionView.reloadData()
         }
     }
@@ -48,7 +49,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     private let questLabel: UILabel = {
         let label = UILabel()
-        label.text = "퀘스트"
+        label.text = "밋업"
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
         return label
@@ -96,7 +97,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         self.addSubview(collectionView)
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .white
         collectionView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         collectionView.register(QuestCollectionViewCell.self, forCellWithReuseIdentifier: QuestCollectionViewCell.identifier)
         

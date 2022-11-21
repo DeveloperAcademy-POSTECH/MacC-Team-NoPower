@@ -36,7 +36,7 @@ class CalendarViewController: UIViewController {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
         collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: CalendarCell.identifier)
         
@@ -329,7 +329,7 @@ extension CalendarViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             if cardDataList.count != 0 {
                 cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
@@ -343,7 +343,7 @@ extension CalendarViewController: UICollectionViewDelegate {
                 return UICollectionViewCell()
             }
             
-            cell.backgroundColor = .systemBackground
+            cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = CalendarViewController.checkInHistory?.count

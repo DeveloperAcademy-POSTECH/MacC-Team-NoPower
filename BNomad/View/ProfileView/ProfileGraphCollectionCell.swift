@@ -71,6 +71,7 @@ class ProfileGraphCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         render()
+        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

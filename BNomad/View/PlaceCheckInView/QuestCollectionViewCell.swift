@@ -44,6 +44,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
     var title: UILabel = {
         let title = UILabel()
         title.font = .preferredFont(forTextStyle: .headline)
+        title.textColor = .black
         title.numberOfLines = 1
         return title
     }()
@@ -103,6 +104,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         image.image = UIImage(systemName: "person.crop.circle.fill")
         image.tintColor = CustomColor.nomadGray1
         image.clipsToBounds = true
+        image.contentMode = .scaleAspectFill
         
         return image
     }()
@@ -116,6 +118,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         configureUI()
         configCheckMark()
         configurePeopleUI()
+        self.backgroundColor = CustomColor.nomad2White
     }
     
     required init?(coder: NSCoder) {

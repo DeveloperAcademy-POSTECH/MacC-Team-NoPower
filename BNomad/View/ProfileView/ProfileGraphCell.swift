@@ -62,7 +62,7 @@ class ProfileGraphCell: UICollectionViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isScrollEnabled = false
         collectionView.register(ProfileGraphCollectionCell.self, forCellWithReuseIdentifier: ProfileGraphCollectionCell.identifier)
-        
+        collectionView.backgroundColor = .white
         return collectionView
     }()
     
@@ -75,6 +75,7 @@ class ProfileGraphCell: UICollectionViewCell {
             ProfileGraphCell.profileGraphCollectionView.delegate = self
             
             render()
+            self.backgroundColor = .white
         }
         
         required init?(coder: NSCoder) {
@@ -154,7 +155,7 @@ extension ProfileGraphCell: UICollectionViewDelegate {
         
         cell.cellDate = cellDate
         cell.checkInHistory = checkInHistory
-        cell.backgroundColor = .systemBackground
+        cell.backgroundColor = .white
         return cell
     }
 }

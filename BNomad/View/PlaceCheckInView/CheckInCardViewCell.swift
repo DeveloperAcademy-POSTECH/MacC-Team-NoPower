@@ -89,6 +89,10 @@ class CheckInCardViewCell: UICollectionViewCell {
         view.image = UIImage(systemName: "person.circle.fill")
         view.tintColor = CustomColor.nomadGray2
         view.anchor(width: 80, height: 80)
+        view.layer.cornerRadius = 80/2
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        
         return view
     }()
     

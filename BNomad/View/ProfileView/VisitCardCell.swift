@@ -26,7 +26,6 @@ class VisitCardCell: UICollectionViewCell {
             
                 rectView.removeFromSuperview()
                 nilLabel.removeFromSuperview()
-                
             let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
             nameLabel.text = place?.name
             
@@ -57,7 +56,6 @@ class VisitCardCell: UICollectionViewCell {
             
                 rectView.removeFromSuperview()
                 nilLabel.removeFromSuperview()
-            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
             
@@ -142,6 +140,7 @@ class VisitCardCell: UICollectionViewCell {
     private let checkinDateLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
@@ -150,6 +149,7 @@ class VisitCardCell: UICollectionViewCell {
     private let stayedTimeLabel: UILabel = {
         let label = UILabel()
         label.text = ""
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 13)
         label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
@@ -178,6 +178,7 @@ class VisitCardCell: UICollectionViewCell {
         view.layer.cornerRadius = 20
         return view
     }()
+    
     private let nilLabel: UILabel = {
         let label = UILabel()
         label.text = "방문기록이 없습니다."
@@ -241,5 +242,5 @@ class VisitCardCell: UICollectionViewCell {
             rectView.removeFromSuperview()
             nilLabel.removeFromSuperview()
     }
-    
+
 }

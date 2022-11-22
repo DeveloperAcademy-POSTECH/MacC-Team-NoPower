@@ -575,4 +575,19 @@ class FirebaseManager {
             completion(placeUid)
         })
     }
+    
+    /// 회원탈퇴시, 프로필 사진 Storage에서 삭제하기
+    func deleteUserProfileImage(userUid: String) {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userUid)")
+        
+        imageRef.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("user profile Image delete clearly")
+            }
+        }
+    }
+    
 }

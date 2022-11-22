@@ -324,27 +324,6 @@ class MapViewController: UIViewController {
         navigationController?.pushViewController(SettingViewController(), animated: true)
     }
     
-    func locationCheck(){
-            let status = CLLocationManager.authorizationStatus()
-            
-            if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
-                let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
-                let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
-                    (action: UIAlertAction) in
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
-                    } else {
-                        UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
-                    }
-                }
-                let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive)
-                alter.addAction(logNoAction)
-                alter.addAction(logOkAction)
-                self.present(alter, animated: true, completion: nil)
-        }
-    }
-    
-    
     // 방문했던/안했던 장소 분리하여 배열에 추가
     func visitedPlacesMapping() {
         self.visitedAnnotation.removeAll()
@@ -563,7 +542,6 @@ extension MapViewController: MKMapViewDelegate {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
-            locationCheck()
             let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in

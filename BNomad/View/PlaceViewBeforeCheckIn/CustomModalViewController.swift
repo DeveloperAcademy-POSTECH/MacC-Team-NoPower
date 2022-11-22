@@ -67,10 +67,6 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let locationmanager = CLLocationManager()
-        locationmanager.delegate = self
-        
-        
         self.view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.layer.shadowColor = UIColor.black.cgColor
@@ -88,24 +84,6 @@ class CustomModalViewController: UIViewController {
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
     }
     
-    func locationCheck(){
-            let status = CLLocationManager.authorizationStatus()
-            if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
-                let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면, 위치 접근을 허용해주셔야 합니다. 앱 설정으로 이동하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
-                let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
-                    (action: UIAlertAction) in
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
-                    } else {
-                        UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
-                    }
-                }
-                let logNoAction = UIAlertAction(title: "취소", style: UIAlertAction.Style.destructive)
-                alter.addAction(logNoAction)
-                alter.addAction(logOkAction)
-                self.present(alter, animated: true, completion: nil)
-            }
-        }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -119,9 +97,8 @@ extension CustomModalViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else  { return UICollectionViewCell() }
         guard var places = places else { return UICollectionViewCell() }
-        guard let position = self.position else { return UICollectionViewCell() }
-        let latitude: Double = position.coordinate.latitude
-        let longitude: Double = position.coordinate.longitude
+        let latitude: Double = position?.coordinate.latitude ?? 0.0
+        let longitude: Double = position?.coordinate.longitude ?? 0.0
         places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         cell.place = places[indexPath.item]
         cell.position = position
@@ -140,14 +117,12 @@ extension CustomModalViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension CustomModalViewController: UICollectionViewDelegate, CLLocationManagerDelegate {
+extension CustomModalViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = PlaceInfoModalViewController()
-        locationCheck()
         guard var places = places else { return }
-        guard let position = self.position else { return }
-        let latitude: Double = position.coordinate.latitude
-        let longitude: Double = position.coordinate.longitude
+        let latitude: Double = position?.coordinate.latitude ?? 0.0
+        let longitude: Double = position?.coordinate.longitude ?? 0.0
         places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         controller.selectedPlace = places[indexPath.item]
         controller.delegateForFloating = self

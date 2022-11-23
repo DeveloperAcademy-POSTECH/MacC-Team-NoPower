@@ -118,7 +118,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         configureUI()
         configCheckMark()
         configurePeopleUI()
-        self.backgroundColor = CustomColor.nomad2White
+        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

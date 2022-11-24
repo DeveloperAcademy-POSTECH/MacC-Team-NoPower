@@ -94,7 +94,11 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3 {
-            return self.checkInHistory?.count ?? 0
+            if numberOfUsers >= 1 {
+                return numberOfUsers - 1
+            } else {
+                return 0
+            }
         }
         return 1
     }
@@ -118,15 +122,23 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 2 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
-            cell.numberOfUsers = numberOfUsers
+            if numberOfUsers >= 1 {
+                cell.numberOfUsers = numberOfUsers - 1
+            } else {
+                cell.numberOfUsers = 0
+            }
             
             return cell
         }
         else if indexPath.section == 3 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
-            
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
-            let userUids = checkIn.compactMap {$0.userUid}
+            var userUids = checkIn.compactMap {$0.userUid}
+            if let myUid = viewModel.user?.userUid {
+                if let index = userUids.firstIndex(of: myUid) {
+                    userUids.remove(at: index)
+                }
+            }
             cell.userUid = userUids[indexPath.row]
             
             return cell
@@ -170,8 +182,16 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 {
+            guard let checkIn = checkInHistory else { return }
             let controller = ProfileViewController()
-            guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
+            var userUids = checkIn.compactMap { $0.userUid }
+            if let myUid = viewModel.user?.userUid {
+                if let index = userUids.firstIndex(of: myUid) {
+                    userUids.remove(at: index)
+                }
+            }
+            let nomadUid = userUids[indexPath.row]
+            
             FirebaseManager.shared.fetchUser(id: nomadUid) { user in
                 controller.nomad = user
                 FirebaseManager.shared.fetchCheckInHistory(userUid: nomadUid) { history in

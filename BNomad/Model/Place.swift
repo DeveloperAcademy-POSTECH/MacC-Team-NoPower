@@ -14,6 +14,7 @@ struct Place {
     let longitude: Double
     var contact: String?
     var address: String?
+    var time: String?
     var type: PlaceType?
     var totalCheckInHistory: [CheckIn]?
     var todayCheckInHistory: [CheckIn]?

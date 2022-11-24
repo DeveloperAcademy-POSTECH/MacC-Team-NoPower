@@ -47,7 +47,7 @@ class MapViewController: UIViewController {
     fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.85)
     
     // 맵 띄우기
-    private lazy var map: MKMapView = {
+    lazy var map: MKMapView = {
         let map = MKMapView()
         map.pointOfInterestFilter = .some(MKPointOfInterestFilter(including: [.airport, .beach, .campground, .publicTransport]))
         map.showsScale = false
@@ -283,13 +283,13 @@ class MapViewController: UIViewController {
     }
     
     @objc private func presentPlaceListModal() {
+        self.dismiss(animated: false)
+
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.delegate = self
-            sheet.prefersGrabberVisible = false
-            sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
             sheet.prefersGrabberVisible = true
@@ -297,6 +297,7 @@ class MapViewController: UIViewController {
         sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation
         sheet.delegateForFloating = self
+        sheet.regionChangeDelegate = self
         present(sheet, animated: true, completion: nil)
     }
     
@@ -485,7 +486,18 @@ class MapViewController: UIViewController {
             .sink { user in
                 guard let user = user else { return self.checkInNow.isHidden = true }
                 
-                self.checkInNow.isHidden = user.isChecked ? false : true
+                if user.isChecked {
+                    self.checkInNow.isHidden = false
+                    self.colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
+                    self.appTitle.setTitleColor(.white, for: .normal)
+                    self.upperStack.tintColor = .white
+                } else {
+                    self.checkInNow.isHidden = true
+                    self.colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
+                    self.appTitle.setTitleColor(.black, for: .normal)
+                    self.upperStack.tintColor = CustomColor.nomadBlue
+                }
+                
                 self.checkedPlaceNameBinding()
             }
             .store(in: &store)
@@ -590,18 +602,8 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
         map.addSubview(checkInNow)
-        if checkInNow.isHidden == true {
-            colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
-            appTitle.setTitleColor(.black, for: .normal)
-            upperStack.tintColor = CustomColor.nomadBlue
-        } else {
-            colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
-            appTitle.setTitleColor(.white, for: .normal)
-            upperStack.tintColor = .white
-        }
         checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 250, height: 50)
         checkInNow.centerX(inView: view)
-        
         checkedPlaceNameBinding()
     }
 }

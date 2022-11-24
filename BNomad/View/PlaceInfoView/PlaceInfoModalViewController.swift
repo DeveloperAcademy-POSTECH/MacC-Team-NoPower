@@ -312,6 +312,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         
         let viewWidth = view.bounds.width
+        let width = collectionView.frame.width
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
@@ -326,7 +327,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
-            return CGSize(width: 349, height: 68)
+            return CGSize(width: width - 30, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 100)
         }

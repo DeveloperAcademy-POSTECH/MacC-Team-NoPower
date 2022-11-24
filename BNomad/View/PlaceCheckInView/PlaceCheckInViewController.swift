@@ -149,9 +149,11 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         }
         
         let viewWidth = view.bounds.width
+        let width = collectionView.frame.width
         let sectionZeroCardHeight: CGFloat = 266
         let sectionZeroBottomPadding: CGFloat = 25
         let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
+        
         
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 390)
@@ -162,7 +164,7 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
             
-            return CGSize(width: 349, height: 68)
+            return CGSize(width: width - 30, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 0)
         }
@@ -184,8 +186,9 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let width = collectionView.frame.width
         if section == 3 {
-            return CGSize(width: view.frame.size.width, height: 70)
+            return CGSize(width: width - 30, height: 70)
         }
         return CGSize()
     }

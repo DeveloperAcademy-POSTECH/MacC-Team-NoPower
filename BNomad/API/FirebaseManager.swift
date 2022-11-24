@@ -47,9 +47,10 @@ class FirebaseManager {
                 let placeUid = snapshot.key
                 let contact = dictionary["contact"] as? String
                 let address = dictionary["address"] as? String
+                let time = dictionary["time"] as? String
                 // TODO: - type 속성 추가
                 let place = Place(placeUid: placeUid, name: name, latitude: latitude, longitude: longitude
-                                  ,contact: contact, address: address)
+                                  ,contact: contact, address: address, time: time)
                 
                 completion(place)
             }

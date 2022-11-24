@@ -36,8 +36,8 @@ class PlaceInfoCell: UICollectionViewCell {
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory
             }
-            FirebaseManager.shared.fetchReviewHistory(placeUid: place.placeUid) { reviewHistory in
-                self.reviewHistory = reviewHistory
+            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpList in
+                self.todayMeetUpList = meetUpList
             }
             
             self.userCheck()
@@ -61,16 +61,12 @@ class PlaceInfoCell: UICollectionViewCell {
         }
     }
     
-    var reviewHistory: [Review]? {
+    
+    var todayMeetUpList: [MeetUp]? {
         didSet {
-            guard let reviewHistory = reviewHistory else { return }
-            
-            self.meetUplabel.text = "\(reviewHistory.count)개의 밋업"
-            let fullText = meetUplabel.text ?? ""
-            let attribtuedString = NSMutableAttributedString(string: fullText)
-            let range = (fullText as NSString).range(of: "\(reviewHistory.count)개")
-            attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-            meetUplabel.attributedText = attribtuedString
+            guard let todayMeetUpList = todayMeetUpList else { return }
+            self.numberOfMeetUp.text = "\(todayMeetUpList.count)개의 밋업"
+            self.numberOfMeetUp.asColor(targetString: "\(todayMeetUpList.count)개", color: CustomColor.nomadBlue ?? .label)
         }
     }
         
@@ -82,7 +78,7 @@ class PlaceInfoCell: UICollectionViewCell {
         placeDistanceStack.spacing = 10
         placeDistanceStack.distribution = .fillProportionally
        
-        let nomadMeetUpStack = UIStackView(arrangedSubviews: [checkedinViewLabel, dotDivider, meetUplabel])
+        let nomadMeetUpStack = UIStackView(arrangedSubviews: [checkedinViewLabel, dotDivider, numberOfMeetUp])
         nomadMeetUpStack.axis = .horizontal
         nomadMeetUpStack.alignment = .center
         nomadMeetUpStack.spacing = 8
@@ -128,17 +124,17 @@ class PlaceInfoCell: UICollectionViewCell {
         return dotDivider
     }()
     
-    lazy var meetUplabel: UILabel = {
-        let meetUplabel = UILabel()
-        meetUplabel.textColor = CustomColor.nomadBlack
-        meetUplabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
-        let fullText = meetUplabel.text ?? ""
+    lazy var numberOfMeetUp: UILabel = {
+        let numberOfMeetUp = UILabel()
+        numberOfMeetUp.textColor = CustomColor.nomadBlack
+        numberOfMeetUp.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        let fullText = numberOfMeetUp.text ?? ""
         let attribtuedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "5개")
         attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-        meetUplabel.attributedText = attribtuedString
+        numberOfMeetUp.attributedText = attribtuedString
         
-        return meetUplabel
+        return numberOfMeetUp
     }()
     
     lazy var checkInButton: UIButton = {

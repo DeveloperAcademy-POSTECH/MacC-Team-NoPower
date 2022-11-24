@@ -28,10 +28,14 @@ class PlaceInfoCell: UICollectionViewCell {
     var place: Place? {
         didSet {
             guard let place = place else { return }
-            guard let latitude = position?.coordinate.latitude else { return }
-            guard let longitude = position?.coordinate.longitude else { return }
+            let latitude = position?.coordinate.latitude ?? 0
+            let longitude = position?.coordinate.longitude ?? 0
             let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
-            self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
+            if latitude == 0 && longitude == 0 {
+                self.distanceLabel.text = ""
+            } else {
+                self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
+            }
             mappingPlaceData(place)
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory

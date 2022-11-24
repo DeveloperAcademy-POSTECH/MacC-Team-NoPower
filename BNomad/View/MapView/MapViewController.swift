@@ -602,18 +602,8 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
         map.addSubview(checkInNow)
-        if checkInNow.isHidden == true {
-            colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
-            appTitle.setTitleColor(.black, for: .normal)
-            upperStack.tintColor = CustomColor.nomadBlue
-        } else {
-            colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
-            appTitle.setTitleColor(.white, for: .normal)
-            upperStack.tintColor = .white
-        }
         checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 250, height: 50)
         checkInNow.centerX(inView: view)
-        
         checkedPlaceNameBinding()
     }
 }

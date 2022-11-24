@@ -134,7 +134,8 @@ class FirebaseManager {
                 }
                 
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+                let todayGoal = dictionary["todayGoal"] as? String
+                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
                 
                 checkInHistory.append(checkIn)
             }
@@ -165,7 +166,8 @@ class FirebaseManager {
         }
         
         let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+        let todayGoal = dictionary["todayGoal"] as? String
+        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
         
         return checkIn
     }
@@ -216,8 +218,8 @@ class FirebaseManager {
 
     /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
-        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
-        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
+        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
+        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
         
         ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())" : checkInUser,
                                "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) {

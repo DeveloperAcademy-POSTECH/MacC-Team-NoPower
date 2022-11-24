@@ -93,8 +93,8 @@ class ReviewListViewController: UIViewController {
         collectionView.anchor(top: totalReviewCount.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 10, paddingLeft: 0, paddingBottom: 0, paddingRight: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(ReviewCell.self, forCellWithReuseIdentifier: ReviewCell.identifier)
-
+        collectionView.register(ReviewCellWithImage.self, forCellWithReuseIdentifier: ReviewCellWithImage.identifier)
+        collectionView.register(ReviewCellWithoutImage.self, forCellWithReuseIdentifier: ReviewCellWithoutImage.identifier)
     }
 
 }
@@ -108,10 +108,16 @@ extension ReviewListViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.identifier, for: indexPath) as? ReviewCell else { return UICollectionViewCell() }
         guard let reviewHistory = reviewHistory else { return UICollectionViewCell() }
-        cell.review = reviewHistory[indexPath.item]
-        return cell
+        if let imageString = reviewHistory[indexPath.item].imageUrl {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCellWithImage.identifier, for: indexPath) as? ReviewCellWithImage else { return UICollectionViewCell() }
+            cell.review = reviewHistory[indexPath.item]
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCellWithoutImage.identifier, for: indexPath) as? ReviewCellWithoutImage else { return UICollectionViewCell() }
+            cell.review = reviewHistory[indexPath.item]
+            return cell
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

@@ -129,10 +129,12 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         profileGraphCellWeekLabel.anchor(top: self.topAnchor, paddingTop: 64)
         
         addSubview(minusWeek)
-        minusWeek.anchor(top: self.topAnchor, right: profileGraphCellWeekLabel.leftAnchor, paddingTop: 64, paddingRight: 20)
+        minusWeek.anchor(left: self.leftAnchor, paddingLeft: 90)
+        minusWeek.centerY(inView: profileGraphCellWeekLabel)
         
         addSubview(plusWeek)
-        plusWeek.anchor(top: self.topAnchor, left: profileGraphCellWeekLabel.rightAnchor, paddingTop: 64, paddingLeft: 20)
+        plusWeek.anchor(right: self.rightAnchor, paddingRight: 90)
+        plusWeek.centerY(inView: profileGraphCellWeekLabel)
     }
     
     @objc func plusTapButton() {
@@ -151,6 +153,18 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     }
 }
 
+//MARK: -hitbox extension
+
+extension UIButton {
+
+  open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    let margin: CGFloat = 10
+    let hitArea = self.bounds.insetBy(dx: -margin, dy: -margin)
+    return hitArea.contains(point)
+  }
+}
+
+
 //MARK: -graphHeaderButton Protocol
 
 protocol PlusMinusProtocol {
@@ -158,3 +172,4 @@ protocol PlusMinusProtocol {
     func minusTap()
     func viewAllTap()
 }
+

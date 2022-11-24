@@ -146,7 +146,7 @@ class ProfileViewController: UIViewController {
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,
                                              paddingTop: 100, paddingLeft: 16, paddingRight: 16,
-                                             height: 600)
+                                             height: 700)
     }
 }
 

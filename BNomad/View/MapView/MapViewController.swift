@@ -484,7 +484,13 @@ class MapViewController: UIViewController {
     func userCombine() {
         viewModel.$user
             .sink { user in
-                guard let user = user else { return self.checkInNow.isHidden = true }
+                guard let user = user else {
+                    self.checkInNow.isHidden = true
+                    self.colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
+                    self.appTitle.setTitleColor(.black, for: .normal)
+                    self.upperStack.tintColor = CustomColor.nomadBlue
+                    return
+                }
                 
                 if user.isChecked {
                     self.checkInNow.isHidden = false

@@ -94,8 +94,7 @@ class ReviewInfoCell: UICollectionViewCell {
     
     private func setAttributes() {
         reviewInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
-        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, paddingTop: 8, width: 360, height: 1)
-        horizontalDivider1.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 30, paddingRight: 30, height: 1)
         NSLayoutConstraint.activate([
             reviewCollectionView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
             reviewCollectionView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
@@ -142,7 +141,8 @@ extension ReviewInfoCell: UICollectionViewDelegate {
 
 extension ReviewInfoCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 363, height: 60)
+        let width = collectionView.frame.width
+        return CGSize(width: width - 30, height: 60)
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

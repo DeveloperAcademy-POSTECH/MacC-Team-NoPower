@@ -41,6 +41,7 @@ class SettingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "설정"
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -141,6 +142,7 @@ extension SettingViewController: UITableViewDataSource {
             cell.textLabel?.textColor = CustomColor.nomadBlue
         } else {
             let image = UIImageView(image: UIImage(systemName: "chevron.right"))
+            image.tintColor = CustomColor.nomadBlack
             cell.addSubview(image)
             image.anchor(right: cell.rightAnchor, paddingRight: 10)
             image.centerY(inView: cell)

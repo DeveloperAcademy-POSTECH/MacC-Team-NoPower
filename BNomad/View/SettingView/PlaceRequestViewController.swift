@@ -11,6 +11,9 @@ class PlaceRequestViewController: UIViewController {
 
     // MARK: - Properties
     
+    private var keyboardHeight: CGFloat = 0
+    private var moveValue: CGFloat = 0
+    
     enum Size {
         static let paddingNormal: CGFloat = 20
         static let stackInnerSpacing: CGFloat = 7
@@ -46,14 +49,14 @@ class PlaceRequestViewController: UIViewController {
     lazy var recommendTextView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = CustomColor.nomadGray3
-        textView.layer.cornerRadius = 12
+        textView.layer.cornerRadius = 8
         textView.textContainerInset = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 20)
         textView.font = .preferredFont(forTextStyle: .body, weight: .regular)
         textView.setHeight(150)
         textView.textColor = .tertiaryLabel
         textView.text = "추천 사유를 입력하세요."
         textView.delegate = self
-        textView.backgroundColor = .systemGray6
+        textView.backgroundColor = CustomColor.nomadGray3
         return textView
     }()
     
@@ -76,14 +79,65 @@ class PlaceRequestViewController: UIViewController {
         return button
     }()
     
+    lazy var placeStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [placeName, placeTextField])
+        stack.axis = .vertical
+        stack.spacing = Size.stackInnerSpacing
+        stack.alignment = .leading
+        stack.distribution = .fill
+        
+        return stack
+    }()
+
+    lazy var addressStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [placeAddress, placeAddressTextField])
+        stack.axis = .vertical
+        stack.spacing = Size.stackInnerSpacing
+        stack.alignment = .leading
+        stack.distribution = .fill
+
+        return stack
+    }()
+    
+    lazy var recommendStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [recommendReason, recommendTextView])
+        stack.axis = .vertical
+        stack.spacing = Size.stackInnerSpacing
+        stack.alignment = .leading
+        stack.distribution = .fill
+        
+        return stack
+    }()
+    
+    lazy var contactStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [recommenderContactNumber, recommendContactTextField])
+        stack.axis = .vertical
+        stack.spacing = Size.stackInnerSpacing
+        stack.alignment = .leading
+        stack.distribution = .fill
+        
+        return stack
+    }()
+
+    lazy var wholeStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [placeStack, addressStack, recommendStack, contactStack])
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = 28
+        
+        return stack
+    }()
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
         navigationController?.navigationBar.prefersLargeTitles = false
-        title = "장소 제안"
+        title = "새로운 노마드스팟"
         hideKeyboardWhenTappedAround()
+        setKeyboardObserver()
+        recommendContactTextField.delegate = self
     }
     
     // MARK: - Actions
@@ -102,41 +156,25 @@ class PlaceRequestViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc func keyboardWillShow(notification: NSNotification)  {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            keyboardHeight = keyboardRectangle.height
+        }
+        print("keyboardWillShow")
+    }
+    
     // MARK: - Helpers
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
     
     private func configUI() {
         view.backgroundColor = .systemBackground
-        
-        let placeStack = UIStackView(arrangedSubviews: [placeName, placeTextField])
-        placeStack.axis = .vertical
-        placeStack.spacing = Size.stackInnerSpacing
-        placeStack.alignment = .leading
-        placeStack.distribution = .fill
-        
-        let addressStack = UIStackView(arrangedSubviews: [placeAddress, placeAddressTextField])
-        addressStack.axis = .vertical
-        addressStack.spacing = Size.stackInnerSpacing
-        addressStack.alignment = .leading
-        addressStack.distribution = .fill
-        
-        let recommendStack = UIStackView(arrangedSubviews: [recommendReason, recommendTextView])
-        recommendStack.axis = .vertical
-        recommendStack.spacing = Size.stackInnerSpacing
-        recommendStack.alignment = .leading
-        recommendStack.distribution = .fill
-        
-        let contactStack = UIStackView(arrangedSubviews: [recommenderContactNumber, recommendContactTextField])
-        contactStack.axis = .vertical
-        contactStack.spacing = Size.stackInnerSpacing
-        contactStack.alignment = .leading
-        contactStack.distribution = .fill
-        
-        let stack = UIStackView(arrangedSubviews: [placeStack, addressStack, recommendStack, contactStack])
-        stack.axis = .vertical
-        stack.distribution = .equalSpacing
-        stack.spacing = 28
-        view.addSubview(stack)
-        stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: Size.paddingNormal, paddingLeft: Size.paddingNormal, paddingRight: Size.paddingNormal)
+
+        view.addSubview(wholeStack)
+        wholeStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: Size.paddingNormal, paddingLeft: Size.paddingNormal, paddingRight: Size.paddingNormal)
         placeTextField.anchor(left: view.leftAnchor, right: view.rightAnchor, paddingLeft: Size.paddingNormal, paddingRight: Size.paddingNormal)
         placeAddressTextField.anchor(left: view.leftAnchor, right: view.rightAnchor, paddingLeft: Size.paddingNormal, paddingRight: Size.paddingNormal)
         recommendTextView.anchor(left: view.leftAnchor, right: view.rightAnchor, paddingLeft: Size.paddingNormal, paddingRight: Size.paddingNormal)
@@ -145,10 +183,41 @@ class PlaceRequestViewController: UIViewController {
         view.addSubview(submit)
         submit.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: Size.paddingNormal, paddingBottom: 50, paddingRight: Size.paddingNormal, height: 50)
     }
-    
 }
 
 // MARK: - UITextViewDelegate
+
+extension PlaceRequestViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("textFieldDidBeginEditing")
+        if textField == recommendContactTextField {
+            let screenHeight = UIScreen.main.bounds.height
+            let keyboardY = screenHeight - keyboardHeight
+            let contentY = wholeStack.frame.minY + wholeStack.frame.height
+
+            guard let window = UIApplication.shared.windows.first else { return }
+            let topSafeAreaHeight = window.safeAreaInsets.top
+            print("키보드높이: \(keyboardHeight), 내용Y: \(contentY), TopSafeArea: \(topSafeAreaHeight)")
+            
+            if contentY > keyboardY {
+                moveValue = contentY - keyboardY + topSafeAreaHeight
+                UIView.animate(withDuration: 0.2) {
+                    self.view.window?.frame.origin.y -= self.moveValue
+                }
+            } else {
+                moveValue = 0
+            }
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == recommendContactTextField {
+            UIView.animate(withDuration: 0.2) {
+                self.view.window?.frame.origin.y += self.moveValue
+            }
+        }
+    }
+}
 
 extension PlaceRequestViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {

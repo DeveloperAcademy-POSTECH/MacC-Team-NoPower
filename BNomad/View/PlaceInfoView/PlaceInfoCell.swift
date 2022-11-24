@@ -355,6 +355,7 @@ class PlaceInfoCell: UICollectionViewCell {
         placeNameLabel.text = place.name
         addressLabel.text = place.address
         phoneNumberLabel.text = place.contact
+        operatingTimeLabel.text = place.time
     }
 }
 

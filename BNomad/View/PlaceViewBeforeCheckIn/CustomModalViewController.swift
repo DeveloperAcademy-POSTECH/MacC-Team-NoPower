@@ -15,7 +15,8 @@ class CustomModalViewController: UIViewController {
     // MARK: - Properties
     
     var delegateForFloating: UpdateFloating?
-    
+    var regionChangeDelegate: setMap?
+
     var position: CLLocation?
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
@@ -127,6 +128,8 @@ extension CustomModalViewController: UICollectionViewDelegate {
         controller.selectedPlace = places[indexPath.item]
         controller.delegateForFloating = self
         present(controller, animated: true)
+        let mapView = MapViewController()
+        regionChangeDelegate?.setMapRegion(controller.selectedPlace!.latitude - 0.002, controller.selectedPlace!.longitude, spanDelta: 0.005)
         // TODO: map의 해당 선택된 region으로 움직여줘야 한다.
     }
 }

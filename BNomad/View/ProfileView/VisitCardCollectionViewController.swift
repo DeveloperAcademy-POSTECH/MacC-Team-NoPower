@@ -96,7 +96,7 @@ extension VisitCardCollectionViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = VisitCardCollectionViewController.checkInHistory?.count
-            cell.checkinHistoryForList = VisitCardCollectionViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
+            cell.checkInHistoryForCalendar = VisitCardCollectionViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
             
             return cell
         

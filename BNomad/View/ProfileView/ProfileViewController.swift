@@ -49,10 +49,11 @@ class ProfileViewController: UIViewController {
                 iv.kf.setImage(with: URL(string: profileImageUrl))
             }
         }
+        iv.frame = CGRect(origin: .zero, size: CGSize(width: 120,height: 120))
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.masksToBounds = true
-        iv.layer.cornerRadius = 78 / 2
+        iv.layer.cornerRadius = iv.frame.width / 2
         return iv
     }()
     
@@ -137,7 +138,7 @@ class ProfileViewController: UIViewController {
         scrollView.addSubview(profileCollectionView)
         scrollView.addSubview(profileImageView)
         
-        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 25, width: 120, height: 120)
+        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: profileImageView.frame.width, height: profileImageView.frame.height)
         profileImageView.centerX(inView: view)
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,

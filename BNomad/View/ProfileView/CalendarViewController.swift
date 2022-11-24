@@ -117,7 +117,7 @@ class CalendarViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.tintColor = .gray
         return button
     }()
     
@@ -125,7 +125,7 @@ class CalendarViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        button.setTitleColor(CustomColor.nomadSkyblue, for: .normal)
+        button.tintColor = .gray
         return button
     }()
     
@@ -347,7 +347,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = CalendarViewController.checkInHistory?.count
-            cell.checkinHistoryForList = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.item-1]
+            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.item-1]
             
             return cell
         }

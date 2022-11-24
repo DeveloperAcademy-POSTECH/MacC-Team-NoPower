@@ -31,8 +31,15 @@ class PlaceInfoViewCell: UICollectionViewCell {
     var meetUpViewModels: [MeetUpViewModel]? {
         didSet {
             guard let meetUpViewModels = meetUpViewModels else { return }
-            numberOfQuestLabel.text = "\(meetUpViewModels.count)"
+            self.numberOfMeetUp = meetUpViewModels.count
             self.collectionView.reloadData()
+        }
+    }
+    
+    var numberOfMeetUp: Int? {
+        didSet {
+            guard let numberOfMeetUp = numberOfMeetUp else { return }
+            numberOfQuestLabel.text = "\(numberOfMeetUp)"
         }
     }
     
@@ -49,7 +56,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
     
     private let questLabel: UILabel = {
         let label = UILabel()
-        label.text = "밋업"
+        label.text = "오늘의 밋업"
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = CustomColor.nomadBlack
         return label
@@ -100,6 +107,7 @@ class PlaceInfoViewCell: UICollectionViewCell {
         collectionView.backgroundColor = .white
         collectionView.anchor(top: self.topAnchor, left: self.leftAnchor, bottom: self.bottomAnchor, right: self.rightAnchor)
         collectionView.register(QuestCollectionViewCell.self, forCellWithReuseIdentifier: QuestCollectionViewCell.identifier)
+        collectionView.register(NoMeetUpCell.self, forCellWithReuseIdentifier: NoMeetUpCell.identifier)
         
         self.addSubview(plusButton)
         plusButton.anchor(top: collectionView.topAnchor, right: collectionView.rightAnchor, paddingTop: 10, paddingRight: 20, width: 24, height: 24)
@@ -134,13 +142,28 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
 
 extension PlaceInfoViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return meetUpViewModels?.count ?? 0
+        guard let numberOfMeetUp = numberOfMeetUp else { return 1 }
+        if numberOfMeetUp > 0 {
+            return numberOfMeetUp
+        } else {
+            return 1
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: QuestCollectionViewCell.identifier, for: indexPath) as? QuestCollectionViewCell else { return UICollectionViewCell() }
-        cell.meetUpViewModel = self.meetUpViewModels?[indexPath.item]
-        return cell
+        guard let meetUpCell = collectionView.dequeueReusableCell(withReuseIdentifier: QuestCollectionViewCell.identifier, for: indexPath) as? QuestCollectionViewCell else { return UICollectionViewCell() }
+        guard let noMeetUpcell = collectionView.dequeueReusableCell(withReuseIdentifier: NoMeetUpCell.identifier, for: indexPath) as? NoMeetUpCell else { return UICollectionViewCell() }
+        
+        if let numberOfMeetUp = numberOfMeetUp {
+            if numberOfMeetUp > 0 {
+                meetUpCell.meetUpViewModel = self.meetUpViewModels?[indexPath.item]
+                return meetUpCell
+            } else {
+                return noMeetUpcell
+            }
+        } else {
+            return noMeetUpcell
+        }
     }
 
 }

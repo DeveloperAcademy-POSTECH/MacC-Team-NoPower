@@ -200,11 +200,11 @@ class PlaceInfoCell: UICollectionViewCell {
         clockStack.spacing = 13
         clockStack.distribution = .equalSpacing
         
-        let bodyStack = UIStackView(arrangedSubviews: [callStack, mapStack, clockStack])
+        let bodyStack = UIStackView(arrangedSubviews: [callStack, horizontalDivider, mapStack, horizontalDivider1, clockStack])
         bodyStack.axis = .vertical
         bodyStack.alignment = .leading
-        bodyStack.spacing = 15
-        bodyStack.distribution = .fillProportionally
+        bodyStack.spacing = 8
+        bodyStack.distribution = .fill
         
         return bodyStack
         
@@ -241,6 +241,8 @@ class PlaceInfoCell: UICollectionViewCell {
         let addressLable = UILabel()
         addressLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
         addressLable.textColor = CustomColor.nomadBlack
+        addressLable.numberOfLines = 0
+        addressLable.lineBreakMode = .byWordWrapping
         return addressLable
     }()
     
@@ -333,8 +335,8 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(checkInButton)
         self.addSubview(afterCheckInButton)
         self.addSubview(bodyStack)
-        self.addSubview(horizontalDivider)
-        self.addSubview(horizontalDivider1)
+        horizontalDivider.anchor(left: bodyStack.leftAnchor, right: bodyStack.rightAnchor, height: 1)
+        horizontalDivider1.anchor(left: bodyStack.leftAnchor, right: bodyStack.rightAnchor, height: 1)
         self.addSubview(alreadyCheckIn)
         setAttributes()
         guard let place = place else { return }
@@ -343,9 +345,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     private func setAttributes() {
         headerStack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
-        bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, paddingTop: 23, paddingLeft: 27)
-        horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)
-        horizontalDivider1.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
+        bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 23, paddingLeft: 27, paddingRight: 27)
         checkInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
         afterCheckInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
         alreadyCheckIn.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)

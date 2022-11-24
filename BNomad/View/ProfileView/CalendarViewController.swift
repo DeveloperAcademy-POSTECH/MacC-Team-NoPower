@@ -386,6 +386,20 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
         return .zero
     }
     
+    //cell 횡간 간격
+       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat{
+           return CGFloat(0)
+       }
+       
+       //cell 종간 간격
+       func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+           if collectionView == visitCardListView {
+               return CGFloat(20)
+           }
+           return CGFloat(0)
+       }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         

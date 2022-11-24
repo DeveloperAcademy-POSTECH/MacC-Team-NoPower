@@ -32,7 +32,6 @@ class SelfUserInfoCell: UICollectionViewCell {
         label.text = DummyData.user1.nickname
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -51,7 +50,6 @@ class SelfUserInfoCell: UICollectionViewCell {
         label.text = "iOS Developer"
         label.textColor = .gray
         label.font = .preferredFont(forTextStyle: .body, weight: .semibold)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -69,7 +67,6 @@ class SelfUserInfoCell: UICollectionViewCell {
         label.text = "안녕하세요 반가워요 윌로우에요 ios 개발 하고있어요, 디자인에도 관심이 많아서 대화 나누기 좋아해요"
         label.textColor = .black
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
 
         return label
     }()
@@ -100,7 +97,7 @@ class SelfUserInfoCell: UICollectionViewCell {
         nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 40, paddingLeft: 20)
         
         contentView.addSubview(editingButton)
-        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 33, paddingRight: 12, width: 55, height: 13)
+        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 12, paddingRight: 12, width: 55, height: 13)
         
         contentView.addSubview(jobLabel)
         jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 75, paddingLeft: 20, paddingRight: 20)

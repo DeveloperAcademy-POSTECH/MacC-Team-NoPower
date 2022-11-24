@@ -106,7 +106,6 @@ class PlaceInfoModalViewController: UIViewController {
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
                     
-                    print(checkInAlert.textFields?[0].text)
                 }))
                 
                 checkInAlert.actions[1].isEnabled = false
@@ -137,7 +136,7 @@ class PlaceInfoModalViewController: UIViewController {
         guard let selectedPlace = selectedPlace else { return }
         guard let userUid = self.viewModel.user?.userUid else { return }
 
-        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date(), todayGoal: checkInAlert.textFields?[0].text)
         FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
             if self.viewModel.user?.checkInHistory == nil {
                 self.viewModel.user?.checkInHistory = [checkIn]

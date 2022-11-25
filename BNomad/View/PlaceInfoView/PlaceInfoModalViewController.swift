@@ -90,7 +90,8 @@ class PlaceInfoModalViewController: UIViewController {
             if distanceChecker() {
                 guard let selectedPlace = selectedPlace else { return }
 
-                let checkInAlert = checkInAlert
+                let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)
+                checkInAlert = alert
                 checkInAlert.message = "\(selectedPlace.name)에 체크인합니다."
                 
                 checkInAlert.addTextField() { textField in

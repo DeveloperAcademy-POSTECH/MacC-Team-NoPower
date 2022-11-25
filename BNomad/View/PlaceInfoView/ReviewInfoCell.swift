@@ -87,7 +87,7 @@ class ReviewInfoCell: UICollectionViewCell {
         self.addSubview(reviewInfoTitleLabel)
         self.addSubview(reviewCollectionView)
         self.addSubview(horizontalDivider1)
-//        self.addSubview(viewAllButton)
+        self.addSubview(viewAllButton)
         setAttributes()
         
     }
@@ -105,8 +105,8 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-//        viewAllButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        viewAllButton.anchor(bottom: self.bottomAnchor, paddingBottom: 30)
+        viewAllButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        viewAllButton.anchor(bottom: self.bottomAnchor, paddingBottom: 30)
     }
 }
 

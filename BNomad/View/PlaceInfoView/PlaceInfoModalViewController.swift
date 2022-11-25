@@ -33,6 +33,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
+//    var distanceCheckTimer = Timer()
+    
     let placeInfoCollectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
         let placeInfoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
@@ -81,6 +83,25 @@ class PlaceInfoModalViewController: UIViewController {
         }
     }
     
+    
+    // 타이머 방식으로 시도했으나 추후 수정하여 재반영 예정
+//    func startDistanceChecker() {
+//        print("스타트")
+//        distanceCheckTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(distanceCheckerInterval), userInfo: nil, repeats: true)
+//    }
+//
+//    // 600초 -> 10분 간격으로 체크인한 장소와의 거리를 측정해서 500m 이상 멀어지면 자동 체크아웃
+//    @objc func distanceCheckerInterval() {
+//        print("인터벌")
+//        guard let userLocation = currentLocation?.coordinate else { return }
+//        print("user")
+//        guard let checkedPlace = viewModel.checkInPlace else { return }
+//        print("place")
+//
+//        let distance = CustomCollectionViewCell.calculateDistance(latitude1: userLocation.latitude, latitude2: checkedPlace.latitude, longitude1: userLocation.longitude, longitude2: checkedPlace.longitude)
+//        print("checkInDistance: ", distance)
+//    }
+    
     func checkIn() {
         print("CHECK IN")
         locationCheck()
@@ -105,7 +126,6 @@ class PlaceInfoModalViewController: UIViewController {
                     self.checkInFirebase()
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
-                    
                     print(checkInAlert.textFields?[0].text)
                 }))
                 
@@ -146,6 +166,7 @@ class PlaceInfoModalViewController: UIViewController {
             }
             self.delegateForFloating?.checkInFloating()
         }
+//        startDistanceChecker()
     }
     
     func checkOut() {
@@ -213,7 +234,7 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func distanceChecker() -> Bool {
-        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 1000, identifier: "반경 500m")
+        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500, identifier: "반경 500m")
         guard let selectedPlace = selectedPlace else { return false }
         if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)) {
             return true
@@ -223,6 +244,7 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func locationCheck(){
+        // authorizationStatus가 iOS14 이후로 삭제된다고 하는데 대체 코드 필요
         let status = CLLocationManager.authorizationStatus()
         
         if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {

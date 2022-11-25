@@ -187,18 +187,21 @@ class MapViewController: UIViewController {
         let allPlaceAction = UIAction(title: "모든 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.map.addAnnotations(self.allAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin"), for: .normal)
         })
         
         let visitedPlaceAction = UIAction(title: "방문한 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.visitedPlacesMapping()
             self.map.addAnnotations(self.visitedAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin.fill"), for: .normal)
         })
         
         let newPlaceAction = UIAction(title: "새로운 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.visitedPlacesMapping()
             self.map.addAnnotations(self.newAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin.fill"), for: .normal)
         })
         
         allPlaceAction.state = .on // 기본적으로는 '모든 스팟'에 체크되어 있음
@@ -209,7 +212,7 @@ class MapViewController: UIViewController {
         btn.showsMenuAsPrimaryAction = true
         btn.menu = menu
         btn.backgroundColor = mapBtnBackgroundColor
-        btn.setImage(UIImage(systemName: "square.on.square"), for: .normal)
+        btn.setImage(UIImage(systemName: "pin"), for: .normal)
         btn.tintColor = CustomColor.nomadBlue
         btn.layer.cornerRadius = 4
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor

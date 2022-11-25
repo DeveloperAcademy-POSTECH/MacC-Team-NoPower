@@ -51,7 +51,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     var reviewHistory: [Review]? {
         didSet {
-            guard let reviewHistory = reviewHistory else { return }
+            guard reviewHistory != nil else { return }
             setupSheet()
             placeInfoCollectionView.reloadData()
             
@@ -259,8 +259,8 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func locationCheck(){
-        // authorizationStatus가 iOS14 이후로 삭제된다고 하는데 대체 코드 필요
-        let status = CLLocationManager.authorizationStatus()
+
+        let status = CLLocationManager().authorizationStatus
         
         if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
             let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
@@ -436,7 +436,7 @@ extension PlaceInfoModalViewController: LogInToSignUp {
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
-        guard let reviewHistory = reviewHistory else { return }
+        guard reviewHistory != nil else { return }
         ReviewListView.placeUid = selectedPlace?.placeUid
         ReviewListView.placeName.text = selectedPlace?.name
         navigationController?.pushViewController(ReviewListView, animated: true)

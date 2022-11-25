@@ -93,7 +93,7 @@ class ReviewDetailViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.tintColor = UIColor(hex: "3C3C43")?.withAlphaComponent(0.6)
         button.backgroundColor = UIColor(hex: "F5F5F5")
-        button.addTarget(self, action: #selector(chooseCameraOrAlbum), for: .touchUpInside)
+        button.addTarget(ReviewDetailViewController.self, action: #selector(chooseCameraOrAlbum), for: .touchUpInside)
         return button
     }()
     
@@ -115,7 +115,7 @@ class ReviewDetailViewController: UIViewController {
         button.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
         button.tintColor = .white
         button.layer.backgroundColor = UIColor.black.withAlphaComponent(0.7).cgColor
-        button.addTarget(self, action: #selector(removePhoto), for: .touchUpInside)
+        button.addTarget(ReviewDetailViewController.self, action: #selector(removePhoto), for: .touchUpInside)
         return button
     }()
     

@@ -144,7 +144,7 @@ class FirebaseTestVC: UIViewController {
             print("checkIn 완료")
             print(checkIn)
             print(user.isChecked)
-            print(user.currentPlaceUid)
+            print(user.currentPlaceUid as Any)
             completion(user)
         }
     }
@@ -171,7 +171,7 @@ class FirebaseTestVC: UIViewController {
             print("checkOut 완료")
             print(checkIn)
             print(user.isChecked)
-            print(user.currentPlaceUid)
+            print(user.currentPlaceUid as Any)
         }
     }
     

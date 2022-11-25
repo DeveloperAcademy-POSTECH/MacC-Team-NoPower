@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         
                         FirebaseManager.shared.fetchCheckInHistory(userUid: uid) { checkInHistory in
                             self.viewModel.user?.checkInHistory = checkInHistory
-                            print("checkIn 유무", self.viewModel.user?.isChecked)
+                            print("checkIn 유무", self.viewModel.user?.isChecked as Any)
                             self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
                             self.window?.makeKeyAndVisible()
                         }

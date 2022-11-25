@@ -366,7 +366,7 @@ class MapViewController: UIViewController {
         
         // subtitle
         var config = UIButton.Configuration.plain()
-        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
+        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1 as Any, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
         config.titleAlignment = .center
         
         checkInNow.configuration = config
@@ -513,8 +513,8 @@ class MapViewController: UIViewController {
     }
     
     func locationCheck(){
-        let status = CLLocationManager.authorizationStatus()
-        
+        let status = CLLocationManager().authorizationStatus
+
         if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
             let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
             let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){

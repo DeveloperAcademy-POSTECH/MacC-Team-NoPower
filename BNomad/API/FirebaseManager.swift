@@ -47,9 +47,10 @@ class FirebaseManager {
                 let placeUid = snapshot.key
                 let contact = dictionary["contact"] as? String
                 let address = dictionary["address"] as? String
+                let time = dictionary["time"] as? String
                 // TODO: - type 속성 추가
                 let place = Place(placeUid: placeUid, name: name, latitude: latitude, longitude: longitude
-                                  ,contact: contact, address: address)
+                                  ,contact: contact, address: address, time: time)
                 
                 completion(place)
             }
@@ -134,7 +135,8 @@ class FirebaseManager {
                 }
                 
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+                let todayGoal = dictionary["todayGoal"] as? String
+                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
                 
                 checkInHistory.append(checkIn)
             }
@@ -165,7 +167,8 @@ class FirebaseManager {
         }
         
         let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+        let todayGoal = dictionary["todayGoal"] as? String
+        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
         
         return checkIn
     }
@@ -216,8 +219,8 @@ class FirebaseManager {
 
     /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
-        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
-        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
+        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
+        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
         
         ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())" : checkInUser,
                                "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) {
@@ -575,4 +578,19 @@ class FirebaseManager {
             completion(placeUid)
         })
     }
+    
+    /// 회원탈퇴시, 프로필 사진 Storage에서 삭제하기
+    func deleteUserProfileImage(userUid: String) {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userUid)")
+        
+        imageRef.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("user profile Image delete clearly")
+            }
+        }
+    }
+    
 }

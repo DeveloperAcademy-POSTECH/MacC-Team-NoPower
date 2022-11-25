@@ -15,7 +15,6 @@ class VisitCardCell: UICollectionViewCell {
     var cardDataList: [CheckIn] = []
     var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
-
     
     var checkInHistoryForCalendar: CheckIn? {
         didSet {
@@ -71,8 +70,17 @@ class VisitCardCell: UICollectionViewCell {
             let checkOutTime = dateFormatter.string(from: lastCheckIn.checkOutTime ?? Date())
             self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
             
-            let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            guard let checkOutTime = lastCheckIn.checkOutTime else {
+                let stayedTime = Int((lastCheckIn.checkOutTime ?? Date()).timeIntervalSince(lastCheckIn.checkInTime) / 60)
+                self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분째"
+                
+                self.checkInAndOutLabel.text = checkInTime + " ~"
+                
+                return
+            }
+            
+            let stayedTime = Int(checkOutTime.timeIntervalSince(lastCheckIn.checkInTime) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분"
             
             nameLabel.reloadInputViews()
         }
@@ -186,7 +194,6 @@ class VisitCardCell: UICollectionViewCell {
             $0.spacing = 1
             $0.distribution = .fillEqually
             $0.alignment = .center
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         contentView.addSubview(stack[0])

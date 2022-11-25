@@ -28,6 +28,7 @@
 		6383330E2900CDBA005AB0C3 /* PlaceInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383330D2900CDBA005AB0C3 /* PlaceInfoCell.swift */; };
 		7E5CF5D42906886A00641E74 /* CheckInCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */; };
 		7E5CF5DA2918BE2E00641E74 /* ParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */; };
+		7E63E4EB292E7D2A000A931E /* NoMeetUpCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E63E4EA292E7D2A000A931E /* NoMeetUpCell.swift */; };
 		7E97254E2919160800AA9F44 /* NewMeetUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */; };
 		7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */; };
 		7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */; };
@@ -106,6 +107,7 @@
 		7E5CF5D228FFB73400641E74 /* BNomad.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BNomad.entitlements; sourceTree = "<group>"; };
 		7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCardViewCell.swift; sourceTree = "<group>"; };
 		7E5CF5D92918BE2E00641E74 /* ParticipantCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantCell.swift; sourceTree = "<group>"; };
+		7E63E4EA292E7D2A000A931E /* NoMeetUpCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMeetUpCell.swift; sourceTree = "<group>"; };
 		7E97254D2919160800AA9F44 /* NewMeetUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMeetUpViewController.swift; sourceTree = "<group>"; };
 		7EC6F9ED28FE39CB003D8A95 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		7EC6F9EF28FE39F4003D8A95 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -341,6 +343,7 @@
 				15B621FC2901469D00E31125 /* PlaceInfoViewCell.swift */,
 				7E5CF5D32906886A00641E74 /* CheckInCardViewCell.swift */,
 				DF561CAC291A02840099D41D /* QuestCollectionViewCell.swift */,
+				7E63E4EA292E7D2A000A931E /* NoMeetUpCell.swift */,
 			);
 			path = PlaceCheckInView;
 			sourceTree = "<group>";
@@ -532,6 +535,7 @@
 				63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */,
 				041351A728FFF459005D19CC /* CalendarViewController.swift in Sources */,
 				E2E6B23228FE757D005C0D77 /* Date+Extension.swift in Sources */,
+				7E63E4EB292E7D2A000A931E /* NoMeetUpCell.swift in Sources */,
 				E2E6B23428FE75F7005C0D77 /* String+Extension.swift in Sources */,
 				DF561CAD291A02840099D41D /* QuestCollectionViewCell.swift in Sources */,
 				04D095A82922165900F1AB3A /* VisitCardCollectionViewController.swift in Sources */,

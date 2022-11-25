@@ -16,6 +16,7 @@ class SettingViewController: UIViewController {
         static let placeRequest = "장소 제안"
         static let withdrawUser = "회원 탈퇴"
         static let logout = "로그아웃"
+        static let login = "로그인"
     }
     
     var viewModel = CombineViewModel.shared
@@ -25,7 +26,7 @@ class SettingViewController: UIViewController {
         return table
     }()
     
-    private let settingListArr: [String] = [listTitle.placeRequest, listTitle.withdrawUser, listTitle.logout]
+    private var settingListArr: [String] = [listTitle.placeRequest, listTitle.withdrawUser]
     
     // MARK: - LifeCycle
     
@@ -41,6 +42,7 @@ class SettingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "설정"
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
@@ -50,6 +52,7 @@ class SettingViewController: UIViewController {
     
     func configureUI() {
         view.backgroundColor = .systemBackground
+        Auth.auth().currentUser == nil ? settingListArr.append(listTitle.login) : settingListArr.append(listTitle.logout)
     }
     
     func configureTable() {
@@ -116,6 +119,10 @@ extension SettingViewController: UITableViewDelegate {
             alert.addAction(cancel)
             alert.addAction(logout)
             self.present(alert, animated: true)
+        } else if selectedTitle == listTitle.login {
+            let controller = LoginViewController()
+            controller.sheetPresentationController?.detents = [.medium()]
+            self.present(controller, animated: true)
         }
     }
     
@@ -137,10 +144,11 @@ extension SettingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         let selectedTitle = settingListArr[indexPath.row]
-        if selectedTitle == listTitle.logout {
+        if selectedTitle == listTitle.logout || selectedTitle == listTitle.login {
             cell.textLabel?.textColor = CustomColor.nomadBlue
         } else {
             let image = UIImageView(image: UIImage(systemName: "chevron.right"))
+            image.tintColor = CustomColor.nomadBlack
             cell.addSubview(image)
             image.anchor(right: cell.rightAnchor, paddingRight: 10)
             image.centerY(inView: cell)

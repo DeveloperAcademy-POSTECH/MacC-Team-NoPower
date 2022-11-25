@@ -83,6 +83,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     func checkIn() {
         print("CHECK IN")
+        locationCheck()
         if !viewModel.isLogIn {
             loginCheck()
         } else {
@@ -105,7 +106,6 @@ class PlaceInfoModalViewController: UIViewController {
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
                     
-                    print(checkInAlert.textFields?[0].text)
                 }))
                 
                 checkInAlert.actions[1].isEnabled = false
@@ -136,7 +136,7 @@ class PlaceInfoModalViewController: UIViewController {
         guard let selectedPlace = selectedPlace else { return }
         guard let userUid = self.viewModel.user?.userUid else { return }
 
-        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date(), todayGoal: checkInAlert.textFields?[0].text)
         FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
             if self.viewModel.user?.checkInHistory == nil {
                 self.viewModel.user?.checkInHistory = [checkIn]
@@ -221,6 +221,26 @@ class PlaceInfoModalViewController: UIViewController {
         }
     }
     
+    func locationCheck(){
+        let status = CLLocationManager.authorizationStatus()
+        
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive)
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
+        }
+    }
+    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -262,6 +282,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             
             return cell
         }
@@ -292,6 +313,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         
         let viewWidth = view.bounds.width
+        let width = collectionView.frame.width
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
@@ -306,7 +328,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
-            return CGSize(width: 349, height: 68)
+            return CGSize(width: width - 30, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 100)
         }
@@ -376,6 +398,9 @@ extension PlaceInfoModalViewController: LogInToSignUp {
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
+        guard let reviewHistory = reviewHistory else { return }
+        ReviewListView.placeUid = selectedPlace?.placeUid
+        ReviewListView.placeName.text = selectedPlace?.name
         self.present(ReviewListView, animated: true, completion: nil)
     }
 }

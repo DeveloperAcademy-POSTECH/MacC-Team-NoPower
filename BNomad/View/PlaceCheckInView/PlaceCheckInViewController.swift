@@ -140,7 +140,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
                 }
             }
             cell.userUid = userUids[indexPath.row]
-            
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             return cell
         }
         return UICollectionViewCell()
@@ -270,5 +270,11 @@ extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
         let vc = MeetUpViewController()
         vc.meetUpViewModel = meetUpViewModel
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func didTapPastMeetUpCell(_ cell: PlaceInfoViewCell) {
+        let alert = UIAlertController(title: "지난 밋업입니다.", message: "지난 밋업은 볼 수 없습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
 }

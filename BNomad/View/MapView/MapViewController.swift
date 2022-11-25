@@ -591,7 +591,7 @@ extension MapViewController: MKMapViewDelegate {
             }
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
-            present(controller, animated: true)
+            present(UINavigationController(rootViewController: controller), animated: true)
         } else {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 5, longitudeDelta: map.region.span.longitudeDelta / 5)), animated: true)

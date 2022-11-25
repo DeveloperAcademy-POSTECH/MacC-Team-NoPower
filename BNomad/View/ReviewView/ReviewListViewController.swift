@@ -49,7 +49,7 @@ class ReviewListViewController: UIViewController {
         title.backgroundColor = .clear
         title.textColor = .black
         title.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        title.text = "쌍사벅스"
+        title.text = ""
         title.textAlignment = .center
         return title
     }()
@@ -61,7 +61,7 @@ class ReviewListViewController: UIViewController {
         title.textColor = CustomColor.nomadSkyblue
         title.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         title.textAlignment = .center
-        let string = "리뷰 213"
+        let string = "리뷰 "
         let attributedString: NSMutableAttributedString = NSMutableAttributedString(string: string)
         let range = (string as NSString).range(of: "리뷰 ")
         attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: range)
@@ -95,6 +95,15 @@ class ReviewListViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(ReviewCellWithImage.self, forCellWithReuseIdentifier: ReviewCellWithImage.identifier)
         collectionView.register(ReviewCellWithoutImage.self, forCellWithReuseIdentifier: ReviewCellWithoutImage.identifier)
+        navigationConfigure()
+    }
+    
+    
+    // MARK: - Helpers
+    
+    func navigationConfigure() {
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
     }
 
 }

@@ -34,7 +34,7 @@ class NewMeetUpViewController: UIViewController {
     var isNewMeetUp: Bool?
     
     private enum Value {
-        static let cornerRadius: CGFloat = 12.0
+        static let cornerRadius: CGFloat = 8.0
         static let paddingLeftRight: CGFloat = 20.0
     }
     
@@ -45,6 +45,9 @@ class NewMeetUpViewController: UIViewController {
     private var counter = 2
     
     private let contentPlaceholder = "내용을 입력하세요."
+    
+    private var keyboardHeight: CGFloat = 0
+    private var moveValue: CGFloat = 0
     
     private let subject: UILabel = {
         let label = UILabel()
@@ -298,6 +301,7 @@ class NewMeetUpViewController: UIViewController {
         locationField.delegate = self
         
         hideKeyboardWhenTappedAround()
+        setKeyboardObserver()
     }
     
     // MARK: - Actions
@@ -372,7 +376,18 @@ class NewMeetUpViewController: UIViewController {
         }
      }
     
+    @objc func keyboardWillShow(notification: NSNotification)  {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            keyboardHeight = keyboardRectangle.height
+        }
+    }
+    
     // MARK: - Helpers
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
     
     func checkIsInputFieldCompleted() -> Bool {
         var isCompleted = false
@@ -590,12 +605,32 @@ extension NewMeetUpViewController: UITextViewDelegate {
             textView.text = nil
             textView.textColor = CustomColor.nomadBlack
         }
+        
+        let screenHeight = UIScreen.main.bounds.height
+        let keyboardY = screenHeight - keyboardHeight
+        let contentY = contentRectangle.frame.minY + contentRectangle.frame.height
+
+        guard let window = UIApplication.shared.windows.first else { return }
+        let topSafeAreaHeight = window.safeAreaInsets.top
+        
+        if contentY > keyboardY {
+            moveValue = contentY - keyboardY + topSafeAreaHeight
+            UIView.animate(withDuration: 0.2) {
+                self.view.window?.frame.origin.y -= self.moveValue
+            }
+        } else {
+            moveValue = 0
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = contentPlaceholder
             textView.textColor = .tertiaryLabel
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.view.window?.frame.origin.y += self.moveValue
         }
     }
 }

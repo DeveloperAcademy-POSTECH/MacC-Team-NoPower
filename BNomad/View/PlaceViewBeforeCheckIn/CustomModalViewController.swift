@@ -106,6 +106,8 @@ extension CustomModalViewController: UICollectionViewDataSource {
         if places[indexPath.item].placeUid == viewModel.user?.currentPlaceUid {
             cell.cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
             cell.cell.layer.borderWidth = 1
+        } else {
+            cell.cell.layer.borderWidth = 0
         }
         return cell
     }
@@ -127,7 +129,7 @@ extension CustomModalViewController: UICollectionViewDelegate {
         places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
         controller.selectedPlace = places[indexPath.item]
         controller.delegateForFloating = self
-        present(controller, animated: true)
+        present(UINavigationController(rootViewController: controller), animated: true)
         let mapView = MapViewController()
         regionChangeDelegate?.setMapRegion(controller.selectedPlace!.latitude - 0.002, controller.selectedPlace!.longitude, spanDelta: 0.005)
         // TODO: map의 해당 선택된 region으로 움직여줘야 한다.

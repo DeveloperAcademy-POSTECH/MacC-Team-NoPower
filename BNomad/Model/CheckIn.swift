@@ -13,6 +13,7 @@ struct CheckIn {
     let checkInUid: String
     let checkInTime: Date
     var checkOutTime: Date?
+    var todayGoal: String?
     
     // ex) "2022-10-18"
     var date: String { checkInTime.toDateString() }

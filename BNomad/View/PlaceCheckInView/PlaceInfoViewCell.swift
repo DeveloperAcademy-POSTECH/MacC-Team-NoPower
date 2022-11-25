@@ -13,6 +13,7 @@ protocol NewMeetUpViewShowable {
 
 protocol PlaceInfoViewCellDelegate: AnyObject {
     func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUpViewModel: MeetUpViewModel)
+    func didTapPastMeetUpCell(_ cell: PlaceInfoViewCell)
 }
 
 class PlaceInfoViewCell: UICollectionViewCell {
@@ -133,8 +134,15 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard (meetUpViewModels?[indexPath.item]) != nil else { return }
-        placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: (meetUpViewModels?[indexPath.item])!)
+        guard let numberOfMeetUp = numberOfMeetUp else { return }
+        if numberOfMeetUp > 0 {
+            guard let meetUp = meetUpViewModels?[indexPath.item] else { return }
+            if meetUp.meetUp?.time.compare(Date()) == .orderedAscending {
+                placeInfoViewCelldelegate?.didTapPastMeetUpCell(self)
+            } else {
+                placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
+            }
+        }
     }
 }
 

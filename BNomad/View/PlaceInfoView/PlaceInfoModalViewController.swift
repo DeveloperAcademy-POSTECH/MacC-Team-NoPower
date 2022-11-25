@@ -52,8 +52,9 @@ class PlaceInfoModalViewController: UIViewController {
     var reviewHistory: [Review]? {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
+            setupSheet()
             placeInfoCollectionView.reloadData()
-//            setupSheet()
+            
         }
     }
     
@@ -70,7 +71,20 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        setupSheet()
+        if let sheet = sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
+        }
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Helpers
@@ -111,7 +125,8 @@ class PlaceInfoModalViewController: UIViewController {
             if distanceChecker() {
                 guard let selectedPlace = selectedPlace else { return }
 
-                let checkInAlert = checkInAlert
+                let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)
+                checkInAlert = alert
                 checkInAlert.message = "\(selectedPlace.name)에 체크인합니다."
                 
                 checkInAlert.addTextField() { textField in
@@ -126,7 +141,7 @@ class PlaceInfoModalViewController: UIViewController {
                     self.checkInFirebase()
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
-                    print(checkInAlert.textFields?[0].text)
+
                 }))
                 
                 checkInAlert.actions[1].isEnabled = false
@@ -157,7 +172,7 @@ class PlaceInfoModalViewController: UIViewController {
         guard let selectedPlace = selectedPlace else { return }
         guard let userUid = self.viewModel.user?.userUid else { return }
 
-        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date(), todayGoal: checkInAlert.textFields?[0].text)
         FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
             if self.viewModel.user?.checkInHistory == nil {
                 self.viewModel.user?.checkInHistory = [checkIn]
@@ -210,8 +225,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     private func setupSheet() {
         if let sheet = sheetPresentationController {
-//            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
-            sheet.detents = [.medium()]
+            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+//            sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
@@ -305,6 +320,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             
             return cell
         }
@@ -360,7 +376,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 1 {
             let controller = PlaceInfoModalViewController()
             controller.reviewHistoryUid = reviewHistory?[indexPath.row].userUid
-            navigationController?.pushViewController(controller, animated: true)
+//            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -423,6 +439,6 @@ extension PlaceInfoModalViewController: ShowReviewListView {
         guard let reviewHistory = reviewHistory else { return }
         ReviewListView.placeUid = selectedPlace?.placeUid
         ReviewListView.placeName.text = selectedPlace?.name
-        self.present(ReviewListView, animated: true, completion: nil)
+        navigationController?.pushViewController(ReviewListView, animated: true)
     }
 }

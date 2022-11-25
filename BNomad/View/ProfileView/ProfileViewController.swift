@@ -27,6 +27,16 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    lazy var editingButton: UIButton = {
+        var button = UIButton(type: .system)
+        button.setTitle("프로필 수정", for: .normal)
+        button.tintColor = CustomColor.nomadGray1
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(moveToEditingPage), for: .touchUpInside)
+        return button
+    }()
+    
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.backgroundColor = CustomColor.nomad2White
@@ -43,6 +53,12 @@ class ProfileViewController: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
+//        if viewModel.user?.profileImage == nil {
+//            if let profileImageUrl = viewModel.user?.profileImageUrl {
+//                iv.kf.setImage(with: URL(string: profileImageUrl))
+//            }
+//        }
+        iv.frame = CGRect(origin: .zero, size: CGSize(width: 120,height: 120))
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.masksToBounds = true
@@ -85,6 +101,10 @@ class ProfileViewController: UIViewController {
         
         configureUI()
         render()
+        
+        if !(isMyProfile ?? true) {
+            editingButton.removeFromSuperview()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +133,13 @@ class ProfileViewController: UIViewController {
         navigationController?.pushViewController(VisitCardCollectionViewController(), animated: true)
     }
     
+    @objc func moveToEditingPage() {
+        let vc = ProfileEditViewController()
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
     // MARK: - Helpers
     
     func configureUI() {
@@ -133,13 +160,16 @@ class ProfileViewController: UIViewController {
         
         scrollView.addSubview(profileCollectionView)
         scrollView.addSubview(profileImageView)
+        scrollView.addSubview(editingButton)
         
-        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: 120, height: 120)
+        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: profileImageView.frame.width, height: profileImageView.frame.height)
         profileImageView.centerX(inView: view)
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,
                                              paddingTop: 100, paddingLeft: 16, paddingRight: 16,
                                              height: 700)
+        
+        editingButton.anchor(top: profileCollectionView.topAnchor, right: profileCollectionView.rightAnchor, paddingTop: 12, paddingRight: 12, width: 55, height: 13)
     }
 }
 
@@ -170,7 +200,6 @@ extension ProfileViewController: UICollectionViewDelegate {
             cell.user = nomad
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
-            cell.delegate = self
             return cell
             
         case 1:
@@ -274,17 +303,6 @@ extension ProfileViewController: PlusMinusProtocol {
     
     func viewAllTap() {
         self.moveToCalendar()
-    }
-}
-
-// MARK: - MovePage
-
-extension ProfileViewController: MovePage {
-    func moveToEditingPage() {
-        let vc = ProfileEditViewController()
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
-        
     }
 }
 

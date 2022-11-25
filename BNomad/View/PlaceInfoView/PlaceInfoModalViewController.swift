@@ -282,6 +282,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             
             return cell
         }

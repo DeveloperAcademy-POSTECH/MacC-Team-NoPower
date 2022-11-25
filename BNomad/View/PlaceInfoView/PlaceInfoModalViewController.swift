@@ -50,8 +50,9 @@ class PlaceInfoModalViewController: UIViewController {
     var reviewHistory: [Review]? {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
+            setupSheet()
             placeInfoCollectionView.reloadData()
-//            setupSheet()
+            
         }
     }
     
@@ -68,14 +69,20 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        setupSheet()
+        if let sheet = sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
+        }
         navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.isHidden = true
-
     }
     
     // MARK: - Helpers
@@ -196,8 +203,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     private func setupSheet() {
         if let sheet = sheetPresentationController {
-//            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
-            sheet.detents = [.medium()]
+            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+//            sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true

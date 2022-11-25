@@ -69,7 +69,6 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-//        setupSheet()
         if let sheet = sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
@@ -78,6 +77,12 @@ class PlaceInfoModalViewController: UIViewController {
             sheet.preferredCornerRadius = 12
             sheet.prefersGrabberVisible = true
         }
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Helpers
@@ -99,7 +104,8 @@ class PlaceInfoModalViewController: UIViewController {
             if distanceChecker() {
                 guard let selectedPlace = selectedPlace else { return }
 
-                let checkInAlert = checkInAlert
+                let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)
+                checkInAlert = alert
                 checkInAlert.message = "\(selectedPlace.name)에 체크인합니다."
                 
                 checkInAlert.addTextField() { textField in
@@ -347,7 +353,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 1 {
             let controller = PlaceInfoModalViewController()
             controller.reviewHistoryUid = reviewHistory?[indexPath.row].userUid
-            navigationController?.pushViewController(controller, animated: true)
+//            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -410,6 +416,6 @@ extension PlaceInfoModalViewController: ShowReviewListView {
         guard let reviewHistory = reviewHistory else { return }
         ReviewListView.placeUid = selectedPlace?.placeUid
         ReviewListView.placeName.text = selectedPlace?.name
-        self.present(ReviewListView, animated: true, completion: nil)
+        navigationController?.pushViewController(ReviewListView, animated: true)
     }
 }

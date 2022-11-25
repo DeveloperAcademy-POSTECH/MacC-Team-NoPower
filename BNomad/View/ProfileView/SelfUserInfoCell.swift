@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol MovePage {
-    func moveToEditingPage()
-}
-
 // TODO: 하드 코딩된 부분 제거 
 class SelfUserInfoCell: UICollectionViewCell {
     
@@ -24,25 +20,13 @@ class SelfUserInfoCell: UICollectionViewCell {
         }
     }
     static let identifier = "SelfUserInfoCell"
-    
-    var delegate: MovePage?
-        
+            
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = DummyData.user1.nickname
         label.font = .preferredFont(forTextStyle: .title1, weight: .bold)
         label.textColor = .black
         return label
-    }()
-    
-    lazy var editingButton: UIButton = {
-        var button = UIButton(type: .system)
-        button.setTitle("프로필 수정", for: .normal)
-        button.tintColor = CustomColor.nomadGray1
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.backgroundColor = .clear
-        button.addTarget(self, action: #selector(moveToEditing), for: .touchUpInside)
-        return button
     }()
     
     private let jobLabel: UILabel = {
@@ -85,19 +69,12 @@ class SelfUserInfoCell: UICollectionViewCell {
     
     // MARK: - Actions
     
-    @objc func moveToEditing() {
-        delegate?.moveToEditingPage()
-    }
-    
     // MARK: - Helpers
     
     func render() {
 
         contentView.addSubview(nameLabel)
         nameLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 40, paddingLeft: 20)
-        
-        contentView.addSubview(editingButton)
-        editingButton.anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 12, paddingRight: 12, width: 55, height: 13)
         
         contentView.addSubview(jobLabel)
         jobLabel.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 75, paddingLeft: 20, paddingRight: 20)

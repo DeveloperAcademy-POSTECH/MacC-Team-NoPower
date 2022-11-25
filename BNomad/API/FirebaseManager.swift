@@ -17,7 +17,12 @@ class FirebaseManager {
 
     // 실사용시 withPath: "Dummy" 제거 필요.
     let ref = Database.database().reference(withPath: "Dummy")
-
+    let refMeetUpPlace = Database.database().reference(withPath: "Dummy/meetUpPlace")
+    
+    private init() {
+        refMeetUpPlace.keepSynced(true)
+    }
+    
     // MARK: place
     // firebase
     //    places
@@ -338,7 +343,7 @@ class FirebaseManager {
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
         let date = date.toDateString()        
-        ref.child("meetUpPlace/\(placeUid)/\(date)").observe(.value, with: { snapshots in
+        refMeetUpPlace.child("\(placeUid)/\(date)").observe(.value, with: { snapshots in
             var meetUpHistory: [MeetUp] = []
             for child in snapshots.children {
                 guard let snapshot = child as? DataSnapshot else { return }

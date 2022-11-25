@@ -50,8 +50,9 @@ class PlaceInfoModalViewController: UIViewController {
     var reviewHistory: [Review]? {
         didSet {
             guard let reviewHistory = reviewHistory else { return }
+            setupSheet()
             placeInfoCollectionView.reloadData()
-//            setupSheet()
+            
         }
     }
     
@@ -68,7 +69,15 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        setupSheet()
+//        setupSheet()
+        if let sheet = sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
+        }
     }
     
     // MARK: - Helpers
@@ -188,8 +197,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     private func setupSheet() {
         if let sheet = sheetPresentationController {
-//            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
-            sheet.detents = [.medium()]
+            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+//            sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
@@ -282,6 +291,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             
             return cell
         }

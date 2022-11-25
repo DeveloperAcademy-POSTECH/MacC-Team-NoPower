@@ -93,8 +93,7 @@ class ReviewSubCell: UICollectionViewCell {
         reviewImageView.anchor(right: self.rightAnchor, paddingRight: 7, width: 60, height: 60)
         profileImageView.anchor(top: reviewTextLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 7, width: 20, height: 20)
         userNameLabel.anchor(top: reviewTextLabel.bottomAnchor, left: profileImageView.rightAnchor, paddingTop: 10, paddingLeft: 8)
-        horizontalDivider1.anchor(top: reviewImageView.bottomAnchor, paddingTop: 4, width: 360, height: 1)
-        horizontalDivider1.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        horizontalDivider1.anchor(top: reviewImageView.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 4, paddingLeft: 3, paddingRight: 3, height: 1)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

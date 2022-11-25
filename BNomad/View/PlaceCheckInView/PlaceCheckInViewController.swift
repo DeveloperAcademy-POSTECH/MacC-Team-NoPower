@@ -162,9 +162,6 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         
         let viewWidth = view.bounds.width
         let width = collectionView.frame.width
-        let sectionZeroCardHeight: CGFloat = 266
-        let sectionZeroBottomPadding: CGFloat = 25
-        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
         
         
         if indexPath.section == 0 {
@@ -235,7 +232,7 @@ extension PlaceCheckInViewController {
 
 extension PlaceCheckInViewController: CheckOutAlert {
     func checkOutAlert(place: Place) {
-        var alert = UIAlertController(title: "체크아웃", message: "\(place.name)에서 체크아웃 하시겠습니까?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "체크아웃", message: "\(place.name)에서 체크아웃 하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             self.checkOut()

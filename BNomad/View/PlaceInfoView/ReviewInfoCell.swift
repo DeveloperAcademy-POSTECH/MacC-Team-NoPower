@@ -61,7 +61,7 @@ class ReviewInfoCell: UICollectionViewCell {
         let config = UIImage.SymbolConfiguration(pointSize: 13)
         viewAllButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
         viewAllButton.tintColor = CustomColor.nomadGray1
-        viewAllButton.addTarget(self, action: #selector(ShowReviewListView), for: .touchUpInside)
+        viewAllButton.addTarget(ReviewInfoCell.self, action: #selector(ShowReviewListView), for: .touchUpInside)
         return viewAllButton
     }()
     // MARK: - Lifecycle

@@ -53,7 +53,7 @@ class RegionSelectViewController: UIViewController {
         btn.setTitleColor(.white, for: .normal)
         btn.layer.cornerRadius = 12
         btn.clipsToBounds = true
-        btn.addTarget(self, action: #selector(regionChange), for: .touchUpInside)
+        btn.addTarget(RegionSelectViewController.self, action: #selector(regionChange), for: .touchUpInside)
         return btn
     }()
     
@@ -106,7 +106,7 @@ extension RegionSelectViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RegionCollectionViewCell.identifier, for: indexPath) as? RegionCollectionViewCell else { return UICollectionViewCell() }
-        guard var regions = regions else { return UICollectionViewCell() }
+        guard let regions = regions else { return UICollectionViewCell() }
         cell.regionBtn.text = regions[indexPath.item].name
         return cell
     }

@@ -110,15 +110,15 @@ class NewMeetUpViewController: UIViewController {
         picker.minuteInterval = 10
         picker.frame.size = CGSize(width: 0, height: 250)
         picker.locale = Locale(identifier: "ko_KR")
-        picker.addTarget(self, action: #selector(didTimePickerValueChange), for: .valueChanged)
+        picker.addTarget(NewMeetUpViewController.self, action: #selector(didTimePickerValueChange), for: .valueChanged)
         
         return picker
     }()
     
     private let timePickerToolBar: UIToolbar = {
         let toolBar = UIToolbar()
-        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelTimePicker))
-        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneTimePicker))
+        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: NewMeetUpViewController.self, action: #selector(didTapCancelTimePicker))
+        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: NewMeetUpViewController.self, action: #selector(didTapDoneTimePicker))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         cancelButton.tintColor = CustomColor.nomadBlue
         doneButton.tintColor = CustomColor.nomadBlue
@@ -214,7 +214,7 @@ class NewMeetUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
-        button.addTarget(self, action: #selector(didTapPlusButton), for: .touchUpInside)
+        button.addTarget(NewMeetUpViewController.self, action: #selector(didTapPlusButton), for: .touchUpInside)
         
         return button
     }()
@@ -232,7 +232,7 @@ class NewMeetUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "minus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
-        button.addTarget(self, action: #selector(didTapMinusButton), for: .touchUpInside)
+        button.addTarget(NewMeetUpViewController.self, action: #selector(didTapMinusButton), for: .touchUpInside)
         
         return button
     }()
@@ -610,8 +610,7 @@ extension NewMeetUpViewController: UITextViewDelegate {
         let keyboardY = screenHeight - keyboardHeight
         let contentY = contentRectangle.frame.minY + contentRectangle.frame.height
 
-        guard let window = UIApplication.shared.windows.first else { return }
-        let topSafeAreaHeight = window.safeAreaInsets.top
+        guard let topSafeAreaHeight = getSafeAreaTop() else { return }
         
         if contentY > keyboardY {
             moveValue = contentY - keyboardY + topSafeAreaHeight
@@ -621,6 +620,16 @@ extension NewMeetUpViewController: UITextViewDelegate {
         } else {
             moveValue = 0
         }
+    }
+    
+    func getSafeAreaTop() -> CGFloat? {
+        let keyWindow = UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
+        return keyWindow?.safeAreaInsets.top
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

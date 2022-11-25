@@ -227,12 +227,12 @@ class NewMeetUpViewController: UIViewController {
         return view
     }()
     
-    private let minusButton: UIButton = {
+    private lazy var minusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "minus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
-        button.addTarget(NewMeetUpViewController.self, action: #selector(didTapMinusButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapMinusButton), for: .touchUpInside)
         
         return button
     }()

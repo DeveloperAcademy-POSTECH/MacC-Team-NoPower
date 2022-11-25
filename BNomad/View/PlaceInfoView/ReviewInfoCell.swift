@@ -52,7 +52,7 @@ class ReviewInfoCell: UICollectionViewCell {
         return reviewCollectionView
     }()
     
-    let viewAllButton: UIButton = {
+    lazy var viewAllButton: UIButton = {
         let viewAllButton = UIButton()
         viewAllButton.setTitle("모든 리뷰 보기 ", for: .normal)
         viewAllButton.setTitleColor(CustomColor.nomadGray1, for: .normal)
@@ -61,7 +61,7 @@ class ReviewInfoCell: UICollectionViewCell {
         let config = UIImage.SymbolConfiguration(pointSize: 13)
         viewAllButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
         viewAllButton.tintColor = CustomColor.nomadGray1
-        viewAllButton.addTarget(ReviewInfoCell.self, action: #selector(ShowReviewListView), for: .touchUpInside)
+        viewAllButton.addTarget(self, action: #selector(ShowReviewListView), for: .touchUpInside)
         return viewAllButton
     }()
     // MARK: - Lifecycle

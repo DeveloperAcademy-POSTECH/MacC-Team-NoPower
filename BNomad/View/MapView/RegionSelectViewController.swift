@@ -45,7 +45,7 @@ class RegionSelectViewController: UIViewController {
         return view
     }()
     
-    private let confirmBtn: UIButton = {
+    private lazy var confirmBtn: UIButton = {
         let btn = UIButton()
         btn.setTitle("확인", for: .normal)
         btn.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
@@ -53,7 +53,7 @@ class RegionSelectViewController: UIViewController {
         btn.setTitleColor(.white, for: .normal)
         btn.layer.cornerRadius = 12
         btn.clipsToBounds = true
-        btn.addTarget(RegionSelectViewController.self, action: #selector(regionChange), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(regionChange), for: .touchUpInside)
         return btn
     }()
     

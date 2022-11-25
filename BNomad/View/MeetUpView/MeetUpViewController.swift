@@ -175,16 +175,24 @@ class MeetUpViewController: UIViewController {
         let alert = UIAlertController(title: "\(meetUpTitleLabel.text ?? "")에 참여 하시겠습니까?", message: "MeetUp에 참여합니다.", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let join = UIAlertAction(title: "확인", style: .default, handler: { action in
-            // TODO: 인원수 유효성 검사 필요
             guard
                 let userUid = self.viewModel.user?.userUid,
                 let meetUpUid = self.meetUpViewModel?.meetUp?.meetUpUid,
-                let placeUid = self.meetUpViewModel?.meetUp?.placeUid
+                let placeUid = self.meetUpViewModel?.meetUp?.placeUid,
+                let currentPeopleUids = self.meetUpViewModel?.meetUp?.currentPeopleUids,
+                let maxPeopleNum = self.meetUpViewModel?.meetUp?.maxPeopleNum
             else { return }
-            FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
-                self.meetUpViewModel?.meetUp?.currentPeopleUids?.append(userUid)
+            
+            if maxPeopleNum > currentPeopleUids.count {
+                FirebaseManager.shared.participateMeetUp(userUid: userUid, meetUpUid: meetUpUid, placeUid: placeUid) {
+                    self.meetUpViewModel?.meetUp?.currentPeopleUids?.append(userUid)
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                let maxAlert = UIAlertController(title: "모집인원 초과", message: "모집인원을 초과하여 참여할 수 없습니다.", preferredStyle: .alert)
+                maxAlert.addAction(UIAlertAction(title: "확인", style: .default))
+                self.present(maxAlert, animated: true)
             }
-            self.navigationController?.popToRootViewController(animated: true)
         })
         alert.addAction(cancel)
         alert.addAction(join)

@@ -135,7 +135,7 @@ class FirebaseManager {
                 }
                 
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                let todayGoal = dictionary["todayGoal"] as? String
+                let todayGoal = dictionary["todayGoal"]
                 let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
                 
                 checkInHistory.append(checkIn)
@@ -158,7 +158,6 @@ class FirebaseManager {
         guard
             let snapshot = snapshot as? DataSnapshot,
             let dictionary = snapshot.value as? [String: String],
-            let checkInUid = snapshot.key as? String,
             let userUid = dictionary["userUid"],
             let checkInTime = dictionary["checkInTime"]?.toDateTime()
         else {
@@ -166,8 +165,9 @@ class FirebaseManager {
             return nil
         }
         
+        let checkInUid = snapshot.key
         let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-        let todayGoal = dictionary["todayGoal"] as? String
+        let todayGoal = dictionary["todayGoal"]
         let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
         
         return checkIn
@@ -374,7 +374,7 @@ class FirebaseManager {
             if snapshots.exists() {
                 for child in snapshots.children {
                     guard let snapshot = child as? DataSnapshot else { return }
-                    guard let meetUpUid = snapshot.key as? String else { return }
+                    let meetUpUid = snapshot.key
                     completion(meetUpUid)
                 }
             } 
@@ -434,7 +434,7 @@ class FirebaseManager {
         
         ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : nil,
                                "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil,
-                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil]) {
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil] as [String: Any?] as [AnyHashable : Any]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("meetUp cancle could not be completed: \(error).")
@@ -488,8 +488,8 @@ class FirebaseManager {
         let dateTime: String = Date().toDateTimeString()
         ref.child("service/suggestPlace/\(dateTime)").updateChildValues(["placeName" : placeName,
                                                           "placeAddress" : placeAddress,
-                                                          "recommendReason" : recommendReason,
-                                                          "recommenderContactNumber" : recommenderContactNumber]) {
+                                                          "recommendReason" : recommendReason as Any,
+                                                        "recommenderContactNumber" : recommenderContactNumber as Any]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("DEBUG \(error).")

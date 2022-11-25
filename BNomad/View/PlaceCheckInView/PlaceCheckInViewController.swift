@@ -140,7 +140,7 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
                 }
             }
             cell.userUid = userUids[indexPath.row]
-            
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             return cell
         }
         return UICollectionViewCell()

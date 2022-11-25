@@ -16,36 +16,6 @@ class VisitCardCell: UICollectionViewCell {
     var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
-    var checkinHistoryForList: CheckIn? {
-        didSet {
-            guard let checkInHistory = checkinHistoryForList else {
-                nilHistory()
-                return
-                
-            }
-            
-                rectView.removeFromSuperview()
-                nilLabel.removeFromSuperview()
-            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
-            nameLabel.text = place?.name
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "M월 d일"
-            
-            dateFormatter.dateFormat = "HH:mm"
-            let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            let checkOutTime = dateFormatter.string(from: checkInHistory.checkOutTime ?? Date())
-            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
-
-            let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            self.checkinDateLabel.text = checkinTime
-            
-            let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
-
-        }
-    }
-    
     var checkInHistoryForCalendar: CheckIn? {
         didSet {
             guard let checkInHistory = checkInHistoryForCalendar else {
@@ -100,8 +70,17 @@ class VisitCardCell: UICollectionViewCell {
             let checkOutTime = dateFormatter.string(from: lastCheckIn.checkOutTime ?? Date())
             self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
             
-            let stayedTime = Int((lastCheckIn.checkOutTime?.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            guard let checkOutTime = lastCheckIn.checkOutTime else {
+                let stayedTime = Int((lastCheckIn.checkOutTime ?? Date()).timeIntervalSince(lastCheckIn.checkInTime) / 60)
+                self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분째"
+                
+                self.checkInAndOutLabel.text = checkInTime + " ~"
+                
+                return
+            }
+            
+            let stayedTime = Int(checkOutTime.timeIntervalSince(lastCheckIn.checkInTime) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분"
             
             nameLabel.reloadInputViews()
         }
@@ -215,7 +194,6 @@ class VisitCardCell: UICollectionViewCell {
             $0.spacing = 1
             $0.distribution = .fillEqually
             $0.alignment = .center
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         contentView.addSubview(stack[0])

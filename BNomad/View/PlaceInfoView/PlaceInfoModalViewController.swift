@@ -397,6 +397,9 @@ extension PlaceInfoModalViewController: LogInToSignUp {
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
+        guard let reviewHistory = reviewHistory else { return }
+        ReviewListView.placeUid = selectedPlace?.placeUid
+        ReviewListView.placeName.text = selectedPlace?.name
         self.present(ReviewListView, animated: true, completion: nil)
     }
 }

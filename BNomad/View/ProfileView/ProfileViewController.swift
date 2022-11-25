@@ -30,19 +30,9 @@ class ProfileViewController: UIViewController {
     let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.backgroundColor = CustomColor.nomad2White
-        scroll.canCancelContentTouches = true
         
         return scroll
     }()
-    
-    class myCollectionView: UIScrollView {
-        override func touchesShouldCancel(in view: UIView) -> Bool {
-            if view is UICollectionView {
-                return false
-            }
-            return super.touchesShouldCancel(in: view)
-        }
-    }
     
     let contentView: UIView = {
         let ui = UIView()
@@ -56,7 +46,8 @@ class ProfileViewController: UIViewController {
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
         iv.layer.masksToBounds = true
-        iv.layer.cornerRadius = 78 / 2
+        iv.frame = CGRect(origin: .zero, size: CGSize(width: 120, height: 120))
+        iv.layer.cornerRadius = iv.frame.height/2
         return iv
     }()
     
@@ -89,6 +80,8 @@ class ProfileViewController: UIViewController {
         
         profileCollectionView.dataSource = self
         profileCollectionView.delegate = self
+        
+        profileImageView.image = nomad?.profileImage ?? UIImage(named: "othersProfile")
         
         configureUI()
         render()
@@ -141,7 +134,7 @@ class ProfileViewController: UIViewController {
         scrollView.addSubview(profileCollectionView)
         scrollView.addSubview(profileImageView)
         
-        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 25, width: 120, height: 120)
+        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: 120, height: 120)
         profileImageView.centerX(inView: view)
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,
@@ -219,7 +212,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             return UICollectionViewCell()
         }
         
-        header.delegate = self //FIXME: 매 로드때마다 딜리게이트 설정해주는게 맞는지?
+        header.delegate = self
 
         switch indexPath.section {
         case 1:
@@ -240,11 +233,14 @@ extension ProfileViewController: UICollectionViewDelegate {
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             return CGSize(width: profileCollectionView.frame.width, height: 182)
-        } else if indexPath.section == 1 {
+        case 1:
             return CGSize(width: profileCollectionView.frame.width, height: 119)
-        } else {
+        case 2:
+            return CGSize(width: profileCollectionView.frame.width, height: 220)
+        default:
             return CGSize(width: profileCollectionView.frame.width, height: 190)
         }
         
@@ -257,7 +253,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             return CGSize(width: view.frame.size.width, height: 62)
         case 2:
-            return CGSize(width: view.frame.size.width, height: 96)
+            return CGSize(width: view.frame.size.width, height: 62)
         default:
             return .zero
         }
@@ -270,12 +266,10 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 extension ProfileViewController: PlusMinusProtocol {
     func plusTap() {
         ProfileGraphCell.editWeek(edit: 1)
-        
     }
     
     func minusTap() {
         ProfileGraphCell.editWeek(edit: -1)
-
     }
     
     func viewAllTap() {

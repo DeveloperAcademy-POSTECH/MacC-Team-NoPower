@@ -363,7 +363,7 @@ class MapViewController: UIViewController {
         
         // subtitle
         var config = UIButton.Configuration.plain()
-        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
+        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1 as Any, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
         config.titleAlignment = .center
         
         checkInNow.configuration = config

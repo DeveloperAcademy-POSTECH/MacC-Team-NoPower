@@ -109,7 +109,7 @@ extension ReviewListViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let reviewHistory = reviewHistory else { return UICollectionViewCell() }
-        if let imageString = reviewHistory[indexPath.item].imageUrl {
+        if reviewHistory[indexPath.item].imageUrl != nil {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCellWithImage.identifier, for: indexPath) as? ReviewCellWithImage else { return UICollectionViewCell() }
             cell.review = reviewHistory[indexPath.item]
             return cell
@@ -134,7 +134,7 @@ extension ReviewListViewController: UICollectionViewDelegateFlowLayout {
         var height: Double = 0.5 + 12 + 174 + 8 + 0 + 4 + 20 + 11
         guard let reviewHistory = reviewHistory else { return CGSize(width: view.bounds.width, height: height)}
 
-        if let imageString = reviewHistory[indexPath.item].imageUrl {
+        if reviewHistory[indexPath.item].imageUrl != nil {
             height = 0.5 + 12 + 174 + 8 + reviewHistory[indexPath.item].content.dynamicHeight() + 4 + 20 + 11
         } else {
             height = 0.5 + 12 + reviewHistory[indexPath.item].content.dynamicHeight() + 4 + 20 + 11

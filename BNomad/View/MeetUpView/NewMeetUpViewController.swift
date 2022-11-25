@@ -110,15 +110,15 @@ class NewMeetUpViewController: UIViewController {
         picker.minuteInterval = 10
         picker.frame.size = CGSize(width: 0, height: 250)
         picker.locale = Locale(identifier: "ko_KR")
-        picker.addTarget(self, action: #selector(didTimePickerValueChange), for: .valueChanged)
+        picker.addTarget(NewMeetUpViewController.self, action: #selector(didTimePickerValueChange), for: .valueChanged)
         
         return picker
     }()
     
     private let timePickerToolBar: UIToolbar = {
         let toolBar = UIToolbar()
-        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(didTapCancelTimePicker))
-        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(didTapDoneTimePicker))
+        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: NewMeetUpViewController.self, action: #selector(didTapCancelTimePicker))
+        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: NewMeetUpViewController.self, action: #selector(didTapDoneTimePicker))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         cancelButton.tintColor = CustomColor.nomadBlue
         doneButton.tintColor = CustomColor.nomadBlue
@@ -214,7 +214,7 @@ class NewMeetUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
-        button.addTarget(self, action: #selector(didTapPlusButton), for: .touchUpInside)
+        button.addTarget(NewMeetUpViewController.self, action: #selector(didTapPlusButton), for: .touchUpInside)
         
         return button
     }()
@@ -232,7 +232,7 @@ class NewMeetUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "minus"), for: .normal)
         button.tintColor = CustomColor.nomadBlack
         button.backgroundColor = .white
-        button.addTarget(self, action: #selector(didTapMinusButton), for: .touchUpInside)
+        button.addTarget(NewMeetUpViewController.self, action: #selector(didTapMinusButton), for: .touchUpInside)
         
         return button
     }()

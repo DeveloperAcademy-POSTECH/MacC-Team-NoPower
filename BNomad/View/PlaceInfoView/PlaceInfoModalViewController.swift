@@ -49,7 +49,7 @@ class PlaceInfoModalViewController: UIViewController {
     
     var reviewHistory: [Review]? {
         didSet {
-            guard let reviewHistory = reviewHistory else { return }
+            guard reviewHistory != nil else { return }
             placeInfoCollectionView.reloadData()
 //            setupSheet()
         }
@@ -398,7 +398,7 @@ extension PlaceInfoModalViewController: LogInToSignUp {
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
-        guard let reviewHistory = reviewHistory else { return }
+        guard reviewHistory != nil else { return }
         ReviewListView.placeUid = selectedPlace?.placeUid
         ReviewListView.placeName.text = selectedPlace?.name
         self.present(ReviewListView, animated: true, completion: nil)

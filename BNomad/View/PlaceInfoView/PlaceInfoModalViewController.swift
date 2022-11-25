@@ -69,6 +69,13 @@ class PlaceInfoModalViewController: UIViewController {
         super.viewDidLoad()
         configureCollectionView()
         setupSheet()
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+
     }
     
     // MARK: - Helpers
@@ -338,7 +345,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 1 {
             let controller = PlaceInfoModalViewController()
             controller.reviewHistoryUid = reviewHistory?[indexPath.row].userUid
-            navigationController?.pushViewController(controller, animated: true)
+//            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -401,6 +408,6 @@ extension PlaceInfoModalViewController: ShowReviewListView {
         guard let reviewHistory = reviewHistory else { return }
         ReviewListView.placeUid = selectedPlace?.placeUid
         ReviewListView.placeName.text = selectedPlace?.name
-        self.present(ReviewListView, animated: true, completion: nil)
+        navigationController?.pushViewController(ReviewListView, animated: true)
     }
 }

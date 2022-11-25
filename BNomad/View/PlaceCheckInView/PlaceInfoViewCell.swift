@@ -134,11 +134,14 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let meetUp = meetUpViewModels?[indexPath.item] else { return }
-        if meetUp.meetUp?.time.compare(Date()) == .orderedAscending {
-            placeInfoViewCelldelegate?.didTapPastMeetUpCell(self)
-        } else {
-            placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
+        guard let numberOfMeetUp = numberOfMeetUp else { return }
+        if numberOfMeetUp > 0 {
+            guard let meetUp = meetUpViewModels?[indexPath.item] else { return }
+            if meetUp.meetUp?.time.compare(Date()) == .orderedAscending {
+                placeInfoViewCelldelegate?.didTapPastMeetUpCell(self)
+            } else {
+                placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
+            }
         }
     }
 }

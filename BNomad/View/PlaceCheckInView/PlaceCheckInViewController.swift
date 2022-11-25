@@ -236,12 +236,20 @@ extension PlaceCheckInViewController: CheckOutAlert {
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             self.checkOut()
+            guard let meetUpViewModels = self.meetUpViewModels else { return }
             FirebaseManager.shared.fetchMeetUpUidAll(userUid: self.viewModel.user?.userUid ?? "") { meetUpUid in
-                FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetUpUid) { placeUid in
-                    FirebaseManager.shared.cancelMeetUp(userUid: self.viewModel.user?.userUid ?? "", meetUpUid: meetUpUid, placeUid: placeUid) {
+                FirebaseManager.shared.fetchMeetUp(meetUpUid: meetUpUid) { meetUp in
+                    if meetUp.time.compare(Date()) != .orderedAscending {
+                        FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetUpUid) { placeUid in
+                            FirebaseManager.shared.cancelMeetUp(userUid: self.viewModel.user?.userUid ?? "", meetUpUid: meetUpUid, placeUid: placeUid) {
+                            }
+                        }
                     }
+                    
                 }
             }
+            
+            
         }))
         present(alert, animated: true)
     }
@@ -267,11 +275,5 @@ extension PlaceCheckInViewController: PlaceInfoViewCellDelegate {
         let vc = MeetUpViewController()
         vc.meetUpViewModel = meetUpViewModel
         navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func didTapPastMeetUpCell(_ cell: PlaceInfoViewCell) {
-        let alert = UIAlertController(title: "지난 밋업입니다.", message: "지난 밋업은 볼 수 없습니다.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        present(alert, animated: true)
     }
 }

@@ -13,7 +13,6 @@ protocol NewMeetUpViewShowable {
 
 protocol PlaceInfoViewCellDelegate: AnyObject {
     func didTapMeetUpCell(_ cell: PlaceInfoViewCell, meetUpViewModel: MeetUpViewModel)
-    func didTapPastMeetUpCell(_ cell: PlaceInfoViewCell)
 }
 
 class PlaceInfoViewCell: UICollectionViewCell {
@@ -32,10 +31,13 @@ class PlaceInfoViewCell: UICollectionViewCell {
     var meetUpViewModels: [MeetUpViewModel]? {
         didSet {
             guard let meetUpViewModels = meetUpViewModels else { return }
+            self.sortedMeetUpViewModels = meetUpViewModels.sorted(by: { $0.meetUp?.time ?? Date() > $1.meetUp?.time ?? Date() })
             self.numberOfMeetUp = meetUpViewModels.count
             self.collectionView.reloadData()
         }
     }
+    
+    var sortedMeetUpViewModels: [MeetUpViewModel]?
     
     var numberOfMeetUp: Int? {
         didSet {
@@ -134,15 +136,8 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let numberOfMeetUp = numberOfMeetUp else { return }
-        if numberOfMeetUp > 0 {
-            guard let meetUp = meetUpViewModels?[indexPath.item] else { return }
-            if meetUp.meetUp?.time.compare(Date()) == .orderedAscending {
-                placeInfoViewCelldelegate?.didTapPastMeetUpCell(self)
-            } else {
-                placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
-            }
-        }
+        guard let meetUp = sortedMeetUpViewModels?[indexPath.item] else { return }
+        placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
     }
 }
 
@@ -164,7 +159,7 @@ extension PlaceInfoViewCell: UICollectionViewDataSource {
         
         if let numberOfMeetUp = numberOfMeetUp {
             if numberOfMeetUp > 0 {
-                meetUpCell.meetUpViewModel = self.meetUpViewModels?[indexPath.item]
+                meetUpCell.meetUpViewModel = self.sortedMeetUpViewModels?[indexPath.item]
                 return meetUpCell
             } else {
                 return noMeetUpcell

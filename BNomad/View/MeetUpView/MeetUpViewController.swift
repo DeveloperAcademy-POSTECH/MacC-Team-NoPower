@@ -27,11 +27,14 @@ class MeetUpViewController: UIViewController {
             
             guard let participants = currentPeopleUids else { return }
             guard let user = viewModel.user?.userUid else { return }
-                
-            if participants.contains(user) {
-                configJoinCancelButton()
+               
+            if meetUp.time.compare(Date()) == .orderedAscending {
+                configPastMeetUpButton()
+            } else {
+                if participants.contains(user) {
+                    configJoinCancelButton()
+                }
             }
-            
         }
     }
     
@@ -236,6 +239,16 @@ class MeetUpViewController: UIViewController {
         joinButton.setTitleColor(CustomColor.nomadBlue, for: .normal)
         joinButton.removeTarget(self, action: #selector(joinMeetUp), for: .touchUpInside)
         joinButton.addTarget(self, action: #selector(cancelJoinMeetUp), for: .touchUpInside)
+    }
+    
+    func configPastMeetUpButton() {
+        joinButton.setTitle("모임시간이 지났습니다.", for: .normal)
+        joinButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        joinButton.backgroundColor = CustomColor.nomadGray1
+        joinButton.setTitleColor(UIColor.white, for: .normal)
+        joinButton.layer.borderWidth = 0
+        joinButton.removeTarget(self, action: #selector(joinMeetUp), for: .touchUpInside)
+        joinButton.removeTarget(self, action: #selector(cancelJoinMeetUp), for: .touchUpInside)
     }
     
     func configUI() {

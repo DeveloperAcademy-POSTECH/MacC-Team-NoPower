@@ -610,8 +610,7 @@ extension NewMeetUpViewController: UITextViewDelegate {
         let keyboardY = screenHeight - keyboardHeight
         let contentY = contentRectangle.frame.minY + contentRectangle.frame.height
 
-        guard let window = UIApplication.shared.windows.first else { return }
-        let topSafeAreaHeight = window.safeAreaInsets.top
+        guard let topSafeAreaHeight = getSafeAreaTop() else { return }
         
         if contentY > keyboardY {
             moveValue = contentY - keyboardY + topSafeAreaHeight
@@ -621,6 +620,16 @@ extension NewMeetUpViewController: UITextViewDelegate {
         } else {
             moveValue = 0
         }
+    }
+    
+    func getSafeAreaTop() -> CGFloat? {
+        let keyWindow = UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
+        return keyWindow?.safeAreaInsets.top
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

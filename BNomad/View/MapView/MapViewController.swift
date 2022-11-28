@@ -30,9 +30,7 @@ class MapViewController: UIViewController {
     }
 
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
-    
-    private var currentAnnotation: MKAnnotation?
-    
+      
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     var store = Set<AnyCancellable>()
     
@@ -584,11 +582,13 @@ extension MapViewController: MKMapViewDelegate {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
-            let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
                 tempAnnotation?.placeUid == place.placeUid
             }
+            
+
+            let controller = PlaceInfoModalViewController()
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
             present(UINavigationController(rootViewController: controller), animated: true)
@@ -600,8 +600,9 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        self.currentAnnotation = nil
         self.dismiss(animated: true)
+        map.becomeFirstResponder()
+
     }
     
 }
@@ -624,7 +625,7 @@ extension MapViewController: UISheetPresentationControllerDelegate {
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         print("will dismiss")
         print("current map: \(self.map)")
-        self.map.deselectAnnotation(self.currentAnnotation, animated: true)
+        map.deselectAnnotation(map.selectedAnnotations.last, animated: false)
     }
 }
 

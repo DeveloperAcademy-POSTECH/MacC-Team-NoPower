@@ -136,8 +136,10 @@ extension PlaceInfoViewCell: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let meetUp = sortedMeetUpViewModels?[indexPath.item] else { return }
-        placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
+        if sortedMeetUpViewModels?.count != 0 {
+            guard let meetUp = sortedMeetUpViewModels?[indexPath.item] else { return }
+            placeInfoViewCelldelegate?.didTapMeetUpCell(self, meetUpViewModel: meetUp)
+        }
     }
 }
 

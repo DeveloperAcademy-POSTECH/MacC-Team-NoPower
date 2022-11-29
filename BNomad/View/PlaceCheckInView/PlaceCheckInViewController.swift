@@ -134,13 +134,15 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             var userUids = checkIn.compactMap {$0.userUid}
+            var goals = checkIn.compactMap {$0.todayGoal}
             if let myUid = viewModel.user?.userUid {
                 if let index = userUids.firstIndex(of: myUid) {
                     userUids.remove(at: index)
+                    goals.remove(at: index)
                 }
             }
             cell.userUid = userUids[indexPath.row]
-            cell.todayGoal = checkIn[indexPath.row].todayGoal
+            cell.todayGoal = goals[indexPath.row]
             return cell
         }
         return UICollectionViewCell()

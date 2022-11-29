@@ -144,7 +144,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
         let stack = UIStackView(arrangedSubviews: [name, placeDetailStack])
         stack.axis = .vertical
         stack.alignment = .leading
-        stack.spacing = 8
+        stack.spacing = 10
         
         return stack
     }()

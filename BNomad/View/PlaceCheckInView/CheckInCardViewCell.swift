@@ -30,7 +30,7 @@ class CheckInCardViewCell: UICollectionViewCell {
         didSet {
             userNameLabel.text = user?.nickname
             userOccupationLabel.text = user?.occupation
-            userStatusMessage.text = user?.introduction
+            userStatusMessage.text = user?.currentCheckIn?.todayGoal
             if let profileImageUrl = user?.profileImageUrl {
                 self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
             } else {

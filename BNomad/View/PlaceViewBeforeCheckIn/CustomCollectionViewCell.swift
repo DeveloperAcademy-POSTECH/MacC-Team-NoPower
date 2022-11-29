@@ -149,6 +149,19 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return stack
     }()
     
+    var workingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "열일중"
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .white
+        label.backgroundColor = CustomColor.nomadBlue
+        label.textAlignment = .center
+        label.layer.cornerRadius = 10
+        label.layer.masksToBounds = true
+        
+        return label
+    }()
+    
     static func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
         let radLatitude1: Double = (latitude1 * .pi)/180
         let radLatitude2: Double = (latitude2 * .pi)/180
@@ -182,6 +195,8 @@ class CustomCollectionViewCell: UICollectionViewCell {
         self.addSubview(cellStack)
         cellStack.anchor(left: cell.leftAnchor, paddingLeft: 16)
         cellStack.centerY(inView: cell)
+        
+        self.addSubview(workingLabel)
+        workingLabel.anchor(bottom: cell.bottomAnchor, right: cell.rightAnchor, paddingBottom: 15, paddingRight: 15, width: 57, height: 20)
     }
-
 }

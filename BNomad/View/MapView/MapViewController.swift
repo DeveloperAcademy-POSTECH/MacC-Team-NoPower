@@ -47,7 +47,7 @@ class MapViewController: UIViewController {
     fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.85)
     
     // 맵 띄우기
-    private lazy var map: MKMapView = {
+    lazy var map: MKMapView = {
         let map = MKMapView()
         map.pointOfInterestFilter = .some(MKPointOfInterestFilter(including: [.airport, .beach, .campground, .publicTransport]))
         map.showsScale = false
@@ -187,18 +187,21 @@ class MapViewController: UIViewController {
         let allPlaceAction = UIAction(title: "모든 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.map.addAnnotations(self.allAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin"), for: .normal)
         })
         
         let visitedPlaceAction = UIAction(title: "방문한 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.visitedPlacesMapping()
             self.map.addAnnotations(self.visitedAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin.fill"), for: .normal)
         })
         
         let newPlaceAction = UIAction(title: "새로운 스팟", handler: { _ in
             self.map.removeAnnotations(self.map.annotations)
             self.visitedPlacesMapping()
             self.map.addAnnotations(self.newAnnotation)
+            self.visitedPlaceMenu.setImage(UIImage(systemName: "pin.fill"), for: .normal)
         })
         
         allPlaceAction.state = .on // 기본적으로는 '모든 스팟'에 체크되어 있음
@@ -209,7 +212,7 @@ class MapViewController: UIViewController {
         btn.showsMenuAsPrimaryAction = true
         btn.menu = menu
         btn.backgroundColor = mapBtnBackgroundColor
-        btn.setImage(UIImage(systemName: "square.on.square"), for: .normal)
+        btn.setImage(UIImage(systemName: "pin"), for: .normal)
         btn.tintColor = CustomColor.nomadBlue
         btn.layer.cornerRadius = 4
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
@@ -283,13 +286,13 @@ class MapViewController: UIViewController {
     }
     
     @objc private func presentPlaceListModal() {
+        self.dismiss(animated: false)
+
         let sheet = CustomModalViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.delegate = self
-            sheet.prefersGrabberVisible = false
-            sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 12
             sheet.prefersGrabberVisible = true
@@ -297,6 +300,7 @@ class MapViewController: UIViewController {
         sheet.places = visiblePlacesOnMap
         sheet.position = currentLocation
         sheet.delegateForFloating = self
+        sheet.regionChangeDelegate = self
         present(sheet, animated: true, completion: nil)
     }
     
@@ -323,27 +327,6 @@ class MapViewController: UIViewController {
         self.dismiss(animated: false)
         navigationController?.pushViewController(SettingViewController(), animated: true)
     }
-    
-    func locationCheck(){
-            let status = CLLocationManager.authorizationStatus()
-            
-            if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
-                let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
-                let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
-                    (action: UIAlertAction) in
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
-                    } else {
-                        UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
-                    }
-                }
-                let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive)
-                alter.addAction(logNoAction)
-                alter.addAction(logOkAction)
-                self.present(alter, animated: true, completion: nil)
-        }
-    }
-    
     
     // 방문했던/안했던 장소 분리하여 배열에 추가
     func visitedPlacesMapping() {
@@ -383,7 +366,7 @@ class MapViewController: UIViewController {
         
         // subtitle
         var config = UIButton.Configuration.plain()
-        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
+        config.attributedSubtitle = AttributedString(NSAttributedString(string: "\(checkedTime ?? "")부터 열일중", attributes: [.foregroundColor: CustomColor.nomadGray1 as Any, .font: UIFont.preferredFont(forTextStyle: .caption2)]))
         config.titleAlignment = .center
         
         checkInNow.configuration = config
@@ -504,13 +487,51 @@ class MapViewController: UIViewController {
     func userCombine() {
         viewModel.$user
             .sink { user in
-                guard let user = user else { return self.checkInNow.isHidden = true }
+                guard let user = user else {
+                    self.checkInNow.isHidden = true
+                    self.colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
+                    self.appTitle.setTitleColor(.black, for: .normal)
+                    self.upperStack.tintColor = CustomColor.nomadBlue
+                    return
+                }
                 
-                self.checkInNow.isHidden = user.isChecked ? false : true
+                if user.isChecked {
+                    self.checkInNow.isHidden = false
+                    self.colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
+                    self.appTitle.setTitleColor(.white, for: .normal)
+                    self.upperStack.tintColor = .white
+                } else {
+                    self.checkInNow.isHidden = true
+                    self.colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
+                    self.appTitle.setTitleColor(.black, for: .normal)
+                    self.upperStack.tintColor = CustomColor.nomadBlue
+                }
+                
                 self.checkedPlaceNameBinding()
             }
             .store(in: &store)
     }
+    
+    func locationCheck(){
+        let status = CLLocationManager().authorizationStatus
+
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive)
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
+        }
+    }
+    
 }
 
 // MARK: - MKMapViewDelegate
@@ -563,7 +584,6 @@ extension MapViewController: MKMapViewDelegate {
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
-            locationCheck()
             let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
@@ -571,7 +591,7 @@ extension MapViewController: MKMapViewDelegate {
             }
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
-            present(controller, animated: true)
+            present(UINavigationController(rootViewController: controller), animated: true)
         } else {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 5, longitudeDelta: map.region.span.longitudeDelta / 5)), animated: true)
@@ -591,18 +611,8 @@ extension MapViewController: MKMapViewDelegate {
 extension MapViewController: UpdateFloating {
     func checkInFloating() {
         map.addSubview(checkInNow)
-        if checkInNow.isHidden == true {
-            colorFilter.backgroundColor = .white.withAlphaComponent(0.1)
-            appTitle.setTitleColor(.black, for: .normal)
-            upperStack.tintColor = CustomColor.nomadBlue
-        } else {
-            colorFilter.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.8)
-            appTitle.setTitleColor(.white, for: .normal)
-            upperStack.tintColor = .white
-        }
         checkInNow.anchor(top: view.topAnchor, paddingTop: 110, width: 250, height: 50)
         checkInNow.centerX(inView: view)
-        
         checkedPlaceNameBinding()
     }
 }

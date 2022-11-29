@@ -94,7 +94,11 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 3 {
-            return self.checkInHistory?.count ?? 0
+            if numberOfUsers >= 1 {
+                return numberOfUsers - 1
+            } else {
+                return 0
+            }
         }
         return 1
     }
@@ -118,17 +122,25 @@ extension PlaceCheckInViewController: UICollectionViewDataSource {
         }
         else if indexPath.section == 2 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListHeader.identifier, for: indexPath) as? CheckedProfileListHeader else { return UICollectionViewCell() }
-            cell.numberOfUsers = numberOfUsers
+            if numberOfUsers >= 1 {
+                cell.numberOfUsers = numberOfUsers - 1
+            } else {
+                cell.numberOfUsers = 0
+            }
             
             return cell
         }
         else if indexPath.section == 3 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CheckedProfileListViewCell.identifier, for: indexPath) as? CheckedProfileListViewCell else { return UICollectionViewCell() }
-            
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
-            let userUids = checkIn.compactMap {$0.userUid}
+            var userUids = checkIn.compactMap {$0.userUid}
+            if let myUid = viewModel.user?.userUid {
+                if let index = userUids.firstIndex(of: myUid) {
+                    userUids.remove(at: index)
+                }
+            }
             cell.userUid = userUids[indexPath.row]
-            
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             return cell
         }
         return UICollectionViewCell()
@@ -149,9 +161,8 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         }
         
         let viewWidth = view.bounds.width
-        let sectionZeroCardHeight: CGFloat = 266
-        let sectionZeroBottomPadding: CGFloat = 25
-        let sectionZeroHeight = sectionZeroCardHeight + sectionZeroBottomPadding
+        let width = collectionView.frame.width
+        
         
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 390)
@@ -162,7 +173,7 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
             
-            return CGSize(width: 349, height: 68)
+            return CGSize(width: width - 30, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 0)
         }
@@ -170,8 +181,16 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 {
+            guard let checkIn = checkInHistory else { return }
             let controller = ProfileViewController()
-            guard let nomadUid = checkInHistory?[indexPath.row].userUid else { return }
+            var userUids = checkIn.compactMap { $0.userUid }
+            if let myUid = viewModel.user?.userUid {
+                if let index = userUids.firstIndex(of: myUid) {
+                    userUids.remove(at: index)
+                }
+            }
+            let nomadUid = userUids[indexPath.row]
+            
             FirebaseManager.shared.fetchUser(id: nomadUid) { user in
                 controller.nomad = user
                 FirebaseManager.shared.fetchCheckInHistory(userUid: nomadUid) { history in
@@ -184,8 +203,9 @@ extension PlaceCheckInViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let width = collectionView.frame.width
         if section == 3 {
-            return CGSize(width: view.frame.size.width, height: 70)
+            return CGSize(width: width - 30, height: 70)
         }
         return CGSize()
     }
@@ -212,16 +232,23 @@ extension PlaceCheckInViewController {
 
 extension PlaceCheckInViewController: CheckOutAlert {
     func checkOutAlert(place: Place) {
-        var alert = UIAlertController(title: "체크아웃", message: "\(place.name)에서 체크아웃 하시겠습니까?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "체크아웃", message: "\(place.name)에서 체크아웃 하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in
             self.checkOut()
             FirebaseManager.shared.fetchMeetUpUidAll(userUid: self.viewModel.user?.userUid ?? "") { meetUpUid in
-                FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetUpUid) { placeUid in
-                    FirebaseManager.shared.cancelMeetUp(userUid: self.viewModel.user?.userUid ?? "", meetUpUid: meetUpUid, placeUid: placeUid) {
+                FirebaseManager.shared.fetchMeetUp(meetUpUid: meetUpUid) { meetUp in
+                    if meetUp.time.compare(Date()) != .orderedAscending {
+                        FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetUpUid) { placeUid in
+                            FirebaseManager.shared.cancelMeetUp(userUid: self.viewModel.user?.userUid ?? "", meetUpUid: meetUpUid, placeUid: placeUid) {
+                            }
+                        }
                     }
+                    
                 }
             }
+            
+            
         }))
         present(alert, animated: true)
     }

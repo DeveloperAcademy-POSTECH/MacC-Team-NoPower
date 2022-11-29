@@ -86,7 +86,7 @@ class ReviewDetailViewController: UIViewController {
         return button
     }()
     
-    private var addPhotoCell: UIButton = {
+    private lazy var addPhotoCell: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 15)
         button.setImage(UIImage(systemName: "plus", withConfiguration: config), for: .normal)
@@ -109,7 +109,7 @@ class ReviewDetailViewController: UIViewController {
         return imageView
     }()
     
-    private var removeButton: UIButton = {
+    private lazy var removeButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 14)
         button.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)

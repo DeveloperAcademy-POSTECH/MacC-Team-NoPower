@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         _ = RCValue.shared
-        
+        Database.database().isPersistenceEnabled = true
+
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
@@ -32,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         
                         FirebaseManager.shared.fetchCheckInHistory(userUid: uid) { checkInHistory in
                             self.viewModel.user?.checkInHistory = checkInHistory
-                            print("checkIn 유무", self.viewModel.user?.isChecked)
+                            print("checkIn 유무", self.viewModel.user?.isChecked as Any)
                             self.window?.rootViewController = UINavigationController(rootViewController: MapViewController())
                             self.window?.makeKeyAndVisible()
                         }

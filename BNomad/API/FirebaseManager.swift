@@ -17,7 +17,12 @@ class FirebaseManager {
 
     // 실사용시 withPath: "Dummy" 제거 필요.
     let ref = Database.database().reference(withPath: "Dummy")
-
+    let refMeetUpPlace = Database.database().reference(withPath: "Dummy/meetUpPlace")
+    
+    private init() {
+        refMeetUpPlace.keepSynced(true)
+    }
+    
     // MARK: place
     // firebase
     //    places
@@ -47,9 +52,10 @@ class FirebaseManager {
                 let placeUid = snapshot.key
                 let contact = dictionary["contact"] as? String
                 let address = dictionary["address"] as? String
+                let time = dictionary["time"] as? String
                 // TODO: - type 속성 추가
                 let place = Place(placeUid: placeUid, name: name, latitude: latitude, longitude: longitude
-                                  ,contact: contact, address: address)
+                                  ,contact: contact, address: address, time: time)
                 
                 completion(place)
             }
@@ -134,7 +140,8 @@ class FirebaseManager {
                 }
                 
                 let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+                let todayGoal = dictionary["todayGoal"]
+                let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
                 
                 checkInHistory.append(checkIn)
             }
@@ -156,7 +163,6 @@ class FirebaseManager {
         guard
             let snapshot = snapshot as? DataSnapshot,
             let dictionary = snapshot.value as? [String: String],
-            let checkInUid = snapshot.key as? String,
             let userUid = dictionary["userUid"],
             let checkInTime = dictionary["checkInTime"]?.toDateTime()
         else {
@@ -164,8 +170,10 @@ class FirebaseManager {
             return nil
         }
         
+        let checkInUid = snapshot.key
         let checkOutTime = dictionary["checkOutTime"]?.toDateTime()
-        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime)
+        let todayGoal = dictionary["todayGoal"]
+        let checkIn = CheckIn(userUid: userUid, placeUid: placeUid, checkInUid: checkInUid, checkInTime: checkInTime, checkOutTime: checkOutTime, todayGoal: todayGoal)
         
         return checkIn
     }
@@ -216,8 +224,8 @@ class FirebaseManager {
 
     /// checkIn할 경우 checkInUser, checkInPlace에 checkIn 데이터 추가
     func setCheckIn(checkIn: CheckIn, completion: @escaping(CheckIn) -> Void) {
-        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
-        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString()]
+        let checkInUser = ["checkInUid": checkIn.checkInUid, "placeUid": checkIn.placeUid, "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
+        let checkInPlace = ["userUid": checkIn.userUid, "checkInTime": checkIn.checkInTime.toDateTimeString(), "checkOutTime": checkIn.checkOutTime?.toDateTimeString(), "todayGoal": checkIn.todayGoal]
         
         ref.updateChildValues(["checkInUser/\(checkIn.userUid)/\(checkIn.checkInTime.toDateTimeString())" : checkInUser,
                                "checkInPlace/\(checkIn.placeUid)/\(checkIn.date)/\(checkIn.checkInUid)" : checkInPlace]) {
@@ -335,7 +343,7 @@ class FirebaseManager {
     /// place의 특정 날짜의 meetUp들 가져오기
     func fetchMeetUpHistory(placeUid: String, date: Date = Date(), completion: @escaping([MeetUp]) -> Void) {
         let date = date.toDateString()        
-        ref.child("meetUpPlace/\(placeUid)/\(date)").observe(.value, with: { snapshots in
+        refMeetUpPlace.child("\(placeUid)/\(date)").observe(.value, with: { snapshots in
             var meetUpHistory: [MeetUp] = []
             for child in snapshots.children {
                 guard let snapshot = child as? DataSnapshot else { return }
@@ -371,7 +379,7 @@ class FirebaseManager {
             if snapshots.exists() {
                 for child in snapshots.children {
                     guard let snapshot = child as? DataSnapshot else { return }
-                    guard let meetUpUid = snapshot.key as? String else { return }
+                    let meetUpUid = snapshot.key
                     completion(meetUpUid)
                 }
             } 
@@ -431,7 +439,7 @@ class FirebaseManager {
         
         ref.updateChildValues(["meetUpUser/\(userUid)/\(meetUpUid)" : nil,
                                "meetUp/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil,
-                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil]) {
+                               "meetUpPlace/\(placeUid)/\(date)/\(meetUpUid)/currentPeopleUids/\(userUid)" : nil] as [String: Any?] as [AnyHashable : Any]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("meetUp cancle could not be completed: \(error).")
@@ -485,8 +493,8 @@ class FirebaseManager {
         let dateTime: String = Date().toDateTimeString()
         ref.child("service/suggestPlace/\(dateTime)").updateChildValues(["placeName" : placeName,
                                                           "placeAddress" : placeAddress,
-                                                          "recommendReason" : recommendReason,
-                                                          "recommenderContactNumber" : recommenderContactNumber]) {
+                                                          "recommendReason" : recommendReason as Any,
+                                                        "recommenderContactNumber" : recommenderContactNumber as Any]) {
             (error: Error?, ref: DatabaseReference) in
             if let error: Error = error {
                 print("DEBUG \(error).")
@@ -575,4 +583,19 @@ class FirebaseManager {
             completion(placeUid)
         })
     }
+    
+    /// 회원탈퇴시, 프로필 사진 Storage에서 삭제하기
+    func deleteUserProfileImage(userUid: String) {
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userUid)")
+        
+        imageRef.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("user profile Image delete clearly")
+            }
+        }
+    }
+    
 }

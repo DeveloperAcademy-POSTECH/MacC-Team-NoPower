@@ -52,7 +52,7 @@ class ReviewInfoCell: UICollectionViewCell {
         return reviewCollectionView
     }()
     
-    let viewAllButton: UIButton = {
+    lazy var viewAllButton: UIButton = {
         let viewAllButton = UIButton()
         viewAllButton.setTitle("모든 리뷰 보기 ", for: .normal)
         viewAllButton.setTitleColor(CustomColor.nomadGray1, for: .normal)
@@ -87,15 +87,14 @@ class ReviewInfoCell: UICollectionViewCell {
         self.addSubview(reviewInfoTitleLabel)
         self.addSubview(reviewCollectionView)
         self.addSubview(horizontalDivider1)
-//        self.addSubview(viewAllButton)
+        self.addSubview(viewAllButton)
         setAttributes()
         
     }
     
     private func setAttributes() {
         reviewInfoTitleLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 19, paddingLeft: 19)
-        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, paddingTop: 8, width: 360, height: 1)
-        horizontalDivider1.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//        horizontalDivider1.anchor(top: reviewInfoTitleLabel.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 8, paddingLeft: 30, paddingRight: 30, height: 1)
         NSLayoutConstraint.activate([
             reviewCollectionView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
             reviewCollectionView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
@@ -106,8 +105,8 @@ class ReviewInfoCell: UICollectionViewCell {
         reviewCollectionView.dataSource = self
         reviewCollectionView.delegate = self
         reviewCollectionView.register(ReviewSubCell.self, forCellWithReuseIdentifier: ReviewSubCell.cellIdentifier)
-//        viewAllButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        viewAllButton.anchor(bottom: self.bottomAnchor, paddingBottom: 30)
+        viewAllButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        viewAllButton.anchor(bottom: self.bottomAnchor, paddingBottom: 30)
     }
 }
 
@@ -142,7 +141,8 @@ extension ReviewInfoCell: UICollectionViewDelegate {
 
 extension ReviewInfoCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 363, height: 60)
+        let width = collectionView.frame.width
+        return CGSize(width: width - 30, height: 60)
         
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

@@ -50,18 +50,10 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         return button
     }()
     
-    private let profileGraphCellHeaderLabel: UILabel = {
-        let label = UILabel()
-        label.text = "주간 통계"
-        label.textColor = .black
-        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        return label
-    }()
-    
     var profileGraphCellWeekLabel: UILabel = {
         let label = UILabel()
         
-        label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
         return label
     }()
     
@@ -87,18 +79,20 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     static func profileGraphCellHeaderMaker(label: UILabel, weekAdded: Int) {
         
         weekAddedMemory += weekAdded
-        print("DBG0:", weekAddedMemory)
         let weekCalculator = weekAddedMemory * 7
         let formatter = DateFormatter()
-        formatter.dateFormat = "M.d"
+        formatter.dateFormat = "M월 d일"
         
         let sundayCalculator = (86400 * (1-Contents.todayOfTheWeek + weekCalculator))
         let saturdayCalculator = (86400 * (1-Contents.todayOfTheWeek+6 + weekCalculator))
         
         let sundayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(sundayCalculator)))
         let saturdayDate = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(saturdayCalculator)))
+        
+        formatter.dateFormat = "y년 "
+        let year = formatter.string(from: Date(timeIntervalSinceNow: TimeInterval(sundayCalculator)))
 
-        label.text = sundayDate+" ~ "+saturdayDate
+        label.text = year+sundayDate+" ~ "+saturdayDate
         label.textColor = .black
         
     }
@@ -107,32 +101,28 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
         minusWeek.removeFromSuperview()
         plusWeek.removeFromSuperview()
         profileGraphCellWeekLabel.removeFromSuperview()
-        profileGraphCellHeaderLabel.removeFromSuperview()
         
         addSubview(visitCardCellHeaderLabel)
-        visitCardCellHeaderLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 20)
+        visitCardCellHeaderLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 10)
         
         addSubview(viewAllButton)
-        viewAllButton.anchor(top:self.topAnchor, right: self.rightAnchor, paddingTop: 28, paddingRight: 20)
+        viewAllButton.anchor(top:self.topAnchor, right: self.rightAnchor, paddingTop: 28, paddingRight: 10)
     }
     
     func setGraphHeader() {
         visitCardCellHeaderLabel.removeFromSuperview()
         viewAllButton.removeFromSuperview()
         
-        addSubview(profileGraphCellHeaderLabel)
-        profileGraphCellHeaderLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 20)
-        
-        
         addSubview(profileGraphCellWeekLabel)
-        profileGraphCellWeekLabel.centerX(inView: self)
-        profileGraphCellWeekLabel.anchor(top: self.topAnchor, paddingTop: 64)
+        profileGraphCellWeekLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 28, paddingLeft: 10)
         
         addSubview(minusWeek)
-        minusWeek.anchor(top: self.topAnchor, right: profileGraphCellWeekLabel.leftAnchor, paddingTop: 64, paddingRight: 20)
+        minusWeek.anchor(right: self.rightAnchor, paddingRight: 60)
+        minusWeek.centerY(inView: profileGraphCellWeekLabel)
         
         addSubview(plusWeek)
-        plusWeek.anchor(top: self.topAnchor, left: profileGraphCellWeekLabel.rightAnchor, paddingTop: 64, paddingLeft: 20)
+        plusWeek.anchor(right: self.rightAnchor, paddingRight: 10)
+        plusWeek.centerY(inView: profileGraphCellWeekLabel)
     }
     
     @objc func plusTapButton() {
@@ -151,6 +141,18 @@ class ProfileHeaderCollectionView: UICollectionReusableView {
     }
 }
 
+//MARK: -hitbox extension
+
+extension UIButton {
+
+  open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    let margin: CGFloat = 10
+    let hitArea = self.bounds.insetBy(dx: -margin, dy: -margin)
+    return hitArea.contains(point)
+  }
+}
+
+
 //MARK: -graphHeaderButton Protocol
 
 protocol PlusMinusProtocol {
@@ -158,3 +160,4 @@ protocol PlusMinusProtocol {
     func minusTap()
     func viewAllTap()
 }
+

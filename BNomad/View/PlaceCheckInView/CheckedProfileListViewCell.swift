@@ -23,12 +23,18 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         }
     }
     
+    var todayGoal: String? {
+        didSet {
+            guard let todayGoal = todayGoal else { return }
+            noteLabel.text = todayGoal
+        }
+    }
+    
     var user: User? {
         didSet {
             guard let user = user else { return }
             usernameLabel.text = user.nickname
             occupationLabel.text = user.occupation
-            noteLabel.text = user.introduction
             if let profileImageUrl = user.profileImageUrl {
                 self.userProfileImg.kf.setImage(with: URL(string: profileImageUrl))
             } else {

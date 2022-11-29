@@ -12,6 +12,10 @@ class WithdrawViewController: UIViewController {
 
     // MARK: - Properties
     
+    enum Constant {
+        static let reason: String = "탈퇴사유를 입력하세요."
+    }
+    
     enum Size {
         static let paddingNormal: CGFloat = 20
     }
@@ -30,7 +34,7 @@ class WithdrawViewController: UIViewController {
         textView.delegate = self
         textView.layer.cornerRadius = 12
         textView.backgroundColor = .systemGray6
-        textView.text = "탈퇴사유를 입력하세요."
+        textView.text = Constant.reason
         textView.textColor = .tertiaryLabel
         textView.textContainerInset = UIEdgeInsets(top: 13, left: Size.paddingNormal, bottom: 13, right: Size.paddingNormal)
         textView.font = .preferredFont(forTextStyle: .body, weight: .regular)
@@ -64,9 +68,9 @@ class WithdrawViewController: UIViewController {
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         let withdrawConfirm = UIAlertAction(title: "탈퇴", style: .destructive) { action in
             if Auth.auth().currentUser != nil {
-                Auth.auth().currentUser?.delete()
                 do {
-                    try Auth.auth().signOut()
+                    Auth.auth().currentUser?.delete()
+                    FirebaseManager.shared.deleteUserProfileImage(userUid: Auth.auth().currentUser?.uid ?? "")
                     if self.viewModel.user?.currentCheckIn == nil {
                         self.viewModel.user = nil
                     } else {
@@ -80,13 +84,12 @@ class WithdrawViewController: UIViewController {
                             }
                             self.viewModel.user?.checkInHistory?[index] = checkIn
                             self.viewModel.user = nil
-                            FirebaseManager.shared.uploadUserWithdrawalReason(userUid: userUid ?? "", reason: self.reasonTextView.text) {
-                                FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid ?? "") { uid in
-                                    FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: uid) { placeUid in
-                                        FirebaseManager.shared.cancelMeetUp(userUid: userUid ?? "", meetUpUid: uid, placeUid: placeUid) {
-                                        }
-                                    }
+                            if self.reasonTextView.text == Constant.reason {
+                                FirebaseManager.shared.uploadUserWithdrawalReason(userUid: userUid ?? "", reason: self.reasonTextView.text) {
+                                    self.withdrawCancelMeetUp(user: userUid ?? "")
                                 }
+                            } else {
+                                self.withdrawCancelMeetUp(user: userUid ?? "")
                             }
                         }
                     }
@@ -108,6 +111,15 @@ class WithdrawViewController: UIViewController {
         let cancel = UIAlertAction(title: "확인", style: .default)
         alert.addAction(cancel)
         self.present(alert, animated: true)
+    }
+    
+    func withdrawCancelMeetUp(user userUid: String) {
+        FirebaseManager.shared.fetchMeetUpUidAll(userUid: userUid) { meetupUid in
+            FirebaseManager.shared.getPlaceUidWithMeetUpId(meetUpUid: meetupUid) { placeUid in
+                FirebaseManager.shared.cancelMeetUp(userUid: userUid, meetUpUid: meetupUid, placeUid: placeUid) {
+                }
+            }
+        }
     }
     
     // MARK: - Helpers

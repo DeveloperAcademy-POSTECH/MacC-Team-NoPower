@@ -32,6 +32,12 @@ class QuestCollectionViewCell: UICollectionViewCell {
 
             guard let userUid = viewModel.user?.userUid else { return }
             isParticipated = meetUp.currentPeopleUids?.contains(userUid)
+            
+            if meetUp.time.compare(Date()) == .orderedAscending {
+                self.backgroundColor = CustomColor.nomadGray3
+            } else {
+                self.backgroundColor = .white
+            }
         }
     }
     
@@ -118,7 +124,7 @@ class QuestCollectionViewCell: UICollectionViewCell {
         configureUI()
         configCheckMark()
         configurePeopleUI()
-        self.backgroundColor = CustomColor.nomad2White
+        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

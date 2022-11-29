@@ -33,6 +33,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     
+//    var distanceCheckTimer = Timer()
+    
     let placeInfoCollectionView: UICollectionView = {
         let flowlayout = UICollectionViewFlowLayout()
         let placeInfoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
@@ -49,9 +51,10 @@ class PlaceInfoModalViewController: UIViewController {
     
     var reviewHistory: [Review]? {
         didSet {
-            guard let reviewHistory = reviewHistory else { return }
+            guard reviewHistory != nil else { return }
+            setupSheet()
             placeInfoCollectionView.reloadData()
-//            setupSheet()
+            
         }
     }
     
@@ -68,7 +71,20 @@ class PlaceInfoModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        setupSheet()
+        if let sheet = sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = 12
+            sheet.prefersGrabberVisible = true
+        }
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     
     // MARK: - Helpers
@@ -81,15 +97,36 @@ class PlaceInfoModalViewController: UIViewController {
         }
     }
     
+    
+    // 타이머 방식으로 시도했으나 추후 수정하여 재반영 예정
+//    func startDistanceChecker() {
+//        print("스타트")
+//        distanceCheckTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(distanceCheckerInterval), userInfo: nil, repeats: true)
+//    }
+//
+//    // 600초 -> 10분 간격으로 체크인한 장소와의 거리를 측정해서 500m 이상 멀어지면 자동 체크아웃
+//    @objc func distanceCheckerInterval() {
+//        print("인터벌")
+//        guard let userLocation = currentLocation?.coordinate else { return }
+//        print("user")
+//        guard let checkedPlace = viewModel.checkInPlace else { return }
+//        print("place")
+//
+//        let distance = CustomCollectionViewCell.calculateDistance(latitude1: userLocation.latitude, latitude2: checkedPlace.latitude, longitude1: userLocation.longitude, longitude2: checkedPlace.longitude)
+//        print("checkInDistance: ", distance)
+//    }
+    
     func checkIn() {
         print("CHECK IN")
+        locationCheck()
         if !viewModel.isLogIn {
             loginCheck()
         } else {
             if distanceChecker() {
                 guard let selectedPlace = selectedPlace else { return }
 
-                let checkInAlert = checkInAlert
+                let alert = UIAlertController(title: "체크인 하시겠습니까?", message: "", preferredStyle: .alert)
+                checkInAlert = alert
                 checkInAlert.message = "\(selectedPlace.name)에 체크인합니다."
                 
                 checkInAlert.addTextField() { textField in
@@ -104,8 +141,7 @@ class PlaceInfoModalViewController: UIViewController {
                     self.checkInFirebase()
                     self.delegateForFloating?.checkInFloating()
                     self.presentPlaceCheckInView()
-                    
-                    print(checkInAlert.textFields?[0].text)
+
                 }))
                 
                 checkInAlert.actions[1].isEnabled = false
@@ -136,7 +172,7 @@ class PlaceInfoModalViewController: UIViewController {
         guard let selectedPlace = selectedPlace else { return }
         guard let userUid = self.viewModel.user?.userUid else { return }
 
-        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date())
+        let checkIn = CheckIn(userUid: userUid , placeUid: selectedPlace.placeUid, checkInUid: UUID().uuidString, checkInTime: Date(), todayGoal: checkInAlert.textFields?[0].text)
         FirebaseManager.shared.setCheckIn(checkIn: checkIn) { checkIn in
             if self.viewModel.user?.checkInHistory == nil {
                 self.viewModel.user?.checkInHistory = [checkIn]
@@ -145,6 +181,7 @@ class PlaceInfoModalViewController: UIViewController {
             }
             self.delegateForFloating?.checkInFloating()
         }
+//        startDistanceChecker()
     }
     
     func checkOut() {
@@ -188,8 +225,8 @@ class PlaceInfoModalViewController: UIViewController {
     
     private func setupSheet() {
         if let sheet = sheetPresentationController {
-//            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
-            sheet.detents = [.medium()]
+            sheet.detents = reviewHistory?.count == 0 ? [.medium()] : [.medium(), .large()]
+//            sheet.detents = [.medium()]
             sheet.selectedDetentIdentifier = .medium
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
@@ -212,12 +249,33 @@ class PlaceInfoModalViewController: UIViewController {
     }
     
     func distanceChecker() -> Bool {
-        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 1000, identifier: "반경 500m")
+        let boundary = CLCircularRegion(center: currentLocation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), radius: 500, identifier: "반경 500m")
         guard let selectedPlace = selectedPlace else { return false }
         if boundary.contains(CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)) {
             return true
         } else {
             return false
+        }
+    }
+    
+    func locationCheck(){
+
+        let status = CLLocationManager().authorizationStatus
+        
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치 접근 허용 설정이 제한되어 있습니다.", message: "해당 장소의 장소보기 및 체크인 기능을 사용하려면 위치 접근을 허용해주셔야 합니다. 앱 설정 화면으로 가시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "설정", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive)
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
         }
     }
     
@@ -262,6 +320,7 @@ extension PlaceInfoModalViewController: UICollectionViewDataSource {
             guard let checkIn = checkInHistory else { return UICollectionViewCell() }
             let userUids = checkIn.compactMap {$0.userUid}
             cell.userUid = userUids[indexPath.row]
+            cell.todayGoal = checkIn[indexPath.row].todayGoal
             
             return cell
         }
@@ -292,6 +351,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         
         
         let viewWidth = view.bounds.width
+        let width = collectionView.frame.width
         if indexPath.section == 0 {
             return CGSize(width: viewWidth, height: 350)
         } else if indexPath.section == 1 {
@@ -306,7 +366,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: viewWidth, height: 40)
         } else if indexPath.section == 3 {
             flow.sectionInset.top = 13
-            return CGSize(width: 349, height: 68)
+            return CGSize(width: width - 30, height: 68)
         } else {
             return CGSize(width: viewWidth, height: 100)
         }
@@ -316,7 +376,7 @@ extension PlaceInfoModalViewController: UICollectionViewDelegateFlowLayout {
         if indexPath.section == 1 {
             let controller = PlaceInfoModalViewController()
             controller.reviewHistoryUid = reviewHistory?[indexPath.row].userUid
-            navigationController?.pushViewController(controller, animated: true)
+//            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -376,6 +436,9 @@ extension PlaceInfoModalViewController: LogInToSignUp {
 extension PlaceInfoModalViewController: ShowReviewListView {
     func didTapShowReviewListView() {
         let ReviewListView = ReviewListViewController()
-        self.present(ReviewListView, animated: true, completion: nil)
+        guard reviewHistory != nil else { return }
+        ReviewListView.placeUid = selectedPlace?.placeUid
+        ReviewListView.placeName.text = selectedPlace?.name
+        navigationController?.pushViewController(ReviewListView, animated: true)
     }
 }

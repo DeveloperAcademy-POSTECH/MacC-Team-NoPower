@@ -28,16 +28,20 @@ class PlaceInfoCell: UICollectionViewCell {
     var place: Place? {
         didSet {
             guard let place = place else { return }
-            guard let latitude = position?.coordinate.latitude else { return }
-            guard let longitude = position?.coordinate.longitude else { return }
+            let latitude = position?.coordinate.latitude ?? 0
+            let longitude = position?.coordinate.longitude ?? 0
             let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
-            self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
+            if latitude == 0 && longitude == 0 {
+                self.distanceLabel.text = ""
+            } else {
+                self.distanceLabel.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
+            }
             mappingPlaceData(place)
             FirebaseManager.shared.fetchCheckInHistory(placeUid: place.placeUid) { checkInHistory in
                 self.todayCheckInHistory = checkInHistory
             }
-            FirebaseManager.shared.fetchReviewHistory(placeUid: place.placeUid) { reviewHistory in
-                self.reviewHistory = reviewHistory
+            FirebaseManager.shared.fetchMeetUpHistory(placeUid: place.placeUid) { meetUpList in
+                self.todayMeetUpList = meetUpList
             }
             
             self.userCheck()
@@ -61,16 +65,12 @@ class PlaceInfoCell: UICollectionViewCell {
         }
     }
     
-    var reviewHistory: [Review]? {
+    
+    var todayMeetUpList: [MeetUp]? {
         didSet {
-            guard let reviewHistory = reviewHistory else { return }
-            
-            self.meetUplabel.text = "\(reviewHistory.count)개의 밋업"
-            let fullText = meetUplabel.text ?? ""
-            let attribtuedString = NSMutableAttributedString(string: fullText)
-            let range = (fullText as NSString).range(of: "\(reviewHistory.count)개")
-            attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-            meetUplabel.attributedText = attribtuedString
+            guard let todayMeetUpList = todayMeetUpList else { return }
+            self.numberOfMeetUp.text = "\(todayMeetUpList.count)개의 밋업"
+            self.numberOfMeetUp.asColor(targetString: "\(todayMeetUpList.count)개", color: CustomColor.nomadBlue ?? .label)
         }
     }
         
@@ -82,7 +82,7 @@ class PlaceInfoCell: UICollectionViewCell {
         placeDistanceStack.spacing = 10
         placeDistanceStack.distribution = .fillProportionally
        
-        let nomadMeetUpStack = UIStackView(arrangedSubviews: [checkedinViewLabel, dotDivider, meetUplabel])
+        let nomadMeetUpStack = UIStackView(arrangedSubviews: [checkedinViewLabel, dotDivider, numberOfMeetUp])
         nomadMeetUpStack.axis = .horizontal
         nomadMeetUpStack.alignment = .center
         nomadMeetUpStack.spacing = 8
@@ -128,17 +128,17 @@ class PlaceInfoCell: UICollectionViewCell {
         return dotDivider
     }()
     
-    lazy var meetUplabel: UILabel = {
-        let meetUplabel = UILabel()
-        meetUplabel.textColor = CustomColor.nomadBlack
-        meetUplabel.font = .preferredFont(forTextStyle: .body, weight: .regular)
-        let fullText = meetUplabel.text ?? ""
+    lazy var numberOfMeetUp: UILabel = {
+        let numberOfMeetUp = UILabel()
+        numberOfMeetUp.textColor = CustomColor.nomadBlack
+        numberOfMeetUp.font = .preferredFont(forTextStyle: .body, weight: .regular)
+        let fullText = numberOfMeetUp.text ?? ""
         let attribtuedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "5개")
         attribtuedString.addAttribute(.foregroundColor, value: CustomColor.nomadBlue as Any, range: range)
-        meetUplabel.attributedText = attribtuedString
+        numberOfMeetUp.attributedText = attribtuedString
         
-        return meetUplabel
+        return numberOfMeetUp
     }()
     
     lazy var checkInButton: UIButton = {
@@ -200,11 +200,11 @@ class PlaceInfoCell: UICollectionViewCell {
         clockStack.spacing = 13
         clockStack.distribution = .equalSpacing
         
-        let bodyStack = UIStackView(arrangedSubviews: [callStack, mapStack, clockStack])
+        let bodyStack = UIStackView(arrangedSubviews: [callStack, horizontalDivider, mapStack, horizontalDivider1, clockStack])
         bodyStack.axis = .vertical
         bodyStack.alignment = .leading
-        bodyStack.spacing = 15
-        bodyStack.distribution = .fillProportionally
+        bodyStack.spacing = 8
+        bodyStack.distribution = .fill
         
         return bodyStack
         
@@ -241,6 +241,8 @@ class PlaceInfoCell: UICollectionViewCell {
         let addressLable = UILabel()
         addressLable.font = UIFont.preferredFont(forTextStyle: .subheadline, weight: .regular)
         addressLable.textColor = CustomColor.nomadBlack
+        addressLable.numberOfLines = 0
+        addressLable.lineBreakMode = .byWordWrapping
         return addressLable
     }()
     
@@ -333,8 +335,8 @@ class PlaceInfoCell: UICollectionViewCell {
         self.addSubview(checkInButton)
         self.addSubview(afterCheckInButton)
         self.addSubview(bodyStack)
-        self.addSubview(horizontalDivider)
-        self.addSubview(horizontalDivider1)
+        horizontalDivider.anchor(left: bodyStack.leftAnchor, right: bodyStack.rightAnchor, height: 1)
+        horizontalDivider1.anchor(left: bodyStack.leftAnchor, right: bodyStack.rightAnchor, height: 1)
         self.addSubview(alreadyCheckIn)
         setAttributes()
         guard let place = place else { return }
@@ -343,9 +345,7 @@ class PlaceInfoCell: UICollectionViewCell {
     
     private func setAttributes() {
         headerStack.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 40, paddingLeft: 20)
-        bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, paddingTop: 23, paddingLeft: 27)
-        horizontalDivider.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 50, paddingLeft: 20, paddingRight: 20, height: 1)
-        horizontalDivider1.anchor(top: horizontalDivider.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 34, paddingLeft: 20, paddingRight: 20, height: 1)
+        bodyStack.anchor(top: checkInButton.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 23, paddingLeft: 27, paddingRight: 27)
         checkInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
         afterCheckInButton.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
         alreadyCheckIn.anchor(top: headerStack.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingTop: 10, paddingLeft: 20, paddingRight: 20, height: 48)
@@ -355,6 +355,7 @@ class PlaceInfoCell: UICollectionViewCell {
         placeNameLabel.text = place.name
         addressLabel.text = place.address
         phoneNumberLabel.text = place.contact
+        operatingTimeLabel.text = place.time
     }
 }
 

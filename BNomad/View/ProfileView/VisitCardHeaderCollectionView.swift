@@ -24,7 +24,6 @@ class VisitCardHeaderCollectionView: UICollectionReusableView {
         label.text = day
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         label.textColor = CustomColor.nomadBlue
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -40,7 +39,7 @@ class VisitCardHeaderCollectionView: UICollectionReusableView {
     
     private func setUI() {
         addSubview(VisitInfoHeader)
-        VisitInfoHeader.anchor(left: self.leftAnchor, paddingLeft: 20)
+        VisitInfoHeader.anchor(left: self.leftAnchor, paddingLeft: 10)
         VisitInfoHeader.centerY(inView: self)
     }
     

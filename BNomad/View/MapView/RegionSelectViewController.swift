@@ -45,7 +45,7 @@ class RegionSelectViewController: UIViewController {
         return view
     }()
     
-    private let confirmBtn: UIButton = {
+    private lazy var confirmBtn: UIButton = {
         let btn = UIButton()
         btn.setTitle("확인", for: .normal)
         btn.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
@@ -106,7 +106,7 @@ extension RegionSelectViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RegionCollectionViewCell.identifier, for: indexPath) as? RegionCollectionViewCell else { return UICollectionViewCell() }
-        guard var regions = regions else { return UICollectionViewCell() }
+        guard let regions = regions else { return UICollectionViewCell() }
         cell.regionBtn.text = regions[indexPath.item].name
         return cell
     }

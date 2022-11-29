@@ -25,12 +25,11 @@ class ProfileGraphCell: UICollectionViewCell {
     private let timeLabel: [UILabel] = {
         var label:[UILabel] = []
         
-        for index in 0...3 {
+        for index in 0...4 {
             let time = UILabel()
-            time.text = String(9 + index*3) //FIXME: 그래프 간격 어떻게 할건지? 현재는 데이터 로직 기준
+            time.text = String(0 + index*6) //FIXME: 그래프 간격 어떻게 할건지? 현재는 데이터 로직 기준
             time.textColor = .gray
             time.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
-            time.translatesAutoresizingMaskIntoConstraints = false
             label.append(time)
         }
         return label
@@ -50,7 +49,6 @@ class ProfileGraphCell: UICollectionViewCell {
             }
             
             day.font = .preferredFont(forTextStyle: .caption2, weight: .regular)
-            day.translatesAutoresizingMaskIntoConstraints = false
             label.append(day)
         }
         return label
@@ -88,21 +86,19 @@ class ProfileGraphCell: UICollectionViewCell {
         
         let timeStack = UIStackView(arrangedSubviews: timeLabel)
         timeStack.axis = .vertical
-        timeStack.spacing = 35
+        timeStack.spacing = 30
         timeStack.distribution = .fillEqually
-        timeStack.translatesAutoresizingMaskIntoConstraints = false
         
         let dayStack = UIStackView(arrangedSubviews: ProfileGraphCell.dayLabel)
         dayStack.axis = .horizontal
         dayStack.spacing = (CGFloat(contentView.frame.width)-55-24*7)/6
         dayStack.distribution = .fillEqually
-        dayStack.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(timeStack)
         timeStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 10, paddingLeft: 10)
         
         contentView.addSubview(dayStack)
-        dayStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 166, paddingLeft: 45)
+        dayStack.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 196, paddingLeft: 45)
 
         contentView.addSubview(ProfileGraphCell.profileGraphCollectionView)
         ProfileGraphCell.profileGraphCollectionView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 10, paddingLeft: 42, width: contentView.frame.width, height: 154)

@@ -16,32 +16,16 @@ class VisitCardCell: UICollectionViewCell {
     var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
-    var checkinHistoryForList: CheckIn? {
-        didSet {
-            guard let checkInHistory = checkinHistoryForList else { return }
-            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
-            nameLabel.text = place?.name
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "M월 d일"
-            
-            dateFormatter.dateFormat = "HH:mm"
-            let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            let checkOutTime = dateFormatter.string(from: checkInHistory.checkOutTime ?? Date())
-            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
-
-            let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            self.checkinDateLabel.text = checkinTime
-            
-            let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
-
-        }
-    }
-    
     var checkInHistoryForCalendar: CheckIn? {
         didSet {
-            guard let checkInHistory = checkInHistoryForCalendar else { return }
+            guard let checkInHistory = checkInHistoryForCalendar else {
+                nilHistory()
+                return
+                
+            }
+            
+                rectView.removeFromSuperview()
+                nilLabel.removeFromSuperview()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
             
@@ -67,13 +51,13 @@ class VisitCardCell: UICollectionViewCell {
         didSet {
             viewOption = "profile"
             guard let lastCheckIn = checkInHistoryForProfile?.last else {
-                nameLabel.text = "최근 방문한 장소가 없습니다"
-                nameLabel.textColor = .black
+                nilHistory()
                 return
+                
             }
             
-            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn.placeUid}
-            nameLabel.text = place?.name
+                rectView.removeFromSuperview()
+                nilLabel.removeFromSuperview()
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
@@ -86,16 +70,17 @@ class VisitCardCell: UICollectionViewCell {
             let checkOutTime = dateFormatter.string(from: lastCheckIn.checkOutTime ?? Date())
             self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
             
-            var lastTime = Date()
-            if let lastCheckedOutTime = lastCheckIn.checkOutTime {
-                lastTime = lastCheckedOutTime
-                print("마지막 체크아웃 시간: \(lastCheckIn.checkOutTime)")
-                print("마지막 체크아웃 시간: \(lastTime)")
+            guard let checkOutTime = lastCheckIn.checkOutTime else {
+                let stayedTime = Int((lastCheckIn.checkOutTime ?? Date()).timeIntervalSince(lastCheckIn.checkInTime) / 60)
+                self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분째"
+                
+                self.checkInAndOutLabel.text = checkInTime + " ~"
+                
+                return
             }
             
-            let stayedTime = Int((lastTime.timeIntervalSince(lastCheckIn.checkInTime) ?? 0) / 60)
-            print("이용시간: \(stayedTime)")
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
+            let stayedTime = Int(checkOutTime.timeIntervalSince(lastCheckIn.checkInTime) / 60)
+            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분"
             
             nameLabel.reloadInputViews()
         }
@@ -104,12 +89,12 @@ class VisitCardCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
-//        if viewOption != "calendar" {
-//            let lastCheckIn = self.nomad?.checkInHistory?.last
-//            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-//            label.text = place?.name
-//        }
+        
+        if viewOption != "calendar" {
+            let lastCheckIn = self.viewModel.user?.checkInHistory?.last
+            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
+            label.text = place?.name
+        }
         
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         return label
@@ -166,6 +151,22 @@ class VisitCardCell: UICollectionViewCell {
         return view
     }()
     
+    private let rectView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let nilLabel: UILabel = {
+        let label = UILabel()
+        label.text = "방문기록이 없습니다."
+        label.textColor = .gray
+        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
+        
+        return label
+    }()
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
@@ -193,7 +194,6 @@ class VisitCardCell: UICollectionViewCell {
             $0.spacing = 1
             $0.distribution = .fillEqually
             $0.alignment = .center
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         contentView.addSubview(stack[0])
@@ -208,4 +208,17 @@ class VisitCardCell: UICollectionViewCell {
         
     }
     
+    func nilHistory() {
+        contentView.addSubview(rectView)
+        rectView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor)
+        contentView.addSubview(nilLabel)
+        nilLabel.centerX(inView: contentView)
+        nilLabel.centerY(inView: contentView)
+    }
+    
+    func eraseNilHistory() {
+            rectView.removeFromSuperview()
+            nilLabel.removeFromSuperview()
+    }
+
 }

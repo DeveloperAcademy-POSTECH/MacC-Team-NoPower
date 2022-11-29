@@ -106,8 +106,11 @@ extension CustomModalViewController: UICollectionViewDataSource {
         if places[indexPath.item].placeUid == viewModel.user?.currentPlaceUid {
             cell.cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
             cell.cell.layer.borderWidth = 1
+            cell.cell.layer.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.15).cgColor
+            cell.workingLabel.isHidden = false
         } else {
             cell.cell.layer.borderWidth = 0
+            cell.workingLabel.isHidden = true
         }
         return cell
     }

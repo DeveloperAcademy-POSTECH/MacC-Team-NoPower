@@ -52,8 +52,8 @@ B.nomad로 체크인하면 오늘의 할 일은 물론 얼마나 오랫동안 �
 ## 👥  Authors
 
 |[eunbkang](https://github.com/eunbkang)|[hardworking-nomad](https://github.com/hardworking-nomad)|[heokyeol](https://github.com/heokyeol)|[jinwp](https://github.com/jinwp)|[limhyoseok](https://github.com/limhyoseok)|[sunshiningsoo](https://github.com/sunshiningsoo)|[Willowwryu](https://github.com/Willowwryu)|[YeeunKim-archive](https://github.com/YeeunKim-archive)|
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|<img src="https://github.com/eunbkang.png"/>|<img src="https://github.com/hardworking-nomad.png"/>|<img src="https://github.com/heokyeol.png"/>|<img src="https://github.com/jinwp.png"/>|<img src="https://github.com/limhyoseok.png"/>|<img src="https://github.com/sunshiningsoo.png"/>|<img src="https://github.com/Willowwryu.png"/>|<img src="https://github.com/YeeunKim-archive.png"/>|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|<img src="https://github.com/eunbkang.png"/>|<img src="https://github.com/hardworking-nomad.png"/>|<img src="https://github.com/heokyeol.png"/>|<img src="https://github.com/jinwp.png"/>|<img src="https://github.com/limhyoseok.png"/>|<img src="https://github.com/sunshiningsoo.png"/>|<img src="https://github.com/Willowwryu.png"/>|<img src="https://github.com/YeeunKim-archive.png"/>
 
 [Team NoPower]
 

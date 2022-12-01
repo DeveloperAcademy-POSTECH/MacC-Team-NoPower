@@ -30,9 +30,7 @@ class MapViewController: UIViewController {
     }
 
     let customStartLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 33.37, longitude: 126.53) // 디바이스 현재 위치 못 받을 경우 커스텀 시작 위치 정해야 함 (c5로? 제주로? 서울로? 전국 지도?)
-    
-    private var currentAnnotation: MKAnnotation?
-    
+      
     lazy var viewModel: CombineViewModel = CombineViewModel.shared
     var store = Set<AnyCancellable>()
     
@@ -72,6 +70,7 @@ class MapViewController: UIViewController {
         btn.setImage(UIImage(systemName: "person.fill"), for: .normal)
         btn.anchor(width: 22, height: 22)
         btn.addTarget(self, action: #selector(moveToProfile), for: .touchUpInside)
+        btn.tintAdjustmentMode = .normal
         return btn
     }()
     
@@ -95,6 +94,7 @@ class MapViewController: UIViewController {
         divider.setImage(UIImage(systemName: "squareshape.fill"), for: .normal)
         divider.isUserInteractionEnabled = false
         divider.anchor(width: 1.5, height: 24)
+        divider.tintAdjustmentMode = .normal
         return divider
     }()
     
@@ -103,6 +103,7 @@ class MapViewController: UIViewController {
         btn.setImage(UIImage(systemName: "gearshape.fill")?.withRenderingMode(.automatic), for: .normal)
         btn.anchor(width: 22, height: 22)
         btn.addTarget(self, action: #selector(goToSetting), for: .touchUpInside)
+        btn.tintAdjustmentMode = .normal
         return btn
     }()
     
@@ -163,6 +164,7 @@ class MapViewController: UIViewController {
         button.layer.borderColor = CustomColor.nomadBlue?.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(presentPlaceListModal), for: .touchUpInside)
+        button.tintAdjustmentMode = .normal
         return button
     }()
     
@@ -177,6 +179,7 @@ class MapViewController: UIViewController {
         button.layer.shadowRadius = 5
         button.setTitleColor(CustomColor.nomadBlue, for: .normal)
         button.tintColor = CustomColor.nomadBlue
+        button.tintAdjustmentMode = .normal
         button.addTarget(self, action: #selector(goBackToCheckInView), for: .touchUpInside)
         button.isHidden = true
         return button
@@ -217,6 +220,7 @@ class MapViewController: UIViewController {
         btn.layer.cornerRadius = 4
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
         btn.layer.borderWidth = 1
+        btn.tintAdjustmentMode = .normal
         return btn
     }()
     
@@ -230,6 +234,7 @@ class MapViewController: UIViewController {
         btn.layer.borderWidth = 1
         btn.anchor(width: 40, height: 40)
         btn.addTarget(self, action: #selector(presentRegionSelector), for: .touchUpInside)
+        btn.tintAdjustmentMode = .normal
         return btn
     }()
     
@@ -241,6 +246,7 @@ class MapViewController: UIViewController {
         btn.layer.borderColor = CustomColor.nomadBlue?.cgColor
         btn.layer.borderWidth = 1
         btn.anchor(width: 40, height: 40)
+        btn.tintAdjustmentMode = .normal
         return btn
     }()
     
@@ -581,17 +587,23 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        self.dismiss(animated: true)
+
         if let view = view as? PlaceAnnotationView  {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude - (0.002 / 0.01) * map.region.span.latitudeDelta, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta, longitudeDelta: map.region.span.longitudeDelta)), animated: true)
-            let controller = PlaceInfoModalViewController()
             let tempAnnotation = annotation as? MKAnnotationFromPlace
             let tempPlace = self.viewModel.places.first { place in
                 tempAnnotation?.placeUid == place.placeUid
             }
+            
+
+            let controller = PlaceInfoModalViewController()
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
             present(UINavigationController(rootViewController: controller), animated: true)
+            
+//            map.deselectAnnotation(annotation, animated: false)
         } else {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 5, longitudeDelta: map.region.span.longitudeDelta / 5)), animated: true)
@@ -600,8 +612,10 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        self.currentAnnotation = nil
-        self.dismiss(animated: true)
+        self.dismiss(animated: false)
+        
+        map.becomeFirstResponder()
+
     }
     
 }
@@ -623,8 +637,8 @@ extension MapViewController: UISheetPresentationControllerDelegate {
     
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         print("will dismiss")
-        print("current map: \(self.map)")
-        self.map.deselectAnnotation(self.currentAnnotation, animated: true)
+        
+        self.dismiss(animated: false)
     }
 }
 

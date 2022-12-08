@@ -14,7 +14,6 @@ class VisitCardCell: UICollectionViewCell {
     // MARK: - Properties
     
     var thisCellsDate: String?
-    var cardDataList: [CheckIn] = []
     lazy var viewModel = CombineViewModel.shared
     
     var checkInHistory: CheckIn? {
@@ -43,39 +42,23 @@ class VisitCardCell: UICollectionViewCell {
             dateFormatter.dateFormat = "HH:mm"
             let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
             guard let checkOutTime = checkInHistory.checkOutTime else {
-//                self.layer.borderWidth = 2
-//                self.layer.borderColor = CustomColor.nomadBlue?.cgColor
+                //                self.layer.borderWidth = 2
+                //                self.layer.borderColor = CustomColor.nomadBlue?.cgColor
                 self.checkInAndOutLabel.text = checkInTime + " ~"
                 return
             }
-//            self.layer.borderWidth = 0
+            //            self.layer.borderWidth = 0
             self.checkInAndOutLabel.text = checkInTime + " - " + dateFormatter.string(from: checkOutTime)
-
+            
         }
     }
-
+    
     
     private var nameLabel: UILabel = {
         let label = UILabel()
         
         label.text = ""
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
-        return label
-    }()
-    
-    private let checkinDateHeadLabel: UILabel = {
-        let label = UILabel()
-        label.text = "날짜"
-        label.textColor = .gray
-        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
-        return label
-    }()
-    
-    private let stayedTimeHeadLabel: UILabel = {
-        let label = UILabel()
-        label.text = "이용시간"
-        label.textColor = .gray
-        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return label
     }()
     
@@ -104,14 +87,6 @@ class VisitCardCell: UICollectionViewCell {
         label.textColor = CustomColor.nomadBlack
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return label
-    }()
-    
-    private let dividerLine: UIView = {
-        let view = UIView()
-        view.backgroundColor = CustomColor.nomadGray1
-        view.layer.masksToBounds = false
-
-        return view
     }()
     
     private let rectView: UIView = {
@@ -165,8 +140,8 @@ class VisitCardCell: UICollectionViewCell {
     }
     
     func eraseNilHistory() {
-            rectView.removeFromSuperview()
-            nilLabel.removeFromSuperview()
+        rectView.removeFromSuperview()
+        nilLabel.removeFromSuperview()
     }
-
+    
 }

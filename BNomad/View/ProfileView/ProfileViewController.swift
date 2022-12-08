@@ -53,11 +53,11 @@ class ProfileViewController: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-//        if viewModel.user?.profileImage == nil {
-//            if let profileImageUrl = viewModel.user?.profileImageUrl {
-//                iv.kf.setImage(with: URL(string: profileImageUrl))
-//            }
-//        }
+        //        if viewModel.user?.profileImage == nil {
+        //            if let profileImageUrl = viewModel.user?.profileImageUrl {
+        //                iv.kf.setImage(with: URL(string: profileImageUrl))
+        //            }
+        //        }
         iv.frame = CGRect(origin: .zero, size: CGSize(width: 120,height: 120))
         iv.clipsToBounds = true
         iv.isUserInteractionEnabled = true
@@ -88,7 +88,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.backButtonTitle = ""
         
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
+        //        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: self, action: #selector(moveToCalendar))
         
         ProfileGraphCell.addedWeek = 0
         ProfileGraphCell.editWeek(edit: 0)
@@ -112,7 +112,7 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.tintColor = CustomColor.nomadBlue
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.isHidden = false
-
+        
         profileImageView.image = nomad?.profileImage ?? UIImage(named: "othersProfile")
     }
     
@@ -153,7 +153,7 @@ class ProfileViewController: UIViewController {
         
         scrollView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         contentView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor)
-
+        
         let contentViewHeight = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
         contentViewHeight.priority = .defaultLow
         contentViewHeight.isActive = true
@@ -166,8 +166,8 @@ class ProfileViewController: UIViewController {
         profileImageView.centerX(inView: view)
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,
-                                             paddingTop: 100, paddingLeft: 16, paddingRight: 16,
-                                             height: 700)
+                                     paddingTop: 100, paddingLeft: 16, paddingRight: 16,
+                                     height: 700)
         
         editingButton.anchor(top: profileCollectionView.topAnchor, right: profileCollectionView.rightAnchor, paddingTop: 12, paddingRight: 12, width: 55, height: 13)
     }
@@ -240,7 +240,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         }
         
         header.delegate = self
-
+        
         switch indexPath.section {
         case 1:
             header.setVisitCardHeader()

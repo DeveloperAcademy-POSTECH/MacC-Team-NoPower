@@ -206,9 +206,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
-//            cell.layer.borderWidth = 2
-//            cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
-            cell.checkInHistoryForProfile = nomad?.checkInHistory
+            cell.checkInHistory = nomad?.checkInHistory?.last
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             return cell

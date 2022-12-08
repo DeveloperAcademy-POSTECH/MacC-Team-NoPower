@@ -232,7 +232,7 @@ class CalendarViewController: UIViewController {
         
         scrollView.addSubview(visitCardView)
         visitCardView.anchor(top: calendarCollectionView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                paddingTop: 24, paddingLeft: 14, paddingRight: 14, height: 1000)
+                                paddingTop: 24, paddingLeft: 14, paddingRight: 14, height: 2000)
         
     }
     
@@ -329,9 +329,9 @@ extension CalendarViewController: UICollectionViewDelegate {
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
             if cardDataList.count != 0 {
-                cell.checkInHistoryForCalendar = cardDataList[indexPath.item]
+                cell.checkInHistory = cardDataList[indexPath.item]
             } else {
-                cell.checkInHistoryForCalendar = nil
+                cell.checkInHistory = nil
             }
             return cell
             
@@ -344,7 +344,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = CalendarViewController.checkInHistory?.count
-            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
+            cell.checkInHistory = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
             
             return cell
             

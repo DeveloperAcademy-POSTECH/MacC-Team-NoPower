@@ -9,16 +9,17 @@ import UIKit
 
 class VisitCardCell: UICollectionViewCell {
     
+    static let identifier = "VisitingInfoCell"
+    
     // MARK: - Properties
     
     var thisCellsDate: String?
     var cardDataList: [CheckIn] = []
-    var viewOption: String = ""
     lazy var viewModel = CombineViewModel.shared
     
-    var checkInHistoryForCalendar: CheckIn? {
+    var checkInHistory: CheckIn? {
         didSet {
-            guard let checkInHistory = checkInHistoryForCalendar else {
+            guard let checkInHistory = checkInHistory else {
                 nilHistory()
                 return
                 
@@ -26,6 +27,9 @@ class VisitCardCell: UICollectionViewCell {
             
             rectView.removeFromSuperview()
             nilLabel.removeFromSuperview()
+            
+            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
+            nameLabel.text = place?.name
             
             checkinCommentLabel.text = checkInHistory.todayGoal
             
@@ -35,74 +39,26 @@ class VisitCardCell: UICollectionViewCell {
             let checkinTime = dateFormatter.string(from: checkInHistory.checkInTime)
             self.checkinDateLabel.text = checkinTime
             
+            
             dateFormatter.dateFormat = "HH:mm"
             let checkInTime = dateFormatter.string(from: checkInHistory.checkInTime)
-            let checkOutTime = dateFormatter.string(from: checkInHistory.checkOutTime ?? Date())
-            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
-                    
-            let stayedTime = Int((checkInHistory.checkOutTime?.timeIntervalSince(checkInHistory.checkInTime) ?? 0) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간"+String(stayedTime%60)+"분"
-                
-
-            let place = self.viewModel.places.first {$0.placeUid == checkInHistory.placeUid}
-            nameLabel.text = place?.name
-        }
-    }
-
-    
-    var checkInHistoryForProfile: [CheckIn]? {
-        didSet {
-            viewOption = "profile"
-            guard let lastCheckIn = checkInHistoryForProfile?.last else {
-                nilHistory()
-                return
-                
-            }
-            
-            rectView.removeFromSuperview()
-            nilLabel.removeFromSuperview()
-            
-            checkinCommentLabel.text = lastCheckIn.todayGoal
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "M월 d일"
-            
-            let checkinTime = dateFormatter.string(from: lastCheckIn.checkInTime)
-            self.checkinDateLabel.text = checkinTime
-            
-            dateFormatter.dateFormat = "HH:mm"
-            let checkInTime = dateFormatter.string(from: lastCheckIn.checkInTime)
-            let checkOutTime = dateFormatter.string(from: lastCheckIn.checkOutTime ?? Date())
-            self.checkInAndOutLabel.text = checkInTime + " - " + checkOutTime
-            
-            guard let checkOutTime = lastCheckIn.checkOutTime else {
-                let stayedTime = Int((lastCheckIn.checkOutTime ?? Date()).timeIntervalSince(lastCheckIn.checkInTime) / 60)
-                self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분째"
-                
+            guard let checkOutTime = checkInHistory.checkOutTime else {
+//                self.layer.borderWidth = 2
+//                self.layer.borderColor = CustomColor.nomadBlue?.cgColor
                 self.checkInAndOutLabel.text = checkInTime + " ~"
-                
                 return
             }
-            
-            let stayedTime = Int(checkOutTime.timeIntervalSince(lastCheckIn.checkInTime) / 60)
-            self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분"
-            
-            nameLabel.reloadInputViews()
-            
+//            self.layer.borderWidth = 0
+            self.checkInAndOutLabel.text = checkInTime + " - " + dateFormatter.string(from: checkOutTime)
 
         }
     }
-    static let identifier = "VisitingInfoCell"
+
     
-    private lazy var nameLabel: UILabel = {
+    private var nameLabel: UILabel = {
         let label = UILabel()
         
-        if viewOption != "calendar" {
-            let lastCheckIn = self.viewModel.user?.checkInHistory?.last
-            let place = self.viewModel.places.first {$0.placeUid == lastCheckIn?.placeUid}
-            label.text = place?.name
-        }
-        
+        label.text = ""
         label.font = .preferredFont(forTextStyle: .title3, weight: .semibold)
         return label
     }()
@@ -124,15 +80,6 @@ class VisitCardCell: UICollectionViewCell {
     }()
     
     private let checkinDateLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.font = .preferredFont(forTextStyle: .headline, weight: .semibold)
-        return label
-    }()
-    
-    private let stayedTimeLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = .black
@@ -206,24 +153,6 @@ class VisitCardCell: UICollectionViewCell {
         
         contentView.addSubview(checkinCommentLabel)
         checkinCommentLabel.anchor(top: checkInAndOutLabel.bottomAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 2, paddingLeft: 20, paddingRight: 20)
-        
-//        let stack = [UIStackView(arrangedSubviews: [checkinDateHeadLabel, checkinDateLabel]), UIStackView(arrangedSubviews: [stayedTimeHeadLabel, stayedTimeLabel])]
-//        stack.forEach {
-//            $0.axis = .vertical
-//            $0.spacing = 1
-//            $0.distribution = .fillEqually
-//            $0.alignment = .center
-//        }
-//
-//        contentView.addSubview(stack[0])
-//        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 68, paddingLeft: 50)
-//
-//        contentView.addSubview(stack[1])
-//        stack[1].anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 68, paddingRight: 50)
-//
-//        contentView.addSubview(dividerLine)
-//        dividerLine.anchor(top: contentView.topAnchor, paddingTop: 72, width: 1, height: 31)
-//        dividerLine.centerX(inView: contentView)
         
     }
     

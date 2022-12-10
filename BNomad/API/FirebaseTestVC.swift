@@ -60,8 +60,8 @@ class FirebaseTestVC: UIViewController {
         uploadUserProfileImage()
     }
     
-    func fetchPlaceAll() {
-        FirebaseManager.shared.fetchPlaceAll { place in
+    func fetchPlaceAll() async {
+        await FirebaseManager.shared.fetchPlaceAll { place in
             print(place)
         }
     }

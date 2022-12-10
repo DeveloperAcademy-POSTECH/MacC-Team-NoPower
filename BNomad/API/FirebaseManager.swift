@@ -35,7 +35,7 @@ class FirebaseManager {
     //            address
 
     /// 모든 PlaceData를 가져오기
-    func fetchPlaceAll(completion: @escaping(Place) -> Void) {
+    func fetchPlaceAll(completion: @escaping(Place) -> Void) async {
         ref.child("places").observeSingleEvent(of: .value, with: { snapshot in
             for child in snapshot.children {
                 guard

@@ -41,6 +41,7 @@ class MapViewController: UIViewController {
     var newAnnotation: [MKAnnotation] = []
     var checkedPlaceName: String?
     var checkedTime: String?
+    var places: [Place] = []
     
     fileprivate let mapBtnBackgroundColor: UIColor = .white.withAlphaComponent(0.85)
     
@@ -145,7 +146,6 @@ class MapViewController: UIViewController {
         let view = UIView()
         return view
     }()
-
     
     // 유저 위치 중심으로 circle overlay (radius distance 미터 단위)
     // TODO: - 실시간으로 위치 이동 시 Circle도 따라가 계속 그려져야 함
@@ -264,8 +264,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         locationFuncs()
         configueMapUI()
-        checkInLocationBinding()
-        userCombine()
+        bindingPlaceLocationStatus()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -322,8 +321,6 @@ class MapViewController: UIViewController {
             controller.nomad = viewModel.user
             navigationController?.pushViewController(controller, animated: true)
         } else {
-            
-            // TODO: - 회원가입 창 띄우기 전에 모달 띄우기
             loginCheck()
         }
         map.selectedAnnotations = []
@@ -406,6 +403,30 @@ class MapViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     }
     
+    private func bindingPlaceLocationStatus() {
+        Task {
+            places = []
+            await fetchPlaces()
+            await MainActor.run(body: {
+                places.forEach { [weak self] place in
+                    guard let self = self else { return }
+                    self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+                    self.viewModel.places.append(place)
+                    self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
+                }
+                self.checkInLocationBinding()
+                self.checkedPlaceNameBinding()
+                userCombine()
+            })
+        }
+    }
+    
+    private func fetchPlaces() async {
+        await FirebaseManager.shared.fetchPlaceAll { place in
+            self.places.append(place)
+        }
+    }
+    
     func checkInLocationBinding() {
         print("체크인 바인딩 -> 위치 전달")
         if let user = viewModel.user {
@@ -414,15 +435,7 @@ class MapViewController: UIViewController {
                     place.placeUid == viewModel.user?.currentPlaceUid
                 }) {
                     self.setMapRegion(place.latitude, place.longitude, spanDelta: 0.01)
-//                    let annotation = MKAnnotationFromPlace.convertPlaceToAnnotation(place)
-//                    self.map.selectAnnotation(annotation, animated: true)
-//                    let controller = PlaceInfoModalViewController()
-//                    controller.selectedPlace = place
-//                    controller.delegateForFloating = self
-//                    controller.presentationController?.delegate = self
-//                    present(controller, animated: true)
                 }
-                
                 print("체크인 상태로 맵 세팅 끝")
             } else {
                 if let location = currentLocation {
@@ -446,20 +459,6 @@ class MapViewController: UIViewController {
     
     // 맵 UI 그리기
     func configueMapUI() {
-//        if RCValue.shared.bool(forKey: ValueKey.isLoginFirst) && !viewModel.isLogIn {
-//            let controller = SignUpViewController()
-//            controller.modalPresentationStyle = .fullScreen
-//            present(controller, animated: false)
-//        }
-        
-        FirebaseManager.shared.fetchPlaceAll { place in
-            self.map.addAnnotation(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-            self.viewModel.places.append(place)
-            self.checkInLocationBinding()
-            self.checkedPlaceNameBinding()
-            self.allAnnotation.append(MKAnnotationFromPlace.convertPlaceToAnnotation(place))
-        }
-        
         map.delegate = self
         
         view.addSubview(map)
@@ -597,13 +596,10 @@ extension MapViewController: MKMapViewDelegate {
                 tempAnnotation?.placeUid == place.placeUid
             }
             
-
             let controller = PlaceInfoModalViewController()
             controller.selectedPlace = tempPlace
             controller.delegateForFloating = self
             present(UINavigationController(rootViewController: controller), animated: true)
-            
-//            map.deselectAnnotation(annotation, animated: false)
         } else {
             guard let annotation = view.annotation else { return }
             map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude ), span: MKCoordinateSpan(latitudeDelta: map.region.span.latitudeDelta / 5, longitudeDelta: map.region.span.longitudeDelta / 5)), animated: true)

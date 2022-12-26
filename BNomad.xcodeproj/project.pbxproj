@@ -37,6 +37,7 @@
 		8C21CC4528FF89BA009043AF /* MapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C21CC4428FF89BA009043AF /* MapData.swift */; };
 		8CC750912919F330009F9C91 /* RegionSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC750902919F330009F9C91 /* RegionSelectViewController.swift */; };
 		8CC750932919F3BE009F9C91 /* RegionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC750922919F3BE009F9C91 /* RegionCollectionViewCell.swift */; };
+		DF0C2E0229582FD9004B3F09 /* ProfileUIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0C2E0129582FD9004B3F09 /* ProfileUIImageView.swift */; };
 		DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B4E28F7D70F002838A4 /* AppDelegate.swift */; };
 		DF288B5128F7D70F002838A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF288B5028F7D70F002838A4 /* SceneDelegate.swift */; };
 		DF288B5828F7D710002838A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF288B5728F7D710002838A4 /* Assets.xcassets */; };
@@ -116,6 +117,7 @@
 		8C21CC4428FF89BA009043AF /* MapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapData.swift; sourceTree = "<group>"; };
 		8CC750902919F330009F9C91 /* RegionSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionSelectViewController.swift; sourceTree = "<group>"; };
 		8CC750922919F3BE009F9C91 /* RegionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionCollectionViewCell.swift; sourceTree = "<group>"; };
+		DF0C2E0129582FD9004B3F09 /* ProfileUIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUIImageView.swift; sourceTree = "<group>"; };
 		DF288B4B28F7D70F002838A4 /* BNomad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BNomad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF288B4E28F7D70F002838A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF288B5028F7D70F002838A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				DF9618A128FCEF0D00E21D30 /* LoginView */,
 				DF9618A228FCEF1200E21D30 /* SignUpView */,
 				DF9618A028FCEF0500E21D30 /* ProfileView */,
+				DF0C2E0129582FD9004B3F09 /* ProfileUIImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 				DF288B4F28F7D70F002838A4 /* AppDelegate.swift in Sources */,
 				8C21CC4128FF8018009043AF /* PlaceAnnotation.swift in Sources */,
 				F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */,
+				DF0C2E0229582FD9004B3F09 /* ProfileUIImageView.swift in Sources */,
 				041351A328FF7E98005D19CC /* ProfileGraphCell.swift in Sources */,
 				DF561CA52918A0B40099D41D /* MeetUpViewController.swift in Sources */,
 				7EC6F9EE28FE39CB003D8A95 /* UIFont+Extension.swift in Sources */,

@@ -56,14 +56,8 @@ class ReviewCellWithImage: UICollectionViewCell {
         text.textAlignment = .left
         return text
     }()
-
-    private var userImage: UIImageView = {
-        let image = UIImage(named: "AppIcon")
-        let imageView = UIImageView(image: image)
-        imageView.layer.cornerRadius = imageView.bounds.width/2
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    
+    private var userImage = ProfileUIImageView(widthToRadius: 20)
     
     private var userName: UILabel = {
         let text = UILabel()
@@ -137,12 +131,9 @@ class ReviewCellWithoutImage: UICollectionViewCell {
         text.textAlignment = .left
         return text
     }()
-
-    private var userImage: UIImageView = {
-        let image = UIImage(named: "AppIcon")
-        let imageView = UIImageView(image: image)
-        imageView.layer.cornerRadius = imageView.bounds.width/2
-        imageView.clipsToBounds = true
+    
+    private var userImage: ProfileUIImageView = {
+        let imageView = ProfileUIImageView(widthToRadius: 20)
         return imageView
     }()
     

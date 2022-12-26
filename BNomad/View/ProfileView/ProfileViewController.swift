@@ -50,22 +50,7 @@ class ProfileViewController: UIViewController {
         return ui
     }()
     
-    private lazy var profileImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-//        if viewModel.user?.profileImage == nil {
-//            if let profileImageUrl = viewModel.user?.profileImageUrl {
-//                iv.kf.setImage(with: URL(string: profileImageUrl))
-//            }
-//        }
-        iv.frame = CGRect(origin: .zero, size: CGSize(width: 120,height: 120))
-        iv.clipsToBounds = true
-        iv.isUserInteractionEnabled = true
-        iv.layer.masksToBounds = true
-        iv.frame = CGRect(origin: .zero, size: CGSize(width: 120, height: 120))
-        iv.layer.cornerRadius = iv.frame.height/2
-        return iv
-    }()
+    private lazy var profileImageView = ProfileUIImageView(widthToRadius: 120)
     
     private let profileCollectionView:  UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -162,7 +147,7 @@ class ProfileViewController: UIViewController {
         scrollView.addSubview(profileImageView)
         scrollView.addSubview(editingButton)
         
-        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: profileImageView.frame.width, height: profileImageView.frame.height)
+        profileImageView.anchor(top: scrollView.topAnchor, paddingTop: 20, width: 120, height: 120)
         profileImageView.centerX(inView: view)
         
         profileCollectionView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, right: view.rightAnchor,

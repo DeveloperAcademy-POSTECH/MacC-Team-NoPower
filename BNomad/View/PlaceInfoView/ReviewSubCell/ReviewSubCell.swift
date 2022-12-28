@@ -21,8 +21,6 @@ class ReviewSubCell: UICollectionViewCell {
                 self.userNameLabel.text = user.nickname
                 if let profileImageUrl = user.profileImageUrl {
                     self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
-                } else {
-                    self.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
                 }
             }
             if let reviewImageUrl = review.imageUrl {
@@ -50,13 +48,7 @@ class ReviewSubCell: UICollectionViewCell {
         return reviewImageView
     }()
     
-    var profileImageView: UIImageView = {
-        let profileImageView = UIImageView()
-        profileImageView.layer.cornerRadius = 10
-        profileImageView.clipsToBounds = true
-        profileImageView.contentMode = .scaleAspectFill
-        return profileImageView
-    }()
+    var profileImageView = ProfileUIImageView(widthRatio: 20)
     
     lazy var userNameLabel: UILabel = {
         let userNameLabel = UILabel()
@@ -87,9 +79,7 @@ class ReviewSubCell: UICollectionViewCell {
     
     private func setAttributes() {
         reviewTextLabel.anchor(top: self.topAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 7)
-        NSLayoutConstraint.activate([
-            reviewImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-            ])
+        reviewImageView.centerY(inView: self)
         reviewImageView.anchor(right: self.rightAnchor, paddingRight: 7, width: 60, height: 60)
         profileImageView.anchor(top: reviewTextLabel.bottomAnchor, left: self.leftAnchor, paddingTop: 8, paddingLeft: 7, width: 20, height: 20)
         userNameLabel.anchor(top: reviewTextLabel.bottomAnchor, left: profileImageView.rightAnchor, paddingTop: 10, paddingLeft: 8)

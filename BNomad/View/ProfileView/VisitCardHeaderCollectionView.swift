@@ -9,12 +9,6 @@ import UIKit
 
 class VisitCardHeaderCollectionView: UICollectionReusableView {
     static let identifier = "VisitCardHeaderCollectionView"
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
     
     private let VisitInfoHeader: UILabel = {
         let content = Contents.todayDate()

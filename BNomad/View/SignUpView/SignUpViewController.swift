@@ -192,8 +192,9 @@ class SignUpViewController: UIViewController {
     
     private lazy var profileImageButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "person.crop.circle.fill"), for: .normal)
         button.tintColor = CustomColor.nomadGray2
+        button.imageView?.contentMode = .scaleAspectFill
         button.addTarget(self, action: #selector(didTapProfileImageButton), for: .touchUpInside)
         button.layer.masksToBounds = true
         
@@ -228,11 +229,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        Analytics.logEvent("signUpViewLoaded", parameters: [
-//            AnalyticsParameterItemName: "signUpViewLoaded",
-//          ])
-
+        
         configUI()
         
         view.addSubview(dotsStackView)
@@ -580,8 +577,6 @@ class SignUpViewController: UIViewController {
                     viewModel.user = user
                     FirebaseManager.shared.setUser(user: user)
                 }
-                
-//                Analytics.logEvent("signUpCompleted", parameters: nil)
                 
                 let completedAlert = UIAlertController(title: "회원가입 완료", message: "회원가입이 완료되었습니다.", preferredStyle: .alert)
                 completedAlert.addAction(UIAlertAction(title: "확인", style: .default, handler: { action in

@@ -37,19 +37,14 @@ class CheckedProfileListViewCell: UICollectionViewCell {
             occupationLabel.text = user.occupation
             if let profileImageUrl = user.profileImageUrl {
                 self.userProfileImg.kf.setImage(with: URL(string: profileImageUrl))
-            } else {
-                self.userProfileImg.image = UIImage(systemName: "person.circle.fill")
             }
         }
     }
     
-    private let userProfileImg: UIImageView = {
-        let userProfileImg = UIImageView()
-        userProfileImg.tintColor = CustomColor.nomadGray2
-        userProfileImg.translatesAutoresizingMaskIntoConstraints = false
-        userProfileImg.clipsToBounds = true
-        userProfileImg.contentMode = .scaleAspectFill
-        return userProfileImg
+    private let userProfileImg: ProfileUIImageView = {
+        let imageView = ProfileUIImageView(widthRatio: 50)
+        imageView.tintColor = CustomColor.nomadGray2
+        return imageView
     }()
     
     private let usernameLabel: UILabel = {
@@ -92,7 +87,6 @@ class CheckedProfileListViewCell: UICollectionViewCell {
         self.addSubview(userProfileImg)
         userProfileImg.anchor(left: self.leftAnchor, paddingLeft: 14, width: 50, height: 50)
         userProfileImg.centerY(inView: self)
-        userProfileImg.layer.cornerRadius = 50/2
         
         let nameJobStack = UIStackView(arrangedSubviews: [usernameLabel, occupationLabel])
         nameJobStack.axis = .horizontal

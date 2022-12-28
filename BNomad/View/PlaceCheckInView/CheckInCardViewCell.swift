@@ -33,8 +33,6 @@ class CheckInCardViewCell: UICollectionViewCell {
             userStatusMessage.text = user?.currentCheckIn?.todayGoal
             if let profileImageUrl = user?.profileImageUrl {
                 self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
-            } else {
-                self.profileImageView.image = UIImage(systemName: "person.circle.fill")
             }
         }
     }
@@ -84,16 +82,11 @@ class CheckInCardViewCell: UICollectionViewCell {
         return view
     }()
 
-    private let profileImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(systemName: "person.circle.fill")
-        view.tintColor = CustomColor.nomadGray2
-        view.anchor(width: 80, height: 80)
-        view.layer.cornerRadius = 80/2
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        
-        return view
+    private let profileImageView: ProfileUIImageView = {
+        let imageView = ProfileUIImageView(widthRatio: 80)
+        imageView.anchor(width: 80, height: 80)
+        imageView.tintColor = CustomColor.nomadGray2
+        return imageView
     }()
     
     private lazy var userNameLabel: UILabel = {

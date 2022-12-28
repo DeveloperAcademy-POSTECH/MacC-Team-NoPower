@@ -22,11 +22,11 @@ class ProfileEditViewController: UIViewController {
     
     private lazy var profileImageButton: UIButton = {
         let button = UIButton(type: .custom)
-
         button.setImage(self.viewModel.user?.profileImage ?? UIImage(named: "othersProfile"), for: .normal)
         button.addTarget(self, action: #selector(profileImageChange), for: .touchUpInside)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 78 / 2
+        button.imageView?.contentMode = .scaleAspectFill
         return button
     }()
     

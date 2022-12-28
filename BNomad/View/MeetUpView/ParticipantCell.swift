@@ -14,6 +14,10 @@ class ParticipantCell: UICollectionViewCell {
     
     static let identifier = "ParticipantCell"
     
+    enum Size {
+        static let screenAspectProfile = UIScreen.main.bounds.width * 58/390
+    }
+    
     var userUid: String? {
         didSet {
             guard let userUid = userUid else { return }
@@ -21,8 +25,6 @@ class ParticipantCell: UICollectionViewCell {
                 self.nicknameLabel.text = user.nickname
                 if let profileImageUrl = user.profileImageUrl {
                     self.profileImageView.kf.setImage(with: URL(string: profileImageUrl))
-                } else {
-                    self.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
                 }
             }
             
@@ -44,13 +46,10 @@ class ParticipantCell: UICollectionViewCell {
         return image
     }()
     
-    private let profileImageView: UIImageView = {
-        let image = UIImageView()
-        image.tintColor = CustomColor.nomadGray1
-        image.clipsToBounds = true
-        image.contentMode = .scaleAspectFill
-        
-        return image
+    private let profileImageView: ProfileUIImageView = {
+        let imageView = ProfileUIImageView(widthRatio: Size.screenAspectProfile)
+        imageView.tintColor = CustomColor.nomadGray1
+        return imageView
     }()
     
     private let nicknameLabel: UILabel = {
@@ -79,13 +78,9 @@ class ParticipantCell: UICollectionViewCell {
         crownView.anchor(top: self.topAnchor, width: 22, height: 18)
         crownView.centerX(inView: self)
         
-        let screenWidth = UIScreen.main.bounds.width
-        let profileImageSize = screenWidth * 58/390
-        
         self.addSubview(profileImageView)
-        profileImageView.anchor(top: crownView.bottomAnchor, paddingTop: 8, width: profileImageSize, height: profileImageSize)
+        profileImageView.anchor(top: crownView.bottomAnchor, paddingTop: 8, width: Size.screenAspectProfile, height: Size.screenAspectProfile)
         profileImageView.centerX(inView: self)
-        profileImageView.layer.cornerRadius = profileImageSize / 2
         
         self.addSubview(nicknameLabel)
         nicknameLabel.anchor(top: profileImageView.bottomAnchor, paddingTop: 14)

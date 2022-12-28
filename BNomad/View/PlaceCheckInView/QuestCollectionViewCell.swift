@@ -14,6 +14,10 @@ class QuestCollectionViewCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: QuestCollectionViewCell.self)
     
+    enum Size {
+        static let screenAspectProfile = UIScreen.main.bounds.width * 36/390
+    }
+    
     let viewModel = CombineViewModel.shared
     
     var meetUpViewModel: MeetUpViewModel? {
@@ -105,14 +109,10 @@ class QuestCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    var organizerImage: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage(systemName: "person.crop.circle.fill")
-        image.tintColor = CustomColor.nomadGray1
-        image.clipsToBounds = true
-        image.contentMode = .scaleAspectFill
-        
-        return image
+    var organizerImage: ProfileUIImageView = {
+        let imageView = ProfileUIImageView(widthRatio: Size.screenAspectProfile)
+        imageView.tintColor = CustomColor.nomadGray1
+        return imageView
     }()
     
     // MARK: - LifeCycle
@@ -184,12 +184,8 @@ class QuestCollectionViewCell: UICollectionViewCell {
     }
     
     func configurePeopleUI() {
-        let screenWidth = UIScreen.main.bounds.width
-        let organizerImageSize = screenWidth * 36/390
-        
         self.addSubview(organizerImage)
-        organizerImage.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14, width: organizerImageSize, height: organizerImageSize)
-        organizerImage.layer.cornerRadius = organizerImageSize / 2
+        organizerImage.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 13, paddingRight: 14, width: Size.screenAspectProfile, height: Size.screenAspectProfile)
         
         self.addSubview(checkedPeople)
         checkedPeople.anchor(bottom: self.bottomAnchor, right: organizerImage.leftAnchor, paddingBottom: 15, paddingRight: 11)

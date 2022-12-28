@@ -42,7 +42,7 @@ class CheckedProfileListViewCell: UICollectionViewCell {
     }
     
     private let userProfileImg: ProfileUIImageView = {
-        let imageView = ProfileUIImageView(widthToRadius: 50)
+        let imageView = ProfileUIImageView(widthRatio: 50)
         imageView.tintColor = CustomColor.nomadGray2
         return imageView
     }()

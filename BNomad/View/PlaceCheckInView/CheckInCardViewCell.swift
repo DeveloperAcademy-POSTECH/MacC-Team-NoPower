@@ -83,7 +83,7 @@ class CheckInCardViewCell: UICollectionViewCell {
     }()
 
     private let profileImageView: ProfileUIImageView = {
-        let imageView = ProfileUIImageView(widthToRadius: 80)
+        let imageView = ProfileUIImageView(widthRatio: 80)
         imageView.anchor(width: 80, height: 80)
         imageView.tintColor = CustomColor.nomadGray2
         return imageView

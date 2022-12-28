@@ -57,7 +57,7 @@ class ReviewCellWithImage: UICollectionViewCell {
         return text
     }()
     
-    private var userImage = ProfileUIImageView(widthToRadius: 20)
+    private var userImage = ProfileUIImageView(widthRatio: 20)
     
     private var userName: UILabel = {
         let text = UILabel()
@@ -133,7 +133,7 @@ class ReviewCellWithoutImage: UICollectionViewCell {
     }()
     
     private var userImage: ProfileUIImageView = {
-        let imageView = ProfileUIImageView(widthToRadius: 20)
+        let imageView = ProfileUIImageView(widthRatio: 20)
         return imageView
     }()
     

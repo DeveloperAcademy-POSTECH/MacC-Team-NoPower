@@ -48,7 +48,7 @@ class ReviewSubCell: UICollectionViewCell {
         return reviewImageView
     }()
     
-    var profileImageView = ProfileUIImageView(widthToRadius: 20)
+    var profileImageView = ProfileUIImageView(widthRatio: 20)
     
     lazy var userNameLabel: UILabel = {
         let userNameLabel = UILabel()

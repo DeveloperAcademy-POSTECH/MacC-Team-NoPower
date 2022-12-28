@@ -50,7 +50,7 @@ class ProfileViewController: UIViewController {
         return ui
     }()
     
-    private lazy var profileImageView = ProfileUIImageView(widthToRadius: 120)
+    private lazy var profileImageView = ProfileUIImageView(widthRatio: 120)
     
     private let profileCollectionView:  UICollectionView = {
         let layout = UICollectionViewFlowLayout()

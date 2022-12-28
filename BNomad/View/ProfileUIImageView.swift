@@ -9,13 +9,13 @@ import UIKit
 
 final class ProfileUIImageView: UIImageView {
     
-    init(widthToRadius: CGFloat) {
+    init(widthRatio: CGFloat) {
         super.init(frame: .zero)
         
         self.image = UIImage(systemName: "person.crop.circle.fill")
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true
-        self.layer.cornerRadius = widthToRadius / 2
+        self.layer.cornerRadius = widthRatio / 2
     }
     
     required init?(coder: NSCoder) {

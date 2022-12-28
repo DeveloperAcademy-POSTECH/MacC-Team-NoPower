@@ -47,7 +47,7 @@ class ParticipantCell: UICollectionViewCell {
     }()
     
     private let profileImageView: ProfileUIImageView = {
-        let imageView = ProfileUIImageView(widthToRadius: Size.screenAspectProfile)
+        let imageView = ProfileUIImageView(widthRatio: Size.screenAspectProfile)
         imageView.tintColor = CustomColor.nomadGray1
         return imageView
     }()

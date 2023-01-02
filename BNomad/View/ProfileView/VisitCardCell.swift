@@ -24,8 +24,11 @@ class VisitCardCell: UICollectionViewCell {
                 
             }
             
-                rectView.removeFromSuperview()
-                nilLabel.removeFromSuperview()
+            rectView.removeFromSuperview()
+            nilLabel.removeFromSuperview()
+            
+            checkinCommentLabel.text = checkInHistory.todayGoal
+            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
             
@@ -56,8 +59,10 @@ class VisitCardCell: UICollectionViewCell {
                 
             }
             
-                rectView.removeFromSuperview()
-                nilLabel.removeFromSuperview()
+            rectView.removeFromSuperview()
+            nilLabel.removeFromSuperview()
+            
+            checkinCommentLabel.text = lastCheckIn.todayGoal
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "M월 d일"
@@ -83,6 +88,8 @@ class VisitCardCell: UICollectionViewCell {
             self.stayedTimeLabel.text = String(Int(stayedTime/60))+"시간 "+String(stayedTime%60)+"분"
             
             nameLabel.reloadInputViews()
+            
+
         }
     }
     static let identifier = "VisitingInfoCell"
@@ -138,7 +145,16 @@ class VisitCardCell: UICollectionViewCell {
         let label = UILabel()
         label.text = ""
         label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = .gray
+        label.textColor = CustomColor.nomadGray1
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
+        return label
+    }()
+    
+    private let checkinCommentLabel: UILabel = {
+        let label = UILabel()
+        label.text = "오늘의 목표를 입력하면 여기에 나타납니다."
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = CustomColor.nomadBlack
         label.font = .preferredFont(forTextStyle: .subheadline, weight: .regular)
         return label
     }()
@@ -188,23 +204,26 @@ class VisitCardCell: UICollectionViewCell {
         contentView.addSubview(checkInAndOutLabel)
         checkInAndOutLabel.anchor(top: nameLabel.bottomAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 2, paddingLeft: 20, paddingRight: 20)
         
-        let stack = [UIStackView(arrangedSubviews: [checkinDateHeadLabel, checkinDateLabel]), UIStackView(arrangedSubviews: [stayedTimeHeadLabel, stayedTimeLabel])]
-        stack.forEach {
-            $0.axis = .vertical
-            $0.spacing = 1
-            $0.distribution = .fillEqually
-            $0.alignment = .center
-        }
+        contentView.addSubview(checkinCommentLabel)
+        checkinCommentLabel.anchor(top: checkInAndOutLabel.bottomAnchor, left: contentView.leftAnchor, right: contentView.rightAnchor, paddingTop: 2, paddingLeft: 20, paddingRight: 20)
         
-        contentView.addSubview(stack[0])
-        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 68, paddingLeft: 50)
-        
-        contentView.addSubview(stack[1])
-        stack[1].anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 68, paddingRight: 50)
-        
-        contentView.addSubview(dividerLine)
-        dividerLine.anchor(top: contentView.topAnchor, paddingTop: 72, width: 1, height: 31)
-        dividerLine.centerX(inView: contentView)
+//        let stack = [UIStackView(arrangedSubviews: [checkinDateHeadLabel, checkinDateLabel]), UIStackView(arrangedSubviews: [stayedTimeHeadLabel, stayedTimeLabel])]
+//        stack.forEach {
+//            $0.axis = .vertical
+//            $0.spacing = 1
+//            $0.distribution = .fillEqually
+//            $0.alignment = .center
+//        }
+//
+//        contentView.addSubview(stack[0])
+//        stack[0].anchor(top: contentView.topAnchor, left: contentView.leftAnchor, paddingTop: 68, paddingLeft: 50)
+//
+//        contentView.addSubview(stack[1])
+//        stack[1].anchor(top: contentView.topAnchor, right: contentView.rightAnchor, paddingTop: 68, paddingRight: 50)
+//
+//        contentView.addSubview(dividerLine)
+//        dividerLine.anchor(top: contentView.topAnchor, paddingTop: 72, width: 1, height: 31)
+//        dividerLine.centerX(inView: contentView)
         
     }
     

@@ -45,7 +45,7 @@ class CalendarViewController: UIViewController {
         return collectionView
     }()
     
-    private let visitInfoView: UICollectionView = {
+    private let visitCardView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -93,7 +93,7 @@ class CalendarViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        button.tintColor = .gray
+        button.tintColor = CustomColor.nomadBlue
         return button
     }()
     
@@ -101,10 +101,22 @@ class CalendarViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-        button.tintColor = .gray
+        button.tintColor = CustomColor.nomadBlue
         return button
     }()
     
+    let scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.backgroundColor = CustomColor.nomad2White
+        
+        return scroll
+    }()
+    
+    let contentView: UIView = {
+        let ui = UIView()
+        ui.backgroundColor = CustomColor.nomad2White
+        return ui
+    }()
     
     // MARK: - Lifecycle
     
@@ -121,8 +133,8 @@ class CalendarViewController: UIViewController {
         calendarCollectionView.dataSource = self
         calendarCollectionView.delegate = self
         
-        visitInfoView.dataSource = self
-        visitInfoView.delegate = self
+        visitCardView.dataSource = self
+        visitCardView.delegate = self
         
         visitCardListView.dataSource = self
         visitCardListView.delegate = self
@@ -172,7 +184,7 @@ class CalendarViewController: UIViewController {
             
             calendarCollectionView.removeFromSuperview()
             calendarCollectionMonthHeader.removeFromSuperview()
-            visitInfoView.removeFromSuperview()
+            visitCardView.removeFromSuperview()
             dayOfWeekStackView.removeFromSuperview()
             minusMonthButton.removeFromSuperview()
             plusMonthButton.removeFromSuperview()
@@ -190,27 +202,37 @@ class CalendarViewController: UIViewController {
     
     func render() {
         
-        view.addSubview(calendarCollectionView)
-        calendarCollectionView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                      paddingTop: 105, paddingLeft: 14, paddingRight: 14,
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        scrollView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
+        contentView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: scrollView.bottomAnchor, right: scrollView.rightAnchor)
+
+        let contentViewHeight = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
+        contentViewHeight.priority = .defaultLow
+        contentViewHeight.isActive = true
+        
+        scrollView.addSubview(calendarCollectionView)
+        calendarCollectionView.anchor(top: scrollView.topAnchor, left: view.leftAnchor, right: view.rightAnchor,
+                                      paddingTop: 20, paddingLeft: 14, paddingRight: 14,
                                       height: 388)
         
-        view.addSubview(calendarCollectionMonthHeader)
+        scrollView.addSubview(calendarCollectionMonthHeader)
         calendarCollectionMonthHeader.anchor(top: calendarCollectionView.topAnchor, left: calendarCollectionView.leftAnchor, paddingTop: 10, paddingLeft: 20)
-        calendarCollectionMonthHeader.centerX(inView: view)
+        calendarCollectionMonthHeader.centerX(inView: scrollView)
         
-        view.addSubview(dayOfWeekStackView)
+        scrollView.addSubview(dayOfWeekStackView)
         dayOfWeekStackView.anchor(top: calendarCollectionMonthHeader.bottomAnchor, paddingTop: 15, width: 358-358/7)
-        dayOfWeekStackView.centerX(inView: view)
+        dayOfWeekStackView.centerX(inView: scrollView)
         
-        view.addSubview(minusMonthButton)
+        scrollView.addSubview(minusMonthButton)
         minusMonthButton.anchor(top: calendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15, paddingRight: 50)
-        view.addSubview(plusMonthButton)
+        scrollView.addSubview(plusMonthButton)
         plusMonthButton.anchor(top: calendarCollectionView.topAnchor, right: dayOfWeekStackView.rightAnchor, paddingTop: 15)
         
-        view.addSubview(visitInfoView)
-        visitInfoView.anchor(top: calendarCollectionView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                                paddingTop: 24, paddingLeft: 14, paddingRight: 14, height: 256)
+        scrollView.addSubview(visitCardView)
+        visitCardView.anchor(top: calendarCollectionView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
+                                paddingTop: 24, paddingLeft: 14, paddingRight: 14, height: 1000)
         
     }
     
@@ -234,7 +256,7 @@ extension CalendarViewController: UICollectionViewDataSource {
         case calendarCollectionView:
             return self.calendarDateFormatter.days.count
 
-        case visitInfoView:
+        case visitCardView:
             return max(cardDataList.count, 1)
 
         case visitCardListView:
@@ -299,7 +321,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             
             return cell
             
-        case visitInfoView:
+        case visitCardView:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
@@ -322,7 +344,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             cell.layer.cornerRadius = 20
             
             let checkinHistoryCount = CalendarViewController.checkInHistory?.count
-            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.item-1]
+            cell.checkInHistoryForCalendar = CalendarViewController.checkInHistory?[(checkinHistoryCount ?? 0)-indexPath.section-1]
             
             return cell
             
@@ -349,7 +371,7 @@ extension CalendarViewController: UICollectionViewDelegate {
             }
             
             calendarCollectionView.reloadData()
-            visitInfoView.reloadData()
+            visitCardView.reloadData()
         }
     }
     
@@ -375,20 +397,23 @@ extension CalendarViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 358/8, height: 358/7)
         }
         
-        return CGSize(width: visitInfoView.frame.width, height: 119)
+        return CGSize(width: visitCardView.frame.width, height: 100)
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if collectionView == visitCardListView {
-            return CGSize(width: view.frame.size.width, height: 50)
+            return CGSize(width: view.frame.size.width, height: 40)
         }
         return .zero
     }
     
     //cell 횡간 간격
        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat{
-           return CGFloat(0)
+           if collectionView == visitCardView {
+               return CGFloat(10)
+           }
+           return 0
        }
        
        //cell 종간 간격

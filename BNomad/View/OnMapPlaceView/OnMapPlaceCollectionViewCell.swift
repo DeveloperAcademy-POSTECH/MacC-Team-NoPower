@@ -8,10 +8,9 @@
 import UIKit
 import MapKit
 
-// TODO: - 하드코딩된 부분 전부 변경 필요. Place 객체 받아서.
-class CustomCollectionViewCell: UICollectionViewCell {
+class OnMapPlaceCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = "CustomCollectionViewCell"
+    static let identifier = String(describing: OnMapPlaceCollectionViewCell.self)
     
     // MARK: - Properties
     
@@ -38,7 +37,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
             guard let place = self.place else { return }
             let latitude: Double = position.coordinate.latitude
             let longitude: Double = position.coordinate.longitude
-            let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = Contents.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
         }
     }
@@ -62,17 +61,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
             self.numberOfMeetUp.asColor(targetString: "\(todayMeetUpList.count)개", color: CustomColor.nomadBlue ?? .label)
         }
     }
-    
-    lazy var cell: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 12
-        view.backgroundColor = .white
-        view.layer.shadowRadius = 15
-        view.layer.shadowOpacity = 0.05
-        view.layer.shadowColor = CustomColor.nomadBlack?.cgColor
-        view.layer.shadowOffset = CGSize(width: 3, height: 4)
-        return view
-    }()
     
     var name: UILabel = {
         let title = UILabel()
@@ -162,16 +150,6 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    static func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
-        let radLatitude1: Double = (latitude1 * .pi)/180
-        let radLatitude2: Double = (latitude2 * .pi)/180
-        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
-        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
-        let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
-        let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
-        return distance
-    }
-    
     // MARK: - LifeCycle
     
     required init?(coder aDecoder: NSCoder) {
@@ -180,23 +158,27 @@ class CustomCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        cellUI()
         configUI()
     }
 
     // MARK: - Helpers
     
+    func cellUI() {
+        self.layer.cornerRadius = 12
+        self.backgroundColor = .white
+        self.layer.shadowRadius = 15
+        self.layer.shadowOpacity = 0.05
+        self.layer.shadowColor = CustomColor.nomadBlack?.cgColor
+        self.layer.shadowOffset = CGSize(width: 3, height: 4)
+    }
+    
     func configUI() {
-        let screenWidth = UIScreen.main.bounds.width
-        let cellHeight = screenWidth * 80/390
-        
-        contentView.addSubview(cell)
-        cell.anchor(top: self.topAnchor, left: self.leftAnchor, right: self.rightAnchor, paddingLeft: 17, paddingRight: 17, height: cellHeight)
-        
         self.addSubview(cellStack)
-        cellStack.anchor(left: cell.leftAnchor, paddingLeft: 16)
-        cellStack.centerY(inView: cell)
+        cellStack.anchor(left: self.leftAnchor, paddingLeft: 16)
+        cellStack.centerY(inView: self)
         
         self.addSubview(workingLabel)
-        workingLabel.anchor(bottom: cell.bottomAnchor, right: cell.rightAnchor, paddingBottom: 15, paddingRight: 15, width: 57, height: 20)
+        workingLabel.anchor(bottom: self.bottomAnchor, right: self.rightAnchor, paddingBottom: 15, paddingRight: 15, width: 57, height: 20)
     }
 }

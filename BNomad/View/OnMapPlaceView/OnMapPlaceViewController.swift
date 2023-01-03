@@ -8,9 +8,7 @@
 import UIKit
 import MapKit
 
-
-// TODO: 화면에 보이는 map에서만 보이는 [Place] 받아와야함.
-class CustomModalViewController: UIViewController {
+class OnMapPlaceViewController: UIViewController {
         
     // MARK: - Properties
     
@@ -23,7 +21,6 @@ class CustomModalViewController: UIViewController {
 
     var places: [Place]? = [] {
         didSet {
-            collectionView.reloadData()
             guard let places = places else { return }
             self.numberOfPlaces.text = "노마드스팟 " + String(places.count) + "개"
         }
@@ -34,9 +31,6 @@ class CustomModalViewController: UIViewController {
         number.backgroundColor = .clear
         number.textColor = .black
         number.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
-        
-        // TODO: - place.count로 변경 필요.
-        number.text = ""
         number.textAlignment = .center
         number.translatesAutoresizingMaskIntoConstraints = false
         return number
@@ -51,15 +45,9 @@ class CustomModalViewController: UIViewController {
     }()
 
     private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        view.isScrollEnabled = true
-        view.showsHorizontalScrollIndicator = false
-        view.showsVerticalScrollIndicator = true
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.scrollIndicatorInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 4)
-        view.contentInset = .zero
         view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
-        view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -68,48 +56,46 @@ class CustomModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
-        self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        self.view.layer.shadowColor = UIColor.black.cgColor
-        self.view.layer.shadowOffset = .init(width: 0, height: -2)
-        self.view.layer.shadowRadius = 20
-        self.view.layer.shadowOpacity = 0.5
-        self.view.addSubview(numberOfPlaces)
-        self.view.addSubview(collectionView)
+        view.layer.backgroundColor = CustomColor.nomad2White?.cgColor
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = .init(width: 0, height: -2)
+        view.layer.shadowRadius = 20
+        view.layer.shadowOpacity = 0.5
+        view.addSubview(numberOfPlaces)
+        view.addSubview(collectionView)
 
         numberOfPlaces.anchor(top: view.topAnchor, paddingTop: 22)
         numberOfPlaces.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingRight: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
+        collectionView.register(OnMapPlaceCollectionViewCell.self, forCellWithReuseIdentifier: OnMapPlaceCollectionViewCell.identifier)
     }
     
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension CustomModalViewController: UICollectionViewDataSource {
+extension OnMapPlaceViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let places = places else {return 9}
         return places.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else  { return UICollectionViewCell() }
-        guard var places = places else { return UICollectionViewCell() }
-        let latitude: Double = position?.coordinate.latitude ?? 0.0
-        let longitude: Double = position?.coordinate.longitude ?? 0.0
-        places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OnMapPlaceCollectionViewCell.identifier, for: indexPath) as? OnMapPlaceCollectionViewCell else  { return UICollectionViewCell() }
+        guard let places = places else { return UICollectionViewCell() }
         cell.place = places[indexPath.item]
         cell.position = position
         if places[indexPath.item].placeUid == viewModel.user?.currentPlaceUid {
-            cell.cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
-            cell.cell.layer.borderWidth = 1
-            cell.cell.layer.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.15).cgColor
+            cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
+            cell.layer.borderWidth = 1
+            cell.layer.backgroundColor = CustomColor.nomadBlue?.withAlphaComponent(0.15).cgColor
             cell.workingLabel.isHidden = false
         } else {
-            cell.cell.layer.borderWidth = 0
+            cell.layer.borderWidth = 0
+            cell.layer.backgroundColor = UIColor.white.cgColor
             cell.workingLabel.isHidden = true
         }
         return cell
@@ -123,37 +109,32 @@ extension CustomModalViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension CustomModalViewController: UICollectionViewDelegate {
+extension OnMapPlaceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = PlaceInfoModalViewController()
-        guard var places = places else { return }
-        let latitude: Double = position?.coordinate.latitude ?? 0.0
-        let longitude: Double = position?.coordinate.longitude ?? 0.0
-        places.sort(by: { CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude)})
+        guard let places = places else { return }
         controller.selectedPlace = places[indexPath.item]
         controller.delegateForFloating = self
         present(UINavigationController(rootViewController: controller), animated: true)
         regionChangeDelegate?.setMapRegion(controller.selectedPlace!.latitude - 0.002, controller.selectedPlace!.longitude, spanDelta: 0.005)
-        // TODO: map의 해당 선택된 region으로 움직여줘야 한다.
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension CustomModalViewController: UICollectionViewDelegateFlowLayout {
+extension OnMapPlaceViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let screenWidth = UIScreen.main.bounds.width
         let cellHeight = screenWidth * 80/390
-        
-        return CGSize(width: view.bounds.width, height: cellHeight)
+        return CGSize(width: screenWidth - 40, height: cellHeight)
     }
     
 }
 
 // MARK: - UpdateFloating
 
-extension CustomModalViewController: UpdateFloating {
+extension OnMapPlaceViewController: UpdateFloating {
     func checkInFloating() {
         self.delegateForFloating?.checkInFloating()
     }

@@ -171,7 +171,6 @@ class MapViewController: UIViewController {
     lazy var checkInNow: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white.withAlphaComponent(0.85)
-//        button.clipsToBounds = true
         button.layer.cornerRadius = 25
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.15
@@ -292,8 +291,7 @@ class MapViewController: UIViewController {
     
     @objc private func presentPlaceListModal() {
         self.dismiss(animated: false)
-
-        let sheet = CustomModalViewController()
+        let sheet = OnMapPlaceViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
             sheet.detents = [.medium()]
@@ -561,6 +559,10 @@ extension MapViewController: MKMapViewDelegate {
                 visiblePlacesOnMap.removeAll { $0.name == place.name }
             }
         }
+        
+        let latitude: Double = currentLocation?.coordinate.latitude ?? 0.0
+        let longitude: Double = currentLocation?.coordinate.longitude ?? 0.0
+        visiblePlacesOnMap = visiblePlacesOnMap.sorted { Contents.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < Contents.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude) }
     }
     
     // 맵 오버레이 rendering

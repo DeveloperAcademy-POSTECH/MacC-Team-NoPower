@@ -16,13 +16,11 @@ protocol CheckInOut {
 }
 
 class PlaceInfoCell: UICollectionViewCell {
-    static let cellIdentifier = "PlaceInfoCell"
+    static let cellIdentifier = String(describing: PlaceInfoCell.self)
     
     // MARK: - Properties
     var delegate: CheckInOut?
     var viewModel = CombineViewModel.shared
-    
-    //current 데이터 없어서 우선 더미로 출력
     var position: CLLocation?
 
     var place: Place? {
@@ -30,7 +28,7 @@ class PlaceInfoCell: UICollectionViewCell {
             guard let place = place else { return }
             let latitude = position?.coordinate.latitude ?? 0
             let longitude = position?.coordinate.longitude ?? 0
-            let distance: Double = CustomCollectionViewCell.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = Contents.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
             if latitude == 0 && longitude == 0 {
                 self.distanceLabel.text = ""
             } else {
@@ -357,5 +355,6 @@ class PlaceInfoCell: UICollectionViewCell {
         phoneNumberLabel.text = place.contact
         operatingTimeLabel.text = place.time
     }
+    
 }
 

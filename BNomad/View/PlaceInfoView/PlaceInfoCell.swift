@@ -28,7 +28,7 @@ class PlaceInfoCell: UICollectionViewCell {
             guard let place = place else { return }
             let latitude = position?.coordinate.latitude ?? 0
             let longitude = position?.coordinate.longitude ?? 0
-            let distance: Double = Contents.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = Contents.calculateDistance(userLatitude: latitude, placeLatitude: place.latitude, userLongitude: longitude, placeLongitude: place.longitude)
             if latitude == 0 && longitude == 0 {
                 self.distanceLabel.text = ""
             } else {

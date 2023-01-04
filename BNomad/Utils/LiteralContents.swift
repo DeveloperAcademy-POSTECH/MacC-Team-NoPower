@@ -74,11 +74,11 @@ struct Contents {
         return newImage
     }
     
-    static func calculateDistance(latitude1: Double, latitude2: Double, longitude1: Double, longitude2: Double) -> Double {
-        let radLatitude1: Double = (latitude1 * .pi)/180
-        let radLatitude2: Double = (latitude2 * .pi)/180
-        let diffLat: Double = ((latitude2 - latitude1) * .pi)/180
-        let diffLon: Double = ((longitude2 - longitude1) * .pi)/180
+    static func calculateDistance(userLatitude: Double, placeLatitude: Double, userLongitude: Double, placeLongitude: Double) -> Double {
+        let radLatitude1: Double = (userLatitude * .pi)/180
+        let radLatitude2: Double = (placeLatitude * .pi)/180
+        let diffLat: Double = ((placeLatitude - userLatitude) * .pi)/180
+        let diffLon: Double = ((placeLongitude - userLongitude) * .pi)/180
         let temp: Double = pow(sin(diffLat/2), 2) + cos(radLatitude1) * cos(radLatitude2) * pow(sin(diffLon/2), 2)
         let distance: Double = 2 * atan2(sqrt(temp), sqrt(1-temp)) * 6371
         return distance

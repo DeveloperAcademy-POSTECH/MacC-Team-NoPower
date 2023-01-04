@@ -562,7 +562,7 @@ extension MapViewController: MKMapViewDelegate {
         
         let latitude: Double = currentLocation?.coordinate.latitude ?? 0.0
         let longitude: Double = currentLocation?.coordinate.longitude ?? 0.0
-        visiblePlacesOnMap = visiblePlacesOnMap.sorted { Contents.calculateDistance(latitude1: latitude, latitude2: $0.latitude, longitude1: longitude, longitude2: $0.longitude) < Contents.calculateDistance(latitude1: latitude, latitude2: $1.latitude, longitude1: longitude, longitude2: $1.longitude) }
+        visiblePlacesOnMap = visiblePlacesOnMap.sorted { Contents.calculateDistance(userLatitude: latitude, placeLatitude: $0.latitude, userLongitude: longitude, placeLongitude: $0.longitude) < Contents.calculateDistance(userLatitude: latitude, placeLatitude: $1.latitude, userLongitude: longitude, placeLongitude: $1.longitude) }
     }
     
     // 맵 오버레이 rendering

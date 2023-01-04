@@ -37,7 +37,7 @@ class VisibleOnMapPlaceCollectionViewCell: UICollectionViewCell {
             guard let place = self.place else { return }
             let latitude: Double = position.coordinate.latitude
             let longitude: Double = position.coordinate.longitude
-            let distance: Double = Contents.calculateDistance(latitude1: latitude, latitude2: place.latitude, longitude1: longitude, longitude2: place.longitude)
+            let distance: Double = Contents.calculateDistance(userLatitude: latitude, placeLatitude: place.latitude, userLongitude: longitude, placeLongitude: place.longitude)
             self.distance.text = distance >= 1.0 ? String(round(distance * 10) / 10.0) + "km" : String(Int(round(distance * 1000))) + "m"
         }
     }

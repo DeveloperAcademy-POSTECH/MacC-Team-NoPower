@@ -77,8 +77,8 @@
 		F6183CB528FFA74000185A1F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB428FFA74000185A1F /* FirebaseStorage */; };
 		F6183CB728FFA83800185A1F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB628FFA83800185A1F /* FirebaseFirestore */; };
 		F6183CB928FFA83F00185A1F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F6183CB828FFA83F00185A1F /* FirebaseAnalytics */; };
-		F6183CC328FFABEC00185A1F /* OnMapPlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBE28FFABEC00185A1F /* OnMapPlaceCollectionViewCell.swift */; };
-		F6183CCA28FFC48F00185A1F /* OnMapPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC928FFC48F00185A1F /* OnMapPlaceViewController.swift */; };
+		F6183CC328FFABEC00185A1F /* VisibleOnMapPlaceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CBE28FFABEC00185A1F /* VisibleOnMapPlaceCollectionViewCell.swift */; };
+		F6183CCA28FFC48F00185A1F /* VisibleOnMapPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6183CC928FFC48F00185A1F /* VisibleOnMapPlaceViewController.swift */; };
 		F6B5E67E28FFA5B400557596 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */; };
 		F6DFE0B329194CB400C808AF /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B229194CB400C808AF /* ReviewCell.swift */; };
 		F6DFE0B7291B2CF900C808AF /* ReviewDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */; };
@@ -149,8 +149,8 @@
 		E2E6B22F28FE7542005C0D77 /* CheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIn.swift; sourceTree = "<group>"; };
 		E2E6B23128FE757D005C0D77 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		E2E6B23328FE75F7005C0D77 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
-		F6183CBE28FFABEC00185A1F /* OnMapPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnMapPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
-		F6183CC928FFC48F00185A1F /* OnMapPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnMapPlaceViewController.swift; sourceTree = "<group>"; };
+		F6183CBE28FFABEC00185A1F /* VisibleOnMapPlaceCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibleOnMapPlaceCollectionViewCell.swift; sourceTree = "<group>"; };
+		F6183CC928FFC48F00185A1F /* VisibleOnMapPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleOnMapPlaceViewController.swift; sourceTree = "<group>"; };
 		F6B5E67D28FFA5B400557596 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F6DFE0B229194CB400C808AF /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		F6DFE0B6291B2CF900C808AF /* ReviewDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDetailViewController.swift; sourceTree = "<group>"; };
@@ -421,8 +421,8 @@
 		F6183CBA28FFABAB00185A1F /* OnMapPlaceView */ = {
 			isa = PBXGroup;
 			children = (
-				F6183CBE28FFABEC00185A1F /* OnMapPlaceCollectionViewCell.swift */,
-				F6183CC928FFC48F00185A1F /* OnMapPlaceViewController.swift */,
+				F6183CBE28FFABEC00185A1F /* VisibleOnMapPlaceCollectionViewCell.swift */,
+				F6183CC928FFC48F00185A1F /* VisibleOnMapPlaceViewController.swift */,
 			);
 			path = OnMapPlaceView;
 			sourceTree = "<group>";
@@ -518,7 +518,7 @@
 				E25A675228F7E1CE004614B0 /* User.swift in Sources */,
 				E2E6B23028FE7542005C0D77 /* CheckIn.swift in Sources */,
 				DFE747B928FD75980048E70A /* UIView+Extension.swift in Sources */,
-				F6183CC328FFABEC00185A1F /* OnMapPlaceCollectionViewCell.swift in Sources */,
+				F6183CC328FFABEC00185A1F /* VisibleOnMapPlaceCollectionViewCell.swift in Sources */,
 				DFD8E94F291CEA3C006BC8BB /* WithdrawViewController.swift in Sources */,
 				DFD8E951291D1C48006BC8BB /* RequestTextField.swift in Sources */,
 				7EC6F9F028FE39F4003D8A95 /* UIColor+Extension.swift in Sources */,
@@ -527,7 +527,7 @@
 				DF9618B228FCEFEA00E21D30 /* FirebaseManager.swift in Sources */,
 				E2BCE4D829247C9D00C6283F /* MeetUpViewModel.swift in Sources */,
 				7EC6F9F228FE3A19003D8A95 /* UILabel+Extension.swift in Sources */,
-				F6183CCA28FFC48F00185A1F /* OnMapPlaceViewController.swift in Sources */,
+				F6183CCA28FFC48F00185A1F /* VisibleOnMapPlaceViewController.swift in Sources */,
 				041351A128FF7E72005D19CC /* VisitCardCell.swift in Sources */,
 				04054C9B2923B3D20030C80F /* ProfileHeaderCollectionView.swift in Sources */,
 				63159D1F291BD4A3000F41F5 /* ReviewSubCell.swift in Sources */,

@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class OnMapPlaceViewController: UIViewController {
+class VisibleOnMapPlaceViewController: UIViewController {
         
     // MARK: - Properties
     
@@ -70,21 +70,21 @@ class OnMapPlaceViewController: UIViewController {
         collectionView.anchor(top: numberOfPlaces.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 24, paddingLeft: 0, paddingRight: 0)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(OnMapPlaceCollectionViewCell.self, forCellWithReuseIdentifier: OnMapPlaceCollectionViewCell.identifier)
+        collectionView.register(VisibleOnMapPlaceCollectionViewCell.self, forCellWithReuseIdentifier: VisibleOnMapPlaceCollectionViewCell.identifier)
     }
     
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension OnMapPlaceViewController: UICollectionViewDataSource {
+extension VisibleOnMapPlaceViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let places = places else {return 9}
         return places.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OnMapPlaceCollectionViewCell.identifier, for: indexPath) as? OnMapPlaceCollectionViewCell else  { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisibleOnMapPlaceCollectionViewCell.identifier, for: indexPath) as? VisibleOnMapPlaceCollectionViewCell else  { return UICollectionViewCell() }
         guard let places = places else { return UICollectionViewCell() }
         cell.place = places[indexPath.item]
         cell.position = position
@@ -109,7 +109,7 @@ extension OnMapPlaceViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension OnMapPlaceViewController: UICollectionViewDelegate {
+extension VisibleOnMapPlaceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let controller = PlaceInfoModalViewController()
         guard let places = places else { return }
@@ -122,7 +122,7 @@ extension OnMapPlaceViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension OnMapPlaceViewController: UICollectionViewDelegateFlowLayout {
+extension VisibleOnMapPlaceViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let screenWidth = UIScreen.main.bounds.width
@@ -134,7 +134,7 @@ extension OnMapPlaceViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UpdateFloating
 
-extension OnMapPlaceViewController: UpdateFloating {
+extension VisibleOnMapPlaceViewController: UpdateFloating {
     func checkInFloating() {
         self.delegateForFloating?.checkInFloating()
     }

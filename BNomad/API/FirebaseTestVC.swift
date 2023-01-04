@@ -74,15 +74,14 @@ class FirebaseTestVC: UIViewController {
     }
     
     func setUser() {
-        FirebaseManager.shared.setUser(user: DummyData.user1)
+//        FirebaseManager.shared.setUser(user: DummyData.user1)
     }
     
     func updateUser() {
-        var user = DummyData.user1
-        user.introduction = "hi~"
-        user.nickname = "liw"
-        
-        FirebaseManager.shared.setUser(user: user)
+//        var user = DummyData.user1
+//        user.introduction = "hi~"
+//        user.nickname = "liw"
+//        FirebaseManager.shared.setUser(user: user)
     }
     
     func fetchCheckInHistoryUser() {

@@ -8,9 +8,9 @@
 import UIKit
 import MapKit
 
-class OnMapPlaceCollectionViewCell: UICollectionViewCell {
+class VisibleOnMapPlaceCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = String(describing: OnMapPlaceCollectionViewCell.self)
+    static let identifier = String(describing: VisibleOnMapPlaceCollectionViewCell.self)
     
     // MARK: - Properties
     

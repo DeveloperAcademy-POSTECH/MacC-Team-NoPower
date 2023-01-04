@@ -16,7 +16,7 @@ class ProfileEditViewController: UIViewController {
 
     // MARK: - Properties
     
-    lazy var viewModel : CombineViewModel = CombineViewModel.shared
+    let viewModel : CombineViewModel = CombineViewModel.shared
     
     var delegate: EditNow?
     
@@ -48,9 +48,7 @@ class ProfileEditViewController: UIViewController {
     private let nickNameCounter: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        
-        // TODO: - 
-        label.text = "5 / 20"
+        label.text = "\(CombineViewModel.shared.user?.nickname.count ?? 0) / 20"
         return label
     }()
     
@@ -63,8 +61,6 @@ class ProfileEditViewController: UIViewController {
         textField.leftViewMode = .always
         textField.layer.borderColor = CustomColor.nomadGray2?.cgColor
         textField.layer.borderWidth = 1
-        
-        // TODO: - 
         textField.text = viewModel.user?.nickname
         textField.delegate = self
         return textField
@@ -81,9 +77,7 @@ class ProfileEditViewController: UIViewController {
     private let occupationCounter: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        
-        // TODO: - 
-        label.text = "13/40"
+        label.text = "\(CombineViewModel.shared.user?.occupation?.count ?? 0) / 40"
         return label
     }()
     
@@ -97,8 +91,6 @@ class ProfileEditViewController: UIViewController {
         textField.layer.borderColor = CustomColor.nomadGray2?.cgColor
         textField.layer.borderWidth = 1
         textField.delegate = self
-        
-        // TODO: - 
         textField.text = viewModel.user?.occupation
         return textField
     }()
@@ -114,17 +106,13 @@ class ProfileEditViewController: UIViewController {
     private let descriptionCounter: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
-        
-        // TODO: - 
-        label.text = "10/50"
+        label.text = "\(CombineViewModel.shared.user?.introduction?.count ?? 0) / 50"
         return label
     }()
     
     private lazy var descriprionTextView: UITextView = {
         let textView = UITextView()
         textView.isEditable = true
-        
-        // TODO: - 
         textView.text =  viewModel.user?.introduction
         textView.layer.cornerRadius = 5
         textView.layer.masksToBounds = true
@@ -214,7 +202,6 @@ class ProfileEditViewController: UIViewController {
         present(imagePicker, animated: true)
     }
     
-    // TODO: - user 객체 수정 & firebase에 업데이트
     @objc func saveProfile() {
         
         let alert = UIAlertController(title: "프로필 수정", message: "프로필 수정을 완료하시겠습니까?", preferredStyle: .alert)

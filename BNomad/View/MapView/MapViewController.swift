@@ -291,7 +291,7 @@ class MapViewController: UIViewController {
     
     @objc private func presentPlaceListModal() {
         self.dismiss(animated: false)
-        let sheet = VisibleOnMapPlaceViewController()
+        let sheet = PlaceListViewController()
         sheet.modalPresentationStyle = .pageSheet
         if let sheet = sheet.sheetPresentationController {
             sheet.detents = [.medium()]

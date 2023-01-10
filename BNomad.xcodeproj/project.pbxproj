@@ -237,10 +237,10 @@
 		DF561CA92918A0CF0099D41D /* SettingView */ = {
 			isa = PBXGroup;
 			children = (
+				DFFBDB70296D4CC20075A144 /* Components */,
 				DF561CAA2918A0DA0099D41D /* SettingViewController.swift */,
 				DFD8E94C291CD3FE006BC8BB /* PlaceRequestViewController.swift */,
 				DFD8E94E291CEA3C006BC8BB /* WithdrawViewController.swift */,
-				DFD8E950291D1C48006BC8BB /* RequestTextField.swift */,
 			);
 			path = SettingView;
 			sourceTree = "<group>";
@@ -391,6 +391,14 @@
 				DFE747C929000FC80048E70A /* ProfileEditViewController.swift */,
 			);
 			path = ProfileEditView;
+			sourceTree = "<group>";
+		};
+		DFFBDB70296D4CC20075A144 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DFD8E950291D1C48006BC8BB /* RequestTextField.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		E25A674E28F7E1AB004614B0 /* Application */ = {

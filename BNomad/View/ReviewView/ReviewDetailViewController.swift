@@ -105,6 +105,7 @@ class ReviewDetailViewController: UIViewController {
         imageView.isHidden = true
         imageView.isUserInteractionEnabled = true
         imageView.addSubview(removeButton)
+        imageView.contentMode = .scaleAspectFill
         removeButton.anchor(top: imageView.topAnchor, right: imageView.rightAnchor, paddingTop: 0, paddingRight: 0, width: 25, height: 25)
         return imageView
     }()
@@ -170,7 +171,6 @@ class ReviewDetailViewController: UIViewController {
     }
     
     @objc func saveReview() {
-        // TODO: alert이후에 저장을 하거나, 바로 저장을 하거나 선택해야함
         guard let user = Auth.auth().currentUser else { return }
         guard let placeUid = place?.placeUid else { return }
         var image = UIImage()

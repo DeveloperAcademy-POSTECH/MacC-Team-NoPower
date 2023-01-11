@@ -10,7 +10,7 @@ import Kingfisher
 
 class ReviewCellWithImage: UICollectionViewCell {
     
-    static let identifier = "ReviewCellWithImage"
+    static let identifier = String(describing: ReviewCellWithImage.self)
 
     // MARK: - Properties
     
@@ -38,7 +38,6 @@ class ReviewCellWithImage: UICollectionViewCell {
 
     var photo: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "AppIcon")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
@@ -64,7 +63,7 @@ class ReviewCellWithImage: UICollectionViewCell {
         text.backgroundColor = .clear
         text.textColor = CustomColor.nomadGray1
         text.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
-        text.text = "랑스, 개발자"
+        text.text = ""
         text.textAlignment = .center
         return text
     }()
@@ -97,7 +96,7 @@ class ReviewCellWithImage: UICollectionViewCell {
 
 class ReviewCellWithoutImage: UICollectionViewCell {
     
-    static let identifier = "ReviewCellWithoutImage"
+    static let identifier = String(describing: ReviewCellWithoutImage.self)
 
     // MARK: - Properties
     
@@ -142,7 +141,7 @@ class ReviewCellWithoutImage: UICollectionViewCell {
         text.backgroundColor = .clear
         text.textColor = CustomColor.nomadGray1
         text.font = .preferredFont(forTextStyle: .caption1, weight: .regular)
-        text.text = "랑스, 개발자"
+        text.text = ""
         text.textAlignment = .center
         return text
     }()

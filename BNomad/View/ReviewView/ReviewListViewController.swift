@@ -28,13 +28,9 @@ class ReviewListViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        view.isScrollEnabled = true
-        view.showsHorizontalScrollIndicator = false
-        view.showsVerticalScrollIndicator = true
         view.scrollIndicatorInsets = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 4)
         view.contentInset = .zero
         view.backgroundColor = .white
-        view.clipsToBounds = true
         return view
     }()
     

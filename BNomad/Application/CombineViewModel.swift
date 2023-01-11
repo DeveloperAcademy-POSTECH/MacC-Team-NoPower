@@ -29,7 +29,7 @@ class CombineViewModel: ObservableObject {
             }
         }
     }
-    @Published var placeInCurrentMap: [Place] = [DummyData.place1, DummyData.place1, DummyData.place2] //
+    @Published var placeInCurrentMap: [Place] = []
     
     var places: [Place] = []
     var isLogIn: Bool { user != nil }

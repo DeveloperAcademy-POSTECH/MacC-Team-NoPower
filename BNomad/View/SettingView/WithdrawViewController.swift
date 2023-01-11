@@ -94,8 +94,6 @@ class WithdrawViewController: UIViewController {
                         }
                     }
                     self.navigationController?.popToRootViewController(animated: true)
-                } catch {
-                    print("SignOut ERROR")
                 }
             } else {
                 self.noUserAlert()

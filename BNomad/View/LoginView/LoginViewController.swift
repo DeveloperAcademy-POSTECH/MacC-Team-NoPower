@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
     fileprivate var currentNonce: String?
     var delegate: LogInToSignUp?
     var viewModel = CombineViewModel.shared
-
+    
     private let loginTitle: UILabel = {
         let label = UILabel()
         label.text = "로그인이 필요합니다!"
@@ -123,7 +123,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 return
             }
             
-            print(idTokenString)
             let credential = OAuthProvider.credential(withProviderID: "apple.com",
                                                                        idToken: idTokenString,
                                                                        rawNonce: nonce)
@@ -145,13 +144,9 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                         }
                     }
                 }
-                if error != nil {
-                    print(error?.localizedDescription ?? "error" as Any)
-                    return
-                }
             }
         } else {
-            print("ERRRRRR")
+            print("ASAuthorizationAppleIDCredential ERROR")
         }
     }
     

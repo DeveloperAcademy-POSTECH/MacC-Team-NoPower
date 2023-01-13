@@ -191,8 +191,8 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VisitCardCell.identifier , for: indexPath) as? VisitCardCell else {
                 return UICollectionViewCell()
             }
-            cell.layer.borderWidth = 2
-            cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
+//            cell.layer.borderWidth = 2
+//            cell.layer.borderColor = CustomColor.nomadBlue?.cgColor
             cell.checkInHistoryForProfile = nomad?.checkInHistory
             cell.backgroundColor = .white
             cell.layer.cornerRadius = 20
@@ -251,7 +251,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             return CGSize(width: profileCollectionView.frame.width, height: 182)
         case 1:
-            return CGSize(width: profileCollectionView.frame.width, height: 119)
+            return CGSize(width: profileCollectionView.frame.width, height: 100)
         case 2:
             return CGSize(width: profileCollectionView.frame.width, height: 220)
         default:
